@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=3 uid="uid://s3w1eg52kr8u"]
 
-[ext_resource type="Script" uid="uid://6o1tcaqxb8c0" path="res://WorldTerrain.cs" id="1_sqfdl"]
-[ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://racoon_shrine.tscn" id="2_683jg"]
-[ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/IPN_Atlas.png" id="3_8iava"]
-[ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="3_vbebb"]
-[ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/spritesheet_nature-blocks.png" id="4_vbebb"]
+[ext_resource type="Script" uid="uid://6o1tcaqxb8c0" path="res://scripts/world_terrain/WorldTerrain.cs" id="1_31luj"]
+[ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/racoon_shrine.tscn" id="2_31luj"]
+[ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="3_wh0dg"]
+[ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="4_coj3r"]
+[ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="5_gphok"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_683jg"]
-texture = ExtResource("4_vbebb")
+texture = ExtResource("3_wh0dg")
 texture_region_size = Vector2i(140, 140)
 3:0/0 = 0
 3:0/0/texture_origin = Vector2i(0, -17)
@@ -54,12 +54,12 @@ tile_size = Vector2i(120, 90)
 sources/0 = SubResource("TileSetAtlasSource_683jg")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_683jg"]
-shader = ExtResource("3_vbebb")
+shader = ExtResource("4_coj3r")
 shader_parameter/wind_strength = 0.4250000201875
 shader_parameter/wind_speed = 2.4910001183225
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vbebb"]
-texture = ExtResource("3_8iava")
+texture = ExtResource("5_gphok")
 separation = Vector2i(0, 129)
 texture_region_size = Vector2i(256, 420)
 1:0/0 = 0
@@ -112,20 +112,20 @@ tile_size = Vector2i(120, 90)
 sources/0 = SubResource("TileSetAtlasSource_vbebb")
 
 [node name="WorldTerrain" type="Node2D" node_paths=PackedStringArray("BaseTileMapLayer", "ObjectTileMapLayer")]
-script = ExtResource("1_sqfdl")
+script = ExtResource("1_31luj")
 TerrainTileTypes = PackedInt32Array(0, 1, 2)
-TerrainTileTypeChance = PackedFloat32Array(0.4, 0.4, 0.2)
+TerrainTileTypeChance = PackedFloat32Array(0.5, 0.5, 0.1)
 BaseTileMapLayer = NodePath("BaseLayer")
 ObjectTileMapLayer = NodePath("ObjectLayer")
-RacoonShrine = ExtResource("2_683jg")
-RabbitShrine = ExtResource("2_683jg")
-OwlShrine = ExtResource("2_683jg")
+RacoonShrine = ExtResource("2_31luj")
+RabbitShrine = ExtResource("2_31luj")
+OwlShrine = ExtResource("2_31luj")
 NumShrines = 3
 MapSizeRows = 300
 MapSizeCols = 300
 ShrineSizeRows = 11
 ShrineSizeCols = 11
-MinimumDistanceShrines = 100
+MinimumDistanceShrines = 35
 tileSizeXPxl = 120.0
 tileSizeYPxl = 90.0
 
