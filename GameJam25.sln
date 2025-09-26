@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warmup", "Warmup.csproj", "{FDAD3960-5DEC-4102-A096-99CECE5250A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameJam25", "GameJam25.csproj", "{FDAD3960-5DEC-4102-A096-99CECE5250A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
