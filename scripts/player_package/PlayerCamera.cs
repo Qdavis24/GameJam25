@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class PlayerCamera : Camera2D
 {
@@ -7,5 +6,7 @@ public partial class PlayerCamera : Camera2D
 	{
 		PositionSmoothingEnabled = true;
 		PositionSmoothingSpeed = 6f;
+
+		Zoom = new Vector2(1.4f, 1.4f);
 	}
 }

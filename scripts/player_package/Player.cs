@@ -69,12 +69,12 @@ public partial class Player : CharacterBody2D
 				if (_anim.Animation != "walk_down")
 					_anim.Play("down_right");
 			}
-			//else
-			//{
-				//// default to side walk animation if only left/right
-				//if (_anim.Animation != "walk_side")
-					//_anim.Play("walk_side");
-			//}
+			else
+			{
+				// default to side walk animation if only left/right
+				if (_anim.Animation != "down_right")
+					_anim.Play("down_right");
+			}
 
 			// Flip horizontally for left vs right
 			if (input.X != 0)
