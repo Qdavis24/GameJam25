@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GameJam25"
-run/main_scene="uid://62ecirhdonkh"
+run/main_scene="uid://s3w1eg52kr8u"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 

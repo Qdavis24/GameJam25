@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://wmtjofjmupla"]
+
+[ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_2gqcc"]
+[ext_resource type="Texture2D" uid="uid://d2mhvdwq05gxf" path="res://assets/player_package/character.png" id="1_wrcci"]
+[ext_resource type="Script" uid="uid://c4jyj40wk318s" path="res://scripts/player_package/PlayerCamera.cs" id="3_uceyd"]
+
+[node name="PlayerPackage" type="Node2D"]
+z_index = 999
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+script = ExtResource("1_2gqcc")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("1_wrcci")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+script = ExtResource("3_uceyd")
