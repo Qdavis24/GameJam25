@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://s3w1eg52kr8u"]
 
-[ext_resource type="Script" uid="uid://6o1tcaqxb8c0" path="res://scripts/world_terrain/WorldTerrain.cs" id="1_31luj"]
+[ext_resource type="Script" uid="uid://d7px3s8446oj" path="res://scripts/world_terrain/WorldTerrain.cs" id="1_31luj"]
 [ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/racoon_shrine.tscn" id="2_31luj"]
 [ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="3_wh0dg"]
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="4_coj3r"]
@@ -131,6 +131,7 @@ tileSizeXPxl = 120.0
 tileSizeYPxl = 90.0
 
 [node name="PlayerPackage" parent="." instance=ExtResource("6_3xxx6")]
+z_index = 1
 position = Vector2(264, 307)
 
 [node name="BaseLayer" type="TileMapLayer" parent="."]
@@ -138,10 +139,11 @@ y_sort_enabled = true
 tile_set = SubResource("TileSet_nmbn7")
 
 [node name="ObjectLayer" type="TileMapLayer" parent="."]
-z_index = 1
+z_index = 2
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_683jg")
 tile_set = SubResource("TileSet_vbebb")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
+visible = false
 color = Color(0.3515629, 0.3515629, 0.35156286, 1)

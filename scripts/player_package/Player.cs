@@ -9,11 +9,14 @@ public partial class Player : CharacterBody2D
 	[Export] public float TileWidth = 120f;
 	[Export] public float TileHeight = 90f;
 	
+	private AnimatedSprite2D _anim;
 	private Sprite2D _sprite;
 
 	public override void _Ready()
 	{
-		_sprite = GetNode<Sprite2D>("Sprite2D");
+		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		//_anim.Play("idle");
+		_anim.Play("down_right");
 	}
 
 	private void GetInput()
@@ -51,7 +54,37 @@ public partial class Player : CharacterBody2D
 
 
 		// Flip sprite horizontally based on left/right input
-		if (input.X != 0) _sprite.FlipH = input.X < 0;
+		// if (input.X != 0) _sprite.FlipH = input.X < 0;
+		
+		if (input != Vector2.Zero)
+		{
+			// Decide which animation to play
+			if (input.Y < 0)
+			{
+				if (_anim.Animation != "up_right")
+					_anim.Play("up_right");
+			}
+			else if (input.Y > 0)
+			{
+				if (_anim.Animation != "walk_down")
+					_anim.Play("down_right");
+			}
+			//else
+			//{
+				//// default to side walk animation if only left/right
+				//if (_anim.Animation != "walk_side")
+					//_anim.Play("walk_side");
+			//}
+
+			// Flip horizontally for left vs right
+			if (input.X != 0)
+				_anim.FlipH = input.X < 0;
+		}
+		else
+		{
+			if (_anim.Animation != "idle")
+				_anim.Play("idle");
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
