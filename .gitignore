@@ -18,3 +18,9 @@ mono_crash.*.json
 
 # MacOS nuisance
 .DS_Store
+
+# MacOS nuisance
+.DS_Store
+
+
+.idea

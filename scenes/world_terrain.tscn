@@ -115,7 +115,7 @@ sources/0 = SubResource("TileSetAtlasSource_vbebb")
 [node name="WorldTerrain" type="Node2D" node_paths=PackedStringArray("BaseTileMapLayer", "ObjectTileMapLayer")]
 script = ExtResource("1_31luj")
 TerrainTileTypes = PackedInt32Array(0, 1, 2)
-TerrainTileTypeChance = PackedFloat32Array(0.5, 0.4, 0.1)
+TerrainTileTypeChance = PackedFloat32Array(0.4, 0.5, 0.1)
 BaseTileMapLayer = NodePath("BaseLayer")
 ObjectTileMapLayer = NodePath("ObjectLayer")
 RacoonShrine = ExtResource("2_31luj")
@@ -126,7 +126,7 @@ MapSizeRows = 300
 MapSizeCols = 300
 ShrineSizeRows = 11
 ShrineSizeCols = 11
-MinimumDistanceShrines = 35
+MinimumDistanceShrines = 50
 tileSizeXPxl = 120.0
 tileSizeYPxl = 90.0
 
@@ -144,4 +144,4 @@ material = SubResource("ShaderMaterial_683jg")
 tile_set = SubResource("TileSet_vbebb")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.31110165, 0.26489472, 0.2654014, 1)
+color = Color(0.3515629, 0.3515629, 0.35156286, 1)

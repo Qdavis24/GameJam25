@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=4 uid="uid://c6lr8f133tbfv"]
+[gd_scene load_steps=8 format=4 uid="uid://c6lr8f133tbfv"]
 
-[ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/spritesheet_nature-blocks.png" id="1_x4osd"]
+[ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="1_x4osd"]
+[ext_resource type="Texture2D" uid="uid://brbxpwlakqslj" path="res://assets/fox/idle.png" id="2_6cvk2"]
 
 [sub_resource type="Gradient" id="Gradient_x4osd"]
 offsets = PackedFloat32Array(0, 0.55333334, 1)
@@ -93,3 +94,7 @@ scale_amount_max = 10.0
 color = Color(0.98349386, 0.9389566, 0, 1)
 hue_variation_min = 1.0
 hue_variation_max = 1.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(163, -3)
+texture = ExtResource("2_6cvk2")
