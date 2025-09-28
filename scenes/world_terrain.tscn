@@ -1,14 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://s3w1eg52kr8u"]
+[gd_scene load_steps=13 format=3 uid="uid://s3w1eg52kr8u"]
 
 [ext_resource type="Script" uid="uid://cgcf6qyo31wyt" path="res://scripts/world_terrain/WorldTerrain.cs" id="1_31luj"]
-[ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/racoon_shrine.tscn" id="2_31luj"]
+[ext_resource type="Resource" uid="uid://bfks6ydjmu5gu" path="res://resources/tile_config.tres" id="2_31luj"]
+[ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/racoon_shrine.tscn" id="3_3xxx6"]
 [ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="3_wh0dg"]
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="4_coj3r"]
 [ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="5_gphok"]
 
 [sub_resource type="Curve" id="Curve_31luj"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0, 0.018025756), 0.0, 0.0, 0, 0, Vector2(0.2511312, 0.44796002), 0.0, 0.0, 0, 0, Vector2(0.5045248, -0.4721067), 0.0, 0.0, 0, 0, Vector2(0.75339365, 0.3938384), 0.0, 0.0, 0, 0, Vector2(1, 0.025811791), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.0054347813, -0.011235952), 0.0, 0.0, 0, 0, Vector2(0.24456522, 0.9775281), 0.0, 0.0, 0, 0, Vector2(0.51086956, -0.32584274), 0.0, 0.0, 0, 0, Vector2(0.75, 1), 0.0, 0.0, 0, 0, Vector2(1, -0.033707857), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_683jg"]
@@ -118,23 +119,20 @@ sources/0 = SubResource("TileSetAtlasSource_vbebb")
 
 [node name="WorldTerrain" type="Node2D" node_paths=PackedStringArray("BaseTileMapLayer", "ObjectTileMapLayer")]
 script = ExtResource("1_31luj")
-TerrainTileTypes = PackedInt32Array(0, 1)
-TerrainTileTypeChance = PackedFloat32Array(0.4, 0.6)
+MapSizeRows = 300
+MapSizeCols = 300
+PossibleStates = PackedInt32Array(0, 1)
+StateSpawnWeights = PackedFloat32Array(0.3, 0.6)
+PathCurve = SubResource("Curve_31luj")
+PathCurveSize = 5
 BaseTileMapLayer = NodePath("BaseLayer")
 ObjectTileMapLayer = NodePath("ObjectLayer")
-RacoonShrine = ExtResource("2_31luj")
-RabbitShrine = ExtResource("2_31luj")
-OwlShrine = ExtResource("2_31luj")
-NumShrines = 3
-pathCurve = SubResource("Curve_31luj")
-pathCurveSize = 20
-MapSizeRows = 150
-MapSizeCols = 150
+TileConfiguration = ExtResource("2_31luj")
 ShrineSizeRows = 11
 ShrineSizeCols = 11
 MinimumDistanceShrines = 60
-tileSizeXPxl = 120.0
-tileSizeYPxl = 90.0
+allShrinePckdScns = Array[PackedScene]([ExtResource("3_3xxx6"), ExtResource("3_3xxx6"), ExtResource("3_3xxx6")])
+metadata/_edit_horizontal_guides_ = [-21.0]
 
 [node name="BaseLayer" type="TileMapLayer" parent="."]
 y_sort_enabled = true

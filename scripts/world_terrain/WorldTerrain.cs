@@ -5,115 +5,119 @@ using System.Linq;
 
 public partial class WorldTerrain : Node2D
 {
-    [Export] int[] TerrainTileTypes;
-    [Export] float[] TerrainTileTypeChance;
-
-    [Export] TileMapLayer BaseTileMapLayer;
-    [Export] TileMapLayer ObjectTileMapLayer;
-
-    [Export] PackedScene RacoonShrine;
-    [Export] PackedScene RabbitShrine;
-    [Export] PackedScene OwlShrine;
-
-    [Export] int NumShrines;
-
-    [Export] Curve pathCurve;
-
-    [Export] int pathCurveSize;
-
-    private PackedScene[] allShrinePckdScns = new PackedScene[3];
-
-    private List<Vector2I> shrinesRowCol = new List<Vector2I>();
-
-    private bool[,] islandVisitedCells;
-
-    private bool[,] pathVisitedCells;
-
-    private List<List<Vector2I>> islands = new List<List<Vector2I>>();
-
-
+    [ExportCategory("World Generation")]
     [Export] int MapSizeRows;
     [Export] int MapSizeCols;
-
-    [Export] int ShrineSizeRows;
-    [Export] int ShrineSizeCols;
-    [Export] int MinimumDistanceShrines; // in tile cells
-
-    [Export] float tileSizeXPxl;
-    [Export] float tileSizeYPxl;
-
-
-    // atlas coords for versions of each tile
-    private Vector2I[] baseLayerGrassTiles =
-        { new Vector2I(4, 0), new Vector2I(9, 0), new Vector2I(12, 0), new Vector2I(10, 0) };
-
-    private Vector2I[] baseLayerFlowerTiles = { new Vector2I(5, 0), new Vector2I(13, 0), new Vector2I(7, 0) };
-    //private Vector2I[] baseLayerFlowerTiles = { new Vector2I(15, 0) };
-    private Vector2I[] baseLayerDirtTiles = { new Vector2I(0, 0), new Vector2I(3, 0) };
-
-    private Vector2I[] objectLayerGrassTiles =
-        { new Vector2I(4, 1), new Vector2I(5, 1), new Vector2I(6, 1), new Vector2I(7, 1) };
-
-    private Vector2I[] objectLayerDirtTiles = { };
+    [Export] int[] PossibleStates; // All possible values that can exist in world cells (e.g., grass, water, mountain)
+    [Export] float[] StateSpawnWeights; // Probability weights for each state during initial world generation (matched indexing)
+    [Export] Curve PathCurve; // shape of path
+    [Export] int PathCurveSize; // Magnitude of path curves
 
     private enum WorldDataStates
     {
-        Grass,
-        Flowers,
-        Dirt,
+        Walkable,
+        NonWalkable,
     };
 
-    private Vector2I[][] baseLayerTilesMapToState = new Vector2I[3][];
-    private Vector2I[][] objectLayerTilesMapToState = new Vector2I[3][];
+
+    private List<List<Vector2I>> islands = new List<List<Vector2I>>();
+    private bool[,] islandVisitedCells;
+
+    [ExportCategory("Tiles")]
+    [Export] TileMapLayer BaseTileMapLayer;
+    [Export] TileMapLayer ObjectTileMapLayer;
+    [Export] TileConfig TileConfiguration;
+
+    [ExportCategory("Shrines")]
+    [Export] int ShrineSizeRows;
+    [Export] int ShrineSizeCols;
+    [Export] int MinimumDistanceShrines; // in tile cells
+    [Export] private PackedScene[] allShrinePckdScns; // Racoon index 0 , Own index 1, Rabbit index 2
+
+    private List<Vector2I> shrinesSpawnCoord = new List<Vector2I>(); // where we are going to spawn each shrine (top left cell) Vector2I (col, row)
 
     private int[,] worldData; // array to represent how to build our map
 
-    private bool uniformNeighbors(int sample_row, int sample_col, int neighbor_depth)
+    private int wrapIndexes(int index, int axisLength)
     {
-        for (int row_shift = -neighbor_depth; row_shift <= neighbor_depth; row_shift++)
+        if (index < 0) index += axisLength;
+        if (index >= axisLength) index -= axisLength;
+
+        return index;
+    }
+    private void setNeighbors(int sampleRow, int sampleCol, WorldDataStates state, int numNeighbors)
+    {
+        for (int rowShift = -numNeighbors; rowShift < numNeighbors; rowShift++)
         {
-            for (int col_shift = -neighbor_depth; col_shift <= neighbor_depth; col_shift++)
+            for (int colShift = -numNeighbors; colShift < numNeighbors; colShift++)
             {
-                int curr_row = sample_row + row_shift;
-                int curr_col = sample_col + col_shift;
-                if (curr_row == sample_row && curr_col == sample_col) continue;
-                if (curr_row < 0) curr_row = worldData.GetLength(0) + curr_row;
-                if (curr_row >= worldData.GetLength(0)) curr_row -= worldData.GetLength(0);
-                if (curr_col < 0) curr_col = worldData.GetLength(1) + curr_col;
-                if (curr_col >= worldData.GetLength(1)) curr_col -= worldData.GetLength(1);
-                if (worldData[curr_row, curr_col] != worldData[sample_row, sample_col]) return false;
+                int row = wrapIndexes(sampleRow + rowShift, MapSizeRows);
+                int col = wrapIndexes(sampleCol + colShift, MapSizeCols);
+                if (row == sampleRow && col == sampleCol) continue;
+                worldData[row, col] = (int)state;
             }
         }
+    }
 
+    private bool uniformNeighbors(int sampleRow, int sampleCol, int numNeighbors)
+    {
+        for (int rowShift = -numNeighbors; rowShift <= numNeighbors; rowShift++)
+        {
+            for (int colShift = -numNeighbors; colShift <= numNeighbors; colShift++)
+            {
+                int row = wrapIndexes(sampleRow + rowShift, MapSizeRows);
+                int col = wrapIndexes(sampleCol + colShift, MapSizeCols);
+
+                if (row == sampleRow && col == sampleCol) continue;
+
+                if (worldData[row, col] != worldData[sampleRow, sampleCol]) return false;
+            }
+        }
         return true;
+
     }
 
-    private void setNeighbors(int row, int col, int state, int numNeighbors)
+    private int majorityNeighbor(int sampleRow, int sampleCol, int numNeighbors)
     {
-        for (int i = row - numNeighbors; i < row + numNeighbors; i++)
+        int[] counts = new int[PossibleStates.Length];
+
+        for (int rowShift = -numNeighbors; rowShift <= numNeighbors; rowShift++)
         {
-            for (int j = col - numNeighbors; j < col + numNeighbors; j++)
+            for (int colShift = -numNeighbors; colShift <= numNeighbors; colShift++)
             {
-                if (i > 0 && i < worldData.GetLength(0) && j > 0 && j < worldData.GetLength(1))
-                    worldData[i, j] = state;
+                int row = wrapIndexes(sampleRow + rowShift, MapSizeRows);
+                int col = wrapIndexes(sampleCol + colShift, MapSizeCols);
+                if (row == sampleRow && col == sampleCol) continue;
+
+                counts[worldData[row, col]] += 1;
             }
         }
+        int currMaxState = 0;
+        int currMaxCount = 0;
+        for (int state = 0; state < counts.Length; state++)
+        {
+            if (counts[state] > currMaxCount)
+            {
+                currMaxCount = counts[state];
+                currMaxState = state;
+            }
+        }
+        return currMaxState;
     }
-
     private void initWorldData()
     {
-        for (int i = 0; i < worldData.GetLength(0); i++)
+        for (int row = 0; row < MapSizeRows; row++)
         {
-            for (int j = 0; j < worldData.GetLength(1); j++)
+            for (int col = 0; col < MapSizeCols; col++)
             {
                 float rInt = GD.Randf();
                 float cummulative = 0f;
-                for (int k = 0; k < TerrainTileTypes.Length; k++)
+                for (int k = 0; k < PossibleStates.Length; k++)
                 {
-                    cummulative += TerrainTileTypeChance[k];
+                    cummulative += StateSpawnWeights[k];
                     if (rInt <= cummulative)
                     {
-                        worldData[i, j] = TerrainTileTypes[k];
+                        worldData[row, col] = PossibleStates[k];
                         break;
                     }
                 }
@@ -121,96 +125,67 @@ public partial class WorldTerrain : Node2D
         }
     }
 
-    private void smoothWorldData(int changeWeight)
+    private void smoothWorldData()
     {
         int[,] copyTerrain = (int[,])worldData.Clone();
-        for (int i = 0; i < worldData.GetLength(0); i++)
+
+        for (int row = 0; row < MapSizeRows; row++)
         {
-            for (int j = 0; j < worldData.GetLength(1); j++)
+            for (int col = 0; col < MapSizeCols; col++)
             {
-                int[] counts = new int[TerrainTileTypes.Length];
-                for (int row_shift = -1; row_shift <= 1; row_shift++)
-                {
-                    for (int col_shift = -1; col_shift <= 1; col_shift++)
-                    {
-                        int row = i + row_shift;
-                        int col = j + col_shift;
-                        if (row == i && col == j) continue;
-                        if (row < 0) row = worldData.GetLength(0) + row;
-                        if (row >= worldData.GetLength(0)) row -= worldData.GetLength(0);
-                        if (col < 0) col = worldData.GetLength(1) + col;
-                        if (col >= worldData.GetLength(1)) col -= worldData.GetLength(1);
-                        counts[worldData[row, col]] += 1;
-                    }
-                }
 
-                int currMaxI = 0;
-                int currMax = 0;
-                for (int k = 0; k < counts.Length; k++)
-                {
-                    // if (counts[k] >= changeWeight)
-                    // {
-                    //     copyTerrain[i, j] = k;
-                    //     break;
-                    // }
-                    if (counts[k] > currMax)
-                    {
-                        currMax = counts[k];
-                        currMaxI = k;
-                    }
-                }
+                int newState = majorityNeighbor(row, col, 1);
+                copyTerrain[row, col] = newState;
 
-                copyTerrain[i, j] = currMaxI;
             }
         }
-
         worldData = copyTerrain;
     }
 
-    private void dfsRecordIsland(int row, int col)
+    private void dfsRecordIsland(int row, int col, WorldDataStates islandState)
     {
-        row = (row + MapSizeRows) % MapSizeRows;
-        col = (col + MapSizeCols) % MapSizeCols;
+        row = wrapIndexes(row, MapSizeRows);
+        col = wrapIndexes(col, MapSizeCols);
+        
+        
 
         if (islandVisitedCells[row, col]) return;
         islandVisitedCells[row, col] = true;
-        if (worldData[row, col] == (int)WorldDataStates.Flowers) islands[islands.Count - 1].Add(new Vector2I(col, row));
+        if (worldData[row, col] == (int)islandState) islands[islands.Count - 1].Add(new Vector2I(row, col));
         else return;
-        dfsRecordIsland(row, col - 1); // left
-        dfsRecordIsland(row, col + 1); // right
-        dfsRecordIsland(row - 1, col); // up
-        dfsRecordIsland(row + 1, col); // down
-        dfsRecordIsland(row - 1, col - 1); // up-left
-        dfsRecordIsland(row - 1, col + 1); // up-right
-        dfsRecordIsland(row + 1, col - 1); // down-left
-        dfsRecordIsland(row + 1, col + 1); // down-right
+        dfsRecordIsland(row, col - 1, islandState); // left
+        dfsRecordIsland(row, col + 1, islandState); // right
+        dfsRecordIsland(row - 1, col, islandState); // up
+        dfsRecordIsland(row + 1, col, islandState); // down
+        dfsRecordIsland(row - 1, col - 1, islandState); // up-left
+        dfsRecordIsland(row - 1, col + 1, islandState); // up-right
+        dfsRecordIsland(row + 1, col - 1, islandState); // down-left
+        dfsRecordIsland(row + 1, col + 1, islandState); // down-right
     }
 
     private void findAllIslands(WorldDataStates islandState)
     {
         islandVisitedCells = new bool[MapSizeRows, MapSizeCols];
         islands = new List<List<Vector2I>>();
-        for (int i = 0; i < MapSizeRows; i++)
+        for (int row = 0; row < MapSizeRows; row++)
         {
-            for (int j = 0; j < MapSizeCols; j++)
+            for (int col = 0; col < MapSizeCols; col++)
             {
-                if (worldData[i, j] == (int)islandState && islandVisitedCells[i, j] != true)
+                if (worldData[row, col] == (int)islandState && islandVisitedCells[row, col] != true)
                 {
                     List<Vector2I> currIsland = new List<Vector2I>();
                     islands.Add(currIsland);
-                    dfsRecordIsland(i, j);
+                    dfsRecordIsland(row, col, islandState);
                 }
             }
         }
     }
 
 
-    private void drawPathBetweenIslands(Vector2I island1ColRow, Vector2I island2ColRow, int pathRadius)
+    private void drawPathBetweenIslands(Vector2I startCoord, Vector2I endCoord, WorldDataStates pathState, int pathRadius)
     {
-        Vector2 start = new Vector2(island2ColRow.X, island2ColRow.Y);
-        Vector2 end = new Vector2(island1ColRow.X, island1ColRow.Y);
-        Vector2 direction = end - start;
 
+        Vector2 direction = endCoord - startCoord;
         // Calculate total steps needed
         int totalSteps = (int)Math.Max(Math.Abs(direction.X), Math.Abs(direction.Y));
         if (totalSteps == 0) return; // Same position
@@ -218,27 +193,27 @@ public partial class WorldTerrain : Node2D
         // Get perpendicular direction for curve offset
         Vector2 perpendicular = new Vector2(-direction.Y, direction.X).Normalized();
 
-        int islandState = worldData[island2ColRow.Y, island2ColRow.X];
+
 
         for (int step = 0; step <= totalSteps; step++)
         {
             float progress = (float)step / totalSteps; // 0 to 1
 
             // Get straight line position
-            Vector2 straightPos = start + direction * progress;
+            Vector2 straightPos = startCoord + direction * progress;
 
             // Sample curve for bend amount
-            float bendAmount = pathCurve.Sample(progress);
+            float bendAmount = PathCurve.Sample(progress);
 
             // Apply perpendicular offset
-            Vector2 curvedPos = straightPos + perpendicular * bendAmount * pathCurveSize;
+            Vector2 curvedPos = straightPos + perpendicular * bendAmount * PathCurveSize;
 
             // Convert to grid coordinates
-            int row = (int)Math.Round(curvedPos.Y);
-            int col = (int)Math.Round(curvedPos.X);
+            int row = (int)Math.Round(curvedPos.X);
+            int col = (int)Math.Round(curvedPos.Y);
 
             // Place the path tile
-            setNeighbors(row, col, islandState, pathRadius);
+            setNeighbors(row, col, pathState, pathRadius);
         }
     }
 
@@ -286,17 +261,17 @@ public partial class WorldTerrain : Node2D
     {
         float minDistanceIslandLength = Single.PositiveInfinity;
         int[] minDistanceIslands = new int[2];
-        for (int i = 0; i < islands.Count; i++)
+        for (int island1 = 0; island1 < islands.Count; island1++)
         {
-            for (int j = i + 1; j < islands.Count; j++)
+            for (int island2 = island1 + 1; island2 < islands.Count; island2++)
             {
-                Vector2I[] closestCells = getTwoClosestCells(islands[i], islands[j]);
+                Vector2I[] closestCells = getTwoClosestCells(islands[island1], islands[island2]);
                 float currDistance = (closestCells[0] - closestCells[1]).Length();
                 if (currDistance < minDistanceIslandLength)
                 {
                     minDistanceIslandLength = currDistance;
-                    minDistanceIslands[0] = i;
-                    minDistanceIslands[1] = j;
+                    minDistanceIslands[0] = island1;
+                    minDistanceIslands[1] = island2;
                 }
             }
         }
@@ -313,7 +288,7 @@ public partial class WorldTerrain : Node2D
             List<Vector2I> startIsland = islands[currIslandPairIndexes[0]];
             List<Vector2I> endIsland = islands[currIslandPairIndexes[1]];
             Vector2I[] currIslandPairClosestCells = getTwoClosestCells(startIsland, endIsland);
-            drawPathBetweenIslands(currIslandPairClosestCells[0], currIslandPairClosestCells[1], 2);
+            drawPathBetweenIslands(currIslandPairClosestCells[0], currIslandPairClosestCells[1], WorldDataStates.Walkable, 2);
             islands.Remove(startIsland);
             islands.Remove(endIsland);
         }
@@ -322,14 +297,14 @@ public partial class WorldTerrain : Node2D
 
     private void markShrinesWorldData()
     {
-        // pick 3 sub 2d arrays in mapData with minimum distance apart
+        // Pick N sub 2d arrays in mapData with minimum distance apart (N = number of shrine types)
         // CAREFUL too big min distance can create inf loop here.
         List<Vector2I> shrinePlacementMapDataCoord = new List<Vector2I>(); // X is COl Y is ROW
-        while (shrinePlacementMapDataCoord.Count < 3)
+        while (shrinePlacementMapDataCoord.Count < allShrinePckdScns.Length)
         {
             Vector2I newCoord = new Vector2I(
-                GD.RandRange(0, MapSizeCols - ShrineSizeCols),
-                GD.RandRange(0, MapSizeRows - ShrineSizeRows));
+                GD.RandRange(0, MapSizeRows - ShrineSizeRows),
+                GD.RandRange(0, MapSizeCols - ShrineSizeCols));
             bool validCoord = true;
             foreach (Vector2I coord in shrinePlacementMapDataCoord)
             {
@@ -343,29 +318,29 @@ public partial class WorldTerrain : Node2D
             if (validCoord)
             {
                 shrinePlacementMapDataCoord.Add(newCoord);
-                int row = newCoord.Y;
-                int col = newCoord.X;
-                for (int i = row; i < row + ShrineSizeRows; i++)
+                int row = newCoord.X;
+                int col = newCoord.Y;
+                for (int shrineCellRow = row; shrineCellRow < row + ShrineSizeRows; shrineCellRow++)
                 {
-                    for (int j = col; j < col + ShrineSizeCols; j++)
+                    for (int shrineCellCol = col; shrineCellCol < col + ShrineSizeCols; shrineCellCol++)
                     {
-                        worldData[i, j] = -1;
+                        worldData[shrineCellRow, shrineCellCol] = -1;
                     }
                 }
 
-                shrinesRowCol.Add(new Vector2I(row, col));
+                shrinesSpawnCoord.Add(new Vector2I(row, col));
             }
         }
     }
 
     private void printWorldData()
     {
-        for (int i = 0; i < worldData.GetLength(0); i++)
+        for (int row = 0; row < worldData.GetLength(0); row++)
         {
             string curr_row = "";
-            for (int j = 0; j < worldData.GetLength(1); j++)
+            for (int col = 0; col < worldData.GetLength(1); col++)
             {
-                curr_row += worldData[i, j];
+                curr_row += worldData[row, col];
             }
 
             GD.Print(curr_row);
@@ -380,7 +355,16 @@ public partial class WorldTerrain : Node2D
             {
                 int worldDataState = worldData[row, col];
                 if (worldDataState == -1) continue;
-                Vector2I[] tileOptions = baseLayerTilesMapToState[worldDataState];
+                Vector2I[] tileOptions = new Vector2I[] { };
+                switch ((WorldDataStates)worldDataState)
+                {
+                    case WorldDataStates.Walkable:
+                        tileOptions = TileConfiguration.BaseLayerWalkableTilesAtlasCoords;
+                        break;
+                    case WorldDataStates.NonWalkable:
+                        tileOptions = TileConfiguration.BaseLayerNonWalkableTilesAtlasCoords;
+                        break;
+                }
                 BaseTileMapLayer.SetCell(new Vector2I(row, col), 0, tileOptions[GD.Randi() % tileOptions.Length]);
             }
         }
@@ -393,24 +377,30 @@ public partial class WorldTerrain : Node2D
             for (int col = 0; col < worldData.GetLength(1); col++)
             {
                 int worldDataState = worldData[row, col];
-                if (worldDataState == -1) continue;
-                Vector2I[] tileOptions = objectLayerTilesMapToState[worldDataState];
-                if ((WorldDataStates)worldDataState == WorldDataStates.Grass && GD.Randf() < .7 && uniformNeighbors(row, col, 1))
+                if (worldDataState == -1 || GD.Randf() > .5) continue;
+                Vector2I[] tileOptions = new Vector2I[] { };
+                switch ((WorldDataStates)worldDataState)
                 {
-                    ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0, tileOptions[GD.Randi() % tileOptions.Length]);
+                    case WorldDataStates.Walkable:
+                        tileOptions = TileConfiguration.ObjectLayerWalkableTilesAtlasCoords;
+                        break;
+                    case WorldDataStates.NonWalkable:
+                        tileOptions = TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords;
+                        break;
                 }
+                ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0, tileOptions[GD.Randi() % tileOptions.Length]);
             }
         }
     }
 
     private void spawnShrines()
     {
-        for (int i = 0; i < allShrinePckdScns.Length; i++)
+        for (int shrine = 0; shrine < allShrinePckdScns.Length; shrine++)
         {
-            Node2D currShrine = allShrinePckdScns[i].Instantiate<Node2D>();
+            Node2D currShrine = allShrinePckdScns[shrine].Instantiate<Node2D>();
             Vector2I centerTile = new Vector2I(
-                shrinesRowCol[i].X + (ShrineSizeCols / 2),
-                shrinesRowCol[i].Y + (ShrineSizeRows / 2)
+                shrinesSpawnCoord[shrine].X + (ShrineSizeRows / 2),
+                shrinesSpawnCoord[shrine].Y + (ShrineSizeCols / 2)
             );
             currShrine.Position = BaseTileMapLayer.MapToLocal(centerTile);
             AddChild(currShrine);
@@ -426,63 +416,45 @@ public partial class WorldTerrain : Node2D
 
     private void wipeMap()
     {
-        for (int i = 0; i < worldData.GetLength(0); i++)
+        for (int row = 0; row < worldData.GetLength(0); row++)
         {
-            for (int j = 0; j < worldData.GetLength(1); j++)
+            for (int col = 0; col < worldData.GetLength(1); col++)
             {
-                ObjectTileMapLayer.EraseCell(new Vector2I(i, j));
-                BaseTileMapLayer.EraseCell(new Vector2I(i, j));
+                ObjectTileMapLayer.EraseCell(new Vector2I(row, col));
+                BaseTileMapLayer.EraseCell(new Vector2I(row, col));
             }
         }
     }
 
     public override void _Ready()
     {
-        worldData = new int[MapSizeCols, MapSizeRows]; // map size
-        islandVisitedCells = new bool[MapSizeCols, MapSizeRows];
-        pathVisitedCells = new bool[MapSizeCols, MapSizeRows];
 
-        allShrinePckdScns[0] = RacoonShrine;
-        allShrinePckdScns[1] = RabbitShrine;
-        allShrinePckdScns[2] = OwlShrine;
-
-        baseLayerTilesMapToState[0] = baseLayerGrassTiles;
-        baseLayerTilesMapToState[1] = baseLayerFlowerTiles;
-        baseLayerTilesMapToState[2] = baseLayerDirtTiles;
-
-        objectLayerTilesMapToState[0] = objectLayerGrassTiles;
-        objectLayerTilesMapToState[1] = objectLayerDirtTiles;
-
+        worldData = new int[MapSizeRows, MapSizeCols];
 
         initWorldData();
-        smoothWorldData(5);
-        smoothWorldData(5);
-        smoothWorldData(6);
-        smoothWorldData(6);
-        smoothWorldData(7);
+        smoothWorldData();
+        smoothWorldData();
+        // smoothWorldData();
+        // smoothWorldData();
+        // smoothWorldData();
         markShrinesWorldData();
-        findAllIslands(WorldDataStates.Flowers);
-        while (islands.Count > 1)
-        {
-            connectIslands();
-            findAllIslands(WorldDataStates.Flowers);
-        }
+        // findAllIslands(WorldDataStates.Walkable);
+        // connectIslands();
         populateMap();
 
-        
-        //printWorldData();
     }
 
     public override void _Process(double delta)
     {
-        if (Input.IsActionPressed("regen"))
+        if (Input.IsActionJustPressed("regen"))
         {
             wipeMap();
-            
-            GD.Print("Island Count");
+            findAllIslands(WorldDataStates.Walkable);
             GD.Print(islands.Count);
-            
+            //connectIslands();
             populateMap();
         }
     }
+
+
 }
