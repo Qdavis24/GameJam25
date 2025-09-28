@@ -47,8 +47,8 @@ public partial class WorldTerrain : Node2D
     private Vector2I[] baseLayerGrassTiles =
         { new Vector2I(4, 0), new Vector2I(9, 0), new Vector2I(12, 0), new Vector2I(10, 0) };
 
-    //private Vector2I[] baseLayerFlowerTiles = { new Vector2I(5, 0), new Vector2I(13, 0), new Vector2I(7, 0) };
-    private Vector2I[] baseLayerFlowerTiles = { new Vector2I(15, 0) };
+    private Vector2I[] baseLayerFlowerTiles = { new Vector2I(5, 0), new Vector2I(13, 0), new Vector2I(7, 0) };
+    //private Vector2I[] baseLayerFlowerTiles = { new Vector2I(15, 0) };
     private Vector2I[] baseLayerDirtTiles = { new Vector2I(0, 0), new Vector2I(3, 0) };
 
     private Vector2I[] objectLayerGrassTiles =
@@ -313,7 +313,7 @@ public partial class WorldTerrain : Node2D
             List<Vector2I> startIsland = islands[currIslandPairIndexes[0]];
             List<Vector2I> endIsland = islands[currIslandPairIndexes[1]];
             Vector2I[] currIslandPairClosestCells = getTwoClosestCells(startIsland, endIsland);
-            drawPathBetweenIslands(currIslandPairClosestCells[0], currIslandPairClosestCells[1], 3);
+            drawPathBetweenIslands(currIslandPairClosestCells[0], currIslandPairClosestCells[1], 2);
             islands.Remove(startIsland);
             islands.Remove(endIsland);
         }
@@ -395,7 +395,7 @@ public partial class WorldTerrain : Node2D
                 int worldDataState = worldData[row, col];
                 if (worldDataState == -1) continue;
                 Vector2I[] tileOptions = objectLayerTilesMapToState[worldDataState];
-                if ((WorldDataStates)worldDataState == WorldDataStates.Grass && GD.Randf() < .3)
+                if ((WorldDataStates)worldDataState == WorldDataStates.Grass && GD.Randf() < .7 && uniformNeighbors(row, col, 1))
                 {
                     ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0, tileOptions[GD.Randi() % tileOptions.Length]);
                 }
@@ -460,9 +460,16 @@ public partial class WorldTerrain : Node2D
         smoothWorldData(6);
         smoothWorldData(6);
         smoothWorldData(7);
+        markShrinesWorldData();
+        findAllIslands(WorldDataStates.Flowers);
+        while (islands.Count > 1)
+        {
+            connectIslands();
+            findAllIslands(WorldDataStates.Flowers);
+        }
         populateMap();
 
-        //markShrinesWorldData();
+        
         //printWorldData();
     }
 
@@ -471,10 +478,10 @@ public partial class WorldTerrain : Node2D
         if (Input.IsActionPressed("regen"))
         {
             wipeMap();
-            findAllIslands(WorldDataStates.Flowers);
+            
             GD.Print("Island Count");
             GD.Print(islands.Count);
-            connectIslands();
+            
             populateMap();
         }
     }

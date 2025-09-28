@@ -127,12 +127,12 @@ RabbitShrine = ExtResource("2_31luj")
 OwlShrine = ExtResource("2_31luj")
 NumShrines = 3
 pathCurve = SubResource("Curve_31luj")
-pathCurveSize = 10
-MapSizeRows = 200
-MapSizeCols = 200
+pathCurveSize = 20
+MapSizeRows = 150
+MapSizeCols = 150
 ShrineSizeRows = 11
 ShrineSizeCols = 11
-MinimumDistanceShrines = 13
+MinimumDistanceShrines = 60
 tileSizeXPxl = 120.0
 tileSizeYPxl = 90.0
 
