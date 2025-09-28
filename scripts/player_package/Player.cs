@@ -4,10 +4,18 @@ using System;
 public partial class Player : CharacterBody2D
 {
 	[Export] public float Speed = 400f;
+	[Export] public string AnimationSet = "v3";
+	
+	[Export] public PackedScene SlashAttack;
 
-	// Tile pixel size for adjusted diagonal angle movement
-	[Export] public float TileWidth = 120f;
-	[Export] public float TileHeight = 90f;
+
+	private float lungeSpeed = 700f;
+	private float lungeDuration = 0.35f;
+
+	private bool lunging = false;
+	private float lungeTime = 0f;
+	private Vector2 lungeDir = Vector2.Right;
+	////////////////
 	
 	private AnimatedSprite2D _anim;
 	private Sprite2D _sprite;
@@ -15,81 +23,109 @@ public partial class Player : CharacterBody2D
 	public override void _Ready()
 	{
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		//_anim.Play("idle");
-		_anim.Play("down_right");
+		_anim.Play(AnimationSet + "idle");
+	}
+	
+	private void Slash(Vector2 dir)
+	{
+		lunging = true;
+		lungeTime = lungeDuration;
+		lungeDir = dir;
+		Velocity = dir * lungeSpeed;
+		
+		////// Leave in world
+		//var slash = SlashAttack.Instantiate<SlashAttackNode2d>();
+		//slash.GlobalPosition = GlobalPosition + dir.Normalized() * 18f;
+		//slash.Direction = dir;
+		//GetTree().CurrentScene.AddChild(slash);
+		var slash = SlashAttack.Instantiate<SlashAttackNode2d>();
+		slash.Position = dir.Normalized() * 18f;  // local position relative to the player
+		slash.Direction = dir;
+		AddChild(slash); // instead of GetTree().CurrentScene.AddChild(slash)
 	}
 
-	private void GetInput()
-	{
-		Vector2 input = Input.GetVector("left", "right", "up", "down");
-		Vector2 moveDir = input;
-
-		float thetaRad = Mathf.Atan2(TileHeight, TileWidth);
-		float thetaDeg = Mathf.RadToDeg(thetaRad);
-		float offset = 45 - thetaDeg;
+	private void Move(Vector2 moveDir) {
+		float offset = 8.130104f; // isometric diagonal offset
 
 		// Nudge diagonal movement to match isometric tile perspective
-		if (input.X != 0 && input.Y != 0)
-		{
-			bool up = input.Y < 0;
-			bool right = input.X > 0;
+		 if (moveDir.X != 0 && moveDir.Y != 0)
+		 {
+		 	bool up = moveDir.Y < 0;
+		 	bool right = moveDir.X > 0;
+		
+		 	// Map the four diagonals to ±offset:
+		 	// up-right  -> +offset
+		 	// up-left   -> -offset
+		 	// down-left -> +offset
+		 	// down-right-> -offset
+		 	float angleOffset =
+		 		(right ? -1f : 1f) * (up ? -1f : 1f) * Mathf.DegToRad(offset);
+		
+		 	moveDir = moveDir.Rotated(angleOffset).Normalized();
+		 }
 
-			// Map the four diagonals to ±offset:
-			// up-right  -> +offset
-			// up-left   -> -offset
-			// down-left -> +offset
-			// down-right-> -offset
-			float angleOffset =
-				(right ? -1f : 1f) * (up ? -1f : 1f) * Mathf.DegToRad(offset);
-
-			moveDir = input.Rotated(angleOffset).Normalized();
-		}
-
-		// Slow down vertical movement
+		// Slow down vertical only movement
 		float speed = Speed;
-		if (input.X == 0 && input.Y != 0)
+		if (moveDir.X == 0 && moveDir.Y != 0)
 			speed *= 0.9f;
 
+		// Move
 		Velocity = moveDir * speed;
+	}
 
-
-		// Flip sprite horizontally based on left/right input
-		// if (input.X != 0) _sprite.FlipH = input.X < 0;
-		
-		if (input != Vector2.Zero)
+	private void UpdateAnimation(Vector2 moveDir) {
+		void Play(string animation)
 		{
-			// Decide which animation to play
-			if (input.Y < 0)
+			if (_anim.Animation != AnimationSet + animation)
+				_anim.Play(AnimationSet + animation);
+		}
+
+		// Flip sprite horizontally for left vs right movement
+		if (moveDir.X != 0) _anim.FlipH = moveDir.X < 0;
+
+		if (moveDir == Vector2.Zero) {
+			Play("idle");
+		}
+		else {
+			Play("walk");
+		}
+
+	}
+
+	private void GetInput(double delta)
+	{		
+		if (!lunging)
+		{
+			if (Input.IsActionJustPressed("attack"))
 			{
-				if (_anim.Animation != "up_right")
-					_anim.Play("up_right");
-			}
-			else if (input.Y > 0)
-			{
-				if (_anim.Animation != "walk_down")
-					_anim.Play("down_right");
-			}
-			else
-			{
-				// default to side walk animation if only left/right
-				if (_anim.Animation != "down_right")
-					_anim.Play("down_right");
+				Vector2 mousePos = GetGlobalMousePosition();
+				Vector2 dir = (mousePos - GlobalPosition).Normalized();
+				if (dir == Vector2.Zero) dir = Vector2.Right;
+
+				Slash(dir);
 			}
 
-			// Flip horizontally for left vs right
-			if (input.X != 0)
-				_anim.FlipH = input.X < 0;
+			Vector2 moveDir = Input.GetVector("left", "right", "up", "down");
+
+			Move(moveDir);
+			UpdateAnimation(moveDir);
 		}
 		else
 		{
-			if (_anim.Animation != "idle")
-				_anim.Play("idle");
+			lungeTime -= (float)delta;
+			Velocity = lungeDir * lungeSpeed;
+			
+			_anim.Play(AnimationSet + "walk");
+			if (lungeDir.X != 0) _anim.FlipH = lungeDir.X < 0;
+
+			if (lungeTime <= 0f)
+				lunging = false;
 		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		GetInput();
+		GetInput(delta);
 		MoveAndSlide();
 	}
 }
