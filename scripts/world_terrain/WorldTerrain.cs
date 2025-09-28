@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 public partial class WorldTerrain : Node2D
 {
     [Export] int[] TerrainTileTypes;
@@ -19,6 +21,13 @@ public partial class WorldTerrain : Node2D
 
     private List<Vector2I> shrinesRowCol = new List<Vector2I>();
 
+    private bool[,] islandVisitedCells;
+
+    private bool[,] pathVisitedCells;
+
+    private List<List<Vector2I>> islands = new List<List<Vector2I>>();
+
+
     [Export] int MapSizeRows;
     [Export] int MapSizeCols;
 
@@ -31,10 +40,15 @@ public partial class WorldTerrain : Node2D
 
 
     // atlas coords for versions of each tile
-    private Vector2I[] baseLayerGrassTiles = { new Vector2I(4, 0), new Vector2I(9, 0), new Vector2I(12, 0), new Vector2I(10, 0) };
+    private Vector2I[] baseLayerGrassTiles =
+        { new Vector2I(4, 0), new Vector2I(9, 0), new Vector2I(12, 0), new Vector2I(10, 0) };
+
     private Vector2I[] baseLayerFlowerTiles = { new Vector2I(5, 0), new Vector2I(13, 0), new Vector2I(7, 0) };
     private Vector2I[] baseLayerDirtTiles = { new Vector2I(0, 0), new Vector2I(3, 0) };
-    private Vector2I[] objectLayerGrassTiles = { new Vector2I(4, 1), new Vector2I(5, 1), new Vector2I(6, 1), new Vector2I(7, 1) };
+
+    private Vector2I[] objectLayerGrassTiles =
+        { new Vector2I(4, 1), new Vector2I(5, 1), new Vector2I(6, 1), new Vector2I(7, 1) };
+
     private Vector2I[] objectLayerDirtTiles = { };
 
     private enum WorldDataStates
@@ -48,6 +62,7 @@ public partial class WorldTerrain : Node2D
     private Vector2I[][] objectLayerTilesMapToState = new Vector2I[3][];
 
     private int[,] worldData; // array to represent how to build our map
+
     private bool uniformNeighbors(int sample_row, int sample_col, int neighbor_depth)
     {
         for (int row_shift = -neighbor_depth; row_shift <= neighbor_depth; row_shift++)
@@ -64,9 +79,10 @@ public partial class WorldTerrain : Node2D
                 if (worldData[curr_row, curr_col] != worldData[sample_row, sample_col]) return false;
             }
         }
-        return true;
 
+        return true;
     }
+
     private void initWorldData()
     {
         for (int i = 0; i < worldData.GetLength(0); i++)
@@ -110,6 +126,7 @@ public partial class WorldTerrain : Node2D
                         counts[worldData[row, col]] += 1;
                     }
                 }
+
                 int currMaxI = 0;
                 int currMax = 0;
                 for (int k = 0; k < counts.Length; k++)
@@ -125,13 +142,155 @@ public partial class WorldTerrain : Node2D
                         currMaxI = k;
                     }
                 }
-                copyTerrain[i, j] = currMaxI;
 
+                copyTerrain[i, j] = currMaxI;
             }
         }
+
         worldData = copyTerrain;
     }
 
+    private void dfsRecordIsland(int row, int col)
+    {
+        if (row < 0 || row >= worldData.GetLength(0) || col < 0 || col >= worldData.GetLength(1) ||
+            islandVisitedCells[row, col]) return;
+        islandVisitedCells[row, col] = true;
+        if (worldData[row, col] == (int)WorldDataStates.Flowers) islands[islands.Count - 1].Add(new Vector2I(col, row));
+        else return;
+        dfsRecordIsland(row, col - 1);
+        dfsRecordIsland(row, col + 1);
+        dfsRecordIsland(row - 1, col);
+        dfsRecordIsland(row + 1, col);
+    }
+
+    private List<Vector2I> dfsFindIslandPaths(Vector2I currCell, List<Vector2I> targetIsland, int maxLength)
+    {
+        if (currCell.Y < 0 || currCell.Y >= worldData.GetLength(0) || currCell.X < 0 ||
+            currCell.X >= worldData.GetLength(1) ||
+            pathVisitedCells[currCell.Y, currCell.X] || maxLength <= 0) return null;
+        pathVisitedCells[currCell.Y, currCell.X] = true;
+        GD.Print($"Checking if {currCell} is in target island");
+        GD.Print($"First target cell: {targetIsland[0]}");
+        GD.Print($"Are they equal? {currCell.Equals(targetIsland[0])}");
+        if (targetIsland.Contains(currCell)) return new List<Vector2I>() { currCell };
+        List<Vector2I> path;
+        Vector2I[] directions =
+        {
+            new Vector2I(-1, -1), // Up-left
+            new Vector2I(0, -1), // Up
+            new Vector2I(1, -1), // Up-right
+            new Vector2I(-1, 0), // Left
+            new Vector2I(1, 0), // Right
+            new Vector2I(-1, 1), // Down-left
+            new Vector2I(0, 1), // Down
+            new Vector2I(1, 1) // Down-right
+        };
+        // Shuffle the directions array first
+        for (int i = directions.Length - 1; i > 0; i--)
+        {
+            int j = Math.Abs((int)GD.Randi() % (i + 1));  // Add the +1 here
+            Vector2I temp = directions[i];
+            GD.Print(i,j);
+            directions[i] = directions[j];
+            directions[j] = temp;
+        }
+
+// Then try each direction in the shuffled order
+        foreach (Vector2I dir in directions)
+        {
+            path = dfsFindIslandPaths(currCell + dir, targetIsland, maxLength - 1);
+            if (path != null)
+            {
+                path.Insert(0, currCell);
+                return path;
+            }
+        }
+
+
+        return null;
+    }
+
+    private void findAllIslands()
+    {
+        for (int i = 0; i < worldData.GetLength(0); i++)
+        {
+            for (int j = 0; j < worldData.GetLength(1); j++)
+            {
+                if (worldData[i, j] == (int)WorldDataStates.Flowers && islandVisitedCells[i, j] != true)
+                {
+                    List<Vector2I> currIsland = new List<Vector2I>();
+                    islands.Add(currIsland);
+                    dfsRecordIsland(i, j);
+                }
+            }
+        }
+    }
+
+    private void setNeighbors(int row, int col, int state, int numNeighbors)
+    {
+        for (int i = row - numNeighbors; i < row + numNeighbors; i++)
+        {
+            for (int j = col - numNeighbors; j < col + numNeighbors; j++)
+            {
+                if (i > 0 && i < worldData.GetLength(0) - 1 && j > 0 && j < worldData.GetLength(1) - 1)
+                    worldData[i, j] = state;
+            }
+        }
+    }
+
+    private void drawPathBetweenIslands(Vector2I island1ColRow, Vector2I island2ColRow)
+    {
+        Vector2I stepsNeeded = island1ColRow - island2ColRow;
+        int rowStepsLeft = stepsNeeded.Y;
+        int colStepsLeft = stepsNeeded.X;
+        int rowStepDir = Math.Sign(rowStepsLeft);
+        int colStepDir = Math.Sign(colStepsLeft);
+        int currRow = island2ColRow.Y;
+        int currCol = island2ColRow.X;
+        int islandState = worldData[currRow, currCol];
+        while (rowStepsLeft != 0 || colStepsLeft != 0)
+        {
+            // col steps left = -10 | 10
+            // col dir = -1 | 1
+            // curr col step = -1 | 1
+            // col steps left = -10 - -1 = -9 | 10 - 1 = 9
+            // curr col = curr col + -1 | curr col + 1
+            int currRowStep = 0;
+            int currColStep = 0;
+            if (rowStepsLeft != 0) currRowStep = rowStepDir;
+            if (colStepsLeft != 0) currColStep = colStepDir;
+            rowStepsLeft -= currRowStep;
+            colStepsLeft -= currColStep;
+            currRow += currRowStep;
+            currCol += currColStep;
+
+            setNeighbors(currRow, currCol, islandState, 1);
+        }
+    }
+
+    private void connectIslands()
+    {
+        GD.Print("island count: ");
+        GD.Print(islands.Count);
+        for (int i = 1; i < islands.Count; i++)
+        {
+            pathVisitedCells = new bool[MapSizeCols, MapSizeRows];
+            Vector2I island1Cell = islands[i - 1][0];
+            List<Vector2I> island2Cells = islands[i];
+            int cellState = worldData[island1Cell.Y, island1Cell.X];
+            GD.Print("Drawing path num: ");
+            GD.Print(i);
+            List<Vector2I> pathCells = null;
+            while (pathCells == null)
+            {
+                pathCells = dfsFindIslandPaths(island1Cell, island2Cells, 1000);
+            }
+            foreach (Vector2I cell in pathCells)
+            {
+                setNeighbors(cell.Y, cell.X, cellState, 2);
+            }
+        }
+    }
 
     private void markShrinesWorldData()
     {
@@ -152,6 +311,7 @@ public partial class WorldTerrain : Node2D
                     break;
                 }
             }
+
             if (validCoord)
             {
                 shrinePlacementMapDataCoord.Add(newCoord);
@@ -169,6 +329,7 @@ public partial class WorldTerrain : Node2D
             }
         }
     }
+
     private void printWorldData()
     {
         for (int i = 0; i < worldData.GetLength(0); i++)
@@ -178,9 +339,11 @@ public partial class WorldTerrain : Node2D
             {
                 curr_row += worldData[i, j];
             }
+
             GD.Print(curr_row);
         }
     }
+
     private void populateBaseLayer()
     {
         for (int row = 0; row < worldData.GetLength(0); row++)
@@ -204,11 +367,11 @@ public partial class WorldTerrain : Node2D
                 int worldDataState = worldData[row, col];
                 if (worldDataState == -1) continue;
                 Vector2I[] tileOptions = objectLayerTilesMapToState[worldDataState];
-                if ((WorldDataStates)worldDataState == WorldDataStates.Grass && GD.Randf() < .5 && uniformNeighbors(row, col, 2))
+                if ((WorldDataStates)worldDataState == WorldDataStates.Grass && GD.Randf() < .5 &&
+                    uniformNeighbors(row, col, 1))
                 {
                     ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0, tileOptions[GD.Randi() % tileOptions.Length]);
                 }
-
             }
         }
     }
@@ -224,19 +387,21 @@ public partial class WorldTerrain : Node2D
             );
             currShrine.Position = BaseTileMapLayer.MapToLocal(centerTile);
             AddChild(currShrine);
-
-
         }
     }
+
     private void populateMap()
     {
         populateBaseLayer();
         populateObjectLayer();
         spawnShrines();
     }
+
     public override void _Ready()
     {
         worldData = new int[MapSizeCols, MapSizeRows]; // map size
+        islandVisitedCells = new bool[MapSizeCols, MapSizeRows];
+        pathVisitedCells = new bool[MapSizeCols, MapSizeRows];
 
         allShrinePckdScns[0] = RacoonShrine;
         allShrinePckdScns[1] = RabbitShrine;
@@ -259,8 +424,19 @@ public partial class WorldTerrain : Node2D
         markShrinesWorldData();
 
         //printWorldData();
+        findAllIslands();
+        // GD.Print("ISLANDS: ");
+        // foreach (List<Vector2I> island in islands)
+        // {
+        //     string str = "";
+        //     foreach (Vector2I vec in island)
+        //     {
+        //         str += "(" + vec.X + ", " + vec.Y + ")";
+        //     }
+        //     GD.Print(str);
+        // }
+        connectIslands();
+        //printWorldData();
         populateMap();
-
-
     }
 }
