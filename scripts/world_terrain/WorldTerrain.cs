@@ -47,7 +47,8 @@ public partial class WorldTerrain : Node2D
     private Vector2I[] baseLayerGrassTiles =
         { new Vector2I(4, 0), new Vector2I(9, 0), new Vector2I(12, 0), new Vector2I(10, 0) };
 
-    private Vector2I[] baseLayerFlowerTiles = { new Vector2I(5, 0), new Vector2I(13, 0), new Vector2I(7, 0) };
+    //private Vector2I[] baseLayerFlowerTiles = { new Vector2I(5, 0), new Vector2I(13, 0), new Vector2I(7, 0) };
+    private Vector2I[] baseLayerFlowerTiles = { new Vector2I(15, 0) };
     private Vector2I[] baseLayerDirtTiles = { new Vector2I(0, 0), new Vector2I(3, 0) };
 
     private Vector2I[] objectLayerGrassTiles =
@@ -93,7 +94,7 @@ public partial class WorldTerrain : Node2D
         {
             for (int j = col - numNeighbors; j < col + numNeighbors; j++)
             {
-                if (i > 0 && i < worldData.GetLength(0) - 1 && j > 0 && j < worldData.GetLength(1) - 1)
+                if (i > 0 && i < worldData.GetLength(0) && j > 0 && j < worldData.GetLength(1))
                     worldData[i, j] = state;
             }
         }
@@ -168,24 +169,32 @@ public partial class WorldTerrain : Node2D
 
     private void dfsRecordIsland(int row, int col)
     {
-        if (row < 0 || row >= worldData.GetLength(0) || col < 0 || col >= worldData.GetLength(1) ||
-            islandVisitedCells[row, col]) return;
+        row = (row + MapSizeRows) % MapSizeRows;
+        col = (col + MapSizeCols) % MapSizeCols;
+
+        if (islandVisitedCells[row, col]) return;
         islandVisitedCells[row, col] = true;
         if (worldData[row, col] == (int)WorldDataStates.Flowers) islands[islands.Count - 1].Add(new Vector2I(col, row));
         else return;
-        dfsRecordIsland(row, col - 1);
-        dfsRecordIsland(row, col + 1);
-        dfsRecordIsland(row - 1, col);
-        dfsRecordIsland(row + 1, col);
+        dfsRecordIsland(row, col - 1); // left
+        dfsRecordIsland(row, col + 1); // right
+        dfsRecordIsland(row - 1, col); // up
+        dfsRecordIsland(row + 1, col); // down
+        dfsRecordIsland(row - 1, col - 1); // up-left
+        dfsRecordIsland(row - 1, col + 1); // up-right
+        dfsRecordIsland(row + 1, col - 1); // down-left
+        dfsRecordIsland(row + 1, col + 1); // down-right
     }
 
-    private void findAllIslands()
+    private void findAllIslands(WorldDataStates islandState)
     {
-        for (int i = 0; i < worldData.GetLength(0); i++)
+        islandVisitedCells = new bool[MapSizeRows, MapSizeCols];
+        islands = new List<List<Vector2I>>();
+        for (int i = 0; i < MapSizeRows; i++)
         {
-            for (int j = 0; j < worldData.GetLength(1); j++)
+            for (int j = 0; j < MapSizeCols; j++)
             {
-                if (worldData[i, j] == (int)WorldDataStates.Flowers && islandVisitedCells[i, j] != true)
+                if (worldData[i, j] == (int)islandState && islandVisitedCells[i, j] != true)
                 {
                     List<Vector2I> currIsland = new List<Vector2I>();
                     islands.Add(currIsland);
@@ -259,7 +268,7 @@ public partial class WorldTerrain : Node2D
         {
             foreach (Vector2I group2Cell in group2)
             {
-                float currDistance = Math.Abs((group1Cell - group2Cell).Length());
+                float currDistance = (group1Cell - group2Cell).Length();
                 if (currDistance < minDistance)
                 {
                     minDistance = currDistance;
@@ -279,10 +288,10 @@ public partial class WorldTerrain : Node2D
         int[] minDistanceIslands = new int[2];
         for (int i = 0; i < islands.Count; i++)
         {
-            for (int j = i; j < islands.Count; j++)
+            for (int j = i + 1; j < islands.Count; j++)
             {
                 Vector2I[] closestCells = getTwoClosestCells(islands[i], islands[j]);
-                float currDistance = Math.Abs((closestCells[0] - closestCells[1]).Length());
+                float currDistance = (closestCells[0] - closestCells[1]).Length();
                 if (currDistance < minDistanceIslandLength)
                 {
                     minDistanceIslandLength = currDistance;
@@ -295,6 +304,7 @@ public partial class WorldTerrain : Node2D
         return minDistanceIslands;
     }
 
+
     private void connectIslands()
     {
         while (islands.Count > 0)
@@ -303,12 +313,12 @@ public partial class WorldTerrain : Node2D
             List<Vector2I> startIsland = islands[currIslandPairIndexes[0]];
             List<Vector2I> endIsland = islands[currIslandPairIndexes[1]];
             Vector2I[] currIslandPairClosestCells = getTwoClosestCells(startIsland, endIsland);
-
             drawPathBetweenIslands(currIslandPairClosestCells[0], currIslandPairClosestCells[1], 3);
             islands.Remove(startIsland);
             islands.Remove(endIsland);
         }
     }
+
 
     private void markShrinesWorldData()
     {
@@ -385,8 +395,7 @@ public partial class WorldTerrain : Node2D
                 int worldDataState = worldData[row, col];
                 if (worldDataState == -1) continue;
                 Vector2I[] tileOptions = objectLayerTilesMapToState[worldDataState];
-                if ((WorldDataStates)worldDataState == WorldDataStates.Grass && GD.Randf() < .3 &&
-                    uniformNeighbors(row, col, 3))
+                if ((WorldDataStates)worldDataState == WorldDataStates.Grass && GD.Randf() < .3)
                 {
                     ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0, tileOptions[GD.Randi() % tileOptions.Length]);
                 }
@@ -415,6 +424,18 @@ public partial class WorldTerrain : Node2D
         spawnShrines();
     }
 
+    private void wipeMap()
+    {
+        for (int i = 0; i < worldData.GetLength(0); i++)
+        {
+            for (int j = 0; j < worldData.GetLength(1); j++)
+            {
+                ObjectTileMapLayer.EraseCell(new Vector2I(i, j));
+                BaseTileMapLayer.EraseCell(new Vector2I(i, j));
+            }
+        }
+    }
+
     public override void _Ready()
     {
         worldData = new int[MapSizeCols, MapSizeRows]; // map size
@@ -439,23 +460,22 @@ public partial class WorldTerrain : Node2D
         smoothWorldData(6);
         smoothWorldData(6);
         smoothWorldData(7);
-        markShrinesWorldData();
-
-        //printWorldData();
-        //printWorldData();
-        findAllIslands();
-        // GD.Print("ISLANDS: ");
-        // foreach (List<Vector2I> island in islands)
-        // {
-        //     string str = "";
-        //     foreach (Vector2I vec in island)
-        //     {
-        //         str += "(" + vec.X + ", " + vec.Y + ")";
-        //     }
-        //     GD.Print(str);
-        // }
-        connectIslands();
-        //printWorldData();
         populateMap();
+
+        //markShrinesWorldData();
+        //printWorldData();
+    }
+
+    public override void _Process(double delta)
+    {
+        if (Input.IsActionPressed("regen"))
+        {
+            wipeMap();
+            findAllIslands(WorldDataStates.Flowers);
+            GD.Print("Island Count");
+            GD.Print(islands.Count);
+            connectIslands();
+            populateMap();
+        }
     }
 }
