@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public partial class WorldTerrain : Node2D
 {
@@ -10,8 +9,12 @@ public partial class WorldTerrain : Node2D
     [Export] int MapSizeCols;
     [Export] int[] PossibleStates; // All possible values that can exist in world cells (e.g., grass, water, mountain)
     [Export] float[] StateSpawnWeights; // Probability weights for each state during initial world generation (matched indexing)
+    [Export] float TreeSpawnChance;
+    [Export] int NumSmooths;
     [Export] Curve PathCurve; // shape of path
     [Export] int PathCurveSize; // Magnitude of path curves
+
+    [Export] int PathDiameter;
 
     private enum WorldDataStates
     {
@@ -21,7 +24,11 @@ public partial class WorldTerrain : Node2D
 
 
     private List<List<Vector2I>> islands = new List<List<Vector2I>>();
+
+    private bool[] connectedIslands;
     private bool[,] islandVisitedCells;
+
+    Dictionary<(int, int), Vector2I[]> closesetIslandCellsCache = new Dictionary<(int, int), Vector2I[]>();
 
     [ExportCategory("Tiles")]
     [Export] TileMapLayer BaseTileMapLayer;
@@ -146,8 +153,8 @@ public partial class WorldTerrain : Node2D
     {
         row = wrapIndexes(row, MapSizeRows);
         col = wrapIndexes(col, MapSizeCols);
-        
-        
+
+
 
         if (islandVisitedCells[row, col]) return;
         islandVisitedCells[row, col] = true;
@@ -217,7 +224,7 @@ public partial class WorldTerrain : Node2D
         }
     }
 
-    private Vector2I[] getTwoClosestCells(List<Vector2I> group1, List<Vector2I> group2)
+    private Vector2I[] getTwoClosestCells(List<Vector2I> group1, List<Vector2I> group2, int group1Index, int group2Index)
     {
         /*
          * Returns the closest two cells in two given cell groupings based on the magnitude of their difference
@@ -236,6 +243,11 @@ public partial class WorldTerrain : Node2D
          *
          *
          */
+        int smallIndex = group1Index < group2Index ? group1Index : group2Index;
+        int largeIndex = group1Index > group2Index ? group1Index : group2Index;
+
+        if (closesetIslandCellsCache.ContainsKey((smallIndex, largeIndex))) return closesetIslandCellsCache[(smallIndex, largeIndex)];
+
         Vector2I closestCellGroup1 = group1[0];
         Vector2I closestCellGroup2 = group2[0];
         float minDistance = Single.PositiveInfinity;
@@ -243,7 +255,7 @@ public partial class WorldTerrain : Node2D
         {
             foreach (Vector2I group2Cell in group2)
             {
-                float currDistance = (group1Cell - group2Cell).Length();
+                float currDistance = (group1Cell - group2Cell).LengthSquared();
                 if (currDistance < minDistance)
                 {
                     minDistance = currDistance;
@@ -254,19 +266,23 @@ public partial class WorldTerrain : Node2D
         }
 
         Vector2I[] closestCells = new Vector2I[2] { closestCellGroup1, closestCellGroup2 };
+        closesetIslandCellsCache[(smallIndex, largeIndex)] = closestCells;
+
         return closestCells;
     }
 
     private int[] getTwoClosestIslands()
     {
+
         float minDistanceIslandLength = Single.PositiveInfinity;
         int[] minDistanceIslands = new int[2];
         for (int island1 = 0; island1 < islands.Count; island1++)
         {
             for (int island2 = island1 + 1; island2 < islands.Count; island2++)
             {
-                Vector2I[] closestCells = getTwoClosestCells(islands[island1], islands[island2]);
-                float currDistance = (closestCells[0] - closestCells[1]).Length();
+                if (connectedIslands[island1] || connectedIslands[island2]) continue;
+                Vector2I[] closestCells = getTwoClosestCells(islands[island1], islands[island2], island1, island2);
+                float currDistance = (closestCells[0] - closestCells[1]).LengthSquared();
                 if (currDistance < minDistanceIslandLength)
                 {
                     minDistanceIslandLength = currDistance;
@@ -282,16 +298,24 @@ public partial class WorldTerrain : Node2D
 
     private void connectIslands()
     {
-        while (islands.Count > 0)
+        closesetIslandCellsCache.Clear();
+        connectedIslands = new bool[islands.Count];
+
+        int removedIslands = 0;
+        while (removedIslands < islands.Count - 1)
         {
             int[] currIslandPairIndexes = getTwoClosestIslands();
-            List<Vector2I> startIsland = islands[currIslandPairIndexes[0]];
-            List<Vector2I> endIsland = islands[currIslandPairIndexes[1]];
-            Vector2I[] currIslandPairClosestCells = getTwoClosestCells(startIsland, endIsland);
-            drawPathBetweenIslands(currIslandPairClosestCells[0], currIslandPairClosestCells[1], WorldDataStates.Walkable, 2);
-            islands.Remove(startIsland);
-            islands.Remove(endIsland);
+
+            Vector2I[] currIslandPairClosestCells = getTwoClosestCells(islands[currIslandPairIndexes[0]], islands[currIslandPairIndexes[1]], currIslandPairIndexes[0], currIslandPairIndexes[1]);
+
+            connectedIslands[currIslandPairIndexes[0]] = true;
+            connectedIslands[currIslandPairIndexes[1]] = true;
+
+            drawPathBetweenIslands(currIslandPairClosestCells[0], currIslandPairClosestCells[1], WorldDataStates.Walkable, PathDiameter);
+
+            removedIslands += 2;
         }
+        islands.Clear();
     }
 
 
@@ -377,7 +401,7 @@ public partial class WorldTerrain : Node2D
             for (int col = 0; col < worldData.GetLength(1); col++)
             {
                 int worldDataState = worldData[row, col];
-                if (worldDataState == -1 || GD.Randf() > .5) continue;
+                if (worldDataState == -1 || GD.Randf() > TreeSpawnChance) continue;
                 Vector2I[] tileOptions = new Vector2I[] { };
                 switch ((WorldDataStates)worldDataState)
                 {
@@ -432,28 +456,18 @@ public partial class WorldTerrain : Node2D
         worldData = new int[MapSizeRows, MapSizeCols];
 
         initWorldData();
-        smoothWorldData();
-        smoothWorldData();
-        // smoothWorldData();
-        // smoothWorldData();
-        // smoothWorldData();
-        markShrinesWorldData();
-        // findAllIslands(WorldDataStates.Walkable);
-        // connectIslands();
-        populateMap();
-
-    }
-
-    public override void _Process(double delta)
-    {
-        if (Input.IsActionJustPressed("regen"))
+        for (int passes = 0; passes < NumSmooths; passes++)
         {
-            wipeMap();
-            findAllIslands(WorldDataStates.Walkable);
-            GD.Print(islands.Count);
-            //connectIslands();
-            populateMap();
+            smoothWorldData();
         }
+        markShrinesWorldData();
+        findAllIslands(WorldDataStates.Walkable);
+        while (islands.Count > 1)
+        {
+            connectIslands();
+            findAllIslands(WorldDataStates.Walkable);
+        }
+        populateMap();
     }
 
 

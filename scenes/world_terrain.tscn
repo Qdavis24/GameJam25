@@ -9,7 +9,7 @@
 
 [sub_resource type="Curve" id="Curve_31luj"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0.0054347813, -0.011235952), 0.0, 0.0, 0, 0, Vector2(0.24456522, 0.9775281), 0.0, 0.0, 0, 0, Vector2(0.51086956, -0.32584274), 0.0, 0.0, 0, 0, Vector2(0.75, 1), 0.0, 0.0, 0, 0, Vector2(1, -0.033707857), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.0054347813, -0.011235952), 0.0, 0.0, 0, 0, Vector2(0.24456522, 0.9775281), 0.0, 0.0, 0, 0, Vector2(0.51498127, -0.9275558), 0.0, 0.0, 0, 0, Vector2(0.75, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.007633567), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_683jg"]
@@ -123,8 +123,11 @@ MapSizeRows = 300
 MapSizeCols = 300
 PossibleStates = PackedInt32Array(0, 1)
 StateSpawnWeights = PackedFloat32Array(0.3, 0.6)
+TreeSpawnChance = 0.8
+NumSmooths = 4
 PathCurve = SubResource("Curve_31luj")
-PathCurveSize = 5
+PathCurveSize = 10
+PathDiameter = 2
 BaseTileMapLayer = NodePath("BaseLayer")
 ObjectTileMapLayer = NodePath("ObjectLayer")
 TileConfiguration = ExtResource("2_31luj")
@@ -145,5 +148,4 @@ material = SubResource("ShaderMaterial_683jg")
 tile_set = SubResource("TileSet_vbebb")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-visible = false
 color = Color(0.3515629, 0.3515629, 0.35156286, 1)

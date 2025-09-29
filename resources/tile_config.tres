@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_qpljb")
-baseLayerWalkableTilesAtlasCoords = PackedVector2Array(5, 0, 7, 0, 13, 0)
+baseLayerWalkableTilesAtlasCoords = PackedVector2Array(13, 0, 7, 0, 5, 0)
 baseLayerNonWalkableTilesAtlasCoords = PackedVector2Array(10, 0, 8, 0, 4, 0)
 objectLayerWalkableTilesAtlasCoords = PackedVector2Array(0, 0, 0, 0, 0, 0)
 objectLayerNonWalkableTilesAtlasCoords = PackedVector2Array(4, 1, 5, 1, 6, 1, 7, 1)
