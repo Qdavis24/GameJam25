@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameJam25.scripts.world_terrain;
 
 public partial class WorldTerrain : Node2D
 {
@@ -66,260 +67,8 @@ public partial class WorldTerrain : Node2D
     private Vector2I[][] baseLayerTilesMapToState = new Vector2I[3][];
     private Vector2I[][] objectLayerTilesMapToState = new Vector2I[3][];
 
-    private int[,] worldData; // array to represent how to build our map
-
-    private bool uniformNeighbors(int sample_row, int sample_col, int neighbor_depth)
-    {
-        for (int row_shift = -neighbor_depth; row_shift <= neighbor_depth; row_shift++)
-        {
-            for (int col_shift = -neighbor_depth; col_shift <= neighbor_depth; col_shift++)
-            {
-                int curr_row = sample_row + row_shift;
-                int curr_col = sample_col + col_shift;
-                if (curr_row == sample_row && curr_col == sample_col) continue;
-                if (curr_row < 0) curr_row = worldData.GetLength(0) + curr_row;
-                if (curr_row >= worldData.GetLength(0)) curr_row -= worldData.GetLength(0);
-                if (curr_col < 0) curr_col = worldData.GetLength(1) + curr_col;
-                if (curr_col >= worldData.GetLength(1)) curr_col -= worldData.GetLength(1);
-                if (worldData[curr_row, curr_col] != worldData[sample_row, sample_col]) return false;
-            }
-        }
-
-        return true;
-    }
-
-    private void setNeighbors(int row, int col, int state, int numNeighbors)
-    {
-        for (int i = row - numNeighbors; i < row + numNeighbors; i++)
-        {
-            for (int j = col - numNeighbors; j < col + numNeighbors; j++)
-            {
-                if (i > 0 && i < worldData.GetLength(0) && j > 0 && j < worldData.GetLength(1))
-                    worldData[i, j] = state;
-            }
-        }
-    }
-
-    private void initWorldData()
-    {
-        for (int i = 0; i < worldData.GetLength(0); i++)
-        {
-            for (int j = 0; j < worldData.GetLength(1); j++)
-            {
-                float rInt = GD.Randf();
-                float cummulative = 0f;
-                for (int k = 0; k < TerrainTileTypes.Length; k++)
-                {
-                    cummulative += TerrainTileTypeChance[k];
-                    if (rInt <= cummulative)
-                    {
-                        worldData[i, j] = TerrainTileTypes[k];
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    private void smoothWorldData(int changeWeight)
-    {
-        int[,] copyTerrain = (int[,])worldData.Clone();
-        for (int i = 0; i < worldData.GetLength(0); i++)
-        {
-            for (int j = 0; j < worldData.GetLength(1); j++)
-            {
-                int[] counts = new int[TerrainTileTypes.Length];
-                for (int row_shift = -1; row_shift <= 1; row_shift++)
-                {
-                    for (int col_shift = -1; col_shift <= 1; col_shift++)
-                    {
-                        int row = i + row_shift;
-                        int col = j + col_shift;
-                        if (row == i && col == j) continue;
-                        if (row < 0) row = worldData.GetLength(0) + row;
-                        if (row >= worldData.GetLength(0)) row -= worldData.GetLength(0);
-                        if (col < 0) col = worldData.GetLength(1) + col;
-                        if (col >= worldData.GetLength(1)) col -= worldData.GetLength(1);
-                        counts[worldData[row, col]] += 1;
-                    }
-                }
-
-                int currMaxI = 0;
-                int currMax = 0;
-                for (int k = 0; k < counts.Length; k++)
-                {
-                    // if (counts[k] >= changeWeight)
-                    // {
-                    //     copyTerrain[i, j] = k;
-                    //     break;
-                    // }
-                    if (counts[k] > currMax)
-                    {
-                        currMax = counts[k];
-                        currMaxI = k;
-                    }
-                }
-
-                copyTerrain[i, j] = currMaxI;
-            }
-        }
-
-        worldData = copyTerrain;
-    }
-
-    private void dfsRecordIsland(int row, int col)
-    {
-        row = (row + MapSizeRows) % MapSizeRows;
-        col = (col + MapSizeCols) % MapSizeCols;
-
-        if (islandVisitedCells[row, col]) return;
-        islandVisitedCells[row, col] = true;
-        if (worldData[row, col] == (int)WorldDataStates.Flowers) islands[islands.Count - 1].Add(new Vector2I(col, row));
-        else return;
-        dfsRecordIsland(row, col - 1); // left
-        dfsRecordIsland(row, col + 1); // right
-        dfsRecordIsland(row - 1, col); // up
-        dfsRecordIsland(row + 1, col); // down
-        dfsRecordIsland(row - 1, col - 1); // up-left
-        dfsRecordIsland(row - 1, col + 1); // up-right
-        dfsRecordIsland(row + 1, col - 1); // down-left
-        dfsRecordIsland(row + 1, col + 1); // down-right
-    }
-
-    private void findAllIslands(WorldDataStates islandState)
-    {
-        islandVisitedCells = new bool[MapSizeRows, MapSizeCols];
-        islands = new List<List<Vector2I>>();
-        for (int i = 0; i < MapSizeRows; i++)
-        {
-            for (int j = 0; j < MapSizeCols; j++)
-            {
-                if (worldData[i, j] == (int)islandState && islandVisitedCells[i, j] != true)
-                {
-                    List<Vector2I> currIsland = new List<Vector2I>();
-                    islands.Add(currIsland);
-                    dfsRecordIsland(i, j);
-                }
-            }
-        }
-    }
-
-
-    private void drawPathBetweenIslands(Vector2I island1ColRow, Vector2I island2ColRow, int pathRadius)
-    {
-        Vector2 start = new Vector2(island2ColRow.X, island2ColRow.Y);
-        Vector2 end = new Vector2(island1ColRow.X, island1ColRow.Y);
-        Vector2 direction = end - start;
-
-        // Calculate total steps needed
-        int totalSteps = (int)Math.Max(Math.Abs(direction.X), Math.Abs(direction.Y));
-        if (totalSteps == 0) return; // Same position
-
-        // Get perpendicular direction for curve offset
-        Vector2 perpendicular = new Vector2(-direction.Y, direction.X).Normalized();
-
-        int islandState = worldData[island2ColRow.Y, island2ColRow.X];
-
-        for (int step = 0; step <= totalSteps; step++)
-        {
-            float progress = (float)step / totalSteps; // 0 to 1
-
-            // Get straight line position
-            Vector2 straightPos = start + direction * progress;
-
-            // Sample curve for bend amount
-            float bendAmount = pathCurve.Sample(progress);
-
-            // Apply perpendicular offset
-            Vector2 curvedPos = straightPos + perpendicular * bendAmount * pathCurveSize;
-
-            // Convert to grid coordinates
-            int row = (int)Math.Round(curvedPos.Y);
-            int col = (int)Math.Round(curvedPos.X);
-
-            // Place the path tile
-            setNeighbors(row, col, islandState, pathRadius);
-        }
-    }
-
-    private Vector2I[] getTwoClosestCells(List<Vector2I> group1, List<Vector2I> group2)
-    {
-        /*
-         * Returns the closest two cells in two given cell groupings based on the magnitude of their difference
-         *
-         * Input :
-         * List<Vector2I> group1
-         * A List containing Vector2I representing cells on a grid
-         * List<Vector2I> group2
-         * A List containing Vector2I representing cells on a grid
-         *
-         * Return :
-         * Vector2I[2] closestCells
-         * a Vector2I[2] array containing the two closest cells,
-         * index 0 a Vector2I representing the closest cell in group1
-         * index 1 a Vector2I representing the closest cell in group2
-         *
-         *
-         */
-        Vector2I closestCellGroup1 = group1[0];
-        Vector2I closestCellGroup2 = group2[0];
-        float minDistance = Single.PositiveInfinity;
-        foreach (Vector2I group1Cell in group1)
-        {
-            foreach (Vector2I group2Cell in group2)
-            {
-                float currDistance = (group1Cell - group2Cell).Length();
-                if (currDistance < minDistance)
-                {
-                    minDistance = currDistance;
-                    closestCellGroup1 = group1Cell;
-                    closestCellGroup2 = group2Cell;
-                }
-            }
-        }
-
-        Vector2I[] closestCells = new Vector2I[2] { closestCellGroup1, closestCellGroup2 };
-        return closestCells;
-    }
-
-    private int[] getTwoClosestIslands()
-    {
-        float minDistanceIslandLength = Single.PositiveInfinity;
-        int[] minDistanceIslands = new int[2];
-        for (int i = 0; i < islands.Count; i++)
-        {
-            for (int j = i + 1; j < islands.Count; j++)
-            {
-                Vector2I[] closestCells = getTwoClosestCells(islands[i], islands[j]);
-                float currDistance = (closestCells[0] - closestCells[1]).Length();
-                if (currDistance < minDistanceIslandLength)
-                {
-                    minDistanceIslandLength = currDistance;
-                    minDistanceIslands[0] = i;
-                    minDistanceIslands[1] = j;
-                }
-            }
-        }
-
-        return minDistanceIslands;
-    }
-
-
-    private void connectIslands()
-    {
-        while (islands.Count > 0)
-        {
-            int[] currIslandPairIndexes = getTwoClosestIslands();
-            List<Vector2I> startIsland = islands[currIslandPairIndexes[0]];
-            List<Vector2I> endIsland = islands[currIslandPairIndexes[1]];
-            Vector2I[] currIslandPairClosestCells = getTwoClosestCells(startIsland, endIsland);
-            drawPathBetweenIslands(currIslandPairClosestCells[0], currIslandPairClosestCells[1], 2);
-            islands.Remove(startIsland);
-            islands.Remove(endIsland);
-        }
-    }
-
-
+    private int[,] worldData;
+    
     private void markShrinesWorldData()
     {
         // pick 3 sub 2d arrays in mapData with minimum distance apart
@@ -395,7 +144,7 @@ public partial class WorldTerrain : Node2D
                 int worldDataState = worldData[row, col];
                 if (worldDataState == -1) continue;
                 Vector2I[] tileOptions = objectLayerTilesMapToState[worldDataState];
-                if ((WorldDataStates)worldDataState == WorldDataStates.Grass && GD.Randf() < .7 && uniformNeighbors(row, col, 1))
+                if ((WorldDataStates)worldDataState == WorldDataStates.Grass && GD.Randf() < .2)
                 {
                     ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0, tileOptions[GD.Randi() % tileOptions.Length]);
                 }
@@ -453,20 +202,17 @@ public partial class WorldTerrain : Node2D
         objectLayerTilesMapToState[0] = objectLayerGrassTiles;
         objectLayerTilesMapToState[1] = objectLayerDirtTiles;
 
+        Matrix matrix =
+            ProcWorldGeneration.InitWorldData(MapSizeRows, MapSizeCols, TerrainTileTypes, TerrainTileTypeChance);
+        matrix = ProcWorldGeneration.SmoothWorldData(matrix, TerrainTileTypes, 1, true);
+        matrix = ProcWorldGeneration.SmoothWorldData(matrix, TerrainTileTypes, 1, true);
+        matrix = ProcWorldGeneration.SmoothWorldData(matrix, TerrainTileTypes, 1, true);
+        matrix = ProcWorldGeneration.SmoothWorldData(matrix, TerrainTileTypes, 1, true);
 
-        initWorldData();
-        smoothWorldData(5);
-        smoothWorldData(5);
-        smoothWorldData(6);
-        smoothWorldData(6);
-        smoothWorldData(7);
+        IslandConnector.ConnectIslands(matrix, 0, 5, pathCurveSize, pathCurve);
+        
+        
         markShrinesWorldData();
-        findAllIslands(WorldDataStates.Flowers);
-        while (islands.Count > 1)
-        {
-            connectIslands();
-            findAllIslands(WorldDataStates.Flowers);
-        }
         populateMap();
 
         
