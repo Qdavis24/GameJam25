@@ -1,15 +1,14 @@
 [gd_scene load_steps=13 format=3 uid="uid://s3w1eg52kr8u"]
 
-[ext_resource type="Script" uid="uid://cgcf6qyo31wyt" path="res://scripts/world_terrain/WorldTerrain.cs" id="1_31luj"]
+[ext_resource type="Script" uid="uid://cgcf6qyo31wyt" path="res://scripts/world_generation/WorldTerrain.cs" id="1_31luj"]
 [ext_resource type="Resource" uid="uid://bfks6ydjmu5gu" path="res://resources/tile_config.tres" id="2_31luj"]
 [ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/racoon_shrine.tscn" id="3_3xxx6"]
 [ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="3_wh0dg"]
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="4_coj3r"]
 [ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="5_gphok"]
 
-[sub_resource type="Curve" id="Curve_31luj"]
-_limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0.0054347813, -0.011235952), 0.0, 0.0, 0, 0, Vector2(0.24456522, 0.9775281), 0.0, 0.0, 0, 0, Vector2(0.51498127, -0.9275558), 0.0, 0.0, 0, 0, Vector2(0.75, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.007633567), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_3xxx6"]
+_data = [Vector2(0, 0.48669535), 0.0, 0.0, 0, 0, Vector2(0.27149323, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 0), 0.0, 0.0, 0, 0, Vector2(0.760181, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.49227476), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_683jg"]
@@ -122,15 +121,16 @@ script = ExtResource("1_31luj")
 MapSizeRows = 300
 MapSizeCols = 300
 PossibleStates = PackedInt32Array(0, 1)
-StateSpawnWeights = PackedFloat32Array(0.3, 0.6)
-TreeSpawnChance = 0.8
-NumSmooths = 4
-PathCurve = SubResource("Curve_31luj")
-PathCurveSize = 10
-PathDiameter = 2
+StateSpawnWeights = PackedFloat32Array(0.4, 0.6)
+TreeSpawnChance = 0.7
+NumSmooths = 5
+PathCurve = SubResource("Curve_3xxx6")
+PathCurveSize = 5
+PathRadius = 2
 BaseTileMapLayer = NodePath("BaseLayer")
 ObjectTileMapLayer = NodePath("ObjectLayer")
 TileConfiguration = ExtResource("2_31luj")
+NumShrines = 3
 ShrineSizeRows = 11
 ShrineSizeCols = 11
 MinimumDistanceShrines = 60

@@ -1,4 +1,4 @@
-﻿namespace GameJam25.scripts.world_terrain
+﻿namespace GameJam25.scripts.world_generation.utilities
 {
     public class UnionFind
     {

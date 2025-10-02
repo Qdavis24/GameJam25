@@ -3,7 +3,7 @@ using Godot;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GameJam25.scripts.world_terrain
+namespace GameJam25.scripts.world_generation.utilities
 {
     public static class IslandConnector
     {
@@ -64,9 +64,8 @@ namespace GameJam25.scripts.world_terrain
             return islandEdges.OrderBy(edge => edge.Distance).ToList();
         }
 
-        public static void ConnectIslands(Matrix matrix, int state, int pathRadius, int pathCurveSize, Curve pathCurve)
+        public static void ConnectIslands(Matrix matrix, List<Island> allIslands, PathConfig pathConfig)
         {
-            List<Island> allIslands = FindIslands(matrix, state);
             List<IslandEdge> islandEdges = generateAllIslandEndges(allIslands);
             UnionFind uf = new UnionFind(allIslands.Count);
             foreach (IslandEdge edge in islandEdges)
@@ -77,8 +76,7 @@ namespace GameJam25.scripts.world_terrain
                 int island2Index = allIslands.IndexOf(island2);
                 if (uf.Find(island1Index) != uf.Find(island2Index))
                 {
-                    MatrixUtils.DrawPathBetweenCells(matrix, island1.Centroid, island2.Centroid, pathRadius,
-                        pathCurveSize, pathCurve);
+                    MatrixUtils.DrawPathBetweenCells(matrix, island1.Centroid, island2.Centroid, pathConfig);
                     uf.Union(island1Index, island2Index);
                 }
             }

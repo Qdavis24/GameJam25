@@ -1,14 +1,10 @@
 ﻿using Godot;
+using System.Collections.Generic;
 using System;
 
-namespace GameJam25.scripts.world_terrain
+namespace GameJam25.scripts.world_generation.utilities
 {
-    public class Matrix(int[,] array)
-    {
-        public int[,] Array { get; private set; } = array;
-        public int RowLength { get; private set; } = array.GetLength(0);
-        public int ColLength { get; private set; } = array.GetLength(1);
-    }
+    
     
     public static class MatrixUtils
     {
@@ -123,7 +119,7 @@ namespace GameJam25.scripts.world_terrain
         }
 
         public static void DrawPathBetweenCells(Matrix matrix, Vector2I startCell,
-            Vector2I endCell, int pathRadius, int pathCurveSize, Curve pathCurve)
+            Vector2I endCell, PathConfig pathConfig)
         {
             Vector2 direction = endCell - startCell;
 
@@ -144,17 +140,38 @@ namespace GameJam25.scripts.world_terrain
                 Vector2 straightPos = startCell + direction * progress;
 
                 // Sample curve for bend amount
-                float bendAmount = pathCurve.Sample(progress);
+                float bendAmount = pathConfig.pathCurve.Sample(progress);
 
                 // Apply perpendicular offset
-                Vector2 curvedPos = straightPos + perpendicular * bendAmount * pathCurveSize;
+                Vector2 curvedPos = straightPos + perpendicular * bendAmount * pathConfig.pathCurveSize;
 
                 // Convert to grid coordinates
                 int row = (int)Math.Round(curvedPos.Y);
                 int col = (int)Math.Round(curvedPos.X);
 
                 // Place the path tile
-                SetNeighbors(matrix, row, col, pathRadius, state, true);
+                SetNeighbors(matrix, row, col, pathConfig.PathRadius, state, true);
+            }
+        }
+
+        public static void InsertIsland(Matrix matrix, List<Vector2I> allCells, int state)
+        {
+            foreach (Vector2I cell in allCells)
+            {
+                matrix.Array[cell.X, cell.Y] = state;
+            }
+        }
+        public static void PrintMatrix(Matrix matrix)
+        {
+            for (int row = 0; row < matrix.RowLength; row++)
+            {
+                string curr_row = "";
+                for (int col = 0; col < matrix.ColLength; col++)
+                {
+                    curr_row += matrix.Array[row, col];
+                }
+
+                GD.Print(curr_row);
             }
         }
     }

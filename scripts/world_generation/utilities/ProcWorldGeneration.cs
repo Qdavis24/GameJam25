@@ -1,8 +1,7 @@
-﻿using System;
-using Godot;
-using System.Collections.Generic;
+﻿using Godot;
 
-namespace GameJam25.scripts.world_terrain
+
+namespace GameJam25.scripts.world_generation.utilities
 {
     public static class ProcWorldGeneration
     {
