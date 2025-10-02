@@ -30,54 +30,59 @@ namespace GameJam25.scripts.world_generation
             for (int smoothPass = 0; smoothPass < numSmooths; smoothPass++)
                 Map = ProcWorldGeneration.SmoothWorldData(Map, possibleStates, 1, true);
             Islands = IslandConnector.FindIslands(Map, (int)MapCellStates.Walkable);
+            GD.Print(Islands.Count);
             IslandConnector.ConnectIslands(Map, Islands, PathConfiguration);
             markShrinesWorldData();
         }
 
-        private Shrine createShrine(int row, int col)
+        private Shrine createShrine(Vector2I rootCell)
         {
             List<Vector2I> allCells = new List<Vector2I>();
-            for (int currRow = row; currRow < row + ShrineConfiguration.ShrineSizeY; currRow++)
+            int rowDirection = rootCell.X > ShrineConfiguration.ShrineSizeX ? -1 : 1;
+            int colDirection = rootCell.Y > ShrineConfiguration.ShrineSizeY ? -1 : 1;
+            for (int rowShift = 0; rowShift < ShrineConfiguration.ShrineSizeY; rowShift++)
             {
-                for (int currCol = col; currCol < col + ShrineConfiguration.ShrineSizeX; currCol++)
+                for (int colShift = 0; colShift < ShrineConfiguration.ShrineSizeX; colShift++)
                 {
+                    int currRow = rootCell.X + (rowShift * rowDirection);
+                    int currCol = rootCell.Y + (colShift * colDirection);
                     Vector2I currCell = new Vector2I(currRow, currCol);
                     allCells.Add(currCell);
                 }
             }
 
-            return new Shrine(allCells);
+            return new Shrine(allCells, rootCell, rowDirection, colDirection);
         }
 
         private void markShrinesWorldData()
         {
-            Island[] shrineIslands = new Island[ShrineConfiguration.NumShrines];
-            bool validIslands = false;
-            while (validIslands != true)
+            List<Shrine> shrines = new List<Shrine>();
+            int count = 0;
+            while (shrines.Count < ShrineConfiguration.NumShrines && count < 100)
             {
-                shrineIslands = new Island[ShrineConfiguration.NumShrines];
-                for (int i = 0; i < shrineIslands.Length; i++)
-                    shrineIslands[i] = Islands[GD.RandRange(0, Islands.Count)];
-
-                validIslands = true;
-                for (int i = 0; i < shrineIslands.Length; i++)
+                count++;
+                Vector2I possibleShrinePlacement = Islands[GD.RandRange(0, Islands.Count - 1)].Centroid;
+                bool validPlacement = true;
+                foreach (Shrine currShrine in shrines)
                 {
-                    for (int j = i + 1; j < shrineIslands.Length; j++)
+                    if ((possibleShrinePlacement - currShrine.RootCell).Length() < ShrineConfiguration.MinDistance)
                     {
-                        if ((shrineIslands[i].Centroid - shrineIslands[j].Centroid).Length() <
-                            ShrineConfiguration.MinDistance)
-                        {
-                            validIslands = false;
-                        }
+                        validPlacement = false;
+                        break;
                     }
+                }
+
+                if (validPlacement)
+                {
+                    Shrine newShrine = createShrine(possibleShrinePlacement);
+                    shrines.Add(newShrine);
                 }
             }
 
-            for (int i = 0; i < ShrineConfiguration.NumShrines; i++)
+            foreach(Shrine currShrine in shrines)
             {
-                Shrine currShrine = createShrine(shrineIslands[i].Centroid.Y, shrineIslands[i].Centroid.X);
-                Shrines.Add(currShrine);
                 MatrixUtils.InsertIsland(Map, currShrine.AllCells, (int)MapCellStates.Shrine);
+                Shrines.Add(currShrine);
             }
         }
     }

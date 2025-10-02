@@ -94,12 +94,12 @@ public partial class WorldTerrain : Node2D
 
     private void spawnShrines()
     {
-        for (int shrine = 0; shrine < allShrinePckdScns.Length; shrine++)
+        for (int shrineIndex = 0; shrineIndex < allShrinePckdScns.Length; shrineIndex++)
         {
-            Node2D currShrine = allShrinePckdScns[shrine].Instantiate<Node2D>();
+            Node2D currShrine = allShrinePckdScns[shrineIndex].Instantiate<Node2D>();
             Vector2I centerTile = new Vector2I(
-                world.Shrines[shrine].AllCells[0].X + (ShrineSizeRows / 2),
-                world.Shrines[shrine].AllCells[0].Y + (ShrineSizeCols / 2)
+                world.Shrines[shrineIndex].RootCell.X + ShrineSizeRows / 2 * world.Shrines[shrineIndex].RowDir,
+                world.Shrines[shrineIndex].RootCell.Y + ShrineSizeCols / 2 * world.Shrines[shrineIndex].ColDir
             );
             currShrine.Position = BaseTileMapLayer.MapToLocal(centerTile);
             AddChild(currShrine);
@@ -108,9 +108,10 @@ public partial class WorldTerrain : Node2D
 
     private void populateMap()
     {
+        spawnShrines();
         populateBaseLayer();
         populateObjectLayer();
-        spawnShrines();
+        
     }
 
     private void wipeMap()

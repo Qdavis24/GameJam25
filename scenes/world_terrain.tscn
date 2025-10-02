@@ -117,22 +117,23 @@ tile_size = Vector2i(120, 90)
 sources/0 = SubResource("TileSetAtlasSource_vbebb")
 
 [node name="WorldTerrain" type="Node2D" node_paths=PackedStringArray("BaseTileMapLayer", "ObjectTileMapLayer")]
+y_sort_enabled = true
 script = ExtResource("1_31luj")
-MapSizeRows = 300
-MapSizeCols = 300
+MapSizeRows = 150
+MapSizeCols = 150
 PossibleStates = PackedInt32Array(0, 1)
-StateSpawnWeights = PackedFloat32Array(0.4, 0.6)
-TreeSpawnChance = 0.7
+StateSpawnWeights = PackedFloat32Array(0.5, 0.5)
+TreeSpawnChance = 1.0
 NumSmooths = 5
 PathCurve = SubResource("Curve_3xxx6")
 PathCurveSize = 5
-PathRadius = 2
+PathRadius = 3
 BaseTileMapLayer = NodePath("BaseLayer")
 ObjectTileMapLayer = NodePath("ObjectLayer")
 TileConfiguration = ExtResource("2_31luj")
 NumShrines = 3
-ShrineSizeRows = 11
-ShrineSizeCols = 11
+ShrineSizeRows = 19
+ShrineSizeCols = 19
 MinimumDistanceShrines = 60
 allShrinePckdScns = Array[PackedScene]([ExtResource("3_3xxx6"), ExtResource("3_3xxx6"), ExtResource("3_3xxx6")])
 metadata/_edit_horizontal_guides_ = [-21.0]
@@ -142,6 +143,7 @@ y_sort_enabled = true
 tile_set = SubResource("TileSet_nmbn7")
 
 [node name="ObjectLayer" type="TileMapLayer" parent="."]
+visible = false
 z_index = 1
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_683jg")
