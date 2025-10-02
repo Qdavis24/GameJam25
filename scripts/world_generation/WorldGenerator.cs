@@ -85,5 +85,7 @@ namespace GameJam25.scripts.world_generation
                 Shrines.Add(currShrine);
             }
         }
+
+        
     }
 }

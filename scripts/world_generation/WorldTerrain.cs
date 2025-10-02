@@ -6,28 +6,31 @@ using GameJam25.scripts.world_generation;
 
 public partial class WorldTerrain : Node2D
 {
-    [ExportCategory("World Generation")] 
+    [ExportCategory("World Generation")] [Export]
+    private int BorderSize;
+
     [Export] int MapSizeRows;
     [Export] int MapSizeCols;
-    
+
     [Export] int[] PossibleStates; // All possible values that can exist in world cells (e.g., grass, water, mountain)
-    [Export] float[] StateSpawnWeights; // Probability weights for each state during initial world generation (matched indexing)
+
+    [Export]
+    float[] StateSpawnWeights; // Probability weights for each state during initial world generation (matched indexing)
 
     [Export] float TreeSpawnChance;
     [Export] int NumSmooths;
 
-    [ExportCategory("Path Carving Settings")] 
-    [Export] Curve PathCurve; // shape of path
+    [ExportCategory("Path Carving Settings")] [Export]
+    Curve PathCurve; // shape of path
+
     [Export] int PathCurveSize; // Magnitude of path curves
     [Export] int PathRadius;
-    
-    [ExportCategory("Tiles")] 
-    [Export] TileMapLayer BaseTileMapLayer;
+
+    [ExportCategory("Tiles")] [Export] TileMapLayer BaseTileMapLayer;
     [Export] TileMapLayer ObjectTileMapLayer;
     [Export] TileConfig TileConfiguration;
 
-    [ExportCategory("Shrines")] 
-    [Export] int NumShrines;
+    [ExportCategory("Shrines")] [Export] int NumShrines;
     [Export] int ShrineSizeRows;
     [Export] int ShrineSizeCols;
     [Export] int MinimumDistanceShrines; // in tile cells
@@ -86,8 +89,60 @@ public partial class WorldTerrain : Node2D
                         break;
                 }
 
-                if (GD.Randf() < TreeSpawnChance && worldDataState != (int) WorldDataStates.Shrine)
+                if (GD.Randf() < TreeSpawnChance && worldDataState != (int)WorldDataStates.Shrine)
                     ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0, tileOptions[GD.Randi() % tileOptions.Length]);
+            }
+        }
+    }
+
+    private void createBorder()
+    {
+        // left pass
+        for (int row = -BorderSize; row < MapSizeRows + BorderSize; row++)
+        {
+            for (int col = -BorderSize; col < 0; col++)
+            {
+                BaseTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                    TileConfiguration.BaseLayerNonWalkableTilesAtlasCoords[0]);
+                ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                    TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords[
+                        GD.Randi() % TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
+            }
+        }
+        // top pass
+        for (int row = -BorderSize; row < 0; row++)
+        {
+            for (int col = 0; col < MapSizeCols; col++)
+            {
+                BaseTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                    TileConfiguration.BaseLayerNonWalkableTilesAtlasCoords[0]);
+                ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                    TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords[
+                        GD.Randi() % TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
+            }
+        }
+        //right pass
+        for (int row = -BorderSize; row < MapSizeRows+BorderSize; row++)
+        {
+            for (int col = MapSizeCols; col < BorderSize + MapSizeCols; col++)
+            {
+                BaseTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                    TileConfiguration.BaseLayerNonWalkableTilesAtlasCoords[0]);
+                ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                    TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords[
+                        GD.Randi() % TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
+            }
+        }
+        // bottom pass
+        for (int row = MapSizeRows; row < MapSizeRows+BorderSize; row++)
+        {
+            for (int col = 0; col < MapSizeCols; col++)
+            {
+                BaseTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                    TileConfiguration.BaseLayerNonWalkableTilesAtlasCoords[0]);
+                ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                    TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords[
+                        GD.Randi() % TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
             }
         }
     }
@@ -111,7 +166,7 @@ public partial class WorldTerrain : Node2D
         spawnShrines();
         populateBaseLayer();
         populateObjectLayer();
-        
+        createBorder();
     }
 
     private void wipeMap()

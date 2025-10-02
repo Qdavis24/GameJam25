@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://gs3xoka1pgbv"]
+
+[ext_resource type="PackedScene" uid="uid://s3w1eg52kr8u" path="res://scenes/world_generation/world_generator.tscn" id="1_elqb8"]
+
+[node name="Main" type="Node2D"]
+
+[node name="WorldGenerator" parent="." instance=ExtResource("1_elqb8")]
+BorderSize = 40
