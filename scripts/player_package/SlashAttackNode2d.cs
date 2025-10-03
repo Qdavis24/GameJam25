@@ -17,7 +17,7 @@ public partial class SlashAttackNode2d : Node2D
 		Rotation = Mathf.Atan2(Direction.Y, Direction.X);
 
 		// Play the slash animation
-		_anim.Play("slash_1");
+		_anim.Play("fox_slash");
 
 		// Auto-destroy when animation finishes
 		_anim.AnimationFinished += () => QueueFree();

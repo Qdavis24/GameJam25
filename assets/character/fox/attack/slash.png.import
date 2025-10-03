@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bch1p6seqvehr"
-path="res://.godot/imported/orange_slash.png-d4f88407f60bd93e96354a400f700b65.ctex"
+uid="uid://bhx7q04am7c66"
+path="res://.godot/imported/slash.png-4b74a13a2c78e07204529c7433586cf1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/player_package/attack/orange_slash.png"
-dest_files=["res://.godot/imported/orange_slash.png-d4f88407f60bd93e96354a400f700b65.ctex"]
+source_file="res://assets/character/fox/attack/slash.png"
+dest_files=["res://.godot/imported/slash.png-4b74a13a2c78e07204529c7433586cf1.ctex"]
 
 [params]
 

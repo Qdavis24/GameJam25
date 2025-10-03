@@ -5,7 +5,7 @@ public partial class Player : CharacterBody2D
 {
 	
 	[Export] public float Speed = 400f;
-	[Export] public string AnimationSet = "v3";
+	[Export] public string AnimationSet = "fox";
 	
 	[Export] public PackedScene SlashAttack;
 	[Export] private float LungeSpeed = 700f;
@@ -21,7 +21,7 @@ public partial class Player : CharacterBody2D
 	public override void _Ready()
 	{
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		_anim.Play(AnimationSet + "idle");
+		_anim.Play(AnimationSet + "_idle");
 	}
 	
 	private void Slash(Vector2 dir)
@@ -71,7 +71,7 @@ public partial class Player : CharacterBody2D
 		void Play(string animation)
 		{
 			if (_anim.Animation != AnimationSet + animation)
-				_anim.Play(AnimationSet + animation);
+				_anim.Play(AnimationSet + "_" + animation);
 		}
 
 		// Flip sprite horizontally for left vs right movement
@@ -109,7 +109,7 @@ public partial class Player : CharacterBody2D
 			lungeTime -= (float)delta;
 			Velocity = lungeDir * LungeSpeed;
 			
-			_anim.Play(AnimationSet + "walk");
+			_anim.Play(AnimationSet + "_walk");
 			if (lungeDir.X != 0) _anim.FlipH = lungeDir.X < 0;
 
 			if (lungeTime <= 0f)

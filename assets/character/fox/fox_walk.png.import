@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bd5ggu3rsmfva"
-path="res://.godot/imported/hands_idle.png-6a4182bd575607f258de1a3fc3832699.ctex"
+uid="uid://b3f4pn3t8do7u"
+path="res://.godot/imported/fox_walk.png-9a44f4ba4cb077ca11c5ac59e6594db4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/player_package/hands_idle.png"
-dest_files=["res://.godot/imported/hands_idle.png-6a4182bd575607f258de1a3fc3832699.ctex"]
+source_file="res://assets/character/fox/fox_walk.png"
+dest_files=["res://.godot/imported/fox_walk.png-9a44f4ba4cb077ca11c5ac59e6594db4.ctex"]
 
 [params]
 
