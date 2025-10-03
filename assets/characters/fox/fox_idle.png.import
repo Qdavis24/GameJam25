@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhx7q04am7c66"
-path="res://.godot/imported/slash.png-4b74a13a2c78e07204529c7433586cf1.ctex"
+uid="uid://bkjnwy48gqesn"
+path="res://.godot/imported/fox_idle.png-41b325da7ca9283913644ab1aff3ffe2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/character/fox/attack/slash.png"
-dest_files=["res://.godot/imported/slash.png-4b74a13a2c78e07204529c7433586cf1.ctex"]
+source_file="res://assets/characters/fox/fox_idle.png"
+dest_files=["res://.godot/imported/fox_idle.png-41b325da7ca9283913644ab1aff3ffe2.ctex"]
 
 [params]
 

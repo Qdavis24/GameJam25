@@ -17,12 +17,6 @@ public partial class Player : CharacterBody2D
 	
 	private AnimatedSprite2D _anim;
 	private Sprite2D _sprite;
-
-	public override void _Ready()
-	{
-		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		_anim.Play(AnimationSet + "_idle");
-	}
 	
 	private void Slash(Vector2 dir)
 	{
@@ -33,7 +27,6 @@ public partial class Player : CharacterBody2D
 
 		var slash = SlashAttack.Instantiate<SlashAttackNode2d>();
 		slash.Position = dir.Normalized() * 10f; // a little in front of char
-		//slash.Position = dir.Normalized();
 		slash.Direction = dir;
 		AddChild(slash);
 	}
@@ -41,7 +34,7 @@ public partial class Player : CharacterBody2D
 	private void Move(Vector2 moveDir) {
 		float offset = 8.130104f; // isometric diagonal offset
 
-		// Nudge diagonal movement to match isometric tile perspective
+		 // Nudge diagonal movement to match isometric tile perspective
 		 if (moveDir.X != 0 && moveDir.Y != 0)
 		 {
 		 	bool up = moveDir.Y < 0;
@@ -70,7 +63,7 @@ public partial class Player : CharacterBody2D
 	private void UpdateAnimation(Vector2 moveDir) {
 		void Play(string animation)
 		{
-			if (_anim.Animation != AnimationSet + animation)
+			if (_anim.Animation != AnimationSet + "_" + animation)
 				_anim.Play(AnimationSet + "_" + animation);
 		}
 
@@ -83,38 +76,46 @@ public partial class Player : CharacterBody2D
 		else {
 			Play("walk");
 		}
-
 	}
 
 	private void GetInput(double delta)
 	{		
-		if (!lunging)
-		{
-			if (Input.IsActionJustPressed("attack"))
-			{
-				Vector2 mousePos = GetGlobalMousePosition();
-				Vector2 dir = (mousePos - GlobalPosition).Normalized();
-				if (dir == Vector2.Zero) dir = Vector2.Right;
-
-				Slash(dir);
-			}
-
-			Vector2 moveDir = Input.GetVector("left", "right", "up", "down");
-
-			Move(moveDir);
-			UpdateAnimation(moveDir);
-		}
-		else
+		if (lunging)
 		{
 			lungeTime -= (float)delta;
 			Velocity = lungeDir * LungeSpeed;
 			
 			_anim.Play(AnimationSet + "_walk");
-			if (lungeDir.X != 0) _anim.FlipH = lungeDir.X < 0;
+			
+			if (lungeDir.X != 0) 
+				_anim.FlipH = lungeDir.X < 0;
 
 			if (lungeTime <= 0f)
 				lunging = false;
+				
+			return;
 		}
+
+		if (Input.IsActionJustPressed("attack"))
+		{
+			Vector2 mousePos = GetGlobalMousePosition();
+			Vector2 dir = (mousePos - GlobalPosition).Normalized();
+			if (dir == Vector2.Zero) dir = Vector2.Right;
+
+			Slash(dir);
+			return;
+		}
+
+		Vector2 moveDir = Input.GetVector("left", "right", "up", "down");
+
+		Move(moveDir);
+		UpdateAnimation(moveDir);
+	}
+	
+	public override void _Ready()
+	{
+		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		_anim.Play(AnimationSet + "_idle");
 	}
 
 	public override void _PhysicsProcess(double delta)

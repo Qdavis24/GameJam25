@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="3_wh0dg"]
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="4_coj3r"]
 [ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="5_gphok"]
-[ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/PlayerPackage.tscn" id="6_3xxx6"]
+[ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player_package.tscn" id="6_3xxx6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_683jg"]
 texture = ExtResource("3_wh0dg")

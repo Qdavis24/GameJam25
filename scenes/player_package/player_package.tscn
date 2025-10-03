@@ -1,12 +1,11 @@
-[gd_scene load_steps=34 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=25 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_2gqcc"]
-[ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/PlayerAttack/SlashAttackScene.tscn" id="2_l4pu8"]
+[ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attack/slash_attack_scene.tscn" id="2_l4pu8"]
 [ext_resource type="Script" uid="uid://c4jyj40wk318s" path="res://scripts/player_package/PlayerCamera.cs" id="3_uceyd"]
-[ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/character/fox/shadow.png" id="6_i3ygb"]
-[ext_resource type="Texture2D" uid="uid://b3f4pn3t8do7u" path="res://assets/character/fox/fox_walk.png" id="8_hbqw5"]
-[ext_resource type="Texture2D" uid="uid://bkjnwy48gqesn" path="res://assets/character/fox/fox_idle.png" id="9_eg526"]
-[ext_resource type="Script" uid="uid://cdpy54nip5ioo" path="res://scripts/player_package/SlashAttackNode2d.cs" id="11_eg526"]
+[ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/characters/fox/shadow.png" id="6_i3ygb"]
+[ext_resource type="Texture2D" uid="uid://b3f4pn3t8do7u" path="res://assets/characters/fox/fox_walk.png" id="8_hbqw5"]
+[ext_resource type="Texture2D" uid="uid://bkjnwy48gqesn" path="res://assets/characters/fox/fox_idle.png" id="9_eg526"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6qmwb"]
 atlas = ExtResource("9_eg526")
@@ -140,59 +139,6 @@ animations = [{
 "speed": 19.0
 }]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8prce"]
-load_path = "res://.godot/imported/SLASH.png-96e9a99c1460057e6d5d1f51d37d8d6b.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wqoyr"]
-atlas = SubResource("CompressedTexture2D_8prce")
-region = Rect2(0, 0, 64, 47)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q6tbt"]
-atlas = SubResource("CompressedTexture2D_8prce")
-region = Rect2(64, 0, 64, 47)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nwvmv"]
-atlas = SubResource("CompressedTexture2D_8prce")
-region = Rect2(128, 0, 64, 47)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cvah0"]
-atlas = SubResource("CompressedTexture2D_8prce")
-region = Rect2(0, 47, 64, 47)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ga8v6"]
-atlas = SubResource("CompressedTexture2D_8prce")
-region = Rect2(64, 47, 64, 47)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_acrcd"]
-atlas = SubResource("CompressedTexture2D_8prce")
-region = Rect2(128, 47, 64, 47)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_cgvje"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wqoyr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_q6tbt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nwvmv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cvah0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ga8v6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_acrcd")
-}],
-"loop": true,
-"name": &"slash",
-"speed": 18.0
-}]
-
 [node name="PlayerPackage" type="Node2D"]
 z_index = 999
 
@@ -215,16 +161,3 @@ show_behind_parent = true
 position = Vector2(0, -30.19)
 scale = Vector2(1.29, 1.67)
 texture = ExtResource("6_i3ygb")
-
-[node name="SlashAttack" type="Node2D" parent="."]
-script = ExtResource("11_eg526")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="SlashAttack"]
-position = Vector2(24.170212, 17.75)
-scale = Vector2(1.7553191, 1.7553191)
-sprite_frames = SubResource("SpriteFrames_cgvje")
-animation = &"slash"
-
-[node name="Area2D" type="Area2D" parent="SlashAttack"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SlashAttack/Area2D"]

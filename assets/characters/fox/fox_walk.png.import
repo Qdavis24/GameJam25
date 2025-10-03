@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cym3xbms17s5g"
-path="res://.godot/imported/shadow.png-791439984cbe9cd98d05a58168fb1a9d.ctex"
+uid="uid://b3f4pn3t8do7u"
+path="res://.godot/imported/fox_walk.png-fee8e49a8b4446535ec0fe5dfac2d367.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/character/fox/shadow.png"
-dest_files=["res://.godot/imported/shadow.png-791439984cbe9cd98d05a58168fb1a9d.ctex"]
+source_file="res://assets/characters/fox/fox_walk.png"
+dest_files=["res://.godot/imported/fox_walk.png-fee8e49a8b4446535ec0fe5dfac2d367.ctex"]
 
 [params]
 
