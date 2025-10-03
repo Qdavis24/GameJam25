@@ -546,7 +546,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"v3walk",
-"speed": 16.0
+"speed": 19.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -665,8 +665,8 @@ z_index = 999
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
 script = ExtResource("1_2gqcc")
-Speed = 350.0
 SlashAttack = ExtResource("2_l4pu8")
+LungeDuration = 0.3
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
 script = ExtResource("3_uceyd")
@@ -674,7 +674,7 @@ script = ExtResource("3_uceyd")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
 scale = Vector2(0.87, 0.87)
 sprite_frames = SubResource("SpriteFrames_8pk6h")
-animation = &"v1idle"
+animation = &"v3walk"
 
 [node name="Shadow" type="Sprite2D" parent="CharacterBody2D"]
 modulate = Color(1, 1, 1, 0.2627451)

@@ -3,19 +3,17 @@ using System;
 
 public partial class Player : CharacterBody2D
 {
+	
 	[Export] public float Speed = 400f;
 	[Export] public string AnimationSet = "v3";
 	
 	[Export] public PackedScene SlashAttack;
-
-
-	private float lungeSpeed = 700f;
-	private float lungeDuration = 0.35f;
+	[Export] private float LungeSpeed = 700f;
+	[Export] private float LungeDuration = 0.35f;
 
 	private bool lunging = false;
 	private float lungeTime = 0f;
 	private Vector2 lungeDir = Vector2.Right;
-	////////////////
 	
 	private AnimatedSprite2D _anim;
 	private Sprite2D _sprite;
@@ -29,19 +27,15 @@ public partial class Player : CharacterBody2D
 	private void Slash(Vector2 dir)
 	{
 		lunging = true;
-		lungeTime = lungeDuration;
+		lungeTime = LungeDuration;
 		lungeDir = dir;
-		Velocity = dir * lungeSpeed;
-		
-		////// Leave in world
-		//var slash = SlashAttack.Instantiate<SlashAttackNode2d>();
-		//slash.GlobalPosition = GlobalPosition + dir.Normalized() * 18f;
-		//slash.Direction = dir;
-		//GetTree().CurrentScene.AddChild(slash);
+		Velocity = dir * LungeSpeed;
+
 		var slash = SlashAttack.Instantiate<SlashAttackNode2d>();
-		slash.Position = dir.Normalized() * 18f;  // local position relative to the player
+		slash.Position = dir.Normalized() * 10f; // a little in front of char
+		//slash.Position = dir.Normalized();
 		slash.Direction = dir;
-		AddChild(slash); // instead of GetTree().CurrentScene.AddChild(slash)
+		AddChild(slash);
 	}
 
 	private void Move(Vector2 moveDir) {
@@ -113,7 +107,7 @@ public partial class Player : CharacterBody2D
 		else
 		{
 			lungeTime -= (float)delta;
-			Velocity = lungeDir * lungeSpeed;
+			Velocity = lungeDir * LungeSpeed;
 			
 			_anim.Play(AnimationSet + "walk");
 			if (lungeDir.X != 0) _anim.FlipH = lungeDir.X < 0;

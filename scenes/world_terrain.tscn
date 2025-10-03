@@ -145,5 +145,4 @@ material = SubResource("ShaderMaterial_683jg")
 tile_set = SubResource("TileSet_vbebb")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-visible = false
 color = Color(0.3515629, 0.3515629, 0.35156286, 1)
