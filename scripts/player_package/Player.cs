@@ -7,6 +7,8 @@ public partial class Player : CharacterBody2D
 	[Export] public float Speed = 400f;
 	[Export] public string AnimationSet = "fox";
 	
+	[Export] public AudioStream WalkSfx;
+	
 	[Export] public PackedScene SlashAttack;
 	[Export] private float LungeSpeed = 700f;
 	[Export] private float LungeDuration = 0.35f;
@@ -17,6 +19,7 @@ public partial class Player : CharacterBody2D
 	
 	private AnimatedSprite2D _anim;
 	private Sprite2D _sprite;
+	private AudioStreamPlayer _audio;
 	
 	private void Slash(Vector2 dir)
 	{
@@ -74,6 +77,7 @@ public partial class Player : CharacterBody2D
 			Play("idle");
 		}
 		else {
+			Sfx.I.PlayFootstep(WalkSfx, GlobalPosition);
 			Play("walk");
 		}
 	}
@@ -114,6 +118,7 @@ public partial class Player : CharacterBody2D
 	
 	public override void _Ready()
 	{
+		_audio = GetNode<AudioStreamPlayer>("WalkSound");
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_anim.Play(AnimationSet + "_idle");
 	}

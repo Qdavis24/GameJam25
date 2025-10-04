@@ -15,6 +15,10 @@ run/main_scene="uid://s3w1eg52kr8u"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Sfx="*res://scripts/Sfx.cs"
+
 [dotnet]
 
 project/assembly_name="GameJam25"
