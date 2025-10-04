@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://s3w1eg52kr8u"]
+[gd_scene load_steps=13 format=3 uid="uid://s3w1eg52kr8u"]
 
 [ext_resource type="Script" uid="uid://d7px3s8446oj" path="res://scripts/world_terrain/WorldTerrain.cs" id="1_31luj"]
 [ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/racoon_shrine.tscn" id="2_31luj"]
@@ -6,6 +6,7 @@
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="4_coj3r"]
 [ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="5_gphok"]
 [ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player_package.tscn" id="6_3xxx6"]
+[ext_resource type="AudioStream" uid="uid://c5xj42iq22ybi" path="res://assets/sounds/ForestTunes(74bpm-Gmaj-GameJam).mp3" id="7_wh0dg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_683jg"]
 texture = ExtResource("3_wh0dg")
@@ -146,3 +147,8 @@ tile_set = SubResource("TileSet_vbebb")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.3515629, 0.3515629, 0.35156286, 1)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_wh0dg")
+autoplay = true
+parameters/looping = true
