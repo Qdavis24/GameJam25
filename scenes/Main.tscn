@@ -5,10 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player_package.tscn" id="3_0bbpv"]
 
 [node name="Main" type="Node2D"]
+y_sort_enabled = true
 
 [node name="PlayerPackage" parent="." instance=ExtResource("3_0bbpv")]
-z_index = 0
-y_sort_enabled = true
 
 [node name="WorldGenerator" parent="." instance=ExtResource("1_elqb8")]
 BorderSize = 40
