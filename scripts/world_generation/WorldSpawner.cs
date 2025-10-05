@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using GameJam25.scripts.world_generation;
 
-public partial class WorldTerrain : Node2D
+
+public partial class WorldSpawner : Node2D
 {
     [ExportCategory("World Generation")] [Export]
     private int BorderSize;
