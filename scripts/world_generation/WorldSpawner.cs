@@ -37,6 +37,7 @@ public partial class WorldSpawner : Node2D
     [Export] int MinimumDistanceShrines; // in tile cells
     [Export] private PackedScene[] allShrinePckdScns; // Racoon index 0 , Own index 1, Rabbit index 2
 
+    [ExportCategory("Player")] [Export] PackedScene PlayerScene;
 
     private WorldGenerator world;
 
@@ -181,6 +182,29 @@ public partial class WorldSpawner : Node2D
             }
         }
     }
+    
+        private void spawnPlayer()
+    {
+        bool IsWalkable(int row, int col) =>
+            (WorldDataStates)world.Map.Array[row, col] == WorldDataStates.Walkable;
+        
+        // search tiles for a suitable spawn point
+        for (int row = 0; row < world.Map.RowLength; row++)
+        {
+            for (int col = 0; col < world.Map.ColLength; col++)
+            {
+                // check if tile type is walkable for tile and surrounding tiles
+                if (IsWalkable(row, col) && IsWalkable(row, col + 1) && IsWalkable(row + 1, col))
+                {
+                    // spawn player
+                    var player = (Node2D)PlayerScene.Instantiate();
+                    player.GlobalPosition = new Vector2(row * 120, col * 90);
+                    AddChild(player);
+                    return;
+                }
+            }
+        }
+    }
 
     public override void _Ready()
     {
@@ -190,5 +214,6 @@ public partial class WorldSpawner : Node2D
         world = new WorldGenerator(MapSizeCols, MapSizeRows, PossibleStates, StateSpawnWeights, NumSmooths,
             pathConfig, shrineConfig);
         populateMap();
+        spawnPlayer();
     }
 }

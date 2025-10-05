@@ -1,13 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://co5rlrgsvr6i0"]
+[gd_scene load_steps=3 format=3 uid="uid://gs3xoka1pgbv"]
 
 [ext_resource type="PackedScene" uid="uid://s3w1eg52kr8u" path="res://scenes/world_generation/world_generator.tscn" id="1_elqb8"]
 [ext_resource type="AudioStream" uid="uid://c5xj42iq22ybi" path="res://assets/sounds/ForestTunes(74bpm-Gmaj-GameJam).mp3" id="2_rvslj"]
-[ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player_package.tscn" id="3_0bbpv"]
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
-
-[node name="PlayerPackage" parent="." instance=ExtResource("3_0bbpv")]
 
 [node name="WorldGenerator" parent="." instance=ExtResource("1_elqb8")]
 BorderSize = 40
