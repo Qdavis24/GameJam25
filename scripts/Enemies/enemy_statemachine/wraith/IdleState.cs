@@ -19,10 +19,8 @@ public partial class IdleState : EnemyState
 
     public override void Update(double delta)
     {
-        if (_targetInRange)
-        {
-            EmitSignal(SignalName.StateTransition, Name, "ChaseState");
-        }
+ 
+        
     }
 
     public override void PhysicsUpdate(double delta)
@@ -32,9 +30,16 @@ public partial class IdleState : EnemyState
 
     void OnBodyEntered(Node2D body)
     {
+        GD.Print(body.Name);
         foreach (string group in Owner.AggroGroups)
         {
-            if (body.IsInGroup(group)) _targetInRange = true;
+
+            if (body.IsInGroup(group))
+            {
+                
+                Owner.CurrentTarget = body;
+                EmitSignal(SignalName.StateTransition, Name, "ChaseState");
+            }
         }
     }
     

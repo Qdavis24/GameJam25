@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://cfabk12i1kbjk"]
+[gd_scene load_steps=43 format=3 uid="uid://cfabk12i1kbjk"]
 
 [ext_resource type="Script" uid="uid://dqruwanp64c6h" path="res://scripts/Enemies/enemy_statemachine/wraith/Wraith.cs" id="1_gsgw0"]
 [ext_resource type="Script" uid="uid://bpgnrv5ji07gb" path="res://scripts/Enemies/enemy_statemachine/EnemyStateMachine.cs" id="2_4y2vv"]
@@ -11,8 +11,10 @@
 
 [sub_resource type="Curve" id="Curve_gsgw0"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0, 0.10112357), 0.0, 0.0, 0, 0, Vector2(0.3423913, 1), 0.0, 0.0, 0, 0, Vector2(0.65217394, -1), 0.0, 0.0, 0, 0, Vector2(1, 0.14606738), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.10112357), 0.0, 0.0, 0, 0, Vector2(0.29347828, 1), 0.0, 0.0, 0, 0, Vector2(0.7336957, -1), 0.0, 0.0, 0, 0, Vector2(1, 0.14606738), 0.0, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q1lcm"]
 atlas = ExtResource("5_q5y88")
@@ -253,21 +255,25 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gsgw0"]
-radius = 337.0534
+radius = 1316.2347
 
-[node name="Wraith" type="Node2D" node_paths=PackedStringArray("AggroRange", "animations")]
+[node name="Wraith" type="CharacterBody2D" node_paths=PackedStringArray("AggroRange", "animations")]
+collision_layer = 2
 script = ExtResource("1_gsgw0")
 health = 100.0
 AggroRange = NodePath("AggroRange")
 AggroGroups = PackedStringArray("Player")
 ChasePath = SubResource("Curve_gsgw0")
-Speed = 100
+Speed = 200
 animations = NodePath("WraithAnimations")
 
-[node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("enemy", "initialState")]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_q5y88")
+
+[node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("enemy", "_initialState")]
 script = ExtResource("2_4y2vv")
 enemy = NodePath("..")
-initialState = NodePath("IdleState")
+_initialState = NodePath("IdleState")
 
 [node name="IdleState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("Owner")]
 script = ExtResource("3_8tdls")
@@ -288,3 +294,6 @@ shape = SubResource("CircleShape2D_gsgw0")
 
 [connection signal="StateTransition" from="WraithStateMachine/IdleState" to="WraithStateMachine" method="OnStateTransition"]
 [connection signal="StateTransition" from="WraithStateMachine/ChaseState" to="WraithStateMachine" method="OnStateTransition"]
+[connection signal="body_entered" from="AggroRange" to="WraithStateMachine/IdleState" method="OnBodyEntered"]
+[connection signal="body_entered" from="AggroRange" to="WraithStateMachine/ChaseState" method="OnBodyEntered"]
+[connection signal="body_exited" from="AggroRange" to="WraithStateMachine/ChaseState" method="OnBodyExited"]

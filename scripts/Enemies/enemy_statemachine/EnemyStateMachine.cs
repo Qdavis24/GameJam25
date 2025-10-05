@@ -7,22 +7,23 @@ public partial class EnemyStateMachine : Node
     [Signal]
     public delegate void StateTransitionEventHandler(string prevState, string nextState);
     [Export] public Enemy enemy;
-    [Export] EnemyState initialState;
-    private EnemyState currState;
-    private Dictionary<string, EnemyState> allStates = new Dictionary<string, EnemyState>();
+    [Export] EnemyState _initialState;
+    private EnemyState _currState;
+    private Dictionary<string, EnemyState> _allStates = new Dictionary<string, EnemyState>();
+    
 
     public override void _Ready()
     {
         foreach (EnemyState state in GetChildren())
         {
-            allStates[state.Name] = state;
+            _allStates[state.Name] = state;
         }
-        foreach(String state in allStates.Keys) GD.Print(state);
-        if (initialState != null)
+        foreach(String state in _allStates.Keys) GD.Print(state);
+        if (_initialState != null)
         {
-            GD.Print(initialState.Name);
-            currState = allStates[initialState.Name];
-            currState.Enter();
+            GD.Print(_initialState.Name);
+            _currState = _allStates[_initialState.Name];
+            _currState.Enter();
         }
         else
         {
@@ -32,18 +33,18 @@ public partial class EnemyStateMachine : Node
 
     public override void _Process(double delta)
     {
-        currState.Update(delta);
+        _currState.Update(delta);
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        currState.PhysicsUpdate(delta);
+        _currState.PhysicsUpdate(delta);
     }
 
-    public void OnStateTransition(EnemyState oldState, EnemyState newState) // signal states will emit callback
+    public void OnStateTransition(String oldState, String newState) // signal states will emit callback
     {
-        oldState.Exit();
-        currState = newState;
-        newState.Enter();
+        _allStates[oldState].Exit();
+        _currState = _allStates[newState];
+        _currState.Enter();
     }
 }

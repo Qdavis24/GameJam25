@@ -1,13 +1,37 @@
-[gd_scene load_steps=2 format=3 uid="uid://chucorh8rq535"]
+[gd_scene load_steps=3 format=3 uid="uid://chucorh8rq535"]
 
 [ext_resource type="PackedScene" uid="uid://cfabk12i1kbjk" path="res://scenes/enemies/Wraith.tscn" id="1_kruvs"]
+[ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player_package.tscn" id="2_cisa7"]
 
 [node name="Testing" type="Node2D"]
 
+[node name="Wraith2" parent="." instance=ExtResource("1_kruvs")]
+
 [node name="Wraith" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(-343, -191)
 
-[node name="WraithStateMachine" parent="Wraith" index="0" node_paths=PackedStringArray("enemy", "initialState")]
-enemy = NodePath("..")
-initialState = NodePath("IdleState")
+[node name="PlayerPackage" parent="." instance=ExtResource("2_cisa7")]
+position = Vector2(302, 299)
 
-[editable path="Wraith"]
+[node name="Wraith3" parent="." instance=ExtResource("1_kruvs")]
+Speed = 100
+
+[node name="Wraith4" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="Wraith5" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="Wraith6" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="Wraith7" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="Wraith8" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="Wraith9" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="Wraith10" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="Wraith11" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="Wraith12" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="Wraith13" parent="." instance=ExtResource("1_kruvs")]

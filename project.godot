@@ -24,6 +24,10 @@ Sfx="*res://scripts/Sfx.cs"
 project/assembly_name="GameJam25"
 project/solution_directory="./"
 
+[global_group]
+
+Player=""
+
 [input]
 
 left={
