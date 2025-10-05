@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://chucorh8rq535"]
+
+[ext_resource type="PackedScene" uid="uid://cfabk12i1kbjk" path="res://scenes/enemies/Wraith.tscn" id="1_kruvs"]
+
+[node name="Testing" type="Node2D"]
+
+[node name="Wraith" parent="." instance=ExtResource("1_kruvs")]
+
+[node name="WraithStateMachine" parent="Wraith" index="0" node_paths=PackedStringArray("enemy", "initialState")]
+enemy = NodePath("..")
+initialState = NodePath("IdleState")
+
+[editable path="Wraith"]

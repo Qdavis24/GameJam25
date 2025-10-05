@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public partial class EnemyStateMachine : Node
 {
+    [Signal]
+    public delegate void StateTransitionEventHandler(string prevState, string nextState);
+    [Export] public Enemy enemy;
     [Export] EnemyState initialState;
     private EnemyState currState;
     private Dictionary<string, EnemyState> allStates = new Dictionary<string, EnemyState>();
@@ -14,10 +17,11 @@ public partial class EnemyStateMachine : Node
         {
             allStates[state.Name] = state;
         }
-
+        foreach(String state in allStates.Keys) GD.Print(state);
         if (initialState != null)
         {
-            currState = initialState;
+            GD.Print(initialState.Name);
+            currState = allStates[initialState.Name];
             currState.Enter();
         }
         else
@@ -36,7 +40,7 @@ public partial class EnemyStateMachine : Node
         currState.PhysicsUpdate(delta);
     }
 
-    public void OnStateTransition(EnemyState oldState, EnemyState newState)
+    public void OnStateTransition(EnemyState oldState, EnemyState newState) // signal states will emit callback
     {
         oldState.Exit();
         currState = newState;
