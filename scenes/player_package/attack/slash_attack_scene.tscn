@@ -1,0 +1,106 @@
+[gd_scene load_steps=17 format=3 uid="uid://ct7f3veokingu"]
+
+[ext_resource type="Script" uid="uid://cdpy54nip5ioo" path="res://scripts/player_package/SlashAttackNode2d.cs" id="1_sj6rj"]
+[ext_resource type="AudioStream" uid="uid://d1shr3bae8dam" path="res://assets/sounds/slash_1.wav" id="3_02i4c"]
+[ext_resource type="Texture2D" uid="uid://bhx7q04am7c66" path="res://assets/characters/fox/attack/slash.png" id="3_bxtic"]
+[ext_resource type="AudioStream" uid="uid://dcaadiycuf0rn" path="res://assets/sounds/slash_2.wav" id="4_gdedo"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_gdedo"]
+playback_mode = 1
+random_pitch = 1.22
+random_volume_offset_db = 0.46
+streams_count = 2
+stream_0/stream = ExtResource("3_02i4c")
+stream_0/weight = 27.099
+stream_1/stream = ExtResource("4_gdedo")
+stream_1/weight = 21.611
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ro6l"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3kaic"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_toj4a"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3seff"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjc7n"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tiluc"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(0, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6e3ay"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(100, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oomq8"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(200, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ie58m"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(300, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2dfsu"]
+atlas = ExtResource("3_bxtic")
+region = Rect2(400, 100, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5ro6l"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ro6l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3kaic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_toj4a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3seff")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wjc7n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tiluc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6e3ay")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oomq8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ie58m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2dfsu")
+}],
+"loop": true,
+"name": &"fox_slash",
+"speed": 39.0
+}]
+
+[node name="SlashAttackScene" type="Node2D"]
+script = ExtResource("1_sj6rj")
+SlashSfx = SubResource("AudioStreamRandomizer_gdedo")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.8)
+position = Vector2(24.170212, 17.75)
+scale = Vector2(1.49, 1.49)
+skew = -0.15882504
+sprite_frames = SubResource("SpriteFrames_5ro6l")
+animation = &"fox_slash"
