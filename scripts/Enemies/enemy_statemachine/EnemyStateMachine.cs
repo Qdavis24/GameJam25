@@ -5,25 +5,32 @@ using System.Collections.Generic;
 public partial class EnemyStateMachine : Node
 {
     [Signal]
-    public delegate void StateTransitionEventHandler(string prevState, string nextState);
+    public delegate void ChangeCurrentStateLabelEventHandler(string nextState);
+
     [Export] public Enemy enemy;
-    [Export] EnemyState _initialState;
-    private EnemyState _currState;
+    public EnemyState CurrState;
     private Dictionary<string, EnemyState> _allStates = new Dictionary<string, EnemyState>();
-    
+
 
     public override void _Ready()
     {
-        foreach (EnemyState state in GetChildren())
+        foreach (Node child in GetChildren())
         {
-            _allStates[state.Name] = state;
+            if (child is EnemyState)
+            {
+                EnemyState state = (EnemyState)child;
+                state.StateMachine
+                _allStates[state.Name] = state;
+            }
         }
-        foreach(String state in _allStates.Keys) GD.Print(state);
+
+        foreach (String state in _allStates.Keys) ;
         if (_initialState != null)
         {
-            GD.Print(_initialState.Name);
-            _currState = _allStates[_initialState.Name];
-            _currState.Enter();
+            
+            EmitSignal(SignalName.ChangeCurrentStateLabel, _initialState.Name);
+            CurrState = _allStates[_initialState.Name];
+            CurrState.Enter();
         }
         else
         {
@@ -33,18 +40,21 @@ public partial class EnemyStateMachine : Node
 
     public override void _Process(double delta)
     {
-        _currState.Update(delta);
+        CurrState.Update(delta);
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        _currState.PhysicsUpdate(delta);
+        CurrState.PhysicsUpdate(delta);
     }
 
-    public void OnStateTransition(String oldState, String newState) // signal states will emit callback
+    public void OnStateTransition(String prevState, String newState) // signal states will emit callback
     {
-        _allStates[oldState].Exit();
-        _currState = _allStates[newState];
-        _currState.Enter();
+       
+        EmitSignal(SignalName.ChangeCurrentStateLabel, newState);
+        
+        _allStates[prevState].Exit();
+        CurrState = _allStates[newState];
+        CurrState.Enter();
     }
 }

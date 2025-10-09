@@ -28,7 +28,7 @@ public partial class WorldSpawner : Node2D
     [Export] int PathRadius;
 
     [ExportCategory("Tiles")] [Export] TileMapLayer BaseTileMapLayer;
-    [Export] TileMapLayer ObjectTileMapLayer;
+    [Export] TileMapLayer ObstacleTileMapLayer;
     [Export] TileConfig TileConfiguration;
 
     [ExportCategory("Shrines")] [Export] int NumShrines;
@@ -48,7 +48,7 @@ public partial class WorldSpawner : Node2D
         Shrine
     };
 
-    private void populateBaseLayer()
+    private void PopulateBaseLayer()
     {
         for (int row = 0; row < world.Map.RowLength; row++)
         {
@@ -72,7 +72,7 @@ public partial class WorldSpawner : Node2D
         }
     }
 
-    private void populateObjectLayer()
+    private void PopulateObstacleLayer()
     {
         for (int row = 0; row < world.Map.RowLength; row++)
         {
@@ -92,12 +92,13 @@ public partial class WorldSpawner : Node2D
                 }
 
                 if (GD.Randf() < TreeSpawnChance && worldDataState != (int)WorldDataStates.Shrine)
-                    ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0, tileOptions[GD.Randi() % tileOptions.Length]);
+                    ObstacleTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                        tileOptions[GD.Randi() % tileOptions.Length]);
             }
         }
     }
 
-    private void createBorder()
+    private void CreateBorder()
     {
         // left pass
         for (int row = -BorderSize; row < MapSizeRows + BorderSize; row++)
@@ -106,11 +107,12 @@ public partial class WorldSpawner : Node2D
             {
                 BaseTileMapLayer.SetCell(new Vector2I(row, col), 0,
                     TileConfiguration.BaseLayerNonWalkableTilesAtlasCoords[0]);
-                ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                ObstacleTileMapLayer.SetCell(new Vector2I(row, col), 0,
                     TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords[
                         GD.Randi() % TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
             }
         }
+
         // top pass
         for (int row = -BorderSize; row < 0; row++)
         {
@@ -118,38 +120,40 @@ public partial class WorldSpawner : Node2D
             {
                 BaseTileMapLayer.SetCell(new Vector2I(row, col), 0,
                     TileConfiguration.BaseLayerNonWalkableTilesAtlasCoords[0]);
-                ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                ObstacleTileMapLayer.SetCell(new Vector2I(row, col), 0,
                     TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords[
                         GD.Randi() % TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
             }
         }
+
         //right pass
-        for (int row = -BorderSize; row < MapSizeRows+BorderSize; row++)
+        for (int row = -BorderSize; row < MapSizeRows + BorderSize; row++)
         {
             for (int col = MapSizeCols; col < BorderSize + MapSizeCols; col++)
             {
                 BaseTileMapLayer.SetCell(new Vector2I(row, col), 0,
                     TileConfiguration.BaseLayerNonWalkableTilesAtlasCoords[0]);
-                ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                ObstacleTileMapLayer.SetCell(new Vector2I(row, col), 0,
                     TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords[
                         GD.Randi() % TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
             }
         }
+
         // bottom pass
-        for (int row = MapSizeRows; row < MapSizeRows+BorderSize; row++)
+        for (int row = MapSizeRows; row < MapSizeRows + BorderSize; row++)
         {
             for (int col = 0; col < MapSizeCols; col++)
             {
                 BaseTileMapLayer.SetCell(new Vector2I(row, col), 0,
                     TileConfiguration.BaseLayerNonWalkableTilesAtlasCoords[0]);
-                ObjectTileMapLayer.SetCell(new Vector2I(row, col), 0,
+                ObstacleTileMapLayer.SetCell(new Vector2I(row, col), 0,
                     TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords[
                         GD.Randi() % TileConfiguration.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
             }
         }
     }
 
-    private void spawnShrines()
+    private void SpawnShrines()
     {
         for (int shrineIndex = 0; shrineIndex < allShrinePckdScns.Length; shrineIndex++)
         {
@@ -163,42 +167,40 @@ public partial class WorldSpawner : Node2D
         }
     }
 
-    private void populateMap()
+    private void PopulateMap()
     {
-        spawnShrines();
-        populateBaseLayer();
-        populateObjectLayer();
-        createBorder();
+        SpawnShrines();
+        PopulateBaseLayer();
+        PopulateObstacleLayer();
+        CreateBorder();
     }
 
-    private void wipeMap()
+    private void WipeMap()
     {
         for (int row = 0; row < world.Map.RowLength; row++)
         {
             for (int col = 0; col < world.Map.ColLength; col++)
             {
-                ObjectTileMapLayer.EraseCell(new Vector2I(row, col));
+                ObstacleTileMapLayer.EraseCell(new Vector2I(row, col));
                 BaseTileMapLayer.EraseCell(new Vector2I(row, col));
             }
         }
     }
-    
-        private void spawnPlayer()
+
+    private void SpawnPlayer()
     {
-        bool IsWalkable(int row, int col) =>
-            (WorldDataStates)world.Map.Array[row, col] == WorldDataStates.Walkable;
-        
         // search tiles for a suitable spawn point
         for (int row = 0; row < world.Map.RowLength; row++)
         {
             for (int col = 0; col < world.Map.ColLength; col++)
             {
                 // check if tile type is walkable for tile and surrounding tiles
-                if (IsWalkable(row, col) && IsWalkable(row, col + 1) && IsWalkable(row + 1, col))
+                if (world.Map.Array[row, col] == (int)WorldDataStates.Walkable &&
+                    MatrixUtils.UniformNeighbors(world.Map, row, col, 2, false))
                 {
                     // spawn player
                     var player = (Node2D)PlayerScene.Instantiate();
-                    player.GlobalPosition = new Vector2(row * 120, col * 90);
+                    player.GlobalPosition = ToGlobal(BaseTileMapLayer.MapToLocal(new Vector2I(row, col)));
                     AddChild(player);
                     return;
                 }
@@ -213,7 +215,7 @@ public partial class WorldSpawner : Node2D
             new ShrineConfig(NumShrines, ShrineSizeCols, ShrineSizeRows, MinimumDistanceShrines);
         world = new WorldGenerator(MapSizeCols, MapSizeRows, PossibleStates, StateSpawnWeights, NumSmooths,
             pathConfig, shrineConfig);
-        populateMap();
-        spawnPlayer();
+        PopulateMap();
+        SpawnPlayer();
     }
 }

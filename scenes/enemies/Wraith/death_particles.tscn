@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://hyo80jbfdgkm"]
+
+[sub_resource type="Gradient" id="Gradient_0rs7d"]
+offsets = PackedFloat32Array(0.3255814, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.5370113, 0.5370113, 0.5370113, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lqj3m"]
+gradient = SubResource("Gradient_0rs7d")
+width = 4
+height = 4
+fill = 1
+fill_from = Vector2(0.517094, 0.45726496)
+
+[node name="DeathParticles" type="CPUParticles2D"]
+emitting = false
+amount = 20
+texture = SubResource("GradientTexture2D_lqj3m")
+one_shot = true
+explosiveness = 0.8
+emission_shape = 1
+emission_sphere_radius = 5.0
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 200)
+initial_velocity_min = 100.0
+initial_velocity_max = 130.0
+damping_min = 50.0
+damping_max = 100.0
+color = Color(0.5649617, 0.5649616, 0.5649616, 1)

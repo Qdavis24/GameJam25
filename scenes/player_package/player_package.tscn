@@ -149,13 +149,14 @@ stream_0/stream = ExtResource("7_s5buh")
 radius = 16.0
 height = 68.0
 
-[node name="PlayerPackage" type="Node2D" groups=["Player"]]
+[node name="PlayerPackage" type="Node2D" groups=["Players"]]
 y_sort_enabled = true
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["Player"]]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["Players"]]
 y_sort_enabled = true
 script = ExtResource("1_2gqcc")
 SlashAttack = ExtResource("2_l4pu8")
+LungeSpeed = 300.0
 LungeDuration = 0.3
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
