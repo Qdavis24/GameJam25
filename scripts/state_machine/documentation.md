@@ -7,11 +7,11 @@ Classes
 - StateMachine
     - EStateMachine
 - State
-    - Enemy Implementations
-        - IdleState
-        - ChaseState
-        - KnockbackState
-        - DieState
+    - Estate
+      - IdleState
+      - ChaseState
+      - KnockbackState
+      - DieState
 - Context
     - InstanceContext
         - EInstanceContext
@@ -93,6 +93,13 @@ The specific implementation for Enemy State Machines
 - Contains the correct EInstanceContext for Context
 
 that's all this does!
+
+## EState
+
+The specific implementation for Enemy States
+
+- Contains the correct EStateMachine type for _stateMachine
+
 
 ## EInstanceContext
 

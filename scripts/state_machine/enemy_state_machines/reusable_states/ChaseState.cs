@@ -1,10 +1,14 @@
 ﻿using System;
 using Godot;
 using System.Collections.Generic;
+using GameJam25.scripts.state_machine;
 using GameJam25.scripts.state_machine.enemy_state_machines;
 
 public partial class ChaseState : EState
 {
+    [Export] private Curve ChasePath;
+    [Export] private float[] _steeringWeights; // obstacles, ENEMIES, player
+    
     private double _timePerCycle;
     private bool _targetInRange;
 
@@ -12,13 +16,13 @@ public partial class ChaseState : EState
     private double _currTimeCycle;
 
     private Vector2[] _steeringVectors = new Vector2[3]; // will be obstacles, enemies, player
-    private float[] _steeringWeights = { 0.8f, 0.2f, 0.7f }; // obstacles, ENEMIES, player
 
     private List<Node2D> _obstaclesInRange = new List<Node2D>();
     private List<Node2D> _enemiesInRange = new List<Node2D>();
 
     public override void Enter()
     {
+        
         _stateMachine.Owner.Speed += GD.RandRange(0, 50);
         _chasePathMagnitude = GD.Randf() * 2;
         _timePerCycle = GD.Randf() * 2f + 2;
@@ -31,8 +35,16 @@ public partial class ChaseState : EState
         _stateMachine.Owner.Animations.Stop();
     }
 
+
+
     public override void PhysicsUpdate(double delta)
     {
+        if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(_stateMachine.InstanceContext.CurrentTarget
+                .GlobalPosition) <
+            _stateMachine.Owner.AttackRange)
+        {
+            _stateMachine.TransitionTo("ExplodeState");
+        }
         Vector2 obstaclesDirection = GetObsticleDir();
         Vector2 enemiesDirection = GetEnemiesDir();
         Vector2 playerDirection =
@@ -43,7 +55,7 @@ public partial class ChaseState : EState
         _steeringVectors[2] = playerDirection;
         Vector2 baseDir = GetCurrentDir();
         Vector2 perpDirection = new Vector2(-baseDir.Y, baseDir.X);
-        float sample = _stateMachine.Owner.ChasePath.Sample((float)(_currTimeCycle / _timePerCycle));
+        float sample = ChasePath.Sample((float)(_currTimeCycle / _timePerCycle));
         Vector2 interpolatedDir =
             (baseDir + (perpDirection * sample * _chasePathMagnitude)).Normalized();
         _currTimeCycle += delta;

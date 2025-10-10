@@ -73,39 +73,38 @@ sources/0 = SubResource("TileSetAtlasSource_x5gvh")
 [node name="PlayerPackage" parent="." instance=ExtResource("2_cisa7")]
 position = Vector2(302, 299)
 
-[node name="Wraith2" parent="." instance=ExtResource("1_kruvs")]
-AttackRange = 0
-
-[node name="Wraith" parent="." instance=ExtResource("1_kruvs")]
-position = Vector2(-343, -191)
-AttackRange = 0
-
-[node name="Wraith3" parent="." instance=ExtResource("1_kruvs")]
-AttackRange = 0
-
-[node name="Wraith4" parent="." instance=ExtResource("1_kruvs")]
-AttackRange = 0
-
-[node name="Wraith5" parent="." instance=ExtResource("1_kruvs")]
-AttackRange = 0
-
-[node name="Wraith6" parent="." instance=ExtResource("1_kruvs")]
-AttackRange = 0
-
-[node name="Wraith7" parent="." instance=ExtResource("1_kruvs")]
-AttackRange = 0
-
-[node name="Wraith8" parent="." instance=ExtResource("1_kruvs")]
-AttackRange = 0
-
-[node name="Wraith9" parent="." instance=ExtResource("1_kruvs")]
-AttackRange = 0
-
-[node name="Wraith10" parent="." instance=ExtResource("1_kruvs")]
-AttackRange = 0
-
 [node name="ObstacleLayer" type="TileMapLayer" parent="."]
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_ywrhq")
 tile_map_data = PackedByteArray("AAAAAAUAAAAHAAEAAAAAAAYAAAAHAAEAAAAAAAcAAAAHAAEAAAABAAcAAAAHAAEAAAACAAcAAAAHAAEAAAADAAcAAAAHAAEAAAAFAAcAAAAHAAEAAAAEAAcAAAAHAAEAAAAGAAcAAAAHAAEAAAAHAAcAAAAHAAEAAAAHAAgAAAAHAAEAAAAHAAoAAAAHAAEAAAAHAAkAAAAHAAEAAAAHAAsAAAAHAAEAAAAIAAsAAAAHAAEAAAAKAAsAAAAHAAEAAAAJAAsAAAAHAAEAAAAKAAoAAAAHAAEAAAAKAAgAAAAHAAEAAAAKAAkAAAAHAAEAAAALAAgAAAAHAAEAAAA=")
 tile_set = SubResource("TileSet_u261m")
+
+[node name="Wraith" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(-1, -104)
+
+[node name="Wraith2" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(-151, -146)
+
+[node name="Wraith3" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(-125, 30)
+
+[node name="Wraith4" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(140, -96)
+
+[node name="Wraith5" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(30, 35)
+
+[node name="Wraith6" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(32, -196)
+
+[node name="Wraith7" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(94, -30)
+
+[node name="Wraith8" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(94, -30)
+
+[node name="Wraith9" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(94, -30)
+
+[node name="Wraith10" parent="." instance=ExtResource("1_kruvs")]
+position = Vector2(94, -30)

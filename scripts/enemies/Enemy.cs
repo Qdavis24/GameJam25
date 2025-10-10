@@ -3,7 +3,7 @@ using GameJam25.scripts.player_package.hitbox;
 using GameJam25.scripts.state_machine;
 using GameJam25.scripts.state_machine.enemy_states;
 
-public abstract partial class Enemy : CharacterBody2D
+public partial class Enemy : CharacterBody2D
 {
     [ExportCategory("stats")] 
     [Export] public int Speed;
@@ -14,19 +14,8 @@ public abstract partial class Enemy : CharacterBody2D
     [Export] public Area2D SteeringRange;
     [Export] public int AttackRange;
 
-    [ExportCategory("special effects")] 
-    [Export] public CpuParticles2D DeathParticles;
-    [Export] public CpuParticles2D HitParticles;
-
-    [ExportCategory("Knockback")] 
-    [Export] public Curve KnockbackCurve;
-    [Export] private int KnockbackWeight;
-
-
     [ExportCategory("Miscellaneous")] 
     [Export] public string[] AggroGroups;
-
-    [Export] public Curve ChasePath;
     [Export] public AnimatedSprite2D Animations;
     [Export] private EStateMachine _stateMachine;
 
