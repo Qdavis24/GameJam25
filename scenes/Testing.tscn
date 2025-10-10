@@ -74,25 +74,35 @@ sources/0 = SubResource("TileSetAtlasSource_x5gvh")
 position = Vector2(302, 299)
 
 [node name="Wraith2" parent="." instance=ExtResource("1_kruvs")]
+AttackRange = 0
 
 [node name="Wraith" parent="." instance=ExtResource("1_kruvs")]
 position = Vector2(-343, -191)
+AttackRange = 0
 
 [node name="Wraith3" parent="." instance=ExtResource("1_kruvs")]
+AttackRange = 0
 
 [node name="Wraith4" parent="." instance=ExtResource("1_kruvs")]
+AttackRange = 0
 
 [node name="Wraith5" parent="." instance=ExtResource("1_kruvs")]
+AttackRange = 0
 
 [node name="Wraith6" parent="." instance=ExtResource("1_kruvs")]
+AttackRange = 0
 
 [node name="Wraith7" parent="." instance=ExtResource("1_kruvs")]
+AttackRange = 0
 
 [node name="Wraith8" parent="." instance=ExtResource("1_kruvs")]
+AttackRange = 0
 
 [node name="Wraith9" parent="." instance=ExtResource("1_kruvs")]
+AttackRange = 0
 
 [node name="Wraith10" parent="." instance=ExtResource("1_kruvs")]
+AttackRange = 0
 
 [node name="ObstacleLayer" type="TileMapLayer" parent="."]
 y_sort_enabled = true

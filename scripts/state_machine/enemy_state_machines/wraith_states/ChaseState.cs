@@ -1,8 +1,9 @@
 ﻿using System;
 using Godot;
 using System.Collections.Generic;
+using GameJam25.scripts.state_machine.enemy_state_machines;
 
-public partial class ChaseState : EnemyState
+public partial class ChaseState : EState
 {
     private double _timePerCycle;
     private bool _targetInRange;
@@ -18,38 +19,36 @@ public partial class ChaseState : EnemyState
 
     public override void Enter()
     {
-        Owner.Speed = GD.RandRange(100, 200);
-        _chasePathMagnitude = GD.Randf()*2;
+        _stateMachine.Owner.Speed += GD.RandRange(0, 50);
+        _chasePathMagnitude = GD.Randf() * 2;
         _timePerCycle = GD.Randf() * 2f + 2;
         _currTimeCycle = _timePerCycle - (GD.Randf() * _timePerCycle);
-        Owner.animations.Play("Move");
+        _stateMachine.Owner.Animations.Play("Move");
     }
 
     public override void Exit()
     {
-        Owner.animations.Stop();
-    }
-
-    public override void Update(double delta)
-    {
+        _stateMachine.Owner.Animations.Stop();
     }
 
     public override void PhysicsUpdate(double delta)
     {
         Vector2 obstaclesDirection = GetObsticleDir();
         Vector2 enemiesDirection = GetEnemiesDir();
-        Vector2 playerDirection = (Owner.CurrentTarget.GlobalPosition - Owner.GlobalPosition).Normalized();
+        Vector2 playerDirection =
+            (_stateMachine.InstanceContext.CurrentTarget.GlobalPosition - _stateMachine.Owner.GlobalPosition)
+            .Normalized();
         _steeringVectors[0] = obstaclesDirection;
         _steeringVectors[1] = enemiesDirection;
         _steeringVectors[2] = playerDirection;
         Vector2 baseDir = GetCurrentDir();
         Vector2 perpDirection = new Vector2(-baseDir.Y, baseDir.X);
-        float sample = Owner.ChasePath.Sample((float)(_currTimeCycle / _timePerCycle));
+        float sample = _stateMachine.Owner.ChasePath.Sample((float)(_currTimeCycle / _timePerCycle));
         Vector2 interpolatedDir =
             (baseDir + (perpDirection * sample * _chasePathMagnitude)).Normalized();
         _currTimeCycle += delta;
-        Owner.Velocity = interpolatedDir * Owner.Speed;
-
+        _stateMachine.Owner.Velocity = interpolatedDir * _stateMachine.Owner.Speed;
+        _stateMachine.Owner.MoveAndSlide();
         if (_currTimeCycle >= _timePerCycle)
         {
             _currTimeCycle = 0;
@@ -68,16 +67,16 @@ public partial class ChaseState : EnemyState
     }
 
     private Vector2 GetObsticleDir()
-    
+
     {
         if (_obstaclesInRange.Count == 0) return Vector2.Zero;
 
         Vector2 sumVector = Vector2.Zero;
         foreach (Node2D currObstacle in _obstaclesInRange)
         {
-            Vector2 diff = (Owner.GlobalPosition - currObstacle.GlobalPosition);
+            Vector2 diff = (_stateMachine.Owner.GlobalPosition - currObstacle.GlobalPosition);
             float distance = diff.Length();
-            if(distance > 0) sumVector += diff.Normalized() / distance;
+            if (distance > 0) sumVector += diff.Normalized() / distance;
         }
 
         return sumVector.Normalized();
@@ -88,39 +87,28 @@ public partial class ChaseState : EnemyState
         if (_enemiesInRange.Count == 0) return Vector2.Zero;
 
         Vector2 sumVector = Vector2.Zero;
-        
+
         foreach (Node2D currEnemy in _enemiesInRange)
         {
-            Vector2 diff = (Owner.GlobalPosition - currEnemy.GlobalPosition);
+            Vector2 diff = (_stateMachine.Owner.GlobalPosition - currEnemy.GlobalPosition);
             float distance = diff.Length();
-            if(distance > 0) sumVector += diff.Normalized() / distance;
+            if (distance > 0) sumVector += diff.Normalized() / distance;
         }
 
         return sumVector.Normalized();
     }
 
-    public void OnAggroRangeExited(Node2D body)
+    private void OnAggroRangeExited(Node2D body)
     {
-        if (body == Owner.CurrentTarget)
-        {
-            EmitSignal(SignalName.StateTransition, Name, "IdleState");
-        }
+        if (body != _stateMachine.InstanceContext.CurrentTarget) return;
+
+        _stateMachine.InstanceContext.CurrentTarget = null;
+        _stateMachine.TransitionTo("IdleState");
     }
 
-    private void PrintEnemies()
+    private void OnSteeringRangeEntered(Node2D body)
     {
-        String ls = Owner.Name + " current enemies : [";
-        foreach (Node2D enemy in _enemiesInRange)
-        {
-            ls += enemy.Name + ", ";
-        }
-
-        ls += "]";
-        GD.Print(ls);
-    }
-    public void OnSteeringRangeEntered(Node2D body)
-    {
-        PrintEnemies();
+        //DebugPrintEnemiesInSteeringRange();
         if (body is TileMapLayer && body.Name == "ObstacleLayer")
         {
             _obstaclesInRange.Add(body);
@@ -131,9 +119,9 @@ public partial class ChaseState : EnemyState
         }
     }
 
-    public void OnSteeringRangeExited(Node2D body)
+    private void OnSteeringRangeExited(Node2D body)
     {
-        PrintEnemies();
+        //DebugPrintEnemiesInSteeringRange();
         if (body is TileMapLayer && body.Name == "ObstacleLayer")
         {
             _obstaclesInRange.Remove(body);
@@ -142,5 +130,17 @@ public partial class ChaseState : EnemyState
         {
             _enemiesInRange.Remove(body);
         }
+    }
+    
+    private void DebugPrintEnemiesInSteeringRange()
+    {
+        String ls = Owner.Name + " current enemies : [";
+        foreach (Node2D enemy in _enemiesInRange)
+        {
+            ls += enemy.Name + ", ";
+        }
+
+        ls += "]";
+        GD.Print(ls);
     }
 }

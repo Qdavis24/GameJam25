@@ -1,7 +1,7 @@
 using Godot;
 using System;
 namespace GameJam25.scripts.Enemies;
-public partial class CurrentState : Label
+public partial class DebugCurrentStateLabel : Label
 {
     public void OnChangeCurrentStateLabel(String nextState)
     {

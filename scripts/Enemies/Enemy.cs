@@ -1,63 +1,60 @@
 ﻿using Godot;
 using GameJam25.scripts.player_package.hitbox;
+using GameJam25.scripts.state_machine;
+using GameJam25.scripts.state_machine.enemy_states;
 
 public abstract partial class Enemy : CharacterBody2D
 {
-    [Export] float health;
+    [ExportCategory("stats")] 
+    [Export] public int Speed;
+    [Export] int Health; //starting health
+
+    [ExportCategory("Distance Ranges")] 
     [Export] public Area2D AggroRange;
     [Export] public Area2D SteeringRange;
     [Export] public int AttackRange;
+
+    [ExportCategory("special effects")] 
     [Export] public CpuParticles2D DeathParticles;
     [Export] public CpuParticles2D HitParticles;
-    [Export] public Curve KnockBackCurve;
-    public Vector2 KnockBackDir = Vector2.Zero;
-    
-    [Export] public string[] AggroGroups;
-    [Export] public Curve ChasePath;
-    
-    [Export] public int Speed;
-    [Export] private int KnockBack;
-    [Export] public AnimatedSprite2D animations;
-    public Node2D CurrentTarget;
 
-    [Export] private EnemyStateMachine _stateMachine;
-    
-    protected float currHealth;
-    
+    [ExportCategory("Knockback")] 
+    [Export] public Curve KnockbackCurve;
+    [Export] private int KnockbackWeight;
+
+
+    [ExportCategory("Miscellaneous")] 
+    [Export] public string[] AggroGroups;
+
+    [Export] public Curve ChasePath;
+    [Export] public AnimatedSprite2D Animations;
+    [Export] private EStateMachine _stateMachine;
+
+    protected float _currHealth;
+
 
     public void TakeDamage(int amount, Vector2 direction)
     {
-        GD.Print("YES");
-        KnockBackDir = direction.Normalized();
-        _stateMachine.OnStateTransition(_stateMachine.CurrState.Name, "KnockBackState");
-        health -= amount;
+        _currHealth -= amount;
+        _stateMachine.InstanceContext.KnockBackDir = direction.Normalized();
+        _stateMachine.TransitionTo("KnockbackState");
     }
-    
 
     public override void _Ready()
     {
-        currHealth = health;
+        _currHealth = Health;
     }
+
     public override void _Process(double delta)
     {
-        if (health < 0 && _stateMachine.CurrState.Name != "DeathState") _stateMachine.OnStateTransition(_stateMachine.CurrState.Name, "DeathState");
-        
+        if (_currHealth < 0 && _stateMachine.CurrState.Name != "DeathState") _stateMachine.TransitionTo("DeathState");
     }
 
-    public override void _PhysicsProcess(double delta)
+    private void OnEnemyHurtBoxEntered(Area2D area)
     {
-        
-        MoveAndSlide();
-        
-    }
+        if (!area.IsInGroup("PlayerAttacks")) return;
 
-    public void OnEnemyHurtBoxEntered(Area2D area)
-    {
-        if (area.IsInGroup("PlayerAttacks"))
-        {
-            Hitbox hb = (Hitbox)area; 
-            TakeDamage(hb.Damage,(GlobalPosition-area.GlobalPosition));
-        }
+        Hitbox hb = (Hitbox)area;
+        TakeDamage(hb.Damage, (GlobalPosition - area.GlobalPosition));
     }
-    
 }

@@ -1,26 +1,26 @@
-[gd_scene load_steps=51 format=3 uid="uid://cfabk12i1kbjk"]
+[gd_scene load_steps=52 format=3 uid="uid://cfabk12i1kbjk"]
 
-[ext_resource type="Script" uid="uid://dqruwanp64c6h" path="res://scripts/Enemies/enemy_statemachine/wraith/Wraith.cs" id="1_gsgw0"]
-[ext_resource type="Script" uid="uid://bpgnrv5ji07gb" path="res://scripts/Enemies/enemy_statemachine/EnemyStateMachine.cs" id="2_4y2vv"]
-[ext_resource type="Script" uid="uid://cas34ewrst30y" path="res://scripts/Enemies/enemy_statemachine/wraith/IdleState.cs" id="3_8tdls"]
-[ext_resource type="Script" uid="uid://cuod1c7f738t6" path="res://scripts/Enemies/enemy_statemachine/wraith/ChaseState.cs" id="4_db2xk"]
+[ext_resource type="Script" uid="uid://46wq56vvaex5" path="res://scripts/Enemies/Wraith.cs" id="1_4kdfn"]
+[ext_resource type="Script" uid="uid://cy8j86jbwas4f" path="res://scripts/state_machine/DebugCurrentStateLabel.cs" id="2_c6c3v"]
+[ext_resource type="Script" uid="uid://cxqvy7rkoegok" path="res://scripts/state_machine/enemy_state_machines/EStateMachine.cs" id="3_hujhk"]
+[ext_resource type="Script" uid="uid://cas34ewrst30y" path="res://scripts/state_machine/enemy_state_machines/wraith_states/IdleState.cs" id="4_pd7c4"]
+[ext_resource type="Script" uid="uid://cuod1c7f738t6" path="res://scripts/state_machine/enemy_state_machines/wraith_states/ChaseState.cs" id="5_2xbs2"]
 [ext_resource type="Texture2D" uid="uid://b18y4yqwqton6" path="res://assets/Monsters_Creatures_Fantasy/Flying eye/Attack.png" id="5_q5y88"]
-[ext_resource type="Script" uid="uid://b4itxnw1qbfjf" path="res://scripts/Enemies/enemy_statemachine/wraith/KnockBackState.cs" id="6_mj5lj"]
+[ext_resource type="Script" uid="uid://bk3e7itwlswga" path="res://scripts/state_machine/enemy_state_machines/wraith_states/KnockbackState.cs" id="6_q7crc"]
 [ext_resource type="Texture2D" uid="uid://cvy47qbvbbw2p" path="res://assets/Monsters_Creatures_Fantasy/Flying eye/Death.png" id="6_voie1"]
+[ext_resource type="Script" uid="uid://duod3se5idmn3" path="res://scripts/state_machine/enemy_state_machines/wraith_states/DeathState.cs" id="7_ad4ay"]
 [ext_resource type="Texture2D" uid="uid://ce2dqchhgs7mc" path="res://assets/Monsters_Creatures_Fantasy/Flying eye/Flight.png" id="7_mj5lj"]
-[ext_resource type="Script" uid="uid://duod3se5idmn3" path="res://scripts/Enemies/enemy_statemachine/wraith/DeathState.cs" id="7_p20hp"]
+[ext_resource type="Script" uid="uid://c03b8mw0syy7a" path="res://scripts/state_machine/enemy_state_machines/EInstanceContext.cs" id="8_c6c3v"]
 [ext_resource type="Texture2D" uid="uid://dytl4dbk6pkcp" path="res://assets/Monsters_Creatures_Fantasy/Flying eye/Take Hit.png" id="8_p20hp"]
-[ext_resource type="Script" uid="uid://c4wqrp0iwej4f" path="res://scripts/Enemies/CurrentState.cs" id="9_q5y88"]
 [ext_resource type="PackedScene" uid="uid://hyo80jbfdgkm" path="res://scenes/enemies/Wraith/death_particles.tscn" id="12_4kdfn"]
 [ext_resource type="PackedScene" uid="uid://76rnut2c0v50" path="res://scenes/enemies/Wraith/hit_particles.tscn" id="13_c6c3v"]
 
-[sub_resource type="Curve" id="Curve_hujhk"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25132278, 1), 1.6413697, 1.6413697, 0, 0, Vector2(0.97883606, 0.03134644), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_c6c3v"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1931217, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.024666071), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="Curve" id="Curve_q5y88"]
-_limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0, 0.025000095), 0.0, 0.0, 0, 0, Vector2(0.24122137, 0.6180709), 0.0, 0.0, 0, 0, Vector2(0.7633588, -0.41962314), 0.0, 0.0, 0, 0, Vector2(1, 0.0127494335), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_hujhk"]
+_data = [Vector2(0, 0.51901346), 0.0, 0.0, 0, 0, Vector2(0.23809525, 1), 0.0, 0.0, 0, 0, Vector2(0.69047624, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.4989723), 0.0, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
@@ -271,20 +271,21 @@ radius = 230.37
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mj5lj"]
 
-[node name="Wraith" type="CharacterBody2D" node_paths=PackedStringArray("AggroRange", "SteeringRange", "DeathParticles", "HitParticles", "animations", "_stateMachine") groups=["Enemies"]]
+[node name="Wraith" type="CharacterBody2D" node_paths=PackedStringArray("AggroRange", "SteeringRange", "DeathParticles", "HitParticles", "Animations", "_stateMachine") groups=["Enemies"]]
 collision_layer = 3
-script = ExtResource("1_gsgw0")
-health = 30.0
+script = ExtResource("1_4kdfn")
+Speed = 150
+Health = 30
 AggroRange = NodePath("AggroRange")
 SteeringRange = NodePath("SteeringRange")
+AttackRange = 20
 DeathParticles = NodePath("DeathParticles")
 HitParticles = NodePath("HitParticles")
-KnockBackCurve = SubResource("Curve_hujhk")
+KnockbackCurve = SubResource("Curve_c6c3v")
+KnockbackWeight = 300
 AggroGroups = PackedStringArray("Players")
-ChasePath = SubResource("Curve_q5y88")
-Speed = 200
-KnockBack = 90
-animations = NodePath("WraithAnimations")
+ChasePath = SubResource("Curve_hujhk")
+Animations = NodePath("WraithAnimations")
 _stateMachine = NodePath("WraithStateMachine")
 
 [node name="CurrentState" type="Label" parent="."]
@@ -292,31 +293,29 @@ offset_left = -25.0
 offset_top = -35.0
 offset_right = 15.0
 offset_bottom = -12.0
-script = ExtResource("9_q5y88")
+script = ExtResource("2_c6c3v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_q5y88")
 
-[node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("enemy", "_initialState")]
-script = ExtResource("2_4y2vv")
-enemy = NodePath("..")
+[node name="WraithStateMachine" type="Node" parent="." node_paths=PackedStringArray("_initialState")]
+script = ExtResource("3_hujhk")
 _initialState = NodePath("IdleState")
 
-[node name="IdleState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("Owner")]
-script = ExtResource("3_8tdls")
-Owner = NodePath("../..")
+[node name="IdleState" type="Node" parent="WraithStateMachine"]
+script = ExtResource("4_pd7c4")
 
-[node name="ChaseState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("Owner")]
-script = ExtResource("4_db2xk")
-Owner = NodePath("../..")
+[node name="ChaseState" type="Node" parent="WraithStateMachine"]
+script = ExtResource("5_2xbs2")
 
-[node name="KnockBackState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("Owner")]
-script = ExtResource("6_mj5lj")
-Owner = NodePath("../..")
+[node name="KnockbackState" type="Node" parent="WraithStateMachine"]
+script = ExtResource("6_q7crc")
 
-[node name="DeathState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("Owner")]
-script = ExtResource("7_p20hp")
-Owner = NodePath("../..")
+[node name="DeathState" type="Node" parent="WraithStateMachine"]
+script = ExtResource("7_ad4ay")
+
+[node name="InstanceContext" type="Node" parent="WraithStateMachine"]
+script = ExtResource("8_c6c3v")
 
 [node name="WraithAnimations" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_p20hp")
@@ -327,6 +326,7 @@ frame_progress = 1.0
 [node name="AggroRange" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AggroRange"]
+position = Vector2(-66, 69)
 shape = SubResource("CircleShape2D_gsgw0")
 
 [node name="SteeringRange" type="Area2D" parent="."]
@@ -344,10 +344,6 @@ shape = SubResource("CircleShape2D_mj5lj")
 [node name="HitParticles" parent="." instance=ExtResource("13_c6c3v")]
 
 [connection signal="ChangeCurrentStateLabel" from="WraithStateMachine" to="CurrentState" method="OnChangeCurrentStateLabel"]
-[connection signal="StateTransition" from="WraithStateMachine/IdleState" to="WraithStateMachine" method="OnStateTransition"]
-[connection signal="StateTransition" from="WraithStateMachine/ChaseState" to="WraithStateMachine" method="OnStateTransition"]
-[connection signal="StateTransition" from="WraithStateMachine/KnockBackState" to="WraithStateMachine" method="OnStateTransition"]
-[connection signal="StateTransition" from="WraithStateMachine/DeathState" to="WraithStateMachine" method="OnStateTransition"]
 [connection signal="body_entered" from="AggroRange" to="WraithStateMachine/IdleState" method="OnAggroRangeEntered"]
 [connection signal="body_exited" from="AggroRange" to="WraithStateMachine/ChaseState" method="OnAggroRangeExited"]
 [connection signal="body_entered" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeEntered"]
