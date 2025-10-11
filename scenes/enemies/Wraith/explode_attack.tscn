@@ -36,6 +36,7 @@ fill_from = Vector2(0.491453, 0.508547)
 fill_to = Vector2(0.93162394, 0.115384616)
 
 [node name="ExplodeAttack" type="Node2D" node_paths=PackedStringArray("_explodeEffect", "_explodeLight")]
+z_index = 1
 script = ExtResource("1_wgsim")
 _explodeEffect = NodePath("ExplodeEffect")
 _explodeLight = NodePath("PointLight2D")
