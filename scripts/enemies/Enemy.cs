@@ -24,6 +24,7 @@ public partial class Enemy : CharacterBody2D
 
     public void TakeDamage(int amount, Vector2 direction)
     {
+        if (_stateMachine.CurrState.Name == "DeathState") return;
         _currHealth -= amount;
         _stateMachine.InstanceContext.KnockBackDir = direction.Normalized();
         _stateMachine.TransitionTo("KnockbackState");

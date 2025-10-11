@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=29 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_2gqcc"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attack/slash_attack_scene.tscn" id="2_l4pu8"]
@@ -149,6 +149,9 @@ stream_0/stream = ExtResource("7_s5buh")
 radius = 16.0
 height = 68.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_s5buh"]
+radius = 39.20459
+
 [node name="PlayerPackage" type="Node2D" groups=["Players"]]
 y_sort_enabled = true
 
@@ -178,5 +181,13 @@ texture = ExtResource("6_i3ygb")
 stream = SubResource("AudioStreamRandomizer_pwcne")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+visible = false
 position = Vector2(1, 0)
 shape = SubResource("CapsuleShape2D_s5buh")
+
+[node name="HurtBox" type="Area2D" parent="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/HurtBox"]
+shape = SubResource("CircleShape2D_s5buh")
+
+[connection signal="area_entered" from="CharacterBody2D/HurtBox" to="CharacterBody2D" method="OnPlayerHurtBoxEntered"]

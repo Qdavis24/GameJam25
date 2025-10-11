@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ct0g3652cw1dx"]
+[gd_scene load_steps=9 format=3 uid="uid://ct0g3652cw1dx"]
 
 [ext_resource type="Script" uid="uid://bcn7hrl18n30k" path="res://scripts/attacks/ExplodeAttack.cs" id="1_wgsim"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/player_package/Hitbox.cs" id="2_jjf1j"]
@@ -25,18 +25,29 @@ color_ramp = SubResource("GradientTexture1D_pd7c4")
 [sub_resource type="CircleShape2D" id="CircleShape2D_jjf1j"]
 radius = 87.02299
 
-[node name="ExplodeAttack" type="Node2D" node_paths=PackedStringArray("_explodeEffect")]
+[sub_resource type="Gradient" id="Gradient_jjf1j"]
+offsets = PackedFloat32Array(0, 0.70642203)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_q87fh"]
+gradient = SubResource("Gradient_jjf1j")
+fill = 1
+fill_from = Vector2(0.491453, 0.508547)
+fill_to = Vector2(0.93162394, 0.115384616)
+
+[node name="ExplodeAttack" type="Node2D" node_paths=PackedStringArray("_explodeEffect", "_explodeLight")]
 script = ExtResource("1_wgsim")
 _explodeEffect = NodePath("ExplodeEffect")
+_explodeLight = NodePath("PointLight2D")
+_lightIntensity = 4.0
 
 [node name="ExplodeEffect" type="GPUParticles2D" parent="."]
 emitting = false
 amount = 1000
-lifetime = 3.0
-interp_to_end = 0.3
+lifetime = 0.5
 one_shot = true
 preprocess = 0.26
-explosiveness = 0.8
+explosiveness = 0.22
 trail_lifetime = 0.2
 trail_sections = 3
 process_material = SubResource("ParticleProcessMaterial_wgsim")
@@ -47,5 +58,11 @@ Damage = 30
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 shape = SubResource("CircleShape2D_jjf1j")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(1, 0, 1, 1)
+energy = 1.5
+texture = SubResource("GradientTexture2D_q87fh")
+texture_scale = 3.0
 
 [connection signal="finished" from="ExplodeEffect" to="." method="OnFinished"]

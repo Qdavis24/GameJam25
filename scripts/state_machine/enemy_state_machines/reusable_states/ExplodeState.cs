@@ -48,7 +48,6 @@ public partial class ExplodeState : EState
 
     private void OnAttackFinished()
     {
-        GD.Print("State Callback Attack Finished");
         _stateMachine.Owner.QueueFree();
     }
 }

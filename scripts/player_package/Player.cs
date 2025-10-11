@@ -144,6 +144,7 @@ public partial class Player : CharacterBody2D
 		{
 			Hitbox hb = (Hitbox)area;
 			TakeDamage(hb.Damage, GlobalPosition-hb.GlobalPosition);
+			GD.Print(currHealth);
 		}
 	}
 }
