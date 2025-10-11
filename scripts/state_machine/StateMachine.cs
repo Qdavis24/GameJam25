@@ -25,7 +25,7 @@ namespace GameJam25.scripts.state_machine;
  *
  * ENSURE to make states children of state machine as requirement for initializing their references
  */
-public partial class StateMachine : Node
+public partial class StateMachine : Node2D
 {
     [Signal] public delegate void ChangeCurrentStateLabelEventHandler(string nextState);
     [Export] private State _initialState;

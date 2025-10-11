@@ -111,7 +111,7 @@ sprite_frames = SubResource("SpriteFrames_5ro6l")
 animation = &"fox_slash"
 frame_progress = 0.29797187
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." groups=["PlayerHitBox"]]
 script = ExtResource("5_6cian")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]

@@ -1,9 +1,10 @@
 using Godot;
 using System;
+using GameJam25.scripts.player_package.hitbox;
 
 public partial class Player : CharacterBody2D
 {
-	
+	[Export] private int Health = 100;
 	[Export] public float Speed = 400f;
 	[Export] public string AnimationSet = "fox";
 	
@@ -12,6 +13,8 @@ public partial class Player : CharacterBody2D
 	[Export] public PackedScene SlashAttack;
 	[Export] private float LungeSpeed = 700f;
 	[Export] private float LungeDuration = 0.35f;
+
+	private float currHealth;
 
 	private bool lunging = false;
 	private float lungeTime = 0f;
@@ -32,6 +35,11 @@ public partial class Player : CharacterBody2D
 		slash.Position = dir.Normalized() * 10f; // a little in front of char
 		slash.Direction = dir;
 		AddChild(slash);
+	}
+
+	private void TakeDamage(int amount, Vector2 dir)
+	{
+		currHealth -= amount;
 	}
 
 	private void Move(Vector2 moveDir) {
@@ -118,6 +126,7 @@ public partial class Player : CharacterBody2D
 	
 	public override void _Ready()
 	{
+		currHealth = Health;
 		_audio = GetNode<AudioStreamPlayer>("WalkSound");
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_anim.Play(AnimationSet + "_idle");
@@ -127,5 +136,14 @@ public partial class Player : CharacterBody2D
 	{
 		GetInput(delta);
 		MoveAndSlide();
+	}
+
+	private void OnPlayerHurtBoxEntered(Area2D area)
+	{
+		if (area.IsInGroup("EnemyHitBox"))
+		{
+			Hitbox hb = (Hitbox)area;
+			TakeDamage(hb.Damage, GlobalPosition-hb.GlobalPosition);
+		}
 	}
 }

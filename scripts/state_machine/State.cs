@@ -3,7 +3,7 @@ using Godot;
 
 namespace GameJam25.scripts.state_machine;
 
-public abstract partial class State : Node
+public abstract partial class State : Node2D
 {
     public abstract void Enter();
     public abstract void Exit();

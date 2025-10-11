@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://cfabk12i1kbjk"]
+[gd_scene load_steps=53 format=3 uid="uid://cfabk12i1kbjk"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_hujhk"]
 [ext_resource type="Script" uid="uid://cy8j86jbwas4f" path="res://scripts/state_machine/DebugCurrentStateLabel.cs" id="2_c6c3v"]
@@ -9,33 +9,13 @@
 [ext_resource type="Script" uid="uid://bu8otgwd2la2k" path="res://scripts/state_machine/enemy_state_machines/reusable_states/ExplodeState.cs" id="6_q7crc"]
 [ext_resource type="Texture2D" uid="uid://cvy47qbvbbw2p" path="res://assets/Monsters_Creatures_Fantasy/Flying eye/Death.png" id="6_voie1"]
 [ext_resource type="Script" uid="uid://3tcjxipqa6on" path="res://scripts/state_machine/enemy_state_machines/reusable_states/KnockbackState.cs" id="7_ad4ay"]
+[ext_resource type="PackedScene" uid="uid://ct0g3652cw1dx" path="res://scenes/enemies/Wraith/explode_attack.tscn" id="7_c6c3v"]
 [ext_resource type="Texture2D" uid="uid://ce2dqchhgs7mc" path="res://assets/Monsters_Creatures_Fantasy/Flying eye/Flight.png" id="7_mj5lj"]
 [ext_resource type="Script" uid="uid://c03b8mw0syy7a" path="res://scripts/state_machine/enemy_state_machines/EInstanceContext.cs" id="8_c6c3v"]
 [ext_resource type="Texture2D" uid="uid://dytl4dbk6pkcp" path="res://assets/Monsters_Creatures_Fantasy/Flying eye/Take Hit.png" id="8_p20hp"]
 [ext_resource type="Script" uid="uid://bwdq54lyr2fds" path="res://scripts/state_machine/enemy_state_machines/reusable_states/DeathState.cs" id="8_vr7wc"]
-[ext_resource type="PackedScene" uid="uid://hyo80jbfdgkm" path="res://scenes/enemies/Wraith/death_particles.tscn" id="12_4kdfn"]
-[ext_resource type="PackedScene" uid="uid://76rnut2c0v50" path="res://scenes/enemies/Wraith/hit_particles.tscn" id="13_c6c3v"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
-
-[sub_resource type="Gradient" id="Gradient_hujhk"]
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_pd7c4"]
-gradient = SubResource("Gradient_hujhk")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2xbs2"]
-lifetime_randomness = 0.5
-particle_flag_disable_z = true
-spread = 180.0
-initial_velocity_min = 199.47
-initial_velocity_max = 277.50998
-gravity = Vector3(0, 10, 0)
-damping_min = 90.00001
-damping_max = 100.00001
-scale_min = 0.0
-scale_max = 16.48
-color = Color(0.6420218, 0.15282935, 0.57431906, 1)
-color_ramp = SubResource("GradientTexture1D_pd7c4")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ad4ay"]
 lifetime_randomness = 0.5
@@ -327,24 +307,12 @@ script = ExtResource("2_c6c3v")
 visible = false
 shape = SubResource("CircleShape2D_q5y88")
 
-[node name="ExplodeEffect" type="GPUParticles2D" parent="."]
-emitting = false
-amount = 1000
-lifetime = 3.0
-interp_to_end = 0.3
-one_shot = true
-preprocess = 0.26
-explosiveness = 0.8
-trail_lifetime = 0.2
-trail_sections = 3
-process_material = SubResource("ParticleProcessMaterial_2xbs2")
-
 [node name="KnockBackEffect" type="GPUParticles2D" parent="."]
 emitting = false
 amount = 60
 one_shot = true
 explosiveness = 1.0
-trail_lifetime = 0.09999999999999999
+trail_lifetime = 0.1
 process_material = SubResource("ParticleProcessMaterial_ad4ay")
 
 [node name="DeathEffect" type="GPUParticles2D" parent="."]
@@ -353,38 +321,38 @@ amount = 100
 one_shot = true
 explosiveness = 1.0
 trail_enabled = true
-trail_lifetime = 0.09999999999999999
+trail_lifetime = 0.1
 process_material = SubResource("ParticleProcessMaterial_ad4ay")
 
-[node name="WraithStateMachine" type="Node" parent="." node_paths=PackedStringArray("_initialState")]
+[node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("_initialState")]
 script = ExtResource("3_hujhk")
 _initialState = NodePath("IdleState")
 
-[node name="IdleState" type="Node" parent="WraithStateMachine"]
+[node name="IdleState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("4_pd7c4")
 
-[node name="ChaseState" type="Node" parent="WraithStateMachine"]
+[node name="ChaseState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("5_2xbs2")
 ChasePath = SubResource("Curve_hujhk")
 _steeringWeights = PackedFloat32Array(0.5, 0.3, 0.7)
 
-[node name="ExplodeState" type="Node" parent="WraithStateMachine" node_paths=PackedStringArray("_explosionEffect")]
+[node name="ExplodeState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("6_q7crc")
 _explosionDelay = 1.5
-_explosionEffect = NodePath("../../ExplodeEffect")
+_explosionAttackScene = ExtResource("7_c6c3v")
 
-[node name="KnockbackState" type="Node" parent="WraithStateMachine" node_paths=PackedStringArray("_hitEffect")]
+[node name="KnockbackState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_hitEffect")]
 script = ExtResource("7_ad4ay")
 KnockbackCurve = SubResource("Curve_q7crc")
 KnockbackWeight = 1000
 _knockBackDuration = 0.4
 _hitEffect = NodePath("../../KnockBackEffect")
 
-[node name="DeathState" type="Node" parent="WraithStateMachine" node_paths=PackedStringArray("_deathEffect")]
+[node name="DeathState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_deathEffect")]
 script = ExtResource("8_vr7wc")
 _deathEffect = NodePath("../../DeathEffect")
 
-[node name="InstanceContext" type="Node" parent="WraithStateMachine"]
+[node name="InstanceContext" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("8_c6c3v")
 
 [node name="WraithAnimations" type="AnimatedSprite2D" parent="."]
@@ -410,10 +378,6 @@ visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 shape = SubResource("CircleShape2D_mj5lj")
-
-[node name="DeathParticles" parent="." instance=ExtResource("12_4kdfn")]
-
-[node name="HitParticles" parent="." instance=ExtResource("13_c6c3v")]
 
 [connection signal="ChangeCurrentStateLabel" from="WraithStateMachine" to="CurrentState" method="OnChangeCurrentStateLabel"]
 [connection signal="body_entered" from="AggroRange" to="WraithStateMachine/IdleState" method="OnAggroRangeEntered"]

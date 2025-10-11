@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://ct0g3652cw1dx"]
+
+[ext_resource type="Script" uid="uid://bcn7hrl18n30k" path="res://scripts/attacks/ExplodeAttack.cs" id="1_wgsim"]
+[ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/player_package/Hitbox.cs" id="2_jjf1j"]
+
+[sub_resource type="Gradient" id="Gradient_1e4dr"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pd7c4"]
+gradient = SubResource("Gradient_1e4dr")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wgsim"]
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 199.47
+initial_velocity_max = 277.50998
+gravity = Vector3(0, 10, 0)
+damping_min = 90.00001
+damping_max = 100.00001
+scale_min = 0.0
+scale_max = 16.48
+color = Color(0.6420218, 0.15282935, 0.57431906, 1)
+color_ramp = SubResource("GradientTexture1D_pd7c4")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jjf1j"]
+radius = 87.02299
+
+[node name="ExplodeAttack" type="Node2D" node_paths=PackedStringArray("_explodeEffect")]
+script = ExtResource("1_wgsim")
+_explodeEffect = NodePath("ExplodeEffect")
+
+[node name="ExplodeEffect" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 1000
+lifetime = 3.0
+interp_to_end = 0.3
+one_shot = true
+preprocess = 0.26
+explosiveness = 0.8
+trail_lifetime = 0.2
+trail_sections = 3
+process_material = SubResource("ParticleProcessMaterial_wgsim")
+
+[node name="HitBox" type="Area2D" parent="." groups=["EnemyHitBox"]]
+script = ExtResource("2_jjf1j")
+Damage = 30
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource("CircleShape2D_jjf1j")
+
+[connection signal="finished" from="ExplodeEffect" to="." method="OnFinished"]

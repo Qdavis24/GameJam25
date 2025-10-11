@@ -107,4 +107,4 @@ position = Vector2(94, -30)
 position = Vector2(94, -30)
 
 [node name="Wraith10" parent="." instance=ExtResource("1_kruvs")]
-position = Vector2(94, -30)
+position = Vector2(367, 20)

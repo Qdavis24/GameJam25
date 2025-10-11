@@ -41,9 +41,9 @@ public partial class Enemy : CharacterBody2D
 
     private void OnEnemyHurtBoxEntered(Area2D area)
     {
-        if (!area.IsInGroup("PlayerAttacks")) return;
+        if (!area.IsInGroup("PlayerHitBox")) return;
 
         Hitbox hb = (Hitbox)area;
-        TakeDamage(hb.Damage, (GlobalPosition - area.GlobalPosition));
+        TakeDamage(hb.Damage, (GlobalPosition - hb.GlobalPosition));
     }
 }

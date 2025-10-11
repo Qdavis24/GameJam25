@@ -28,6 +28,8 @@ project/solution_directory="./"
 
 Enemies=""
 Players=""
+EnemyHitBox=""
+PlayerHitBox=""
 
 [input]
 

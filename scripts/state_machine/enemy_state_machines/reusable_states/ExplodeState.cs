@@ -7,7 +7,8 @@ public partial class ExplodeState : EState
 {
     [ExportCategory("Explosion params")]
     [Export] private double _explosionDelay;
-    [Export] private GpuParticles2D _explosionEffect;
+    [Export] private PackedScene _explosionAttackScene;
+    private ExplodeAttack _explosionAttackSceneInstantiated;
     
     private double _currTime;
     private bool _isExploding;
@@ -28,25 +29,26 @@ public partial class ExplodeState : EState
         _currTime -= delta;
         if (_currTime < 0 && !_isExploding)
         {
-            _explosionEffect.Emitting = true;
+            _explosionAttackSceneInstantiated = _explosionAttackScene.Instantiate<ExplodeAttack>();
+            _explosionAttackSceneInstantiated.AttackFinished += OnAttackFinished;
+            AddChild(_explosionAttackSceneInstantiated);
             _isExploding = true;
             _stateMachine.Owner.Animations.Play("Die");
         }
-        else if (_currTime < 0 & _isExploding && _explosionEffect.Emitting == false)
-        {
-            _stateMachine.Owner.QueueFree();
-        }
-        
-        
-        
     }
 
     public override void PhysicsUpdate(double delta)
     {
         if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(_stateMachine.InstanceContext.CurrentTarget
-                .GlobalPosition) > _stateMachine.Owner.AttackRange)
+                .GlobalPosition) > _stateMachine.Owner.AttackRange && !_isExploding)
         {
             _stateMachine.TransitionTo("ChaseState");
         }
+    }
+
+    private void OnAttackFinished()
+    {
+        GD.Print("State Callback Attack Finished");
+        _stateMachine.Owner.QueueFree();
     }
 }
