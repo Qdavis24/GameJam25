@@ -27,7 +27,6 @@ public partial class ExplodeAttack : Node2D
 
     private void OnFinished()
     {
-        EmitSignal(SignalName.AttackFinished);
         QueueFree();
     }
 }

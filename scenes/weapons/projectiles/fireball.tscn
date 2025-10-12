@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cyjhlvykvi3fn"]
+[gd_scene load_steps=13 format=3 uid="uid://cyjhlvykvi3fn"]
 
 [ext_resource type="Script" uid="uid://n41ha5q3hksi" path="res://scripts/weapons/projectiles/Fireball.cs" id="1_4h438"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/player_package/Hitbox.cs" id="2_4h438"]
+[ext_resource type="PackedScene" uid="uid://bc8136epjg2t4" path="res://scenes/weapons/explode.tscn" id="2_bvcyv"]
 [ext_resource type="Texture2D" uid="uid://3oaaiq7vqfjn" path="res://assets/Monsters_Creatures_Fantasy/weapons/fireball.png" id="3_4h438"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bvcyv"]
@@ -59,10 +60,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="fireball" type="Node2D" node_paths=PackedStringArray("_explode", "Hitbox")]
-z_index = -1
+[node name="fireball" type="Node2D" node_paths=PackedStringArray("Hitbox")]
 script = ExtResource("1_4h438")
-_explode = NodePath("explode")
+_explosionParticles = ExtResource("2_bvcyv")
 Hitbox = NodePath("hitbox")
 
 [node name="hitbox" type="Area2D" parent="." groups=["PlayerHitBox"]]
@@ -76,17 +76,10 @@ color = Color(1, 0.003921569, 0, 1)
 texture = SubResource("GradientTexture2D_4h438")
 
 [node name="trail" type="GPUParticles2D" parent="."]
-visible = false
 amount = 30
 process_material = SubResource("ParticleProcessMaterial_31e3c")
 
-[node name="explode" type="GPUParticles2D" parent="."]
-emitting = false
-amount = 200
-one_shot = true
-explosiveness = 1.0
-process_material = SubResource("ParticleProcessMaterial_31e3c")
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+rotation = 1.1047934
 sprite_frames = SubResource("SpriteFrames_k38kp")
-frame_progress = 0.93965465
+frame_progress = 0.57360613

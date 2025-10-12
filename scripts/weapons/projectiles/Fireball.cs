@@ -1,29 +1,33 @@
 using Godot;
-using System;
+
 
 public partial class Fireball : Node2D
 {
-    [Export] private GpuParticles2D _explode;
+    [Export] private PackedScene _explosionParticles;
     [Export] private Area2D Hitbox;
-    private bool _queueFree;
+    private Vector2 _currPos;
 
     public override void _Ready()
     {
         Hitbox.AreaEntered += OnAreaEntered;
     }
-
-    public override void _PhysicsProcess(double delta)
-    {
-        if (_queueFree && _explode.Emitting == false) QueueFree();
-    }
+    
 
     private void OnAreaEntered(Node2D area)
     {
         if (area.IsInGroup("EnemyHurtbox"))
         {
-            GD.Print("HIT");
-            _explode.Emitting = true;
-            _queueFree = true;
+            _currPos = GlobalPosition;
+            QueueFree();
         }
+    }
+
+    public override void _ExitTree()
+    {
+        var explodeParticles = _explosionParticles.Instantiate<GpuParticles2D>();
+        explodeParticles.Emitting = true;
+        explodeParticles.Finished += () => explodeParticles.QueueFree();
+        GetTree().Root.AddChild(explodeParticles);
+        explodeParticles.GlobalPosition = GlobalPosition;
     }
 }

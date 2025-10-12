@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://cfabk12i1kbjk"]
+[gd_scene load_steps=41 format=3 uid="uid://cfabk12i1kbjk"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_hujhk"]
 [ext_resource type="Script" uid="uid://cy8j86jbwas4f" path="res://scripts/state_machine/DebugCurrentStateLabel.cs" id="2_c6c3v"]
@@ -10,13 +10,15 @@
 [ext_resource type="PackedScene" uid="uid://ct0g3652cw1dx" path="res://scenes/enemies/Wraith/explode_attack.tscn" id="7_c6c3v"]
 [ext_resource type="Script" uid="uid://c03b8mw0syy7a" path="res://scripts/state_machine/enemy_state_machines/EInstanceContext.cs" id="8_c6c3v"]
 [ext_resource type="Script" uid="uid://bwdq54lyr2fds" path="res://scripts/state_machine/enemy_state_machines/reusable_states/DeathState.cs" id="8_vr7wc"]
+[ext_resource type="PackedScene" uid="uid://chvr7h6jkalhr" path="res://scenes/enemies/Wraith/Particle_Effects/death_particles.tscn" id="10_3mp8d"]
 [ext_resource type="Texture2D" uid="uid://s5d3gw3umxnv" path="res://assets/Monsters_Creatures_Fantasy/Wraith/ghoul.png" id="11_pdrcd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
 radius = 15.0
 
-[sub_resource type="Curve" id="Curve_hujhk"]
-_data = [Vector2(0, 0.5104064), 0.0, 0.0, 0, 0, Vector2(0.31538463, 1), 0.0, 0.0, 0, 0, Vector2(0.6820513, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.54905856), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_pdrcd"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0.06474829), 0.0, 0.0, 0, 0, Vector2(0.24867725, 0.5858171), 0.0, 0.0, 0, 0, Vector2(0.7195768, -0.49640286), 0.0, 0.0, 0, 0, Vector2(1, 0.05138755), 0.0, 0.0, 0, 0]
 point_count = 4
 
 [sub_resource type="Curve" id="Curve_q7crc"]
@@ -100,6 +102,10 @@ region = Rect2(0, 1932, 100, 138)
 atlas = ExtResource("11_pdrcd")
 region = Rect2(0, 2070, 100, 138)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_iisjl"]
+atlas = ExtResource("11_pdrcd")
+region = Rect2(0, 0, 100, 138)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_p20hp"]
 animations = [{
 "frames": [{
@@ -157,52 +163,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_3mp8d")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4kdfn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_c6c3v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hujhk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pd7c4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2xbs2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_q7crc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ad4ay")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vr7wc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_513k7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pdt8l")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ynesd")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qumpf")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ep7m0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wcdi3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bgl01")
+"texture": SubResource("AtlasTexture_iisjl")
 }],
 "loop": false,
 "name": &"Die",
@@ -432,8 +393,14 @@ script = ExtResource("4_pd7c4")
 
 [node name="ChaseState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("5_2xbs2")
-ChasePath = SubResource("Curve_hujhk")
+_minPathMag = 1.0
+_maxPathMag = 3.0
+_path = SubResource("Curve_pdrcd")
 _steeringWeights = PackedFloat32Array(1, 0.2, 0.7)
+_numRaycastSamples = 30
+_sampleDistance = 100
+_minTimePerCycle = 2.0
+_maxTimePerCycle = 4.0
 
 [node name="ExplodeState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("6_q7crc")
@@ -458,14 +425,7 @@ process_material = SubResource("ParticleProcessMaterial_ad4ay")
 script = ExtResource("8_vr7wc")
 _deathEffect = NodePath("DeathEffect")
 
-[node name="DeathEffect" type="GPUParticles2D" parent="WraithStateMachine/DeathState"]
-emitting = false
-amount = 100
-one_shot = true
-explosiveness = 1.0
-trail_enabled = true
-trail_lifetime = 0.1
-process_material = SubResource("ParticleProcessMaterial_ad4ay")
+[node name="DeathEffect" parent="WraithStateMachine/DeathState" instance=ExtResource("10_3mp8d")]
 
 [node name="InstanceContext" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("8_c6c3v")
@@ -473,7 +433,7 @@ script = ExtResource("8_c6c3v")
 [node name="WraithAnimations" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_p20hp")
-animation = &"TakeDamage"
+animation = &"Die"
 
 [node name="AggroRange" type="Area2D" parent="."]
 
@@ -495,7 +455,6 @@ shape = SubResource("CapsuleShape2D_pdrcd")
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 z_index = -1
 amount = 40
-lifetime = 2.0
 process_material = SubResource("ParticleProcessMaterial_pdrcd")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]

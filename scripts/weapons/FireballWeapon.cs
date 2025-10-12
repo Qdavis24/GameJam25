@@ -1,76 +1,112 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Vector2 = Godot.Vector2;
 
 public partial class FireballWeapon : Node2D
 {
-    [Export] private PackedScene _fireballScene;
+    [Export] private PackedScene _fireballPackedScene;
     [Export] private Timer _timer;
     [Export] private float _fireballSpeed;
     [Export] private Curve _speedRamp;
     [Export] private double _fireballLifetime;
-    private double _currTime;
+    [Export] private int _numFireballs;
 
-    private Vector2[] _directions =
+
+    private enum _states
     {
-        new Vector2(-1, 0),
-        new Vector2(-1, -1).Normalized(),
-        new Vector2(0, -1),
-        new Vector2(1, -1).Normalized(),
-        new Vector2(1, 0),
-        new Vector2(1, 1).Normalized(),
-        new Vector2(0, 1),
-        new Vector2(-1, 1).Normalized()
+        Cooldown,
+        Fire
     };
 
-    private bool _isLaunching;
+    private _states _currState;
+
     private Node2D[] _fireballs;
+    private Vector2[] _directions;
 
-    public override void _Ready()
-    {
-        _timer.Timeout += OnTimeout;
-    }
+    private List<Node2D[]> _burstsQueue;
+    private List<double> _currTimes;
 
-    public override void _PhysicsProcess(double delta)
+    private void calculateDirections()
     {
-        if (_isLaunching)
+        float radIncr = (2 * Mathf.Pi) / _numFireballs;
+        float currRad = 0;
+        for (int i = 0; i < _numFireballs; i++)
         {
-            _currTime += delta;
-            for (int i = 0; i < _fireballs.Length; i++)
-            {
-                if (IsInstanceValid(_fireballs[i]))
-                {
-                    Vector2 dir = _directions[i] * _speedRamp.Sample((float)(_currTime / _fireballLifetime)) *
-                                  _fireballSpeed;
-                    _fireballs[i].GlobalPosition += dir * (float)delta;
-                }
-            }
+            _directions[i] = Vector2.FromAngle(currRad);
+            currRad += radIncr;
         }
     }
 
-    private void CleanupBalls()
+    private void CleanupBalls(int burstIndex)
     {
-        foreach (Node2D fireball in _fireballs)
+        foreach (Node2D fireball in _burstsQueue[burstIndex])
         {
             if (IsInstanceValid(fireball))
                 fireball.QueueFree();
         }
+        _burstsQueue.RemoveAt(burstIndex);
+        _currTimes.RemoveAt(burstIndex);
+    }
+
+    public override void _Ready()
+    {
+        _burstsQueue = new List<Node2D[]>();
+        _currTimes = new List<double>();
+
+        _directions = new Vector2[_numFireballs];
+        calculateDirections();
+
+        _timer.Timeout += OnTimeout;
+    }
+
+
+    public override void _PhysicsProcess(double delta)
+    {
+        for (int i = 0; i < _burstsQueue.Count; i++)
+        {
+            _currTimes[i] += delta;
+            // trigger deque for a burst
+            if (_currTimes[i] >= _fireballLifetime)
+            {
+                CleanupBalls(i);
+                continue;
+            }
+
+            // position each fireball in a burst
+            for (int j = 0; j < _numFireballs; j++)
+            {
+                if (IsInstanceValid(_burstsQueue[i][j]))
+                {
+                    Vector2 dir =
+                        _directions[j].Rotated((float)((_currTimes[i] / _fireballLifetime * (2 * Mathf.Pi)))) *
+                        _speedRamp.Sample((float)(_currTimes[i] / _fireballLifetime)) *
+                        _fireballSpeed;
+                    _burstsQueue[i][j].Rotation = dir.Angle();
+                    _burstsQueue[i][j].GlobalPosition += dir * (float)delta;
+                }
+            }
+        }
+        
     }
 
     private void OnTimeout()
     {
-        _currTime = 0;
-        if (_fireballs != null)
-            CleanupBalls();
-        _fireballs = new Node2D[_directions.Length];
-        for (int i = 0; i < _directions.Length; i++)
+        GD.Print("Timeout hit");
+        _currTimes.Add(0);
+
+        _fireballs = new Node2D[_numFireballs];
+        for (int i = 0; i < _numFireballs; i++)
         {
-            var currFireball = _fireballScene.Instantiate<Node2D>();
-            GetTree().Root.AddChild(currFireball);
+            var currFireball = _fireballPackedScene.Instantiate<Node2D>();
+            currFireball.Rotation = _directions[i].Angle();
+            AddChild(currFireball);
             currFireball.GlobalPosition = GlobalPosition;
-            currFireball.Rotation = (_directions[i].Angle() + Mathf.Pi / 3);
             _fireballs[i] = currFireball;
         }
 
-        _isLaunching = true;
+        _burstsQueue.Add(_fireballs);
+        GD.Print(_burstsQueue.Count);
     }
 }
