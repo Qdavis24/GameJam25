@@ -1,0 +1,67 @@
+[gd_scene load_steps=9 format=3 uid="uid://dyrdk24okgbja"]
+
+[ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/enemies/EnemySpawner.cs" id="1_7lb27"]
+[ext_resource type="PackedScene" uid="uid://cfabk12i1kbjk" path="res://scenes/enemies/Wraith/Wraith.tscn" id="2_abhiv"]
+[ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/characters/fox/shadow.png" id="3_abhiv"]
+
+[sub_resource type="Curve" id="Curve_abhiv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5132275, 0.1048305), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.5327357, 0.5327357, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_abhiv"]
+offsets = PackedFloat32Array(0, 0.6802326)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_twont"]
+gradient = SubResource("Gradient_abhiv")
+fill = 1
+fill_from = Vector2(0.4957265, 0.47435898)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_abhiv"]
+radius = 1961.2141
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_abhiv"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(4, 4, 1)
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 52.969997
+gravity = Vector3(0, -98, 0)
+damping_min = 4.0
+damping_max = 5.0
+scale_min = 0.34
+scale_max = 15.309999
+color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
+
+[node name="WraithSpawner" type="Node2D" node_paths=PackedStringArray("_light", "_toggleRange", "_timer")]
+script = ExtResource("1_7lb27")
+_light = NodePath("PointLight2D")
+_lightRamp = SubResource("Curve_abhiv")
+_maxEnergy = 1.0
+_toggleRange = NodePath("toggleRange")
+_enemyTypes = Array[PackedScene]([ExtResource("2_abhiv")])
+_enemyTypeSpawnChance = PackedFloat32Array(1)
+_timer = NodePath("Timer")
+_spawnRadius = Vector2(100, 100)
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_abhiv")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(1, 0, 1, 1)
+texture = SubResource("GradientTexture2D_twont")
+texture_scale = 20.0
+
+[node name="toggleRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="toggleRange"]
+shape = SubResource("CircleShape2D_abhiv")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+z_index = -1
+amount = 40
+lifetime = 5.0
+process_material = SubResource("ParticleProcessMaterial_abhiv")

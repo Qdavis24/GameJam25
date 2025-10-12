@@ -22,11 +22,12 @@ public partial class Enemy : CharacterBody2D
     protected float _currHealth;
 
 
-    public void TakeDamage(int amount, Vector2 direction)
+    public void TakeDamage(int amount, int knockbackWeight, Vector2 direction)
     {
         if (_stateMachine.CurrState.Name == "DeathState") return;
         _currHealth -= amount;
-        _stateMachine.InstanceContext.KnockBackDir = direction.Normalized();
+        _stateMachine.InstanceContext.KnockbackDir = direction.Normalized();
+        _stateMachine.InstanceContext.KnockbackWeight = knockbackWeight;
         _stateMachine.TransitionTo("KnockbackState");
     }
 
@@ -45,6 +46,7 @@ public partial class Enemy : CharacterBody2D
         if (!area.IsInGroup("PlayerHitBox")) return;
 
         Hitbox hb = (Hitbox)area;
-        TakeDamage(hb.Damage, (GlobalPosition - hb.GlobalPosition));
+        
+        TakeDamage(hb.Damage, hb.KnockbackWeight,  (GlobalPosition - hb.GlobalPosition));
     }
 }

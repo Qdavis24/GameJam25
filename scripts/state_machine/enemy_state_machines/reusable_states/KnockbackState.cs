@@ -6,27 +6,28 @@ namespace GameJam25.scripts.Enemies.enemy_statemachine.wraith;
 
 public partial class KnockbackState : EState
 {
-    [ExportCategory("Knockback")] 
-    [Export] public Curve KnockbackCurve;
-    [Export] private int KnockbackWeight;
+    [ExportCategory("Knockback")] [Export] public Curve KnockbackCurve;
+
     [Export] private double _knockBackDuration;
-    
-    [ExportCategory("special effects")] 
-    [Export] private GpuParticles2D _hitEffect;
+    private int _knockbackWeight;
+
+    [ExportCategory("special effects")] [Export]
+    private GpuParticles2D _hitEffect;
+
     private ParticleProcessMaterial _hitEffectMaterial;
-    
+
     private double _currTime;
-    
+
     public override void Enter()
     {
-        _hitEffectMaterial = (ParticleProcessMaterial) _hitEffect.ProcessMaterial;
+        _knockbackWeight = _stateMachine.InstanceContext.KnockbackWeight;
+        _hitEffectMaterial = (ParticleProcessMaterial)_hitEffect.ProcessMaterial;
         _currTime = 0;
         _stateMachine.Owner.Animations.Play("TakeDamage");
-        Vector2 dir = (_stateMachine.InstanceContext.KnockBackDir).Normalized();
+        Vector2 dir = (_stateMachine.InstanceContext.KnockbackDir).Normalized();
         Vector3 materialDir = new Vector3(dir.X, dir.Y, 0);
         _hitEffectMaterial.Direction = materialDir;
         _hitEffect.Emitting = true;
-        
     }
 
     public override void Exit()
@@ -42,8 +43,8 @@ public partial class KnockbackState : EState
     {
         _currTime += delta;
         float sample = KnockbackCurve.Sample((float)(_currTime / _knockBackDuration));
-        float currSpeed = sample * KnockbackWeight;
-        _stateMachine.Owner.Velocity = _stateMachine.InstanceContext.KnockBackDir.Normalized() * currSpeed;
+        float currSpeed = sample * _knockbackWeight;
+        _stateMachine.Owner.Velocity = _stateMachine.InstanceContext.KnockbackDir.Normalized() * currSpeed;
         _stateMachine.Owner.MoveAndSlide();
         if (_currTime >= _knockBackDuration)
         {

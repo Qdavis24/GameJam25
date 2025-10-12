@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://7subxsr3gb3o"]
+
+[ext_resource type="Script" uid="uid://dqsiueykhc37" path="res://scripts/weapons/FireballWeapon.cs" id="1_ekx4o"]
+[ext_resource type="PackedScene" uid="uid://cyjhlvykvi3fn" path="res://scenes/weapons/projectiles/fireball.tscn" id="2_s5frb"]
+
+[sub_resource type="Curve" id="Curve_s5frb"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1e-05, 1), 0.0, 0.0, 0, 0, Vector2(0.5767195, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[node name="FireballWeapon" type="Node2D" node_paths=PackedStringArray("_timer")]
+z_index = -1
+y_sort_enabled = true
+script = ExtResource("1_ekx4o")
+_fireballScene = ExtResource("2_s5frb")
+_timer = NodePath("Timer")
+_fireballSpeed = 800.0
+_speedRamp = SubResource("Curve_s5frb")
+_fireballLifetime = 5.0
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true

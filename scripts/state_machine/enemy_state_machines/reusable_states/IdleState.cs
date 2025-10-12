@@ -3,16 +3,19 @@ using Godot;
 
 public partial class IdleState : EState
 {
+    private Vector2 _wanderDirection;
+    private float _wanderTimer;
     
     public override void Enter()
     {
-        GD.Print(_stateMachine.Name);
         _stateMachine.Owner.Animations.Play("Idle");
+        PickNewDirection();
     }
 
     public override void Exit()
     {
         _stateMachine.Owner.Animations.Stop();
+        _stateMachine.Owner.Velocity = Vector2.Zero;
     }
 
     public override void Update(double delta)
@@ -21,24 +24,29 @@ public partial class IdleState : EState
         {
             _stateMachine.TransitionTo("ChaseState");
         }
+        
+        // Change direction every 2 seconds
+        _wanderTimer -= (float)delta;
+        if (_wanderTimer <= 0)
+        {
+            PickNewDirection();
+        }
     }
 
     public override void PhysicsUpdate(double delta)
     {
+        _stateMachine.Owner.Velocity = _wanderDirection * 50f; // wander speed
+        _stateMachine.Owner.MoveAndSlide();
+    }
+    
+    private void PickNewDirection()
+    {
+        float angle = GD.Randf() * Mathf.Tau;
+        _wanderDirection = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+        _wanderTimer = 4f;
     }
 
     void OnAggroRangeEntered(Node2D body)
-        /*
-         * this is a call back for the aggro range area 2D body entered
-         * works to detect if player is in aggro range then store a ref to player in context for later state (chase)
-         * also transitions state on detection
-         *
-         * ISSUES:
-         * body entered doesn't happen again if player is already in body
-         * IE if we transition to IDLE again while player is still inside area2D
-         *
-         * good spot to fix / add better logic for this
-         */
     {
         foreach (string group in _stateMachine.Owner.AggroGroups)
         {
@@ -49,8 +57,7 @@ public partial class IdleState : EState
                 {
                     currTarget = (Player)body;
                 }
-                // ADD all groups here as we increase aggro groups!!
-                // potential null ref if not added
+                
                 if (currTarget == null)
                 {
                     GD.PrintErr(

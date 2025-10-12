@@ -39,6 +39,9 @@ public partial class WorldSpawner : Node2D
 
     [ExportCategory("Player")] [Export] PackedScene PlayerScene;
 
+    [ExportCategory("Enemy System")] [Export]
+    private PackedScene _enemySpawner;
+
     private WorldGenerator world;
 
     private enum WorldDataStates
@@ -157,12 +160,17 @@ public partial class WorldSpawner : Node2D
     {
         for (int shrineIndex = 0; shrineIndex < allShrinePckdScns.Length; shrineIndex++)
         {
+            Node2D enemySpawner = _enemySpawner.Instantiate<Node2D>();
+            
             Node2D currShrine = allShrinePckdScns[shrineIndex].Instantiate<Node2D>();
             Vector2I centerTile = new Vector2I(
                 world.Shrines[shrineIndex].RootCell.X + ShrineSizeRows / 2 * world.Shrines[shrineIndex].RowDir,
                 world.Shrines[shrineIndex].RootCell.Y + ShrineSizeCols / 2 * world.Shrines[shrineIndex].ColDir
             );
             currShrine.Position = BaseTileMapLayer.MapToLocal(centerTile);
+            enemySpawner.Position = BaseTileMapLayer.MapToLocal(centerTile);
+            
+            AddChild(enemySpawner);
             AddChild(currShrine);
         }
     }

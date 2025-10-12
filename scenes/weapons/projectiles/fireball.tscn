@@ -1,0 +1,92 @@
+[gd_scene load_steps=12 format=3 uid="uid://cyjhlvykvi3fn"]
+
+[ext_resource type="Script" uid="uid://n41ha5q3hksi" path="res://scripts/weapons/projectiles/Fireball.cs" id="1_4h438"]
+[ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/player_package/Hitbox.cs" id="2_4h438"]
+[ext_resource type="Texture2D" uid="uid://3oaaiq7vqfjn" path="res://assets/Monsters_Creatures_Fantasy/weapons/fireball.png" id="3_4h438"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bvcyv"]
+
+[sub_resource type="Gradient" id="Gradient_31e3c"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4h438"]
+gradient = SubResource("Gradient_31e3c")
+fill = 1
+fill_from = Vector2(0.4871795, 0.491453)
+fill_to = Vector2(0.7777778, 0.16666667)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_31e3c"]
+lifetime_randomness = 0.6
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+direction = Vector3(-1, 1, 0)
+spread = 180.0
+initial_velocity_min = 337.77
+initial_velocity_max = 372.34
+gravity = Vector3(0, 0, 0)
+damping_min = 0.3
+damping_max = 1.0
+scale_min = 0.0
+scale_max = 4.0
+color = Color(1, 0.7921569, 0.16078432, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bvcyv"]
+atlas = ExtResource("3_4h438")
+region = Rect2(0, 0, 35, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ar4v7"]
+atlas = ExtResource("3_4h438")
+region = Rect2(35, 0, 35, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_av7mv"]
+atlas = ExtResource("3_4h438")
+region = Rect2(70, 0, 35, 35)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_k38kp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bvcyv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ar4v7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_av7mv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="fireball" type="Node2D" node_paths=PackedStringArray("_explode", "Hitbox")]
+z_index = -1
+script = ExtResource("1_4h438")
+_explode = NodePath("explode")
+Hitbox = NodePath("hitbox")
+
+[node name="hitbox" type="Area2D" parent="." groups=["PlayerHitBox"]]
+script = ExtResource("2_4h438")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+shape = SubResource("CircleShape2D_bvcyv")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(1, 0.003921569, 0, 1)
+texture = SubResource("GradientTexture2D_4h438")
+
+[node name="trail" type="GPUParticles2D" parent="."]
+visible = false
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_31e3c")
+
+[node name="explode" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 200
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_31e3c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_k38kp")
+frame_progress = 0.93965465
