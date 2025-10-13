@@ -147,14 +147,19 @@ streams_count = 1
 stream_0/stream = ExtResource("7_s5buh")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_s5buh"]
-radius = 14.0
-height = 50.0
+radius = 12.0
+height = 38.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_s5buh"]
 radius = 39.20459
 
 [node name="PlayerPackage" type="Node2D" groups=["Players"]]
 y_sort_enabled = true
+
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("_target")]
+script = ExtResource("3_uceyd")
+_target = NodePath("../CharacterBody2D")
+_speed = 0.2
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["Players"]]
 y_sort_enabled = true
@@ -164,9 +169,6 @@ LungeSpeed = 300.0
 LungeDuration = 0.3
 
 [node name="FireballWeapon" parent="CharacterBody2D" instance=ExtResource("8_pwcne")]
-
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
-script = ExtResource("3_uceyd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
 scale = Vector2(0.87, 0.87)
