@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Godot;
+
 namespace GameJam25.scripts.world_generation;
 
-public class World
+public partial class World : Node2D
 {
-    public Matrix Map { get; }
-    public List<Island> Islands { get; } = new List<Island>();
-    public List<Shrine> Shrines { get; } = new List<Shrine>();
+    public LogicalWorld LogicalWorldData;
+    public PhysicalWorld PhysicalWorldData;
+
 }

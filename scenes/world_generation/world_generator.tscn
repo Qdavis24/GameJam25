@@ -1,17 +1,19 @@
-[gd_scene load_steps=15 format=3 uid="uid://s3w1eg52kr8u"]
+[gd_scene load_steps=21 format=3 uid="uid://s3w1eg52kr8u"]
 
-[ext_resource type="Script" uid="uid://cgcf6qyo31wyt" path="res://scripts/world_generation/WorldSpawner.cs" id="1_83pux"]
+[ext_resource type="Script" uid="uid://636r6ategnc6" path="res://scripts/world_generation/World.cs" id="1_gxwrl"]
 [ext_resource type="Resource" uid="uid://bfks6ydjmu5gu" path="res://resources/tile_config.tres" id="2_w0i7v"]
 [ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/world_generation/shrines/racoon_shrine.tscn" id="3_klido"]
-[ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player_package.tscn" id="4_w0i7v"]
+[ext_resource type="Script" uid="uid://bvu271y34tacx" path="res://scripts/world_generation/pipeline/WorldGenerationPipelineManager.cs" id="4_pfpup"]
 [ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="4_wyppg"]
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="5_itp5q"]
-[ext_resource type="PackedScene" uid="uid://dyrdk24okgbja" path="res://scenes/enemies/WraithSpawner.tscn" id="5_klido"]
+[ext_resource type="Script" uid="uid://csuwanyvgyjhk" path="res://scripts/world_generation/pipeline/logical_pipeline/GenerateTerrainStage.cs" id="5_rlb28"]
 [ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="6_pfpup"]
-
-[sub_resource type="Curve" id="Curve_3xxx6"]
-_data = [Vector2(0, 0.48669535), 0.0, 0.0, 0, 0, Vector2(0.5305343, 1), 0.47681358, 0.47681358, 0, 0, Vector2(1, 0.49227476), 0.0, 0.0, 0, 0]
-point_count = 3
+[ext_resource type="Script" uid="uid://xwgx2tol2mjl" path="res://scripts/world_generation/pipeline/logical_pipeline/FindIslandsStage.cs" id="6_rhnx7"]
+[ext_resource type="Script" uid="uid://bsr4viawm7cxa" path="res://scripts/world_generation/pipeline/logical_pipeline/FindConnectionsStage.cs" id="7_gxwrl"]
+[ext_resource type="Script" uid="uid://dwk5hwtddjr83" path="res://scripts/world_generation/pipeline/logical_pipeline/ConnectIslandsStage.cs" id="8_i6a4r"]
+[ext_resource type="Script" uid="uid://bidoh4v7k13r5" path="res://scripts/world_generation/pipeline/logical_pipeline/MarkShrinesStage.cs" id="9_iyfg6"]
+[ext_resource type="Script" uid="uid://bihhuhy5y2wt8" path="res://scripts/world_generation/pipeline/physical_pipeline/RenderTilesStage.cs" id="10_ktc6t"]
+[ext_resource type="Script" uid="uid://du8smpfyvpfos" path="res://scripts/world_generation/pipeline/physical_pipeline/SpawnShrinesStage.cs" id="11_sn51g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_683jg"]
 texture = ExtResource("4_wyppg")
@@ -124,33 +126,18 @@ physics_layer_0/collision_layer = 3
 physics_layer_0/collision_mask = 3
 sources/0 = SubResource("TileSetAtlasSource_w0i7v")
 
-[node name="WorldSpawner" type="Node2D" node_paths=PackedStringArray("BaseTileMapLayer", "ObstacleTileMapLayer")]
+[sub_resource type="Curve" id="Curve_glyxv"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.23469386, -0.79775274), 0.0, 0.0, 0, 0, Vector2(0.3673469, 0.5280899), 0.0, 0.0, 0, 0, Vector2(0.57142854, -0.77528083), 0.0, 0.0, 0, 0, Vector2(0.7193877, 0.5730337), 0.0, 0.0, 0, 0, Vector2(0.877551, -0.7528089), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 7
+
+[node name="World" type="Node2D"]
 y_sort_enabled = true
-script = ExtResource("1_83pux")
-BorderSize = 20
-MapSizeRows = 150
-MapSizeCols = 150
-PossibleStates = PackedInt32Array(0, 1)
-StateSpawnWeights = PackedFloat32Array(0.5, 0.5)
-TreeSpawnChance = 0.85
-NumSmooths = 5
-PathCurve = SubResource("Curve_3xxx6")
-PathCurveSize = 5
-PathRadius = 2
-BaseTileMapLayer = NodePath("BaseLayer")
-ObstacleTileMapLayer = NodePath("ObstacleLayer")
-TileConfiguration = ExtResource("2_w0i7v")
-NumShrines = 3
-ShrineSizeRows = 19
-ShrineSizeCols = 19
-MinimumDistanceShrines = 60
-allShrinePckdScns = Array[PackedScene]([ExtResource("3_klido"), ExtResource("3_klido"), ExtResource("3_klido")])
-PlayerScene = ExtResource("4_w0i7v")
-_enemySpawner = ExtResource("5_klido")
+script = ExtResource("1_gxwrl")
 metadata/_edit_horizontal_guides_ = [-21.0]
 
 [node name="BaseLayer" type="TileMapLayer" parent="."]
-z_index = -2
+z_index = -1
 y_sort_enabled = true
 tile_set = SubResource("TileSet_nmbn7")
 
@@ -158,3 +145,44 @@ tile_set = SubResource("TileSet_nmbn7")
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_683jg")
 tile_set = SubResource("TileSet_vbebb")
+
+[node name="GenerationPipeline" type="Node" parent="."]
+script = ExtResource("4_pfpup")
+
+[node name="GenerateTerrainStage" type="Node" parent="GenerationPipeline"]
+script = ExtResource("5_rlb28")
+_rowLength = 150
+_colLength = 150
+_stateProbabilities = PackedFloat32Array(0.5, 0.5)
+_smoothingNeighborDepth = 2
+_smoothingWraparound = true
+_numSmooths = 8
+
+[node name="FindIslandsStage" type="Node" parent="GenerationPipeline"]
+script = ExtResource("6_rhnx7")
+
+[node name="FindConnectionsStage" type="Node" parent="GenerationPipeline"]
+script = ExtResource("7_gxwrl")
+
+[node name="ConnectIslandsStage" type="Node" parent="GenerationPipeline"]
+script = ExtResource("8_i6a4r")
+_pathCurve = SubResource("Curve_glyxv")
+_pathRadius = 2
+_pathCurveMagnitude = 2
+
+[node name="MarkShrinesStage" type="Node" parent="GenerationPipeline"]
+script = ExtResource("9_iyfg6")
+_numShrines = 3
+_shrineSizeCols = 19
+_shrineSizeRows = 19
+_minDistance = 50
+
+[node name="RenderTilesStage" type="Node" parent="GenerationPipeline" node_paths=PackedStringArray("_baseTileMapLayer", "_obstacleTileMapLayer")]
+script = ExtResource("10_ktc6t")
+_baseTileMapLayer = NodePath("../../BaseLayer")
+_obstacleTileMapLayer = NodePath("../../ObstacleLayer")
+_tileConfig = ExtResource("2_w0i7v")
+
+[node name="SpawnShrinesStage" type="Node" parent="GenerationPipeline"]
+script = ExtResource("11_sn51g")
+_allShrinePackedScenes = Array[PackedScene]([ExtResource("3_klido"), ExtResource("3_klido"), ExtResource("3_klido")])
