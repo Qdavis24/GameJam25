@@ -1,6 +1,6 @@
 using Godot;
 using System;
-namespace GameJam25.scripts.player_package.hitbox;
+namespace GameJam25.scripts.damage_system;
 // Hitbox.cs
 using Godot;
 

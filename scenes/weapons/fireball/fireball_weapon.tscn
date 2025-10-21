@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://7subxsr3gb3o"]
 
 [ext_resource type="Script" uid="uid://dqsiueykhc37" path="res://scripts/weapons/FireballWeapon.cs" id="1_ekx4o"]
-[ext_resource type="PackedScene" uid="uid://cyjhlvykvi3fn" path="res://scenes/weapons/projectiles/fireball.tscn" id="2_s5frb"]
+[ext_resource type="PackedScene" uid="uid://cyjhlvykvi3fn" path="res://scenes/weapons/fireball/fireball.tscn" id="2_s5frb"]
 
 [sub_resource type="Curve" id="Curve_s5frb"]
 _data = [Vector2(0, 0.52569383), 0.0, 0.0, 0, 0, Vector2(0.51322746, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.45242822), 0.0, 0.0, 0, 0]

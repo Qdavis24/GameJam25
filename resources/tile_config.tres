@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://bfks6ydjmu5gu"]
 
-[ext_resource type="Script" uid="uid://bg6q8i3twguxf" path="res://resources/TileConfig.cs" id="1_qpljb"]
+[ext_resource type="Script" uid="uid://bg6q8i3twguxf" path="res://scripts/resources/TileConfig.cs" id="1_qpljb"]
 
 [resource]
 script = ExtResource("1_qpljb")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://ct0g3652cw1dx"]
 
-[ext_resource type="Script" uid="uid://bcn7hrl18n30k" path="res://scripts/attacks/ExplodeAttack.cs" id="1_wgsim"]
-[ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/player_package/Hitbox.cs" id="2_jjf1j"]
+[ext_resource type="Script" uid="uid://bcn7hrl18n30k" path="res://scripts/enemies/wraith/ExplodeAttack.cs" id="1_wgsim"]
+[ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_jjf1j"]
 
 [sub_resource type="Gradient" id="Gradient_1e4dr"]
 

@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=3 uid="uid://cyjhlvykvi3fn"]
 
 [ext_resource type="Script" uid="uid://n41ha5q3hksi" path="res://scripts/weapons/projectiles/Fireball.cs" id="1_4h438"]
-[ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/player_package/Hitbox.cs" id="2_4h438"]
-[ext_resource type="PackedScene" uid="uid://bc8136epjg2t4" path="res://scenes/weapons/explode.tscn" id="2_bvcyv"]
+[ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_4h438"]
+[ext_resource type="PackedScene" uid="uid://bc8136epjg2t4" path="res://scenes/weapons/fireball/explode.tscn" id="2_bvcyv"]
 [ext_resource type="Texture2D" uid="uid://3oaaiq7vqfjn" path="res://assets/Monsters_Creatures_Fantasy/weapons/fireball.png" id="3_4h438"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bvcyv"]

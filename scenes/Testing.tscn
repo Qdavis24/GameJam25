@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=4 uid="uid://chucorh8rq535"]
 
-[ext_resource type="PackedScene" uid="uid://cfabk12i1kbjk" path="res://scenes/enemies/Wraith/Wraith.tscn" id="1_kruvs"]
+[ext_resource type="PackedScene" uid="uid://cfabk12i1kbjk" path="res://scenes/enemies/Wraith/wraith.tscn" id="1_kruvs"]
 [ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player_package.tscn" id="2_cisa7"]
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="3_rvfp2"]
 [ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="4_jqbpl"]

@@ -1,15 +1,15 @@
 [gd_scene load_steps=41 format=3 uid="uid://cfabk12i1kbjk"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_hujhk"]
-[ext_resource type="Script" uid="uid://cy8j86jbwas4f" path="res://scripts/state_machine/DebugCurrentStateLabel.cs" id="2_c6c3v"]
-[ext_resource type="Script" uid="uid://cxqvy7rkoegok" path="res://scripts/state_machine/enemy_state_machines/EStateMachine.cs" id="3_hujhk"]
-[ext_resource type="Script" uid="uid://bhb4y45cyuplt" path="res://scripts/state_machine/enemy_state_machines/reusable_states/IdleState.cs" id="4_pd7c4"]
-[ext_resource type="Script" uid="uid://cbwikvgq15dby" path="res://scripts/state_machine/enemy_state_machines/reusable_states/ChaseState.cs" id="5_2xbs2"]
-[ext_resource type="Script" uid="uid://bu8otgwd2la2k" path="res://scripts/state_machine/enemy_state_machines/reusable_states/ExplodeState.cs" id="6_q7crc"]
-[ext_resource type="Script" uid="uid://3tcjxipqa6on" path="res://scripts/state_machine/enemy_state_machines/reusable_states/KnockbackState.cs" id="7_ad4ay"]
-[ext_resource type="PackedScene" uid="uid://ct0g3652cw1dx" path="res://scenes/enemies/Wraith/explode_attack.tscn" id="7_c6c3v"]
-[ext_resource type="Script" uid="uid://c03b8mw0syy7a" path="res://scripts/state_machine/enemy_state_machines/EInstanceContext.cs" id="8_c6c3v"]
-[ext_resource type="Script" uid="uid://bwdq54lyr2fds" path="res://scripts/state_machine/enemy_state_machines/reusable_states/DeathState.cs" id="8_vr7wc"]
+[ext_resource type="Script" uid="uid://cy8j86jbwas4f" path="res://scripts/state_machines/DebugCurrentStateLabel.cs" id="2_c6c3v"]
+[ext_resource type="Script" uid="uid://cxqvy7rkoegok" path="res://scripts/state_machines/enemy_state_machines/EStateMachine.cs" id="3_hujhk"]
+[ext_resource type="Script" uid="uid://bhb4y45cyuplt" path="res://scripts/state_machines/enemy_state_machines/reusable_states/IdleState.cs" id="4_pd7c4"]
+[ext_resource type="Script" uid="uid://cbwikvgq15dby" path="res://scripts/state_machines/enemy_state_machines/reusable_states/ChaseState.cs" id="5_2xbs2"]
+[ext_resource type="Script" uid="uid://bu8otgwd2la2k" path="res://scripts/state_machines/enemy_state_machines/reusable_states/ExplodeState.cs" id="6_q7crc"]
+[ext_resource type="Script" uid="uid://3tcjxipqa6on" path="res://scripts/state_machines/enemy_state_machines/reusable_states/KnockbackState.cs" id="7_ad4ay"]
+[ext_resource type="PackedScene" uid="uid://ct0g3652cw1dx" path="res://scenes/enemies/Wraith/attacks/explode_attack.tscn" id="7_c6c3v"]
+[ext_resource type="Script" uid="uid://c03b8mw0syy7a" path="res://scripts/state_machines/enemy_state_machines/EInstanceContext.cs" id="8_c6c3v"]
+[ext_resource type="Script" uid="uid://bwdq54lyr2fds" path="res://scripts/state_machines/enemy_state_machines/reusable_states/DeathState.cs" id="8_vr7wc"]
 [ext_resource type="PackedScene" uid="uid://chvr7h6jkalhr" path="res://scenes/enemies/Wraith/Particle_Effects/death_particles.tscn" id="10_3mp8d"]
 [ext_resource type="Texture2D" uid="uid://s5d3gw3umxnv" path="res://assets/Monsters_Creatures_Fantasy/Wraith/ghoul.png" id="11_pdrcd"]
 
@@ -366,7 +366,6 @@ fill_to = Vector2(0.8632479, 0.17094018)
 y_sort_enabled = true
 script = ExtResource("1_hujhk")
 Speed = 200
-Health = 20
 AggroRange = NodePath("AggroRange")
 SteeringRange = NodePath("SteeringRange")
 AttackRange = 5000

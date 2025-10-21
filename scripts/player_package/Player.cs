@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using GameJam25.scripts.player_package.hitbox;
+using GameJam25.scripts.damage_system;
 
 public partial class Player : CharacterBody2D
 {

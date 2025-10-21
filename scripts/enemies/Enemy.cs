@@ -1,13 +1,12 @@
 ﻿using Godot;
-using GameJam25.scripts.player_package.hitbox;
+using GameJam25.scripts.damage_system;
 using GameJam25.scripts.state_machine;
-using GameJam25.scripts.state_machine.enemy_states;
 
 public partial class Enemy : CharacterBody2D
 {
     [ExportCategory("stats")] 
     [Export] public int Speed;
-    [Export] int Health; //starting health
+    [Export] private int _health; //starting health
 
     [ExportCategory("Distance Ranges")] 
     [Export] public Area2D AggroRange;
@@ -33,7 +32,7 @@ public partial class Enemy : CharacterBody2D
 
     public override void _Ready()
     {
-        _currHealth = Health;
+        _currHealth = _health;
     }
 
     public override void _Process(double delta)
