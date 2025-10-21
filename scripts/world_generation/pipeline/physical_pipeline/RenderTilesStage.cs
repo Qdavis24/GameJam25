@@ -9,6 +9,7 @@ public partial class RenderTilesStage : IPipelineStage
     [Export] private TileConfig _tileConfig;
     [Export] private float _obstacleSpawnChance = .9f;
     [Export] private int _borderSize = 20;
+    [Export] private int _neighborsPerSpawn;
  
     // Local Members to cache Global Data (Logical World)
     private int[,] _matrix;
@@ -69,7 +70,7 @@ public partial class RenderTilesStage : IPipelineStage
                 if (worldDataState == _walkableState)tileOptions = _tileConfig.ObjectLayerWalkableTilesAtlasCoords;
                 else tileOptions = _tileConfig.ObjectLayerNonWalkableTilesAtlasCoords;
                 
-                if (GD.Randf() < _obstacleSpawnChance && worldDataState != _shrineState)
+                if (GD.Randf() < _obstacleSpawnChance && worldDataState != _shrineState && MatrixUtils.UniformNeighbors(_matrix, row, col, _neighborsPerSpawn, true))
                     _obstacleTileMapLayer.SetCell(new Vector2I(row, col), 0,
                         tileOptions[GD.Randi() % tileOptions.Length]);
             }

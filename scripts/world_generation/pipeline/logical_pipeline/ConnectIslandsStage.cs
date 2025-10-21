@@ -34,7 +34,7 @@ public partial class ConnectIslandsStage : IPipelineStage
         Vector2I endCell, PathConfig pathConfig)
     {
         Vector2 direction = endCell - startCell;
-
+        
         // Calculate total steps needed
         int totalSteps = (int)Math.Max(Math.Abs(direction.X), Math.Abs(direction.Y));
         if (totalSteps == 0) return; // Same position
@@ -42,11 +42,14 @@ public partial class ConnectIslandsStage : IPipelineStage
         // Get perpendicular direction for curve offset
         Vector2 perpendicular = new Vector2(-direction.Y, direction.X).Normalized();
 
+        float currCurveSize = (float) totalSteps / 6;
+
         int state = _matrix[endCell.Y, endCell.X];
 
         for (int step = 0; step <= totalSteps; step++)
         {
             float progress = (float)step / totalSteps; // 0 to 1
+            
 
             // Get straight line position
             Vector2 straightPos = startCell + direction * progress;
@@ -55,7 +58,7 @@ public partial class ConnectIslandsStage : IPipelineStage
             float bendAmount = pathConfig.pathCurve.Sample(progress);
 
             // Apply perpendicular offset
-            Vector2 curvedPos = straightPos + perpendicular * bendAmount * pathConfig.pathCurveSize;
+            Vector2 curvedPos = straightPos + perpendicular * bendAmount * currCurveSize;
 
             // Convert to grid coordinates
             int row = (int)Math.Round(curvedPos.Y);

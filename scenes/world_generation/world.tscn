@@ -126,10 +126,10 @@ physics_layer_0/collision_layer = 3
 physics_layer_0/collision_mask = 3
 sources/0 = SubResource("TileSetAtlasSource_w0i7v")
 
-[sub_resource type="Curve" id="Curve_glyxv"]
+[sub_resource type="Curve" id="Curve_gxwrl"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.23469386, -0.79775274), 0.0, 0.0, 0, 0, Vector2(0.3673469, 0.5280899), 0.0, 0.0, 0, 0, Vector2(0.57142854, -0.77528083), 0.0, 0.0, 0, 0, Vector2(0.7193877, 0.5730337), 0.0, 0.0, 0, 0, Vector2(0.877551, -0.7528089), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 7
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [node name="World" type="Node2D"]
 y_sort_enabled = true
@@ -151,12 +151,11 @@ script = ExtResource("4_pfpup")
 
 [node name="GenerateTerrainStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("5_rlb28")
-_rowLength = 150
-_colLength = 150
-_stateProbabilities = PackedFloat32Array(0.5, 0.5)
-_smoothingNeighborDepth = 2
+_rowLength = 110
+_colLength = 110
+_stateProbabilities = PackedFloat32Array(0.45, 0.55)
 _smoothingWraparound = true
-_numSmooths = 8
+_numSmooths = 4
 
 [node name="FindIslandsStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("6_rhnx7")
@@ -166,9 +165,9 @@ script = ExtResource("7_gxwrl")
 
 [node name="ConnectIslandsStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("8_i6a4r")
-_pathCurve = SubResource("Curve_glyxv")
-_pathRadius = 2
-_pathCurveMagnitude = 2
+_pathCurve = SubResource("Curve_gxwrl")
+_pathRadius = 1
+_pathCurveMagnitude = 10
 
 [node name="MarkShrinesStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("9_iyfg6")
@@ -182,6 +181,8 @@ script = ExtResource("10_ktc6t")
 _baseTileMapLayer = NodePath("../../BaseLayer")
 _obstacleTileMapLayer = NodePath("../../ObstacleLayer")
 _tileConfig = ExtResource("2_w0i7v")
+_obstacleSpawnChance = 1.0
+_neighborsPerSpawn = 1
 
 [node name="SpawnShrinesStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("11_sn51g")
