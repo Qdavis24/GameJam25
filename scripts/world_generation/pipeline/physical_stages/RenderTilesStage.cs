@@ -1,7 +1,8 @@
-﻿using Godot;
-namespace GameJam25.scripts.world_generation.pipeline.physical_pipeline;
+﻿using System.Collections.Generic;
+using Godot;
+namespace GameJam25.scripts.world_generation.pipeline.physical_stages;
 
-public partial class RenderTilesStage : IPipelineStage
+public partial class RenderTilesStage : PipelineStage
 {
     // Stage parameters
     [Export] private TileMapLayer _baseTileMapLayer;
@@ -33,6 +34,13 @@ public partial class RenderTilesStage : IPipelineStage
         PopulateBaseLayer();
         PopulateObstacleLayer();
         CreateBorder();
+
+        if (PipelineManager.Debug)
+        {
+            PopulateIslands();
+            PopulateIslandBorders();
+            PopulatePaths();
+        }
         
         // update Global Data
         PipelineManager.PhysicalWorldData.BaseTileMapLayer =  _baseTileMapLayer;
@@ -40,6 +48,39 @@ public partial class RenderTilesStage : IPipelineStage
         PipelineManager.PhysicalWorldData.TileConfiguration =  _tileConfig;
         
 
+    }
+
+    private void PopulateIslands()
+    {
+        foreach (Island island in PipelineManager.LogicalWorldData.Islands)
+        {
+            foreach (Vector2I islandCell in island.AllCells)
+            {
+                _baseTileMapLayer.SetCell(islandCell, 0, _tileConfig.DebugIslandAtlasCoord);
+            }
+        }
+    }
+    
+    private void PopulateIslandBorders()
+    {
+        foreach (Island island in PipelineManager.LogicalWorldData.Islands)
+        {
+            foreach (Vector2I islandCell in island.BorderCells)
+            {
+                _baseTileMapLayer.SetCell(islandCell, 0, _tileConfig.DebugIslandBorderAtlasCoord);
+            }
+        }
+    }
+
+    private void PopulatePaths()
+    {
+        foreach (List<Vector2I> path in PipelineManager.LogicalWorldData.Paths)
+        {
+            foreach (Vector2I pathCell in path)
+            {
+                _baseTileMapLayer.SetCell(pathCell, 0, _tileConfig.DebugPathAtlasCoord);
+            }
+        }
     }
     
     private void PopulateBaseLayer()

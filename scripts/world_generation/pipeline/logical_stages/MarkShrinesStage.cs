@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Godot;
 
-namespace GameJam25.scripts.world_generation.pipeline.logical_pipeline;
+namespace GameJam25.scripts.world_generation.pipeline.logical_stages;
 
-public partial class MarkShrinesStage : IPipelineStage
+public partial class MarkShrinesStage : PipelineStage
 {
     // Stage parameters
     [Export] private int _numShrines;

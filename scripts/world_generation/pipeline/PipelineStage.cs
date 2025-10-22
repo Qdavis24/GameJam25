@@ -31,7 +31,7 @@ namespace GameJam25.scripts.world_generation.pipeline;
  * for more information on the pipeline see WorldGenerationPipelineManager
  *
  */
-public abstract partial class IPipelineStage : Node
+public abstract partial class PipelineStage : Node
 {
     protected WorldGenerationPipelineManager PipelineManager;
     public override void _Ready()

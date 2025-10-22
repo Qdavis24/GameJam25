@@ -3,9 +3,9 @@ using System.Linq;
 using Godot;
 using System;
 
-namespace GameJam25.scripts.world_generation.pipeline.logical_pipeline;
+namespace GameJam25.scripts.world_generation.pipeline.logical_stages;
 
-public partial class FindConnectionsStage : IPipelineStage
+public partial class FindConnectionsStage : PipelineStage
 {
     // Local Members to cache Global Data (Logical World)
     private List<Island> _allIslands;
@@ -43,6 +43,7 @@ public partial class FindConnectionsStage : IPipelineStage
         }
 
         _allIslandEdges = _allIslandEdges.OrderBy(edge => edge.Distance).ToList();
+        _allIslandEdges.ForEach(edge => GD.Print(edge.Distance));
     }
 
     public void GenerateValidConnections()

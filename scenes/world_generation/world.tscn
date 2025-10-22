@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://s3w1eg52kr8u"]
+[gd_scene load_steps=22 format=3 uid="uid://s3w1eg52kr8u"]
 
 [ext_resource type="Script" uid="uid://636r6ategnc6" path="res://scripts/world_generation/World.cs" id="1_gxwrl"]
 [ext_resource type="Resource" uid="uid://bfks6ydjmu5gu" path="res://resources/tile_config.tres" id="2_w0i7v"]
@@ -6,16 +6,17 @@
 [ext_resource type="Script" uid="uid://bvu271y34tacx" path="res://scripts/world_generation/pipeline/WorldGenerationPipelineManager.cs" id="4_pfpup"]
 [ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="4_wyppg"]
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="5_itp5q"]
-[ext_resource type="Script" uid="uid://csuwanyvgyjhk" path="res://scripts/world_generation/pipeline/logical_pipeline/GenerateTerrainStage.cs" id="5_rlb28"]
+[ext_resource type="Script" uid="uid://csuwanyvgyjhk" path="res://scripts/world_generation/pipeline/logical_stages/GenerateTerrainStage.cs" id="6_132vp"]
 [ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="6_pfpup"]
-[ext_resource type="Script" uid="uid://xwgx2tol2mjl" path="res://scripts/world_generation/pipeline/logical_pipeline/FindIslandsStage.cs" id="6_rhnx7"]
-[ext_resource type="Script" uid="uid://bsr4viawm7cxa" path="res://scripts/world_generation/pipeline/logical_pipeline/FindConnectionsStage.cs" id="7_gxwrl"]
-[ext_resource type="Script" uid="uid://dwk5hwtddjr83" path="res://scripts/world_generation/pipeline/logical_pipeline/ConnectIslandsStage.cs" id="8_i6a4r"]
-[ext_resource type="Script" uid="uid://bidoh4v7k13r5" path="res://scripts/world_generation/pipeline/logical_pipeline/MarkShrinesStage.cs" id="9_iyfg6"]
-[ext_resource type="Script" uid="uid://bihhuhy5y2wt8" path="res://scripts/world_generation/pipeline/physical_pipeline/RenderTilesStage.cs" id="10_ktc6t"]
-[ext_resource type="Script" uid="uid://du8smpfyvpfos" path="res://scripts/world_generation/pipeline/physical_pipeline/SpawnShrinesStage.cs" id="11_sn51g"]
+[ext_resource type="Script" uid="uid://xwgx2tol2mjl" path="res://scripts/world_generation/pipeline/logical_stages/FindIslandsStage.cs" id="7_gubng"]
+[ext_resource type="Script" uid="uid://bsr4viawm7cxa" path="res://scripts/world_generation/pipeline/logical_stages/FindConnectionsStage.cs" id="8_ysaxy"]
+[ext_resource type="Script" uid="uid://dwk5hwtddjr83" path="res://scripts/world_generation/pipeline/logical_stages/ConnectIslandsStage.cs" id="9_s0qqk"]
+[ext_resource type="Script" uid="uid://bidoh4v7k13r5" path="res://scripts/world_generation/pipeline/logical_stages/MarkShrinesStage.cs" id="10_tmpep"]
+[ext_resource type="Script" uid="uid://bihhuhy5y2wt8" path="res://scripts/world_generation/pipeline/physical_stages/RenderTilesStage.cs" id="11_fgma2"]
+[ext_resource type="Script" uid="uid://buoasp8jr4q8d" path="res://scripts/world_generation/pipeline/logical_stages/FindPlayerSpawnStage.cs" id="13_n115m"]
+[ext_resource type="Script" uid="uid://du8smpfyvpfos" path="res://scripts/world_generation/pipeline/physical_stages/SpawnShrinesStage.cs" id="14_sqldb"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_683jg"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_132vp"]
 texture = ExtResource("4_wyppg")
 texture_region_size = Vector2i(140, 140)
 3:0/0 = 0
@@ -60,14 +61,14 @@ tile_shape = 1
 tile_layout = 5
 tile_offset_axis = 1
 tile_size = Vector2i(120, 90)
-sources/0 = SubResource("TileSetAtlasSource_683jg")
+sources/0 = SubResource("TileSetAtlasSource_132vp")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_683jg"]
 shader = ExtResource("5_itp5q")
 shader_parameter/wind_strength = 0.4250000201875
 shader_parameter/wind_speed = 2.4910001183225
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w0i7v"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gubng"]
 texture = ExtResource("6_pfpup")
 separation = Vector2i(0, 129)
 texture_region_size = Vector2i(256, 420)
@@ -124,11 +125,10 @@ tile_offset_axis = 1
 tile_size = Vector2i(120, 90)
 physics_layer_0/collision_layer = 3
 physics_layer_0/collision_mask = 3
-sources/0 = SubResource("TileSetAtlasSource_w0i7v")
+sources/0 = SubResource("TileSetAtlasSource_gubng")
 
-[sub_resource type="Curve" id="Curve_gxwrl"]
-_limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_xnpr7"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5510204, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [node name="World" type="Node2D"]
@@ -150,40 +150,41 @@ tile_set = SubResource("TileSet_vbebb")
 script = ExtResource("4_pfpup")
 
 [node name="GenerateTerrainStage" type="Node" parent="GenerationPipeline"]
-script = ExtResource("5_rlb28")
-_rowLength = 110
-_colLength = 110
-_stateProbabilities = PackedFloat32Array(0.45, 0.55)
-_smoothingWraparound = true
+script = ExtResource("6_132vp")
+_rowLength = 125
+_colLength = 125
+_stateProbabilities = PackedFloat32Array(0.5, 0.5)
+_smoothingNeighborDepth = 2
 _numSmooths = 4
 
 [node name="FindIslandsStage" type="Node" parent="GenerationPipeline"]
-script = ExtResource("6_rhnx7")
+script = ExtResource("7_gubng")
 
 [node name="FindConnectionsStage" type="Node" parent="GenerationPipeline"]
-script = ExtResource("7_gxwrl")
+script = ExtResource("8_ysaxy")
 
 [node name="ConnectIslandsStage" type="Node" parent="GenerationPipeline"]
-script = ExtResource("8_i6a4r")
-_pathCurve = SubResource("Curve_gxwrl")
-_pathRadius = 1
-_pathCurveMagnitude = 10
+script = ExtResource("9_s0qqk")
+_pathCurve = SubResource("Curve_xnpr7")
+_pathRadius = 2
+_pathCurveMagnitude = 5
 
 [node name="MarkShrinesStage" type="Node" parent="GenerationPipeline"]
-script = ExtResource("9_iyfg6")
+script = ExtResource("10_tmpep")
 _numShrines = 3
 _shrineSizeCols = 19
 _shrineSizeRows = 19
 _minDistance = 50
 
 [node name="RenderTilesStage" type="Node" parent="GenerationPipeline" node_paths=PackedStringArray("_baseTileMapLayer", "_obstacleTileMapLayer")]
-script = ExtResource("10_ktc6t")
+script = ExtResource("11_fgma2")
 _baseTileMapLayer = NodePath("../../BaseLayer")
 _obstacleTileMapLayer = NodePath("../../ObstacleLayer")
 _tileConfig = ExtResource("2_w0i7v")
-_obstacleSpawnChance = 1.0
-_neighborsPerSpawn = 1
 
 [node name="SpawnShrinesStage" type="Node" parent="GenerationPipeline"]
-script = ExtResource("11_sn51g")
+script = ExtResource("14_sqldb")
 _allShrinePackedScenes = Array[PackedScene]([ExtResource("3_klido"), ExtResource("3_klido"), ExtResource("3_klido")])
+
+[node name="FindPlayerSpawnStage" type="Node" parent="GenerationPipeline"]
+script = ExtResource("13_n115m")

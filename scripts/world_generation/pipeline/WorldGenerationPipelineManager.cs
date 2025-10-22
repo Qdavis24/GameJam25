@@ -32,22 +32,23 @@ namespace GameJam25.scripts.world_generation.pipeline
 {
     public partial class WorldGenerationPipelineManager : Node
     {
-        public LogicalWorld LogicalWorldData = new LogicalWorld();
-        public PhysicalWorld PhysicalWorldData = new PhysicalWorld();
-        public World World;
+        [Export] public bool Debug;
+        public LogicalWorld LogicalWorldData = new();
+        public PhysicalWorld PhysicalWorldData = new();
+        private World _world;
 
 
         public override void _Ready()
         {
-            World = (World) GetParent();
+            _world = (World) GetParent();
             foreach (Node child in GetChildren())
             {
-                if (child is IPipelineStage stage)
+                if (child is PipelineStage stage)
                     stage.ProcessWorld();
             }
             
-            World.LogicalWorldData = LogicalWorldData;
-            World.PhysicalWorldData = PhysicalWorldData;
+            _world.LogicalWorldData = LogicalWorldData;
+            _world.PhysicalWorldData = PhysicalWorldData;
             
         }
     }

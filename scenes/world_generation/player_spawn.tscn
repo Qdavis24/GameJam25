@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=3 uid="uid://qevbfpqv6q20"]
+
+[ext_resource type="Script" uid="uid://bjdvo6aab61xk" path="res://scripts/PlayerSpawn.cs" id="1_aem1f"]
+[ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player.tscn" id="2_goa5y"]
+
+[sub_resource type="Curve" id="Curve_mb4jx"]
+_limits = [-0.112359524, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 1.8813281), 0.0, 0.0, 0, 0, Vector2(1, 0.7183436), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_aem1f"]
+curve = SubResource("Curve_mb4jx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mb4jx"]
+particle_flag_disable_z = true
+spread = 15.65
+initial_velocity_min = 50.0
+initial_velocity_max = 60.0
+orbit_velocity_min = 1.3000002
+orbit_velocity_max = 1.3000002
+orbit_velocity_curve = SubResource("CurveTexture_aem1f")
+radial_velocity_min = 11.999977
+radial_velocity_max = 16.999977
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
+color = Color(0.28560802, 0.0009629519, 0.51313466, 1)
+
+[sub_resource type="Gradient" id="Gradient_goa5y"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y64p0"]
+gradient = SubResource("Gradient_goa5y")
+fill = 1
+fill_from = Vector2(0.50934577, 0.47663552)
+fill_to = Vector2(0.80841124, 0.20093457)
+
+[node name="PlayerSpawn" type="Node2D" node_paths=PackedStringArray("particles", "light")]
+z_index = -1
+script = ExtResource("1_aem1f")
+_playerPackedScene = ExtResource("2_goa5y")
+particles = NodePath("GPUParticles2D")
+light = NodePath("PointLight2D")
+maxLightEnergy = 1.0
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 400
+lifetime = 3.0
+one_shot = true
+trail_enabled = true
+process_material = SubResource("ParticleProcessMaterial_mb4jx")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0.3647059, 0, 1, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_y64p0")
+texture_scale = 9.26

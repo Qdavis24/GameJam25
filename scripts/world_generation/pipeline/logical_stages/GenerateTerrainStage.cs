@@ -1,8 +1,8 @@
 ﻿using Godot;
 
-namespace GameJam25.scripts.world_generation.pipeline.logical_pipeline
+namespace GameJam25.scripts.world_generation.pipeline.logical_stages
 {
-    public partial class GenerateTerrainStage : IPipelineStage
+    public partial class GenerateTerrainStage : PipelineStage
     {
         // Stage parameters
         [ExportCategory("MapSize")]

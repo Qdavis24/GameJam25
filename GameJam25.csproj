@@ -5,11 +5,9 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="scenes\enemies\" />
-    <Folder Include="scenes\player_package\attack\" />
+    <None Include="**/*.md"/>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="scripts\state_machine\quick_start.md" />
-    <Content Include="scripts\state_machine\documentation.md" />
+    <Folder Include="scripts\world_generation\pipeline\debug_stages\" />
   </ItemGroup>
 </Project>

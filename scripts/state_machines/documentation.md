@@ -1,22 +1,22 @@
-﻿# StateMachine System
+# StateMachine System
 
 ## What makes up the FSM system?
 
 Classes
 
 - StateMachine
-    - EStateMachine
+	- EStateMachine
 - State
-    - Estate
-      - IdleState
-      - ChaseState
-      - KnockbackState
-      - DieState
+	- Estate
+	  - IdleState
+	  - ChaseState
+	  - KnockbackState
+	  - DieState
 - Context
-    - InstanceContext
-        - EInstanceContext
-    - GroupContext
-        - EGroupContext
+	- InstanceContext
+		- EInstanceContext
+	- GroupContext
+		- EGroupContext
 
 ## StateMachine
 
@@ -34,7 +34,7 @@ and data for any individual implementation of a state machine
 ### Low Level
 
 - Initializes references to its states via scene tree (automatic)
-    - adds all children of type SM
+	- adds all children of type SM
 
 ### Relationships
 
@@ -51,7 +51,7 @@ state is responsible for carrying out state specific behaviour and holding state
 ### High Level
 
 - keep a reference to State Machine
-    - therefor has a reference to Owner and Context
+	- therefor has a reference to Owner and Context
 - carry out per frame and per physics frame logic required of that state
 - handle required logical setup when entering state
 - hanlde required logical teardown when exiting state
@@ -61,8 +61,8 @@ state is responsible for carrying out state specific behaviour and holding state
 
 - Initialize reference to its state machine via scene tree (automatic)
 - use state machine ref to access information about Player or Context that will be required for any frame processing
-    - self._stateMachine.Owner
-    - self._stateMachine.Context
+	- self._stateMachine.Owner
+	- self._stateMachine.Context
 
 ### Relationships
 
@@ -106,6 +106,3 @@ The specific implementation for Enemy States
 The specific implementation for Enemy Instance Context
 
 - Contains properties specifically required for enemies to hold data between certain states
-
-
-

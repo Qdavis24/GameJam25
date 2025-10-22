@@ -5,25 +5,25 @@ namespace GameJam25.scripts.world_generation.models
 {
     public class Island
     {
-        public List<Vector2I> AllCells { get; private set; }
-        public List<Vector2I> BorderCells { get; private set; }
+        public List<Vector2I> AllCells;
+        public List<Vector2I> BorderCells;
         public Vector2I Centroid { get; private set; }
 
-        public Island(List<Vector2I> allCells)
+        public Island()
         {
-            AllCells = allCells;
-            calculateCentroid();
+            AllCells = new List<Vector2I>();
+            BorderCells = new List<Vector2I>();
         }
 
 
-        private void calculateCentroid()
+        public void CalculateCentroid()
         {
             Vector2I sum = new Vector2I();
-            foreach (Vector2I cell in AllCells)
+            foreach (Vector2I cell in BorderCells)
             {
                 sum += cell;
             }
-            Centroid = sum / AllCells.Count;;
+            Centroid = sum / AllCells.Count;
         }
     }
 }

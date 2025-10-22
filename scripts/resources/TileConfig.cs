@@ -9,6 +9,10 @@ public partial class TileConfig : Resource
     [Export] private Vector2[] objectLayerWalkableTilesAtlasCoords;
     [Export] private Vector2[] objectLayerNonWalkableTilesAtlasCoords;
     
+    [Export] public Vector2I DebugIslandAtlasCoord;
+    [Export] public Vector2I DebugPathAtlasCoord;
+    [Export] public Vector2I DebugIslandBorderAtlasCoord;
+    
     [Export] public float TileSizeXPxl;
     [Export] public float TileSizeYPxl;
     

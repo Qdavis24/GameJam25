@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Godot;
 
-namespace GameJam25.scripts.world_generation.pipeline.physical_pipeline;
+namespace GameJam25.scripts.world_generation.pipeline.physical_stages;
 
-public partial class SpawnShrinesStage : IPipelineStage
+public partial class SpawnShrinesStage : PipelineStage
 {
     // Stage parameters
     [Export] private PackedScene[] _allShrinePackedScenes;
