@@ -46,7 +46,6 @@ public partial class GameManager : Node
         _cam.Target = spawnPortal;
         GD.Print(_cam.Target.GlobalPosition, _cam.GlobalPosition);   
         spawnPortal.PortalOpen += () => { _currPlayer.GlobalPosition = spawnPortal.GlobalPosition; _cam.Target = _currPlayer;};
-        
 
     }
 }

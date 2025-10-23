@@ -100,7 +100,7 @@ public partial class ConnectIslandsStage : PipelineStage
 
             currPath.Add(new Vector2I(row, col));
 
-            MatrixUtils.SetNeighbors(_matrix, row, col, pathConfig.PathRadius, state, true);
+            MatrixUtils.SetNeighbors(_matrix, row, col, pathConfig.PathRadius, state, false);
         }
 
         _paths.Add(currPath);

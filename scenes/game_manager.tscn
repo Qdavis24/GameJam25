@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://c4jyj40wk318s" path="res://scripts/player_package/PlayerCamera.cs" id="5_eaq8r"]
 
 [node name="GameManager" type="Node2D" node_paths=PackedStringArray("_cam")]
+y_sort_enabled = true
 script = ExtResource("1_udu3i")
 _worldPckdScene = ExtResource("2_oo155")
 _playerPckdScene = ExtResource("3_udu3i")

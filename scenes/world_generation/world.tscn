@@ -174,7 +174,7 @@ script = ExtResource("10_tmpep")
 _numShrines = 3
 _shrineSizeCols = 19
 _shrineSizeRows = 19
-_minDistance = 50
+_minDistance = 40
 
 [node name="RenderTilesStage" type="Node" parent="GenerationPipeline" node_paths=PackedStringArray("_baseTileMapLayer", "_obstacleTileMapLayer")]
 script = ExtResource("11_fgma2")

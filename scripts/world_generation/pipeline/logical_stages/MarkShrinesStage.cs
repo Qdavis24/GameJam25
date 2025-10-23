@@ -40,8 +40,8 @@ public partial class MarkShrinesStage : PipelineStage
     private Shrine CreateShrine(Vector2I rootCell, ShrineConfig shrineConfiguration)
     {
         List<Vector2I> allCells = new List<Vector2I>();
-        int rowDirection = rootCell.X > shrineConfiguration.ShrineSizeCols ? -1 : 1;
-        int colDirection = rootCell.Y > shrineConfiguration.ShrineSizeRows ? -1 : 1;
+        int rowDirection = rootCell.X > shrineConfiguration.ShrineSizeRows ? -1 : 1;
+        int colDirection = rootCell.Y > shrineConfiguration.ShrineSizeCols ? -1 : 1;
         for (int rowShift = 0; rowShift < shrineConfiguration.ShrineSizeRows; rowShift++)
         {
             for (int colShift = 0; colShift < shrineConfiguration.ShrineSizeCols; colShift++)
@@ -74,6 +74,7 @@ public partial class MarkShrinesStage : PipelineStage
 
             if (validPlacement)
             {
+                GD.Print("Possilbe shrine place" + possibleShrinePlacement);
                 Shrine newShrine = CreateShrine(possibleShrinePlacement, shrineConfiguration);
                 _shrines.Add(newShrine);
             }

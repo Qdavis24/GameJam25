@@ -23,7 +23,7 @@ namespace GameJam25.scripts.world_generation.models
             {
                 sum += cell;
             }
-            Centroid = sum / AllCells.Count;
+            Centroid = sum / BorderCells.Count;
         }
     }
 }
