@@ -366,6 +366,7 @@ fill_to = Vector2(0.8632479, 0.17094018)
 y_sort_enabled = true
 script = ExtResource("1_hujhk")
 Speed = 200
+_health = 30
 AggroRange = NodePath("AggroRange")
 SteeringRange = NodePath("SteeringRange")
 AttackRange = 5000

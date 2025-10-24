@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using GameJam25.scripts.damage_system;
+using GameJam25.scripts.singletons;
 
 public partial class Player : CharacterBody2D
 {
@@ -134,6 +135,7 @@ public partial class Player : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		PlayerData.Position = GlobalPosition;
 		GetInput(delta);
 		MoveAndSlide();
 	}

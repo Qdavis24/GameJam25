@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://s3w1eg52kr8u"]
+[gd_scene load_steps=23 format=3 uid="uid://s3w1eg52kr8u"]
 
 [ext_resource type="Script" uid="uid://636r6ategnc6" path="res://scripts/world_generation/World.cs" id="1_gxwrl"]
 [ext_resource type="Resource" uid="uid://bfks6ydjmu5gu" path="res://resources/tile_config.tres" id="2_w0i7v"]
 [ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/world_generation/shrines/racoon_shrine.tscn" id="3_klido"]
 [ext_resource type="Script" uid="uid://bvu271y34tacx" path="res://scripts/world_generation/pipeline/WorldGenerationPipelineManager.cs" id="4_pfpup"]
 [ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="4_wyppg"]
+[ext_resource type="Script" uid="uid://b1ckyajv0pq2d" path="res://scripts/ObstacleLayer.cs" id="5_gubng"]
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="5_itp5q"]
 [ext_resource type="Script" uid="uid://csuwanyvgyjhk" path="res://scripts/world_generation/pipeline/logical_stages/GenerateTerrainStage.cs" id="6_132vp"]
 [ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="6_pfpup"]
@@ -63,10 +64,12 @@ tile_offset_axis = 1
 tile_size = Vector2i(120, 90)
 sources/0 = SubResource("TileSetAtlasSource_132vp")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_683jg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_132vp"]
 shader = ExtResource("5_itp5q")
 shader_parameter/wind_strength = 0.4250000201875
 shader_parameter/wind_speed = 2.4910001183225
+shader_parameter/player_position = Vector2(0, 0)
+shader_parameter/min_dst = 500.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gubng"]
 texture = ExtResource("6_pfpup")
@@ -143,8 +146,9 @@ tile_set = SubResource("TileSet_nmbn7")
 
 [node name="ObstacleLayer" type="TileMapLayer" parent="."]
 y_sort_enabled = true
-material = SubResource("ShaderMaterial_683jg")
+material = SubResource("ShaderMaterial_132vp")
 tile_set = SubResource("TileSet_vbebb")
+script = ExtResource("5_gubng")
 
 [node name="GenerationPipeline" type="Node" parent="."]
 script = ExtResource("4_pfpup")
