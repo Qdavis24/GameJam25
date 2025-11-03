@@ -57,12 +57,15 @@ public partial class ChaseState : EState
 
     public override void PhysicsUpdate(double delta)
     {
+        if (_stateMachine.InstanceContext.CurrentTarget == null) return;
         if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(_stateMachine.InstanceContext.CurrentTarget
                 .GlobalPosition) <
             _stateMachine.Owner.AttackRange)
         {
             _stateMachine.TransitionTo("ExplodeState");
         }
+
+        if (GameManager.Instance.CurrFlowField.Directions == null) return;
 
         // Vector2 obstaclesDirection = GetObsticleDir();
         // Vector2 enemiesDirection = GetEnemiesDir();
@@ -82,18 +85,19 @@ public partial class ChaseState : EState
         //     var currValidDirs = GetValidDirs();
         //     baseDir = GetBaseDir(currValidDirs, desiredDir);
         // }
-        var enemyPhysicalCoord = GameManager.Instance.CurrWorld.BaseTileMapLayer.LocalToMap(_stateMachine.Owner.Position);
-        Coord enemyLogicalCoord = (enemyPhysicalCoord.Y, enemyPhysicalCoord.X);
-        var baseDir = GameManager.Instance.CurrFlowField.Directions[enemyLogicalCoord.row, enemyLogicalCoord.col];
+        var enemyCoord = GameManager.Instance.CurrWorld.PhysicalData.BaseTileMapLayer.LocalToMap(
+            GameManager.Instance.CurrWorld.PhysicalData.BaseTileMapLayer.ToLocal(_stateMachine.Owner.GlobalPosition));
+        var baseDir = GameManager.Instance.CurrFlowField.Directions[enemyCoord.X, enemyCoord.Y];
+      
         Vector2 perpDirection = new Vector2(-baseDir.Y, baseDir.X);
-        GD.Print(baseDir);
+        
 
         float sample = _path.Sample((float)(_currTimeCycle / _timePerCycle));
         Vector2 interpolatedDir =
             (baseDir + (perpDirection * sample * _minPathMag)).Normalized();
         _currTimeCycle += delta;
-        _stateMachine.Owner.Velocity = interpolatedDir * _stateMachine.Owner.Speed;
-        
+        _stateMachine.Owner.Velocity = baseDir * _stateMachine.Owner.Speed;
+
         _stateMachine.Owner.MoveAndSlide();
     }
 
@@ -178,10 +182,10 @@ public partial class ChaseState : EState
 
     private void OnAggroRangeExited(Node2D body)
     {
-        if (body != _stateMachine.InstanceContext.CurrentTarget) return;
-
-        _stateMachine.InstanceContext.CurrentTarget = null;
-        _stateMachine.TransitionTo("IdleState");
+        // if (body != _stateMachine.InstanceContext.CurrentTarget) return;
+        //
+        // _stateMachine.InstanceContext.CurrentTarget = null;
+        // _stateMachine.TransitionTo("IdleState");
     }
 
     private void OnSteeringRangeEntered(Node2D body)

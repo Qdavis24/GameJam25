@@ -8,99 +8,99 @@ namespace GameJam25.scripts.world_generation.utilities
     
     public static class MatrixUtils
     {
-        public static int[] WraparoundIndexes(int arrayRowSize, int arrayColSize, int row, int col)
+        public static int[] WraparoundIndexes(int arrayRowSize, int arrayColSize, int col, int row)
         {
-            if (row < 0) row += arrayRowSize;
-            if (row >= arrayRowSize) row -= arrayRowSize;
             if (col < 0) col += arrayColSize;
             if (col >= arrayColSize) col -= arrayColSize;
+            if (row < 0) row += arrayRowSize;
+            if (row >= arrayRowSize) row -= arrayRowSize;
 
-            return new int[] { row, col };
+            return new int[] { col, row };
         }
 
-        public static bool UniformNeighbors(int[,] matrix, int row, int col,
+        public static bool UniformNeighbors(int[,] matrix, int col, int row,
             int neighborDepth, bool wrapAround)
         {
-            for (int rowShift = -neighborDepth; rowShift <= neighborDepth; rowShift++)
+            for (int colShift = -neighborDepth; colShift <= neighborDepth; colShift++)
             {
-                for (int colShift = -neighborDepth; colShift <= neighborDepth; colShift++)
+                for (int rowShift = -neighborDepth; rowShift <= neighborDepth; rowShift++)
                 {
-                    int currRow = row + rowShift;
                     int currCol = col + colShift;
+                    int currRow = row + rowShift;
                     if (wrapAround)
                     {
-                        int[] wrappedRowCol =
-                            WraparoundIndexes(matrix.GetLength(0), matrix.GetLength(1), currRow, currCol);
-                        currRow = wrappedRowCol[0];
-                        currCol = wrappedRowCol[1];
+                        int[] wrappedColRow =
+                            WraparoundIndexes(matrix.GetLength(1), matrix.GetLength(0), currCol, currRow);
+                        currCol = wrappedColRow[0];
+                        currRow = wrappedColRow[1];
                     }
                     else
                     {
-                        if (currRow < 0 || currRow >= matrix.GetLength(0) || currCol < 0 || currCol >= matrix.GetLength(1)) continue;
+                        if (currCol < 0 || currCol >= matrix.GetLength(0) || currRow < 0 || currRow >= matrix.GetLength(1)) continue;
                     }
 
-                    if (currRow == row && currCol == col) continue;
+                    if (currCol == col && currRow == row) continue;
 
-                    if (matrix[currRow, currCol] != matrix[row, col]) return false;
+                    if (matrix[currCol, currRow] != matrix[col, row]) return false;
                 }
             }
 
             return true;
         }
 
-        public static void SetNeighbors(int[,] matrix, int row, int col,
+        public static void SetNeighbors(int[,] matrix, int col, int row,
             int neighborDepth,
             int state,
             bool wrapAround)
         {
-            for (int rowShift = -neighborDepth; rowShift <= neighborDepth; rowShift++)
+            for (int colShift = -neighborDepth; colShift <= neighborDepth; colShift++)
             {
-                for (int colShift = -neighborDepth; colShift <= neighborDepth; colShift++)
+                for (int rowShift = -neighborDepth; rowShift <= neighborDepth; rowShift++)
                 {
-                    int currRow = row + rowShift;
                     int currCol = col + colShift;
+                    int currRow = row + rowShift;
                     if (wrapAround)
                     {
-                        int[] wrappedRowCol =
-                            WraparoundIndexes(matrix.GetLength(0), matrix.GetLength(1), currRow, currCol);
-                        currRow = wrappedRowCol[0];
-                        currCol = wrappedRowCol[1];
+                        int[] wrappedColRow =
+                            WraparoundIndexes(matrix.GetLength(1), matrix.GetLength(0), currCol, currRow);
+                        currCol = wrappedColRow[0];
+                        currRow = wrappedColRow[1];
                     }
                     else
                     {
-                        if (currRow < 0 || currRow >= matrix.GetLength(0) || currCol < 0 || currCol >= matrix.GetLength(1)) continue;
+                        if (currCol < 0 || currCol >= matrix.GetLength(0) || currRow < 0 || currRow >= matrix.GetLength(1)) continue;
                     }
 
-                    matrix[currRow, currCol] = state;
+                    matrix[currCol, currRow] = state;
                 }
             }
         }
 
-        public static int MajorityNeighbor(int[,] matrix, int[] cellStates, int row,
-            int col,
+        public static int MajorityNeighbor(int[,] matrix, int[] cellStates, int col,
+            int row,
             int neighborDepth,
             bool wrapAround)
         {
             int[] counts = new int[cellStates.Length];
-            for (int rowShift = -neighborDepth; rowShift <= neighborDepth; rowShift++)
+            for (int colShift = -neighborDepth; colShift <= neighborDepth; colShift++)
             {
-                for (int colShift = -neighborDepth; colShift <= neighborDepth; colShift++)
+                for (int rowShift = -neighborDepth; rowShift <= neighborDepth; rowShift++)
                 {
-                    int currRow = row + rowShift;
                     int currCol = col + colShift;
+                    int currRow = row + rowShift;
                     if (wrapAround)
                     {
-                        int[] wrappedRowCol =
-                            WraparoundIndexes(matrix.GetLength(0), matrix.GetLength(1), currRow, currCol);
-                        currRow = wrappedRowCol[0];
-                        currCol = wrappedRowCol[1];
+                        int[] wrappedColRow =
+                            WraparoundIndexes(matrix.GetLength(1), matrix.GetLength(0), currCol, currRow);
+                        currCol = wrappedColRow[0];
+                        currRow = wrappedColRow[1];
                     }
                     else
                     {
-                        if (currRow < 0 || currRow >= matrix.GetLength(0) || currCol < 0 || currCol >= matrix.GetLength(1)) continue;
+                        if (currCol < 0 || currCol >= matrix.GetLength(0) || currRow < 0 || currRow >= matrix.GetLength(1)) continue;
                     }
 
-                    counts[matrix[currRow, currCol]]++;
+                    counts[matrix[currCol, currRow]]++;
                 }
             }
 
@@ -127,12 +127,12 @@ namespace GameJam25.scripts.world_generation.utilities
         }
         public static void PrintMatrix(int[,] matrix)
         {
-            for (int row = 0; row < matrix.GetLength(0); row++)
+            for (int row = 0; row < matrix.GetLength(1); row++)
             {
                 string curr_row = "";
-                for (int col = 0; col < matrix.GetLength(1); col++)
+                for (int col = 0; col < matrix.GetLength(0); col++)
                 {
-                    curr_row += matrix[row, col];
+                    curr_row += matrix[col, row];
                 }
 
                 GD.Print(curr_row);

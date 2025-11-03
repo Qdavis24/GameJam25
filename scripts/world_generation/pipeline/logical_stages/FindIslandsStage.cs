@@ -33,42 +33,42 @@ namespace GameJam25.scripts.world_generation.pipeline.logical_stages
             World.LogicalData.Islands = Islands;
         }
 
-        private void DfsFloodFill(int row, int col, int state, Island island, bool[,] visited)
+        private void DfsFloodFill(int col, int row, int state, Island island, bool[,] visited)
         {
-            if (row < 0 || row >= _rowLength || col < 0 || col >= _colLength ||
-                _matrix[row, col] != state)
+            if (col < 0 || col >= _colLength || row < 0 || row >= _rowLength ||
+                _matrix[col, row] != state)
                 return;
-            if (visited[row, col]) return;
-            
-            visited[row, col] = true;
-            
-            var currCell = new Vector2I(row, col);
-            
-            if (MatrixUtils.UniformNeighbors(_matrix, row, col, 1, false))
+            if (visited[col, row]) return;
+
+            visited[col, row] = true;
+
+            var currCell = new Vector2I(col, row);
+
+            if (MatrixUtils.UniformNeighbors(_matrix, col, row, 1, false))
                 island.AllCells.Add(currCell);
             else
                 island.BorderCells.Add(currCell);
-            
-            DfsFloodFill(row, col - 1, state, island, visited); // left
-            DfsFloodFill(row, col + 1, state, island, visited); // right
-            DfsFloodFill(row - 1, col, state, island, visited); // up
-            DfsFloodFill(row + 1, col, state, island, visited); // down
-            DfsFloodFill(row - 1, col - 1, state, island, visited); // up-left
-            DfsFloodFill(row - 1, col + 1, state, island, visited); // up-right
-            DfsFloodFill(row + 1, col - 1, state, island, visited); // down-left
-            DfsFloodFill(row + 1, col + 1, state, island, visited); // down-right
+
+            DfsFloodFill(col - 1, row, state, island, visited); // left
+            DfsFloodFill(col + 1, row, state, island, visited); // right
+            DfsFloodFill(col, row - 1, state, island, visited); // up
+            DfsFloodFill(col, row + 1, state, island, visited); // down
+            DfsFloodFill(col - 1, row - 1, state, island, visited); // up-left
+            DfsFloodFill(col + 1, row - 1, state, island, visited); // up-right
+            DfsFloodFill(col - 1, row + 1, state, island, visited); // down-left
+            DfsFloodFill(col + 1, row + 1, state, island, visited); // down-right
         }
 
         public void FindIslands(int state)
         {
             Islands = new List<Island>();
-            bool[,] visited = new bool[_rowLength, _colLength];
-            for (int row = 0; row < _rowLength; row++)
+            bool[,] visited = new bool[_colLength, _rowLength];
+            for (int col = 0; col < _colLength; col++)
             {
-                for (int col = 0; col < _colLength; col++)
+                for (int row = 0; row < _rowLength; row++)
                 {
                     Island newIsland = new Island();
-                    DfsFloodFill(row, col, state, newIsland, visited);
+                    DfsFloodFill(col, row, state, newIsland, visited);
                     if (newIsland.AllCells.Count > 0)
                     {
                         newIsland.CalculateCentroid();

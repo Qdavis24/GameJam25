@@ -330,7 +330,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gsgw0"]
-radius = 800.0
+radius = 4067.049
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_voie1"]
 radius = 100.0
@@ -365,7 +365,8 @@ fill_to = Vector2(0.8632479, 0.17094018)
 [node name="Wraith" type="CharacterBody2D" node_paths=PackedStringArray("AggroRange", "SteeringRange", "Animations", "_stateMachine") groups=["Enemies"]]
 y_sort_enabled = true
 script = ExtResource("1_hujhk")
-Speed = 200
+Speed = 90
+_health = 30
 AggroRange = NodePath("AggroRange")
 SteeringRange = NodePath("SteeringRange")
 AttackRange = 5000
@@ -385,7 +386,7 @@ shape = SubResource("CircleShape2D_q5y88")
 
 [node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("_initialState")]
 script = ExtResource("3_hujhk")
-_initialState = NodePath("IdleState")
+_initialState = NodePath("ChaseState")
 
 [node name="IdleState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("4_pd7c4")

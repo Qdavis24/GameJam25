@@ -15,9 +15,10 @@ public partial class EnemySpawner : Node2D
     [Export] private float[] _enemyTypeSpawnChance;
     [Export] private Timer _timer;
     [Export] private Vector2 _spawnRadius;
+    [Export] private int Count = 1;
     
     private double _currTime = 0;
-    
+    private int _currCount = 0;
     public override void _Ready()
     {
         _light.Energy = 0;
@@ -36,7 +37,8 @@ public partial class EnemySpawner : Node2D
     private void Spawn()
     {
         _currTime = 0;
-        
+        if (_currCount > Count) return;
+        _currCount++;
         float cumProb = 0;
         for (int i = 0; i < _enemyTypes.Length ; i++)
         {

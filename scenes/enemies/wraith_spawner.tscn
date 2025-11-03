@@ -18,7 +18,7 @@ fill = 1
 fill_from = Vector2(0.4957265, 0.47435898)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_abhiv"]
-radius = 1961.2141
+radius = 11719.162
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_abhiv"]
 particle_flag_disable_z = true
@@ -44,6 +44,7 @@ _enemyTypes = Array[PackedScene]([ExtResource("2_abhiv")])
 _enemyTypeSpawnChance = PackedFloat32Array(1)
 _timer = NodePath("Timer")
 _spawnRadius = Vector2(100, 100)
+Count = 10
 
 [node name="Timer" type="Timer" parent="."]
 

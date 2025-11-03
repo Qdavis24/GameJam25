@@ -62,3 +62,5 @@ tile_set = SubResource("TileSet_cbfir")
 
 [node name="WraithSpawner" parent="." instance=ExtResource("2_mubml")]
 position = Vector2(-10, -54)
+
+[editable path="WraithSpawner"]

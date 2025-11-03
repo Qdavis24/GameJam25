@@ -40,19 +40,19 @@ public partial class MarkShrinesStage : PipelineStage
     private Shrine CreateShrine(Vector2I rootCell, ShrineConfig shrineConfiguration)
     {
         List<Vector2I> allCells = new List<Vector2I>();
-        int rowDirection = rootCell.X > shrineConfiguration.ShrineSizeRows ? -1 : 1;
-        int colDirection = rootCell.Y > shrineConfiguration.ShrineSizeCols ? -1 : 1;
-        for (int rowShift = 0; rowShift < shrineConfiguration.ShrineSizeRows; rowShift++)
+        int colDirection = rootCell.X > shrineConfiguration.ShrineSizeCols ? -1 : 1;
+        int rowDirection = rootCell.Y > shrineConfiguration.ShrineSizeRows ? -1 : 1;
+        for (int colShift = 0; colShift < shrineConfiguration.ShrineSizeCols; colShift++)
         {
-            for (int colShift = 0; colShift < shrineConfiguration.ShrineSizeCols; colShift++)
+            for (int rowShift = 0; rowShift < shrineConfiguration.ShrineSizeRows; rowShift++)
             {
-                int currRow = rootCell.X + (rowShift * rowDirection);
-                int currCol = rootCell.Y + (colShift * colDirection);
-                Vector2I currCell = new Vector2I(currRow, currCol);
+                int currCol = rootCell.X + (colShift * colDirection);
+                int currRow = rootCell.Y + (rowShift * rowDirection);
+                Vector2I currCell = new Vector2I(currCol, currRow);
                 allCells.Add(currCell);
             }
         }
-        return new Shrine(allCells, rootCell, rowDirection, colDirection, shrineConfiguration.ShrineSizeRows, shrineConfiguration.ShrineSizeCols);
+        return new Shrine(allCells, rootCell, colDirection, rowDirection, shrineConfiguration.ShrineSizeCols, shrineConfiguration.ShrineSizeRows);
     }
 
     private void MarkShrinesWorldData(ShrineConfig shrineConfiguration)

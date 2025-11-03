@@ -8,9 +8,6 @@
     <None Include="**/*.md"/>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="scripts\GlobalUsings" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="scenes\world_generation\" />
   </ItemGroup>
 </Project>

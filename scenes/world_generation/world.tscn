@@ -153,8 +153,6 @@ script = ExtResource("4_pfpup")
 
 [node name="GenerateTerrainStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("6_132vp")
-_rowLength = 125
-_colLength = 125
 _stateProbabilities = PackedFloat32Array(0.5, 0.5)
 _smoothingNeighborDepth = 2
 _numSmooths = 4
@@ -183,6 +181,7 @@ script = ExtResource("11_fgma2")
 _baseTileMapLayer = NodePath("../../BaseLayer")
 _obstacleTileMapLayer = NodePath("../../ObstacleLayer")
 _tileConfig = ExtResource("2_w0i7v")
+_neighborsPerSpawn = 2
 
 [node name="SpawnShrinesStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("14_sqldb")

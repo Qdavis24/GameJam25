@@ -60,7 +60,7 @@ public partial class ConnectIslandsStage : PipelineStage
                 }
             }
         }
-        GD.Print(closestCells[0], closestCells[1]);
+        
         return closestCells;
     }
 
@@ -95,12 +95,12 @@ public partial class ConnectIslandsStage : PipelineStage
             Vector2 curvedPos = straightPos + perpendicular * bendAmount * currCurveSize;
 
             // Convert to grid coordinates
-            int row = (int)Math.Round(curvedPos.X);
-            int col = (int)Math.Round(curvedPos.Y);
+            int col = (int)Math.Round(curvedPos.X);
+            int row = (int)Math.Round(curvedPos.Y);
 
-            currPath.Add(new Vector2I(row, col));
+            currPath.Add(new Vector2I(col, row));
 
-            MatrixUtils.SetNeighbors(_matrix, row, col, pathConfig.PathRadius, state, false);
+            MatrixUtils.SetNeighbors(_matrix, col, row, pathConfig.PathRadius, state, false);
         }
 
         _paths.Add(currPath);

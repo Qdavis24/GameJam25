@@ -5,7 +5,7 @@ namespace GameJam25.scripts.world_generation.models
 {
     public class LogicalWorldData
     {
-        public int[,] Matrix;
+        public int[,] Matrix; // col major
         public List<Island> Islands;
         public List<IslandEdge> IslandEdges;
         public List<Shrine> Shrines;
