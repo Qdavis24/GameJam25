@@ -19,12 +19,12 @@ public partial class MarkShrinesStage : PipelineStage
     // Stage result members
     private List<Shrine> _shrines;
 
-    public override void ProcessWorld()
+    public override void ProcessStage()
     {
         // cache needed references from Global Data
-        _matrix = PipelineManager.LogicalWorldData.Matrix;
-        _islands = PipelineManager.LogicalWorldData.Islands;
-        _shrineState = PipelineManager.LogicalWorldData.ShrineState;
+        _matrix = World.LogicalData.Matrix;
+        _islands = World.LogicalData.Islands;
+        _shrineState = World.LogicalData.ShrineState;
         
         // build config for stage params, init stage result members
         var shrineConfiguration = new ShrineConfig(_numShrines, _shrineSizeCols, _shrineSizeRows, _minDistance);
@@ -34,7 +34,7 @@ public partial class MarkShrinesStage : PipelineStage
         MarkShrinesWorldData(shrineConfiguration);
 
         // update Global Data
-        PipelineManager.LogicalWorldData.Shrines = _shrines;
+        World.LogicalData.Shrines = _shrines;
     }
 
     private Shrine CreateShrine(Vector2I rootCell, ShrineConfig shrineConfiguration)

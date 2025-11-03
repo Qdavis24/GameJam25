@@ -64,25 +64,27 @@ public partial class ChaseState : EState
             _stateMachine.TransitionTo("ExplodeState");
         }
 
-        Vector2 obstaclesDirection = GetObsticleDir();
-        Vector2 enemiesDirection = GetEnemiesDir();
-        Vector2 playerDirection =
-            (_stateMachine.InstanceContext.CurrentTarget.GlobalPosition - _stateMachine.Owner.GlobalPosition)
-            .Normalized();
-
-        _steeringVectors[0] = obstaclesDirection;
-        _steeringVectors[1] = enemiesDirection;
-        _steeringVectors[2] = playerDirection;
-
-        Vector2 desiredDir = GetMostDesirableDir();
-        Vector2 baseDir = desiredDir;
-        if (_currTimeCycle > _timePerCycle)
-        {
-            _currTimeCycle = 0;
-            var currValidDirs = GetValidDirs();
-            baseDir = GetBaseDir(currValidDirs, desiredDir);
-        }
-
+        // Vector2 obstaclesDirection = GetObsticleDir();
+        // Vector2 enemiesDirection = GetEnemiesDir();
+        // Vector2 playerDirection =
+        //     (_stateMachine.InstanceContext.CurrentTarget.GlobalPosition - _stateMachine.Owner.GlobalPosition)
+        //     .Normalized();
+        //
+        // _steeringVectors[0] = obstaclesDirection;
+        // _steeringVectors[1] = enemiesDirection;
+        // _steeringVectors[2] = playerDirection;
+        //
+        // Vector2 desiredDir = GetMostDesirableDir();
+        // Vector2 baseDir = desiredDir;
+        // if (_currTimeCycle > _timePerCycle)
+        // {
+        //     _currTimeCycle = 0;
+        //     var currValidDirs = GetValidDirs();
+        //     baseDir = GetBaseDir(currValidDirs, desiredDir);
+        // }
+        var enemyPhysicalCoord = GameManager.Instance.CurrWorld.BaseTileMapLayer.LocalToMap(_stateMachine.Owner.Position);
+        Coord enemyLogicalCoord = (enemyPhysicalCoord.Y, enemyPhysicalCoord.X);
+        var baseDir = GameManager.Instance.CurrFlowField.Directions[enemyLogicalCoord.row, enemyLogicalCoord.col];
         Vector2 perpDirection = new Vector2(-baseDir.Y, baseDir.X);
         GD.Print(baseDir);
 

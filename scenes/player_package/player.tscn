@@ -185,10 +185,4 @@ shape = SubResource("CapsuleShape2D_s5buh")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 shape = SubResource("CircleShape2D_s5buh")
 
-[node name="SubViewport" type="SubViewport" parent="."]
-disable_3d = true
-transparent_bg = true
-debug_draw = 3
-size_2d_override = Vector2i(100, 100)
-
 [connection signal="area_entered" from="HurtBox" to="." method="OnPlayerHurtBoxEntered"]

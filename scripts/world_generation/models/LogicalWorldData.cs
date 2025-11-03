@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameJam25.scripts.world_generation.models
 {
-    public partial class LogicalWorld
+    public class LogicalWorldData
     {
         public int[,] Matrix;
         public List<Island> Islands;

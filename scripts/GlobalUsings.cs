@@ -1,0 +1,1 @@
+﻿global using Coord = (int row, int col);

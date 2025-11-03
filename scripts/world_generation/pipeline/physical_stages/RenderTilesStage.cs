@@ -20,22 +20,22 @@ public partial class RenderTilesStage : PipelineStage
     private int _nonWalkableState;
     private int _shrineState;
     
-    public override void ProcessWorld()
+    public override void ProcessStage()
     {
         // cache needed references from Global Data
-        _matrix = PipelineManager.LogicalWorldData.Matrix;
-        _rowLength = PipelineManager.LogicalWorldData.RowLength;
-        _colLength = PipelineManager.LogicalWorldData.ColLength;
-        _walkableState = PipelineManager.LogicalWorldData.WalkableState;
-        _nonWalkableState = PipelineManager.LogicalWorldData.NonWalkableState;
-        _shrineState = PipelineManager.LogicalWorldData.ShrineState;
+        _matrix = World.LogicalData.Matrix;
+        _rowLength = World.LogicalData.RowLength;
+        _colLength = World.LogicalData.ColLength;
+        _walkableState = World.LogicalData.WalkableState;
+        _nonWalkableState = World.LogicalData.NonWalkableState;
+        _shrineState = World.LogicalData.ShrineState;
         
         // trigger stage logic
         PopulateBaseLayer();
         PopulateObstacleLayer();
         CreateBorder();
 
-        if (PipelineManager.Debug)
+        if (World.Debug)
         {
             PopulateIslands();
             PopulateIslandBorders();
@@ -43,16 +43,16 @@ public partial class RenderTilesStage : PipelineStage
         }
         
         // update Global Data
-        PipelineManager.PhysicalWorldData.BaseTileMapLayer =  _baseTileMapLayer;
-        PipelineManager.PhysicalWorldData.ObstacleTileMapLayer = _obstacleTileMapLayer;
-        PipelineManager.PhysicalWorldData.TileConfiguration =  _tileConfig;
+        World.PhysicalData.BaseTileMapLayer =  _baseTileMapLayer;
+        World.PhysicalData.ObstacleTileMapLayer = _obstacleTileMapLayer;
+        World.PhysicalData.TileConfiguration =  _tileConfig;
         
 
     }
 
     private void PopulateIslands()
     {
-        foreach (Island island in PipelineManager.LogicalWorldData.Islands)
+        foreach (Island island in World.LogicalData.Islands)
         {
             foreach (Vector2I islandCell in island.AllCells)
             {
@@ -63,7 +63,7 @@ public partial class RenderTilesStage : PipelineStage
     
     private void PopulateIslandBorders()
     {
-        foreach (Island island in PipelineManager.LogicalWorldData.Islands)
+        foreach (Island island in World.LogicalData.Islands)
         {
             foreach (Vector2I islandCell in island.BorderCells)
             {
@@ -74,7 +74,7 @@ public partial class RenderTilesStage : PipelineStage
 
     private void PopulatePaths()
     {
-        foreach (List<Vector2I> path in PipelineManager.LogicalWorldData.Paths)
+        foreach (List<Vector2I> path in World.LogicalData.Paths)
         {
             foreach (Vector2I pathCell in path)
             {

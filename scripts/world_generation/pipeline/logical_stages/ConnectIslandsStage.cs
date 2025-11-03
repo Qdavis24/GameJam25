@@ -18,11 +18,11 @@ public partial class ConnectIslandsStage : PipelineStage
 
     private List<List<Vector2I>> _paths;
 
-    public override void ProcessWorld()
+    public override void ProcessStage()
     {
         // cache needed references from Global Data
-        _islandConnections = PipelineManager.LogicalWorldData.IslandEdges;
-        _matrix = PipelineManager.LogicalWorldData.Matrix;
+        _islandConnections = World.LogicalData.IslandEdges;
+        _matrix = World.LogicalData.Matrix;
 
         // build config for stage params (allows us to compress num of parameters)
         var pathConfig = new PathConfig(_pathRadius, _pathCurveMagnitude, _pathCurve);
@@ -38,7 +38,7 @@ public partial class ConnectIslandsStage : PipelineStage
             
 
         // update global data
-        PipelineManager.LogicalWorldData.Paths = _paths;
+        World.LogicalData.Paths = _paths;
     }
 
     private Vector2I[] FindClosestBorderCells(IslandEdge edge)

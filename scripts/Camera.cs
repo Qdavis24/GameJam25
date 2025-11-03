@@ -1,6 +1,6 @@
-using Godot;
+﻿using Godot;
 
-public partial class PlayerCamera : Camera2D
+public partial class Camera : Camera2D
 {
     [Export] private float _speed;
 
@@ -15,7 +15,6 @@ public partial class PlayerCamera : Camera2D
     {
         if (Target != null)
         {
-            GD.Print("yes");
             GlobalPosition = GlobalPosition.Lerp(Target.GlobalPosition, _speed);
         }
     }

@@ -17,12 +17,12 @@ namespace GameJam25.scripts.world_generation.pipeline.logical_stages
         // Stage result members
         public List<Island> Islands { get; private set; }
 
-        public override void ProcessWorld()
+        public override void ProcessStage()
         {
             // cache needed references from Global Data
-            _matrix = PipelineManager.LogicalWorldData.Matrix;
-            _rowLength = PipelineManager.LogicalWorldData.RowLength;
-            _colLength = PipelineManager.LogicalWorldData.ColLength;
+            _matrix = World.LogicalData.Matrix;
+            _rowLength = World.LogicalData.RowLength;
+            _colLength = World.LogicalData.ColLength;
 
             // trigger stage logic 
             FindIslands(_islandState);
@@ -30,7 +30,7 @@ namespace GameJam25.scripts.world_generation.pipeline.logical_stages
             GD.Print("Island Count: " + Islands.Count);
 
             // update Global Data
-            PipelineManager.LogicalWorldData.Islands = Islands;
+            World.LogicalData.Islands = Islands;
         }
 
         private void DfsFloodFill(int row, int col, int state, Island island, bool[,] visited)

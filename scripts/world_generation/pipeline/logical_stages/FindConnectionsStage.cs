@@ -15,17 +15,17 @@ public partial class FindConnectionsStage : PipelineStage
     
     // Stage result members
     private List<IslandEdge> _validIslandEdges;
-    public override void ProcessWorld()
+    public override void ProcessStage()
     {
         // cache needed references from Global Data
-        _allIslands = PipelineManager.LogicalWorldData.Islands;
+        _allIslands = World.LogicalData.Islands;
         
         // trigger stage logic 
         GenerateAllIslandEdges();
         GenerateValidConnections();
         
         // update Global Data
-        PipelineManager.LogicalWorldData.IslandEdges = _validIslandEdges;
+        World.LogicalData.IslandEdges = _validIslandEdges;
     }
 
     private void GenerateAllIslandEdges()

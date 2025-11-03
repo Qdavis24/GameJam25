@@ -21,7 +21,7 @@ namespace GameJam25.scripts.world_generation.pipeline.logical_stages
         private int[,] _matrix;
         private int[] _states;
 
-        public override void ProcessWorld()
+        public override void ProcessStage()
         {
             _matrix = new int[_rowLength, _colLength];
             _states = new int[] { _walkableState, _nonWalkableState };
@@ -31,14 +31,14 @@ namespace GameJam25.scripts.world_generation.pipeline.logical_stages
                 Smooth(_smoothingNeighborDepth, _smoothingWraparound);
 
             // update Global Data (Logical World)
-            PipelineManager.LogicalWorldData.Matrix = _matrix;
-            PipelineManager.LogicalWorldData.RowLength = _rowLength;
-            PipelineManager.LogicalWorldData.ColLength = _colLength;
-            PipelineManager.LogicalWorldData.States = _states;
-            PipelineManager.LogicalWorldData.StateProbabilities = _stateProbabilities;
-            PipelineManager.LogicalWorldData.WalkableState = _walkableState;
-            PipelineManager.LogicalWorldData.NonWalkableState = _nonWalkableState;
-            PipelineManager.LogicalWorldData.ShrineState = _shrineState;
+            World.LogicalData.Matrix = _matrix;
+            World.LogicalData.RowLength = _rowLength;
+            World.LogicalData.ColLength = _colLength;
+            World.LogicalData.States = _states;
+            World.LogicalData.StateProbabilities = _stateProbabilities;
+            World.LogicalData.WalkableState = _walkableState;
+            World.LogicalData.NonWalkableState = _nonWalkableState;
+            World.LogicalData.ShrineState = _shrineState;
         }
 
         private void Init()

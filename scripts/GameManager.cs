@@ -1,51 +1,73 @@
 using Godot;
 using System;
 using GameJam25.scripts.world_generation;
+
 public partial class GameManager : Node
 {
     [Export] private PackedScene _worldPckdScene;
     [Export] private PackedScene _playerPckdScene;
     [Export] private PackedScene _playerSpawnPckdScene;
+    [Export] private Camera _cam;
 
-    [Export] private PlayerCamera _cam;
+    public static GameManager Instance;
 
-    private World _currWorld;
-    private Player _currPlayer;
+    public World CurrWorld;
+    public FlowField CurrFlowField;
+    public Player Player;
+
+    private Vector2I _playerTile;
 
 
     public override void _Ready()
     {
-        _currPlayer = _playerPckdScene.Instantiate<Player>();
-        AddChild(_currPlayer);
-        SpawnNewWorld();
-        SpawnPlayer();
+        Instance = this;
+        InitLevel();
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (Input.IsActionJustPressed("regen"))
+        var playersPhysicalCoord =
+            CurrWorld.PhysicalData.BaseTileMapLayer.LocalToMap(
+                CurrWorld.PhysicalData.BaseTileMapLayer.ToGlobal(Player.GlobalPosition)); // big mess but just getting the players tile coord in X,Y
+        if ((_playerTile-playersPhysicalCoord).LengthSquared() > 5*5)
         {
-            SpawnNewWorld();
-            SpawnPlayer();
+            var playersLogicalCoord = (Coord) (playersPhysicalCoord.Y,  playersPhysicalCoord.X);
+            _playerTile = playersPhysicalCoord;
+            CurrFlowField.GenerateFlowFieldFrom(playersLogicalCoord);
         }
+    }
+
+    public void InitLevel()
+    {
+        SpawnNewWorld();
+        SpawnPlayer();
+        CurrFlowField = new FlowField(CurrWorld.LogicalData.Matrix, CurrWorld.LogicalData.WalkableState);
+        
     }
 
     private void SpawnNewWorld()
     {
-        if (_currWorld != null) _currWorld.QueueFree();
-        _currWorld = _worldPckdScene.Instantiate<World>();
-        AddChild(_currWorld);
+        if (CurrWorld != null) CurrWorld.QueueFree();
+        CurrWorld = _worldPckdScene.Instantiate<World>();
+        AddChild(CurrWorld);
     }
 
     private void SpawnPlayer()
     {
-     
+        if (Player == null)
+        {
+            Player = _playerPckdScene.Instantiate<Player>();
+            AddChild(Player);
+        }
+
         var spawnPortal = _playerSpawnPckdScene.Instantiate<PlayerSpawn>();
-        spawnPortal.GlobalPosition = _currWorld.LogicalWorldData.PlayerSpawn;
+        spawnPortal.GlobalPosition = CurrWorld.LogicalData.PlayerSpawn;
         AddChild(spawnPortal);
         _cam.Target = spawnPortal;
-        GD.Print(_cam.Target.GlobalPosition, _cam.GlobalPosition);   
-        spawnPortal.PortalOpen += () => { _currPlayer.GlobalPosition = spawnPortal.GlobalPosition; _cam.Target = _currPlayer;};
-
+        spawnPortal.PortalOpen += () =>
+        {
+            Player.GlobalPosition = spawnPortal.GlobalPosition;
+            _cam.Target = Player;
+        };
     }
 }
