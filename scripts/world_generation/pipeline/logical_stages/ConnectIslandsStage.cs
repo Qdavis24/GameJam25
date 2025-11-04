@@ -49,7 +49,7 @@ public partial class ConnectIslandsStage : PipelineStage
         var island2BorderCells = edge.Island2.BorderCells;
         for (int cell1 = 0; cell1 < island1BorderCells.Count; cell1++)
         {
-            for (int cell2 = cell1 + 1; cell2 < island2BorderCells.Count; cell2++)
+            for (int cell2 = 0; cell2 < island2BorderCells.Count; cell2++)
             {
                 float currDistance = (island1BorderCells[cell1] - island2BorderCells[cell2]).LengthSquared();
                 if (currDistance < minDistance)
