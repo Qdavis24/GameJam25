@@ -72,10 +72,9 @@ public class FlowField
         for (int col = 1; col < _terrainColumnLength-1; col++)
         for (int row = 1; row < _terrainRowLength-1; row++)
         {
-           
             
-            int xDir = Costs[col - 1, row] - Costs[col + 1, row];
-            int yDir = Costs[col, row - 1] - Costs[col, row + 1];
+            int xDir = Costs[col - 1, row+1] - Costs[col + 1, row-1];
+            int yDir = Costs[col-1, row - 1] - Costs[col+1, row + 1];
             
             Vector2 finalDir =  new Vector2(xDir, yDir).Normalized();
 

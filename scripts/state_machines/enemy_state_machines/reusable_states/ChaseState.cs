@@ -12,41 +12,31 @@ public partial class ChaseState : EState
     [Export] private int _numRaycastSamples;
     [Export] int _sampleDistance;
 
-    private Vector2[] _sampleDirections;
-
 
     [Export] private double _minTimePerCycle;
     [Export] private double _maxTimePerCycle;
 
     private double _timePerCycle;
-
-
     private double _currTimeCycle;
-    private Vector2[] _steeringVectors = new Vector2[3]; // will be obstacles, enemies, player
 
-    private List<Node2D> _obstaclesInRange = new List<Node2D>();
     private List<Node2D> _enemiesInRange = new List<Node2D>();
 
-    private void CalculateSampleDirections()
+    private float _togglePathfindingRange = 300.0f; // range to stop using FF to pathfind 
+
+    private enum Pathfinding
     {
-        float radIncr = (2 * Mathf.Pi) / _numRaycastSamples;
-        float currRad = 0;
-        for (int i = 0; i < _numRaycastSamples; i++)
-        {
-            _sampleDirections[i] = Vector2.FromAngle(currRad);
-            currRad += radIncr;
-        }
+        FlowField,
+        Traditional
     }
+
+    private Pathfinding _currPathfindingMode = Pathfinding.FlowField;
 
     public override void Enter()
     {
-        _sampleDirections = new Vector2[_numRaycastSamples];
-        CalculateSampleDirections();
         _stateMachine.Owner.Speed += GD.RandRange(0, 50);
         _minPathMag += _minPathMag + _maxPathMag * GD.Randf();
         _timePerCycle = _minTimePerCycle + _maxTimePerCycle * GD.Randf();
         _currTimeCycle = _timePerCycle - (GD.Randf() * _timePerCycle);
-        _stateMachine.Owner.Animations.Play("Move");
     }
 
     public override void Exit()
@@ -57,93 +47,60 @@ public partial class ChaseState : EState
 
     public override void PhysicsUpdate(double delta)
     {
-        if (_stateMachine.InstanceContext.CurrentTarget == null) return;
-        if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(_stateMachine.InstanceContext.CurrentTarget
-                .GlobalPosition) <
+        if (GameManager.Instance.Player == null) return;
+        if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(GameManager.Instance.Player.GlobalPosition) <
             _stateMachine.Owner.AttackRange)
         {
             _stateMachine.TransitionTo("ExplodeState");
         }
 
         if (GameManager.Instance.CurrFlowField.Directions == null) return;
-
-        // Vector2 obstaclesDirection = GetObsticleDir();
-        // Vector2 enemiesDirection = GetEnemiesDir();
-        // Vector2 playerDirection =
-        //     (_stateMachine.InstanceContext.CurrentTarget.GlobalPosition - _stateMachine.Owner.GlobalPosition)
-        //     .Normalized();
-        //
-        // _steeringVectors[0] = obstaclesDirection;
-        // _steeringVectors[1] = enemiesDirection;
-        // _steeringVectors[2] = playerDirection;
-        //
-        // Vector2 desiredDir = GetMostDesirableDir();
-        // Vector2 baseDir = desiredDir;
-        // if (_currTimeCycle > _timePerCycle)
-        // {
-        //     _currTimeCycle = 0;
-        //     var currValidDirs = GetValidDirs();
-        //     baseDir = GetBaseDir(currValidDirs, desiredDir);
-        // }
-        var enemyCoord = GameManager.Instance.CurrWorld.PhysicalData.BaseTileMapLayer.LocalToMap(
-            GameManager.Instance.CurrWorld.PhysicalData.BaseTileMapLayer.ToLocal(_stateMachine.Owner.GlobalPosition));
-        var baseDir = GameManager.Instance.CurrFlowField.Directions[enemyCoord.X, enemyCoord.Y];
-      
-        Vector2 perpDirection = new Vector2(-baseDir.Y, baseDir.X);
+        if ((_stateMachine.Owner.GlobalPosition - GameManager.Instance.Player.GlobalPosition).LengthSquared() <
+            _togglePathfindingRange * _togglePathfindingRange) _currPathfindingMode = Pathfinding.Traditional;
+        else _currPathfindingMode = Pathfinding.FlowField;
         
+        var baseDir = _currPathfindingMode == Pathfinding.FlowField ? GetFlowFieldBaseDir() : GetTradBaseDir();
+        baseDir = (baseDir + GetEnemiesDir() * .8f) / 2;
+
+        Vector2 perpDirection = new Vector2(-baseDir.Y, baseDir.X);
+
 
         float sample = _path.Sample((float)(_currTimeCycle / _timePerCycle));
         Vector2 interpolatedDir =
             (baseDir + (perpDirection * sample * _minPathMag)).Normalized();
         _currTimeCycle += delta;
-        _stateMachine.Owner.Velocity = baseDir * _stateMachine.Owner.Speed;
+        _stateMachine.Owner.Velocity = interpolatedDir * _stateMachine.Owner.Speed;
 
         _stateMachine.Owner.MoveAndSlide();
     }
 
-    private Vector2 GetBaseDir(List<Vector2> validDirs, Vector2 desiredDir)
+    private Vector2 GetTradBaseDir()
     {
-        float maxDotP = -Mathf.Inf;
-        Vector2 baseDir = validDirs[0];
+        return (GameManager.Instance.Player.GlobalPosition - _stateMachine.Owner.GlobalPosition).Normalized();
+    }
 
-        foreach (Vector2 dir in validDirs)
+    private Vector2 GetFlowFieldBaseDir()
+    {
+        var enemyCoord = GameManager.Instance.CurrWorld.PhysicalData.BaseTileMapLayer.LocalToMap(
+            GameManager.Instance.CurrWorld.PhysicalData.BaseTileMapLayer.ToLocal(_stateMachine.Owner.GlobalPosition));
+        var baseDir = Vector2.Zero;
+        var flowFieldCols = GameManager.Instance.CurrFlowField.Directions.GetLength(0);
+        var flowFieldRows = GameManager.Instance.CurrFlowField.Directions.GetLength(1);
+        var numSampleDirs = 0;
+        for (int colShift = -1; colShift <= 1; colShift++)
+        for (int rowShift = -1; rowShift <= 1; rowShift++)
         {
-            float currDotP = dir.Dot(desiredDir);
-            if (currDotP > maxDotP)
-            {
-                baseDir = dir;
-                maxDotP = currDotP;
-            }
+            var currCol = enemyCoord.X + colShift;
+            var currRow = enemyCoord.Y + rowShift;
+            if (currCol < 0 || currCol >= flowFieldCols || currRow < 0 || currRow >= flowFieldRows) continue;
+            var currDir = GameManager.Instance.CurrFlowField.Directions[currCol, currRow];
+            if (currDir == Vector2.Zero) continue;
+            baseDir += currDir;
+            numSampleDirs++;
         }
 
+        baseDir /= numSampleDirs;
         return baseDir;
-    }
-
-    private Vector2 GetMostDesirableDir()
-    {
-        Vector2 sumVector = Vector2.Zero;
-        for (int i = 0; i < _steeringVectors.Length; i++)
-        {
-            sumVector += _steeringVectors[i] * _steeringWeights[i];
-        }
-
-        return sumVector.Normalized();
-    }
-
-    private Vector2 GetObsticleDir()
-
-    {
-        if (_obstaclesInRange.Count == 0) return Vector2.Zero;
-
-        Vector2 sumVector = Vector2.Zero;
-        foreach (Node2D currObstacle in _obstaclesInRange)
-        {
-            Vector2 diff = (_stateMachine.Owner.GlobalPosition - currObstacle.GlobalPosition);
-            float distance = diff.Length();
-            if (distance > 0) sumVector += diff.Normalized() / distance;
-        }
-
-        return sumVector.Normalized();
     }
 
     private Vector2 GetEnemiesDir()
@@ -155,47 +112,15 @@ public partial class ChaseState : EState
         foreach (Node2D currEnemy in _enemiesInRange)
         {
             Vector2 diff = (_stateMachine.Owner.GlobalPosition - currEnemy.GlobalPosition);
-            float distance = diff.Length();
-            if (distance > 0) sumVector += diff.Normalized() / distance;
+            sumVector += diff.Normalized();
         }
 
-        return sumVector.Normalized();
-    }
-
-    private List<Vector2> GetValidDirs()
-    {
-        List<Vector2> validDirIndexes = new List<Vector2>();
-        for (int i = 0; i < _numRaycastSamples; i++)
-        {
-            Vector2 dir = _sampleDirections[i];
-            var spaceState = GetWorld2D().DirectSpaceState;
-            // use global coordinates, not local to node
-            var query = PhysicsRayQueryParameters2D.Create(GlobalPosition, GlobalPosition + dir * _sampleDistance);
-            query.CollisionMask = 2;
-            var result = spaceState.IntersectRay(query);
-            if (result.Count > 0 && result["collider"].As<Node2D>().IsInGroup("ObstacleLayer")) continue;
-            validDirIndexes.Add(dir);
-        }
-
-        return validDirIndexes;
-    }
-
-    private void OnAggroRangeExited(Node2D body)
-    {
-        // if (body != _stateMachine.InstanceContext.CurrentTarget) return;
-        //
-        // _stateMachine.InstanceContext.CurrentTarget = null;
-        // _stateMachine.TransitionTo("IdleState");
+        return (sumVector / _enemiesInRange.Count).Normalized();
     }
 
     private void OnSteeringRangeEntered(Node2D body)
     {
-        //DebugPrintEnemiesInSteeringRange();
-        if (body is TileMapLayer && body.Name == "ObstacleLayer")
-        {
-            _obstaclesInRange.Add(body);
-        }
-        else if (body.IsInGroup("Enemies"))
+        if (body.IsInGroup("Enemies"))
         {
             _enemiesInRange.Add(body);
         }
@@ -203,12 +128,7 @@ public partial class ChaseState : EState
 
     private void OnSteeringRangeExited(Node2D body)
     {
-        //DebugPrintEnemiesInSteeringRange();
-        if (body is TileMapLayer && body.Name == "ObstacleLayer")
-        {
-            _obstaclesInRange.Remove(body);
-        }
-        else if (body.IsInGroup("Enemies"))
+        if (body.IsInGroup("Enemies"))
         {
             _enemiesInRange.Remove(body);
         }

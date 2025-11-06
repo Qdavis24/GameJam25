@@ -9,12 +9,10 @@ public partial class Enemy : CharacterBody2D
     [Export] private int _health; //starting health
 
     [ExportCategory("Distance Ranges")] 
-    [Export] public Area2D AggroRange;
     [Export] public Area2D SteeringRange;
     [Export] public int AttackRange;
 
     [ExportCategory("Miscellaneous")] 
-    [Export] public string[] AggroGroups;
     [Export] public AnimatedSprite2D Animations;
     [Export] private EStateMachine _stateMachine;
 

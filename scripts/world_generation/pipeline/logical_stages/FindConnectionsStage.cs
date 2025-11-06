@@ -43,7 +43,7 @@ public partial class FindConnectionsStage : PipelineStage
         }
 
         _allIslandEdges = _allIslandEdges.OrderBy(edge => edge.Distance).ToList();
-        _allIslandEdges.ForEach(edge => GD.Print(edge.Distance));
+        
     }
 
     public void GenerateValidConnections()

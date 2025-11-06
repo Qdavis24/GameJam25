@@ -19,4 +19,3 @@ _fireballLifetime = 3.0
 _numFireballs = 7
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 5.0

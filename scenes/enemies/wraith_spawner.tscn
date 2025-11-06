@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://dyrdk24okgbja"]
+[gd_scene load_steps=11 format=3 uid="uid://dyrdk24okgbja"]
 
 [ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/enemies/EnemySpawner.cs" id="1_7lb27"]
-[ext_resource type="PackedScene" uid="uid://cfabk12i1kbjk" path="res://scenes/enemies/Wraith/wraith.tscn" id="2_abhiv"]
+[ext_resource type="PackedScene" uid="uid://dtgtqkim67d2o" path="res://scenes/enemies/owl_wraith/owl_wraith.tscn" id="2_rua06"]
 [ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/characters/fox/shadow.png" id="3_abhiv"]
+[ext_resource type="PackedScene" uid="uid://dnsjmjr2bh647" path="res://scenes/enemies/deer_wraith/deer_wraith.tscn" id="3_mr0n6"]
+[ext_resource type="PackedScene" uid="uid://ob6a41jkv6cq" path="res://scenes/enemies/bunny_wraith/bunny_wraith.tscn" id="4_dva5f"]
 
 [sub_resource type="Curve" id="Curve_abhiv"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5132275, 0.1048305), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.5327357, 0.5327357, 0, 0]
@@ -40,11 +42,11 @@ _light = NodePath("PointLight2D")
 _lightRamp = SubResource("Curve_abhiv")
 _maxEnergy = 1.0
 _toggleRange = NodePath("toggleRange")
-_enemyTypes = Array[PackedScene]([ExtResource("2_abhiv")])
-_enemyTypeSpawnChance = PackedFloat32Array(1)
+_enemyTypes = Array[PackedScene]([ExtResource("2_rua06"), ExtResource("3_mr0n6"), ExtResource("4_dva5f")])
+_enemyTypeSpawnChance = PackedFloat32Array(0.33, 0.33, 0.33)
 _timer = NodePath("Timer")
 _spawnRadius = Vector2(100, 100)
-Count = 10
+Count = 20
 
 [node name="Timer" type="Timer" parent="."]
 

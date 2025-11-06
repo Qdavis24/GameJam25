@@ -15,7 +15,6 @@ namespace GameJam25.scripts.state_machine.enemy_states;
  */
 public partial class EInstanceContext : InstanceContext
 {
-    public Player CurrentTarget;
     public Vector2 KnockbackDir = Vector2.Zero;
     public int KnockbackWeight = 0;
 }

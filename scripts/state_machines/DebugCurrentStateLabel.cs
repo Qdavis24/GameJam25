@@ -8,9 +8,4 @@ public partial class DebugCurrentStateLabel : Label
         
         Text = nextState;
     }
-
-    public override void _Ready()
-    {
-        GD.Print("enter");
-    }
 }

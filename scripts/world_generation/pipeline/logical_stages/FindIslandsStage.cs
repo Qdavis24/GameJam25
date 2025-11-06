@@ -26,8 +26,7 @@ namespace GameJam25.scripts.world_generation.pipeline.logical_stages
 
             // trigger stage logic 
             FindIslands(_islandState);
-
-            GD.Print("Island Count: " + Islands.Count);
+            
 
             // update Global Data
             World.LogicalData.Islands = Islands;

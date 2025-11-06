@@ -1,0 +1,273 @@
+[gd_scene load_steps=36 format=3 uid="uid://ob6a41jkv6cq"]
+
+[ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_3nskh"]
+[ext_resource type="Script" uid="uid://cy8j86jbwas4f" path="res://scripts/state_machines/DebugCurrentStateLabel.cs" id="2_cqj2b"]
+[ext_resource type="Script" uid="uid://cxqvy7rkoegok" path="res://scripts/state_machines/enemy_state_machines/EStateMachine.cs" id="3_s0x31"]
+[ext_resource type="Script" uid="uid://cbwikvgq15dby" path="res://scripts/state_machines/enemy_state_machines/reusable_states/ChaseState.cs" id="4_67yay"]
+[ext_resource type="Script" uid="uid://bu8otgwd2la2k" path="res://scripts/state_machines/enemy_state_machines/reusable_states/ExplodeState.cs" id="5_60v8l"]
+[ext_resource type="PackedScene" uid="uid://ct0g3652cw1dx" path="res://scenes/enemies/attacks/explode_attack.tscn" id="6_ns0ja"]
+[ext_resource type="Script" uid="uid://3tcjxipqa6on" path="res://scripts/state_machines/enemy_state_machines/reusable_states/KnockbackState.cs" id="7_oytsk"]
+[ext_resource type="Script" uid="uid://bwdq54lyr2fds" path="res://scripts/state_machines/enemy_state_machines/reusable_states/DeathState.cs" id="8_bwd1a"]
+[ext_resource type="PackedScene" uid="uid://chvr7h6jkalhr" path="res://scenes/enemies/Particle_Effects/death_particles.tscn" id="9_re5pc"]
+[ext_resource type="Script" uid="uid://c03b8mw0syy7a" path="res://scripts/state_machines/enemy_state_machines/EInstanceContext.cs" id="10_j0yut"]
+[ext_resource type="Texture2D" uid="uid://80kvo112cxb3" path="res://assets/Monsters_Creatures_Fantasy/bunny_wraith.png" id="11_d3oxt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
+radius = 15.0
+
+[sub_resource type="Curve" id="Curve_pdrcd"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0.06474829), 0.0, 0.0, 0, 0, Vector2(0.24867725, 0.5858171), 0.0, 0.0, 0, 0, Vector2(0.7195768, -0.49640286), 0.0, 0.0, 0, 0, Vector2(1, 0.05138755), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_q7crc"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.20105818, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ad4ay"]
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+direction = Vector3(0, 0, 0)
+spread = 27.272
+initial_velocity_min = 742.93
+initial_velocity_max = 796.91
+gravity = Vector3(0, 200, 0)
+damping_max = 2.6590002
+scale_max = 3.0
+color = Color(0.99381655, 0, 0.20968658, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hiihx"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(0, 0, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bugrm"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(100, 0, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p40ih"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(200, 0, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0vtk"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(300, 0, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ol46e"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(400, 0, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_53d7h"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(0, 139, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_87glh"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(100, 139, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rlrlu"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(200, 139, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qknn0"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(300, 139, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0gjp1"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(400, 139, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fntls"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(0, 278, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ctxg0"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(100, 278, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uyqrp"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(200, 278, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b4dot"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(300, 278, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qgm7h"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(400, 278, 100, 139)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dod6m"]
+atlas = ExtResource("11_d3oxt")
+region = Rect2(0, 417, 100, 139)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p20hp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hiihx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bugrm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p40ih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0vtk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ol46e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_53d7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_87glh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rlrlu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qknn0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0gjp1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fntls")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ctxg0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uyqrp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b4dot")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qgm7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dod6m")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_voie1"]
+radius = 100.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pdrcd"]
+radius = 20.0
+height = 80.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pdrcd"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(4, 4, 1)
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 0, 0)
+damping_min = 4.0
+damping_max = 5.0
+scale_min = 3.0
+scale_max = 10.0
+color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
+
+[node name="Wraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Animations", "_stateMachine") groups=["Enemies"]]
+y_sort_enabled = true
+collision_layer = 5
+collision_mask = 5
+script = ExtResource("1_3nskh")
+Speed = 200
+_health = 30
+SteeringRange = NodePath("SteeringRange")
+AttackRange = 5000
+Animations = NodePath("WraithAnimations")
+_stateMachine = NodePath("WraithStateMachine")
+
+[node name="CurrentState" type="Label" parent="."]
+offset_left = -23.0
+offset_top = -70.0
+offset_right = 17.0
+offset_bottom = -47.0
+script = ExtResource("2_cqj2b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_q5y88")
+
+[node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("_initialState")]
+script = ExtResource("3_s0x31")
+_initialState = NodePath("ChaseState")
+
+[node name="ChaseState" type="Node2D" parent="WraithStateMachine"]
+script = ExtResource("4_67yay")
+_minPathMag = 1.0
+_maxPathMag = 3.0
+_path = SubResource("Curve_pdrcd")
+_steeringWeights = PackedFloat32Array(1, 0.2, 0.7)
+_numRaycastSamples = 30
+_sampleDistance = 100
+_minTimePerCycle = 2.0
+_maxTimePerCycle = 4.0
+
+[node name="ExplodeState" type="Node2D" parent="WraithStateMachine"]
+script = ExtResource("5_60v8l")
+_explosionAttackScene = ExtResource("6_ns0ja")
+
+[node name="KnockbackState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_hitEffect")]
+script = ExtResource("7_oytsk")
+KnockbackCurve = SubResource("Curve_q7crc")
+_knockBackDuration = 0.4
+_hitEffect = NodePath("KnockBackEffect")
+
+[node name="KnockBackEffect" type="GPUParticles2D" parent="WraithStateMachine/KnockbackState"]
+emitting = false
+amount = 60
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+trail_lifetime = 0.1
+process_material = SubResource("ParticleProcessMaterial_ad4ay")
+
+[node name="DeathState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_deathEffect")]
+script = ExtResource("8_bwd1a")
+_deathEffect = NodePath("DeathEffect")
+
+[node name="DeathEffect" parent="WraithStateMachine/DeathState" instance=ExtResource("9_re5pc")]
+
+[node name="InstanceContext" type="Node2D" parent="WraithStateMachine"]
+script = ExtResource("10_j0yut")
+
+[node name="WraithAnimations" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.7, 0.7)
+sprite_frames = SubResource("SpriteFrames_p20hp")
+
+[node name="SteeringRange" type="Area2D" parent="." groups=["Enemies"]]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SteeringRange"]
+shape = SubResource("CircleShape2D_voie1")
+
+[node name="HurtBox" type="Area2D" parent="." groups=["EnemyHurtbox"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(0, 8)
+shape = SubResource("CapsuleShape2D_pdrcd")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+z_index = -1
+amount = 40
+process_material = SubResource("ParticleProcessMaterial_pdrcd")
+
+[connection signal="ChangeCurrentStateLabel" from="WraithStateMachine" to="CurrentState" method="OnChangeCurrentStateLabel"]
+[connection signal="body_entered" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeEntered"]
+[connection signal="body_exited" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeExited"]
+[connection signal="area_entered" from="HurtBox" to="." method="OnEnemyHurtBoxEntered"]

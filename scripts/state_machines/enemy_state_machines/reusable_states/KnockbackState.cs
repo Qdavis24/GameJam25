@@ -23,7 +23,6 @@ public partial class KnockbackState : EState
         _knockbackWeight = _stateMachine.InstanceContext.KnockbackWeight;
         _hitEffectMaterial = (ParticleProcessMaterial)_hitEffect.ProcessMaterial;
         _currTime = 0;
-        _stateMachine.Owner.Animations.Play("TakeDamage");
         Vector2 dir = (_stateMachine.InstanceContext.KnockbackDir).Normalized();
         Vector3 materialDir = new Vector3(dir.X, dir.Y, 0);
         _hitEffectMaterial.Direction = materialDir;
@@ -48,7 +47,7 @@ public partial class KnockbackState : EState
         _stateMachine.Owner.MoveAndSlide();
         if (_currTime >= _knockBackDuration)
         {
-            _stateMachine.TransitionTo("IdleState");
+            _stateMachine.TransitionTo("ChaseState");
         }
     }
 }

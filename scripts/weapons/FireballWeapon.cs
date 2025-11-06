@@ -93,7 +93,6 @@ public partial class FireballWeapon : Node2D
 
     private void OnTimeout()
     {
-        GD.Print("Timeout hit");
         _currTimes.Add(0);
 
         _fireballs = new Node2D[_numFireballs];
@@ -107,6 +106,5 @@ public partial class FireballWeapon : Node2D
         }
 
         _burstsQueue.Add(_fireballs);
-        GD.Print(_burstsQueue.Count);
     }
 }

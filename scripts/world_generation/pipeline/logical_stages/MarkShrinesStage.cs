@@ -74,7 +74,6 @@ public partial class MarkShrinesStage : PipelineStage
 
             if (validPlacement)
             {
-                GD.Print("Possilbe shrine place" + possibleShrinePlacement);
                 Shrine newShrine = CreateShrine(possibleShrinePlacement, shrineConfiguration);
                 _shrines.Add(newShrine);
             }

@@ -11,7 +11,6 @@ public partial class DeathState : EState
     public override void Enter()
     {
         _deathEffectMaterial = (ParticleProcessMaterial) _deathEffect.ProcessMaterial;
-        _stateMachine.Owner.Animations.Play("Die");
         Vector2 dir = (_stateMachine.InstanceContext.KnockbackDir).Normalized();
         Vector3 materialDir = new Vector3(dir.X, dir.Y, 0);
         _deathEffectMaterial.Direction = materialDir;

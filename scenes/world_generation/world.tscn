@@ -153,8 +153,6 @@ script = ExtResource("4_pfpup")
 
 [node name="GenerateTerrainStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("6_132vp")
-_rowLength = 300
-_colLength = 300
 _stateProbabilities = PackedFloat32Array(0.5, 0.5)
 _smoothingNeighborDepth = 2
 _numSmooths = 4
