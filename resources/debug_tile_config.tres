@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://b18hyjq0c25lt"]
+
+[ext_resource type="Script" uid="uid://bg6q8i3twguxf" path="res://scripts/resources/TileConfig.cs" id="1_htnt3"]
+
+[resource]
+script = ExtResource("1_htnt3")
+baseLayerWalkableTilesAtlasCoords = PackedVector2Array(15, 0)
+baseLayerNonWalkableTilesAtlasCoords = PackedVector2Array(12, 0)
+objectLayerWalkableTilesAtlasCoords = PackedVector2Array(0, 0, 0, 0, 0, 0)
+objectLayerNonWalkableTilesAtlasCoords = PackedVector2Array(4, 1, 5, 1, 6, 1, 7, 1)
+TileSizeXPxl = 120.0
+TileSizeYPxl = 90.0

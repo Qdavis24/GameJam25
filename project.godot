@@ -24,6 +24,15 @@ Sfx="*res://scripts/Sfx.cs"
 project/assembly_name="GameJam25"
 project/solution_directory="./"
 
+[global_group]
+
+Enemies=""
+Players=""
+EnemyHitBox=""
+PlayerHitBox=""
+EnemyHurtbox=""
+PlayerHurtbox=""
+
 [input]
 
 left={

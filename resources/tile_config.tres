@@ -1,12 +1,14 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://bfks6ydjmu5gu"]
 
-[ext_resource type="Script" uid="uid://bg6q8i3twguxf" path="res://resources/TileConfig.cs" id="1_qpljb"]
+[ext_resource type="Script" uid="uid://bg6q8i3twguxf" path="res://scripts/resources/TileConfig.cs" id="1_qpljb"]
 
 [resource]
 script = ExtResource("1_qpljb")
 baseLayerWalkableTilesAtlasCoords = PackedVector2Array(13, 0, 7, 0, 5, 0)
 baseLayerNonWalkableTilesAtlasCoords = PackedVector2Array(10, 0, 8, 0, 4, 0)
 objectLayerWalkableTilesAtlasCoords = PackedVector2Array(0, 0, 0, 0, 0, 0)
-objectLayerNonWalkableTilesAtlasCoords = PackedVector2Array(4, 1, 5, 1, 6, 1, 7, 1)
+objectLayerNonWalkableTilesAtlasCoords = PackedVector2Array(4, 1, 5, 1, 7, 1)
+DebugPathAtlasCoord = Vector2i(15, 0)
+DebugIslandBorderAtlasCoord = Vector2i(1, 0)
 TileSizeXPxl = 120.0
 TileSizeYPxl = 90.0
