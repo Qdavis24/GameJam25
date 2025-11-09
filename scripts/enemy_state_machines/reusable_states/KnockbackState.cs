@@ -1,8 +1,8 @@
 ﻿using System;
-using GameJam25.scripts.state_machine.enemy_state_machines;
+using GameJam25.scripts.enemy_state_machines.base_classes;
 using Godot;
 
-namespace GameJam25.scripts.Enemies.enemy_statemachine.wraith;
+namespace GameJam25.scripts.enemy_state_machines.reusable_states;
 
 public partial class KnockbackState : EState
 {
@@ -18,6 +18,7 @@ public partial class KnockbackState : EState
 
     private double _currTime;
 
+    // Super's abstract methods below
     public override void Enter()
     {
         _knockbackWeight = _stateMachine.InstanceContext.KnockbackWeight;
@@ -50,4 +51,5 @@ public partial class KnockbackState : EState
             _stateMachine.TransitionTo("ChaseState");
         }
     }
+    
 }

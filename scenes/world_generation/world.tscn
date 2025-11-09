@@ -143,7 +143,7 @@ z_index = -1
 y_sort_enabled = true
 tile_set = SubResource("TileSet_nmbn7")
 
-[node name="ObstacleLayer" type="TileMapLayer" parent="."]
+[node name="ObstacleLayer" type="TileMapLayer" parent="." groups=["Obstacle"]]
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_683jg")
 tile_set = SubResource("TileSet_vbebb")
@@ -166,7 +166,7 @@ script = ExtResource("8_ysaxy")
 [node name="ConnectIslandsStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("9_s0qqk")
 _pathCurve = SubResource("Curve_xnpr7")
-_pathRadius = 2
+_pathRadius = 3
 _pathCurveMagnitude = 5
 
 [node name="MarkShrinesStage" type="Node" parent="GenerationPipeline"]

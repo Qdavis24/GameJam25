@@ -1,10 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://dyrdk24okgbja"]
+[gd_scene load_steps=10 format=3 uid="uid://dyrdk24okgbja"]
 
-[ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/enemies/EnemySpawner.cs" id="1_7lb27"]
+[ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/EnemySpawner.cs" id="1_7lb27"]
 [ext_resource type="PackedScene" uid="uid://dtgtqkim67d2o" path="res://scenes/enemies/owl_wraith/owl_wraith.tscn" id="2_rua06"]
 [ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/characters/fox/shadow.png" id="3_abhiv"]
-[ext_resource type="PackedScene" uid="uid://dnsjmjr2bh647" path="res://scenes/enemies/deer_wraith/deer_wraith.tscn" id="3_mr0n6"]
-[ext_resource type="PackedScene" uid="uid://ob6a41jkv6cq" path="res://scenes/enemies/bunny_wraith/bunny_wraith.tscn" id="4_dva5f"]
+[ext_resource type="PackedScene" uid="uid://dywc23eylfitj" path="res://scenes/enemies/bunny_wraith/bunny_wraith.tscn" id="4_dva5f"]
 
 [sub_resource type="Curve" id="Curve_abhiv"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5132275, 0.1048305), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.5327357, 0.5327357, 0, 0]
@@ -37,18 +36,20 @@ scale_max = 15.309999
 color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
 
 [node name="WraithSpawner" type="Node2D" node_paths=PackedStringArray("_light", "_toggleRange", "_timer")]
+y_sort_enabled = true
 script = ExtResource("1_7lb27")
 _light = NodePath("PointLight2D")
 _lightRamp = SubResource("Curve_abhiv")
 _maxEnergy = 1.0
 _toggleRange = NodePath("toggleRange")
-_enemyTypes = Array[PackedScene]([ExtResource("2_rua06"), ExtResource("3_mr0n6"), ExtResource("4_dva5f")])
-_enemyTypeSpawnChance = PackedFloat32Array(0.33, 0.33, 0.33)
+_enemyTypes = Array[PackedScene]([ExtResource("4_dva5f"), ExtResource("2_rua06")])
+_enemyTypeSpawnChance = PackedFloat32Array(0.7, 0.3)
 _timer = NodePath("Timer")
 _spawnRadius = Vector2(100, 100)
-Count = 20
+Count = 40
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("3_abhiv")

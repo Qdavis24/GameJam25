@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://chucorh8rq535"]
+[gd_scene load_steps=8 format=4 uid="uid://c8i4lhxb04qts"]
 
 [ext_resource type="PackedScene" uid="uid://cfabk12i1kbjk" path="res://scenes/enemies/deer_wraith/wraith.tscn" id="1_kruvs"]
 [ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player.tscn" id="2_cisa7"]

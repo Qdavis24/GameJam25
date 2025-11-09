@@ -1,11 +1,10 @@
 ﻿using Godot;
 using GameJam25.scripts.damage_system;
-using GameJam25.scripts.state_machine;
+using GameJam25.scripts.enemy_state_machines.base_classes;
 
 public partial class Enemy : CharacterBody2D
 {
     [ExportCategory("stats")] 
-    [Export] public int Speed;
     [Export] private int _health; //starting health
 
     [ExportCategory("Distance Ranges")] 

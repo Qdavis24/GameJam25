@@ -12,10 +12,10 @@ z_index = -1
 y_sort_enabled = true
 script = ExtResource("1_ekx4o")
 _fireballPackedScene = ExtResource("2_s5frb")
-_timer = NodePath("Timer")
-_fireballSpeed = 500.0
 _speedRamp = SubResource("Curve_s5frb")
+_timer = NodePath("Timer")
 _fireballLifetime = 3.0
-_numFireballs = 7
+ProjectileSpeed = 100.0
+ProjectileCount = 4
 
 [node name="Timer" type="Timer" parent="."]

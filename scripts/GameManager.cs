@@ -20,7 +20,7 @@ public partial class GameManager : Node
 
     private Vector2I _lastPlayerCoord;
 
-    private List<Node2D> arrows = new List<Node2D>();
+    private List<Node2D> _arrows = new();
 
     public override void _Ready()
     {
@@ -40,7 +40,7 @@ public partial class GameManager : Node
         arrow.GlobalPosition = tilePos;
         AddChild(arrow);
         arrow.Rotation = (direction).Angle();
-        arrows.Add(arrow);
+        _arrows.Add(arrow);
     }
 
     private void CreateLabel(int col, int row, string cost)
@@ -59,8 +59,8 @@ public partial class GameManager : Node
                     .ToLocal(Player.GlobalPosition)); // big mess but just getting the players tile coord
         if ((_lastPlayerCoord - currPlayerCoord).LengthSquared() > 5 * 5)
         {
-            if (arrows.Count > 0)
-                foreach (var ar in arrows)
+            if (_arrows.Count > 0)
+                foreach (var ar in _arrows)
                     ar.QueueFree();
 
 

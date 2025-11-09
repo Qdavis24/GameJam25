@@ -1,30 +1,33 @@
-using Godot;
+﻿using Godot;
 
+namespace GameJam25.scripts.enemies.owl_wraith_package;
 
-public partial class Fireball : Node2D
+public partial class ShadowBall : Node2D
 {
     [Export] private PackedScene _explosionParticles;
-    [Export] private Area2D Hitbox;
+    [Export] public Area2D Hitbox;
+    public Vector2 Velocity;
+    public int Speed;
+    
     public override void _Ready()
     {
         Hitbox.AreaEntered += OnAreaEntered;
     }
-    
 
-    private void OnAreaEntered(Node2D area)
+    public override void _PhysicsProcess(double delta)
     {
-        if (area.IsInGroup("EnemyHurtbox"))
-        {
-            QueueFree();
-        }
+        GlobalPosition += Velocity * Speed * (float) delta;
     }
 
-    public override void _ExitTree()
+    public void OnAreaEntered(Area2D area)
     {
+        if (!area.IsInGroup("PlayerHurtbox") && !area.IsInGroup("Obstacle")) return;
         var explodeParticles = _explosionParticles.Instantiate<GpuParticles2D>();
         explodeParticles.Emitting = true;
         explodeParticles.Finished += () => explodeParticles.QueueFree();
         GetTree().Root.AddChild(explodeParticles);
         explodeParticles.GlobalPosition = GlobalPosition;
+        QueueFree();
     }
+    
 }

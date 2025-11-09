@@ -1,6 +1,5 @@
 using Godot;
 using System.Collections.Generic;
-using GameJam25.scripts.state_machine;
 
 public partial class EnemySpawner : Node2D
 {
@@ -38,18 +37,26 @@ public partial class EnemySpawner : Node2D
     {
         _currTime = 0;
         if (_currCount > Count) return;
-        _currCount++;
+        _currCount+=10;
         float cumProb = 0;
         for (int i = 0; i < _enemyTypes.Length ; i++)
         {
             cumProb += _enemyTypeSpawnChance[i];
             if (GD.Randf() < cumProb)
             {
-                InstantiateEnemy(_enemyTypes[i]);
+                SpawnGroup(_enemyTypes[i], 5);
+                return;
             }
         }
     }
 
+    private void SpawnGroup(PackedScene enemyPackedScene, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            InstantiateEnemy(enemyPackedScene);
+        }
+    }
     private void InstantiateEnemy(PackedScene enemyPackedScene)
     {
         var enemy = enemyPackedScene.Instantiate<Node2D>();

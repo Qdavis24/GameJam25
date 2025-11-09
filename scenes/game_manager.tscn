@@ -19,6 +19,6 @@ _arrow = ExtResource("5_ternb")
 _label = ExtResource("6_q8mjp")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.9, 0.9)
+zoom = Vector2(0.8, 0.8)
 script = ExtResource("5_eaq8r")
 _speed = 0.2

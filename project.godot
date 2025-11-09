@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GameJam25"
-run/main_scene="uid://gs3xoka1pgbv"
+run/main_scene="uid://cuv7nxob83tho"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -32,6 +32,9 @@ EnemyHitBox=""
 PlayerHitBox=""
 EnemyHurtbox=""
 PlayerHurtbox=""
+Obstacle=""
+OwlWraiths=""
+BunnyWraiths=""
 
 [input]
 
