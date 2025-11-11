@@ -1,27 +1,51 @@
+using System;
 using Godot;
 using System.Collections.Generic;
+using GameJam25.scripts.damage_system;
 
 public partial class EnemySpawner : Node2D
 {
+    [Signal] public delegate void SpawnerDestroyedEventHandler();
+    
+    [ExportCategory("Spawner Crystal")] 
+    [Export] private float _maxCrystalHealth;
+    [Export] private Area2D _crystalHurtbox;
+    [Export] private AnimatedSprite2D _crystalSprite;
+    [Export] private ShaderMaterial _flashShaderMaterial;
+    
     [ExportCategory("Light")]
     [Export] private PointLight2D _light;
     [Export] private Curve _lightRamp;
     [Export] private float _maxEnergy;
 
-    [ExportCategory("Spawner Config")] [Export]
-    private Area2D _toggleRange;
+    [ExportCategory("Spawner Config")] 
+    [Export] private Area2D _toggleRange;
     [Export] private PackedScene[] _enemyTypes;
     [Export] private float[] _enemyTypeSpawnChance;
     [Export] private Timer _timer;
     [Export] private Vector2 _spawnRadius;
-    [Export] private int Count = 1;
-    
-    private double _currTime = 0;
-    private int _currCount = 0;
+    [Export] private int _numEnemiesPerWave = 1;
+    [Export] private int _numWaves;
+
+    private float _crystalHealth;
+    private double _currTime;
+    private int _currWave;
+
+    public void Init(float maxCrystalHealth, float interval, float enemiesPerWave, float numWaves)
+    {
+        _crystalHealth = maxCrystalHealth;
+        _numEnemiesPerWave = (int) enemiesPerWave;
+        _numWaves = (int) numWaves;
+        _timer.WaitTime = interval;
+        
+    }
     public override void _Ready()
     {
+        OnTimeout();
+        _currWave = 0;
         _light.Energy = 0;
-        _timer.Timeout += Spawn;
+        _crystalHurtbox.AreaEntered += OnCrystalHurtboxEntered;
+        _timer.Timeout += OnTimeout;
         _toggleRange.BodyEntered += OnToggleRangeEntered;
         _toggleRange.BodyExited += OnToggleRangeExited;
     }
@@ -33,26 +57,26 @@ public partial class EnemySpawner : Node2D
         _light.Energy = energySample * _maxEnergy;
     }
 
-    private void Spawn()
+    private void OnTimeout()
     {
         _currTime = 0;
-        if (_currCount > Count) return;
-        _currCount+=10;
+        if (_currWave >= _numWaves) return;
+        _currWave++;
         float cumProb = 0;
         for (int i = 0; i < _enemyTypes.Length ; i++)
         {
             cumProb += _enemyTypeSpawnChance[i];
             if (GD.Randf() < cumProb)
             {
-                SpawnGroup(_enemyTypes[i], 5);
+                SpawnGroup(_enemyTypes[i], _numEnemiesPerWave);
                 return;
             }
         }
     }
 
-    private void SpawnGroup(PackedScene enemyPackedScene, int count)
+    private void SpawnGroup(PackedScene enemyPackedScene, int numEnemies)
     {
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < numEnemies; i++)
         {
             InstantiateEnemy(enemyPackedScene);
         }
@@ -68,6 +92,22 @@ public partial class EnemySpawner : Node2D
         AddChild(enemy);
     }
 
+    private void OnCrystalHurtboxEntered(Area2D area)
+    {
+        if (area.IsInGroup("PlayerHitbox"))
+        {
+            _crystalHealth -= ((Hitbox)area).Damage;
+            _crystalSprite.Material = _flashShaderMaterial;
+            area.TreeExited += () => { _crystalSprite.Material = null; };
+            if (_crystalHealth <= 0)
+            {
+                EmitSignal(SignalName.SpawnerDestroyed);
+                QueueFree();
+            }
+        }
+       
+    }
+    
     private void OnToggleRangeEntered(Node2D body)
     {
         if (body.IsInGroup("Players"))

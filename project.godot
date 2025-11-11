@@ -28,13 +28,13 @@ project/solution_directory="./"
 
 Enemies=""
 Players=""
-EnemyHitBox=""
-PlayerHitBox=""
 EnemyHurtbox=""
 PlayerHurtbox=""
 Obstacle=""
 OwlWraiths=""
 BunnyWraiths=""
+PlayerHitbox=""
+EnemyHitbox=""
 
 [input]
 

@@ -39,7 +39,7 @@ public partial class Enemy : CharacterBody2D
 
     private void OnEnemyHurtBoxEntered(Area2D area)
     {
-        if (!area.IsInGroup("PlayerHitBox")) return;
+        if (!area.IsInGroup("PlayerHitbox")) return;
 
         Hitbox hb = (Hitbox)area;
         

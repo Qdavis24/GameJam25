@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c00xjc6boakmw"
-path="res://.godot/imported/deer_wraith.png-683e01645a6a74848447ece3d0ee255a.ctex"
+uid="uid://2x2oe8vf4m06"
+path="res://.godot/imported/crystal_dark_32x32_24f_20d_no_light.png-7f28478b7fc0a90dbf9f6366784ba009.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Monsters_Creatures_Fantasy/deer_wraith.png"
-dest_files=["res://.godot/imported/deer_wraith.png-683e01645a6a74848447ece3d0ee255a.ctex"]
+source_file="res://assets/crystals/crystal_dark_32x32_24f_20d_no_light.png"
+dest_files=["res://.godot/imported/crystal_dark_32x32_24f_20d_no_light.png-7f28478b7fc0a90dbf9f6366784ba009.ctex"]
 
 [params]
 

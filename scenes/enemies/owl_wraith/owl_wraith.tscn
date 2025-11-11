@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://dlgs75em0lmb6" path="res://scripts/enemy_state_machines/custom_states/ShootState.cs" id="8_s7auy"]
 [ext_resource type="PackedScene" uid="uid://bb1am2rf2c6lb" path="res://scenes/enemies/owl_wraith/shadow_ball.tscn" id="9_eieg8"]
 [ext_resource type="PackedScene" uid="uid://chvr7h6jkalhr" path="res://scenes/enemies/Particle_Effects/death_particles.tscn" id="9_mguii"]
-[ext_resource type="Texture2D" uid="uid://drp4ukbvg0k4g" path="res://assets/Monsters_Creatures_Fantasy/owl_wraith.png" id="11_oto54"]
+[ext_resource type="Texture2D" uid="uid://drp4ukbvg0k4g" path="res://assets/enemies/owl_wraith.png" id="11_oto54"]
 [ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/characters/fox/shadow.png" id="11_rvc00"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
@@ -151,7 +151,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_voie1"]
-radius = 200.0
+radius = 240.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pdrcd"]
 radius = 20.0
@@ -196,12 +196,12 @@ _maxDistancePerCycle = 510.0
 _minPathMag = 0.2
 _maxPathMag = 0.4
 _path = SubResource("Curve_eieg8")
-_separationForce = 0.8
-_alignmentForce = 0.7
-_cohesionForce = 0.8
+_separationForce = 1.2
+_alignmentForce = 1.0
+_cohesionForce = 1.0
 _boidsInfluence = 1.0
 _flowFieldInfluence = 0.9
-_minSpeed = 100.0
+_minSpeed = 120.0
 _maxSpeed = 120.0
 _attackState = "ShootState"
 
@@ -247,7 +247,6 @@ collision_layer = 4
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SteeringRange"]
-visible = false
 shape = SubResource("CircleShape2D_voie1")
 
 [node name="HurtBox" type="Area2D" parent="." groups=["EnemyHurtbox"]]

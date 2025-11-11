@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://80kvo112cxb3"
-path="res://.godot/imported/bunny_wraith.png-c992466bf10d1724d6c115704cc3404d.ctex"
+uid="uid://cqme1prkftwjk"
+path="res://.godot/imported/crystal_dark_32x32_12f_20d_normal.png-74bd9a20a9fe30e4b8297326cb7ef9b7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Monsters_Creatures_Fantasy/bunny_wraith.png"
-dest_files=["res://.godot/imported/bunny_wraith.png-c992466bf10d1724d6c115704cc3404d.ctex"]
+source_file="res://assets/crystals/crystal_dark_32x32_12f_20d_normal.png"
+dest_files=["res://.godot/imported/crystal_dark_32x32_12f_20d_normal.png-74bd9a20a9fe30e4b8297326cb7ef9b7.ctex"]
 
 [params]
 

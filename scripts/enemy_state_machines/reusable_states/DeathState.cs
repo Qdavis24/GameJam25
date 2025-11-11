@@ -2,11 +2,12 @@
 using Godot;
 
 namespace GameJam25.scripts.enemy_state_machines.reusable_states;
+
 public partial class DeathState : EState
 {
-    [ExportCategory("special effects")] 
-    [Export] private GpuParticles2D _deathEffect;
-    
+    [ExportCategory("special effects")] [Export]
+    private GpuParticles2D _deathEffect;
+
     private ParticleProcessMaterial _deathEffectMaterial;
 
     // Super's abstract methods below
@@ -19,13 +20,18 @@ public partial class DeathState : EState
         _deathEffect.Emitting = true;
     }
 
-    public override void Exit() {}
-    
+    public override void Exit()
+    {
+    }
+
 
     public override void Update(double delta)
     {
-        _stateMachine.Owner.QueueFree();
+        if (!_deathEffect.Emitting)
+            _stateMachine.Owner.QueueFree();
     }
 
-    public override void PhysicsUpdate(double delta) {}
+    public override void PhysicsUpdate(double delta)
+    {
+    }
 }

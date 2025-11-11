@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drp4ukbvg0k4g"
-path="res://.godot/imported/owl_wraith.png-71cc609ba5c0d9896d02448e6f7b8a82.ctex"
+uid="uid://bdgwg0ue5g3xb"
+path="res://.godot/imported/crystal_dark_64x64_24f_20d_no_border.png-90d9c7a6d80f976021935236dc2bc617.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Monsters_Creatures_Fantasy/owl_wraith.png"
-dest_files=["res://.godot/imported/owl_wraith.png-71cc609ba5c0d9896d02448e6f7b8a82.ctex"]
+source_file="res://assets/crystals/crystal_dark_64x64_24f_20d_no_border.png"
+dest_files=["res://.godot/imported/crystal_dark_64x64_24f_20d_no_border.png-90d9c7a6d80f976021935236dc2bc617.ctex"]
 
 [params]
 

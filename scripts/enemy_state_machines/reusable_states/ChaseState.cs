@@ -68,7 +68,6 @@ public partial class ChaseState : EState
 
     public override void PhysicsUpdate(double delta)
     {
-        GD.Print(_sameGroupEnemies.Count);
         if (GameManager.Instance.Player == null) return;
         if (GameManager.Instance.CurrFlowField.Directions == null) return;
 
