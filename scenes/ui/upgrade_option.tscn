@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://cy2bh7tqwko58"]
+
+[ext_resource type="Texture2D" uid="uid://w2f4tpkoqpd6" path="res://assets/ui/heart.png" id="1_fmiar"]
+[ext_resource type="Script" uid="uid://ogb4yfoj5o6a" path="res://scripts/ui/UpgradeOption.cs" id="1_iks3e"]
+[ext_resource type="Script" uid="uid://cppjsjxkmv65q" path="res://scripts/ui/ColorRect2ACTIVE.cs" id="2_v8sua"]
+
+[node name="UpgradeOption" type="PanelContainer"]
+script = ExtResource("1_iks3e")
+
+[node name="RarityBorder" type="ColorRect" parent="."]
+layout_mode = 2
+color = Color(0.6729947, 0.0024128908, 0.89600706, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ColorRect2" type="ColorRect" parent="MarginContainer"]
+layout_mode = 2
+color = Color(0.58941764, 0.41425475, 0.30042368, 1)
+script = ExtResource("2_v8sua")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_fmiar")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="RichTextLabel" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Flaming Fireball"
+fit_content = true
+
+[node name="Description" type="RichTextLabel" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "+ 10%"
+fit_content = true
