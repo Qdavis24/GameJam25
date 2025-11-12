@@ -100,6 +100,7 @@ public partial class ChaseState : EState
         
         _stateMachine.Owner.Velocity = baseDir * _speed;
         _currDistance += _stateMachine.Owner.Velocity.Length();
+        _stateMachine.Owner.Animations.FlipH = baseDir.X < 0;
         _stateMachine.Owner.MoveAndSlide();
     }
 

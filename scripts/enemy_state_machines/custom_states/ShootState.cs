@@ -38,11 +38,10 @@ public partial class ShootState : EState
 
     private void OnTimeout()
     {
-        var newProj = _projectile.Instantiate<ShadowBall>();
-        newProj.GlobalPosition = _stateMachine.Owner.GlobalPosition;
-        newProj.Velocity = (GameManager.Instance.Player.GlobalPosition -_stateMachine.Owner.GlobalPosition).Normalized();
-        newProj.Speed = _projectileSpeed;
-        GetTree().Root.AddChild(newProj);
+        var newShadowBall = _projectile.Instantiate<ShadowBall>();
+        newShadowBall.Init((GameManager.Instance.Player.GlobalPosition -_stateMachine.Owner.GlobalPosition).Normalized(), _projectileSpeed);
+        newShadowBall.GlobalPosition = _stateMachine.Owner.GlobalPosition;
+        GetTree().Root.AddChild(newShadowBall);
     }
     
 }

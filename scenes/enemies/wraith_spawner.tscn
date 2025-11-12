@@ -265,7 +265,7 @@ process_material = SubResource("ParticleProcessMaterial_abhiv")
 position = Vector2(-1, -64)
 shape = SubResource("CapsuleShape2D_dva5f")
 
-[node name="Hurtbox" type="Area2D" parent="SpawnerCrystal"]
+[node name="Hurtbox" type="Area2D" parent="SpawnerCrystal" groups=["EnemyHurtbox"]]
 collision_layer = 0
 collision_mask = 2
 

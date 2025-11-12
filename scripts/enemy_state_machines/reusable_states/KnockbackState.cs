@@ -48,7 +48,8 @@ public partial class KnockbackState : EState
         _stateMachine.Owner.MoveAndSlide();
         if (_currTime >= _knockBackDuration)
         {
-            _stateMachine.TransitionTo("ChaseState");
+            if (_stateMachine.Owner.Health <= 0) _stateMachine.TransitionTo("DeathState");
+            else _stateMachine.TransitionTo("ChaseState");
         }
     }
     

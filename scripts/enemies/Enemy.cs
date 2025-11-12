@@ -15,13 +15,13 @@ public partial class Enemy : CharacterBody2D
     [Export] public AnimatedSprite2D Animations;
     [Export] private EStateMachine _stateMachine;
 
-    protected float _currHealth;
+    public float Health;
 
 
     public void TakeDamage(int amount, int knockbackWeight, Vector2 direction)
     {
         if (_stateMachine.CurrState.Name == "DeathState") return;
-        _currHealth -= amount;
+        Health -= amount;
         _stateMachine.InstanceContext.KnockbackDir = direction.Normalized();
         _stateMachine.InstanceContext.KnockbackWeight = knockbackWeight;
         _stateMachine.TransitionTo("KnockbackState");
@@ -29,13 +29,9 @@ public partial class Enemy : CharacterBody2D
 
     public override void _Ready()
     {
-        _currHealth = _health;
+        Health = _health;
     }
-
-    public override void _Process(double delta)
-    {
-        if (_currHealth < 0 && _stateMachine.CurrState.Name != "DeathState") _stateMachine.TransitionTo("DeathState");
-    }
+    
 
     private void OnEnemyHurtBoxEntered(Area2D area)
     {

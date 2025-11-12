@@ -1,6 +1,6 @@
 [gd_scene load_steps=31 format=3 uid="uid://cyjhlvykvi3fn"]
 
-[ext_resource type="Script" uid="uid://n41ha5q3hksi" path="res://scripts/weapons/projectiles/Fireball.cs" id="1_4h438"]
+[ext_resource type="Script" uid="uid://n41ha5q3hksi" path="res://scripts/weapons/fireball_weapon/Fireball.cs" id="1_4h438"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_4h438"]
 [ext_resource type="PackedScene" uid="uid://bc8136epjg2t4" path="res://scenes/weapons/fireball/explode.tscn" id="2_bvcyv"]
 [ext_resource type="Texture2D" uid="uid://blklr2ns14mq3" path="res://assets/characters/fox/attack/fireball.png" id="4_s0qqh"]
@@ -12,9 +12,11 @@ colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_4h438"]
 gradient = SubResource("Gradient_31e3c")
+width = 300
+height = 300
 fill = 1
 fill_from = Vector2(0.4871795, 0.491453)
-fill_to = Vector2(0.7777778, 0.16666667)
+fill_to = Vector2(0.8457944, 0.14018692)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_31e3c"]
 lifetime_randomness = 0.6
@@ -186,21 +188,24 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="fireball" type="Node2D" node_paths=PackedStringArray("Hitbox")]
+[node name="fireball" type="Node2D" node_paths=PackedStringArray("_hitbox")]
+z_index = -1
+y_sort_enabled = true
 script = ExtResource("1_4h438")
 _explosionParticles = ExtResource("2_bvcyv")
-Hitbox = NodePath("hitbox")
+_hitbox = NodePath("Hitbox")
 
-[node name="hitbox" type="Area2D" parent="." groups=["PlayerHitBox"]]
+[node name="Hitbox" type="Area2D" parent="." groups=["PlayerHitbox"]]
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("2_4h438")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("CircleShape2D_bvcyv")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-color = Color(1, 0.003921569, 0, 1)
+color = Color(1, 0.7882353, 0.21960784, 1)
+energy = 0.4
 texture = SubResource("GradientTexture2D_4h438")
 
 [node name="trail" type="GPUParticles2D" parent="."]
@@ -208,6 +213,8 @@ amount = 30
 process_material = SubResource("ParticleProcessMaterial_31e3c")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+y_sort_enabled = true
 rotation = -1.5707964
+scale = Vector2(1.2, 1.2)
 sprite_frames = SubResource("SpriteFrames_k38kp")
 autoplay = "default"
