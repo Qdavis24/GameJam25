@@ -15,6 +15,10 @@ public partial class Ui : CanvasLayer
 		_upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
 	}
 	
+	public Player GetPlayer() {
+		return _player;
+	}
+	
 	public void InitializeUiFromPlayer(Player player)
 	{
 		_player = player;
