@@ -105,6 +105,7 @@ public partial class GameManager : Node
 		{
 			Player = _playerPckdScene.Instantiate<Player>();
 			AddChild(Player);
+			GetNode<Ui>("Ui").InitializeUiFromPlayer(Player);
 		}
 
 		var spawnPortal = _playerSpawnPckdScene.Instantiate<PlayerSpawn>();

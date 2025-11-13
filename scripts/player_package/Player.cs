@@ -4,7 +4,70 @@ using GameJam25.scripts.damage_system;
 
 public partial class Player : CharacterBody2D
 {
-	[Export] private int Health = 100;
+	[Signal] public delegate void HealthChangedEventHandler(int newHealth);
+	[Signal] public delegate void MaxHealthChangedEventHandler(int newMaxHealth);
+	[Signal] public delegate void XpChangedEventHandler(int newXp);
+	[Signal] public delegate void LevelChangedEventHandler(int newLevel);
+
+	// Values used by UI for display or game logic
+	// Setters implemented below to emit changes to UI.
+	private int _health = 3;
+	private int _maxHealth = 3;
+	private int _xp = 0;
+	private int _level = 1;
+
+	// Current Health
+	[Export]
+	public int Health
+	{
+		get => _health;
+		set
+		{
+			if (_health == value) return;
+			_health = Mathf.Clamp(value, 0, MaxHealth);
+			EmitSignal(SignalName.HealthChanged, _health);
+		}
+	}
+
+	// Max Health
+	[Export]
+	public int MaxHealth
+	{
+		get => _maxHealth;
+		set
+		{
+			if (_maxHealth == value) return;
+			_maxHealth = Mathf.Max(1, value);
+			EmitSignal(SignalName.MaxHealthChanged, _maxHealth);
+		}
+	}
+
+	// Experience
+	[Export]
+	public int Xp
+	{
+		get => _xp;
+		set
+		{
+			if (_xp == value) return;
+			_xp = Mathf.Max(0, value);
+			EmitSignal(SignalName.XpChanged, _xp);
+		}
+	}
+
+	// Level
+	[Export]
+	public int Level
+	{
+		get => _level;
+		set
+		{
+			if (_level == value) return;
+			_level = Mathf.Max(1, value);
+			EmitSignal(SignalName.LevelChanged, _level);
+		}
+	}
+	
 	[Export] public float Speed = 400f;
 	[Export] public string AnimationSet = "fox";
 		
@@ -21,6 +84,11 @@ public partial class Player : CharacterBody2D
 	private AnimatedSprite2D _anim;
 	private Sprite2D _sprite;
 	private AudioStreamPlayer _audio;
+	
+	public int GetXpForLevel(int level, float baseXp = 100f, float growth = 1.2f)
+	{
+		return Mathf.FloorToInt(baseXp * Mathf.Pow(growth, level - 1));
+	}
 	
 	private void Slash(Vector2 dir)
 	{
@@ -129,6 +197,7 @@ public partial class Player : CharacterBody2D
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
 		_anim.Play(AnimationSet + "_idle");
+		Xp = 70;
 	}
 
 	public override void _PhysicsProcess(double delta)

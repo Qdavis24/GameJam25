@@ -1,15 +1,39 @@
-[gd_scene load_steps=2 format=3 uid="uid://w11lstxqrmpj"]
+[gd_scene load_steps=7 format=3 uid="uid://w11lstxqrmpj"]
 
 [ext_resource type="PackedScene" uid="uid://ci3unkj74fw6k" path="res://scenes/ui/UpgradeScreen.tscn" id="1_d2gw2"]
+[ext_resource type="Script" uid="uid://bu3whablyvrhm" path="res://scripts/ui/Ui.cs" id="1_m01cm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m01cm"]
+bg_color = Color(0, 0.654902, 1, 1)
+
+[sub_resource type="Theme" id="Theme_nnfdp"]
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_m01cm")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s64wo"]
+bg_color = Color(0.8352941, 0, 0.023529412, 1)
+
+[sub_resource type="Theme" id="Theme_m01cm"]
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_s64wo")
 
 [node name="Ui" type="CanvasLayer"]
+script = ExtResource("1_m01cm")
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
-offset_right = 4.0
+[node name="XpBar" type="ProgressBar" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
 offset_bottom = 27.0
+grow_horizontal = 2
+theme = SubResource("Theme_nnfdp")
+show_percentage = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="HealthBar" type="ProgressBar" parent="."]
+anchors_preset = -1
+anchor_right = 0.23871528
+offset_top = 30.0
+offset_bottom = 57.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_m01cm")
+metadata/_edit_use_anchors_ = true
 
 [node name="UpgradeScreen" parent="." instance=ExtResource("1_d2gw2")]

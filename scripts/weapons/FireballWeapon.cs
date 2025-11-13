@@ -29,6 +29,11 @@ public partial class FireballWeapon : Node2D
 	private List<Node2D[]> _burstsQueue;
 	private List<double> _currTimes;
 
+	public void Enable()
+	{
+		_timer.Start();
+	}
+	
 	private void CalculateDirections()
 	{
 		float radIncr = (2 * Mathf.Pi) / ProjectileCount;
