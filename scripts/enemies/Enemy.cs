@@ -1,20 +1,17 @@
 ﻿using Godot;
 using GameJam25.scripts.damage_system;
-using GameJam25.scripts.state_machine;
+using GameJam25.scripts.enemy_state_machines.base_classes;
 
 public partial class Enemy : CharacterBody2D
 {
     [ExportCategory("stats")] 
-    [Export] public int Speed;
     [Export] private int _health; //starting health
 
     [ExportCategory("Distance Ranges")] 
-    [Export] public Area2D AggroRange;
     [Export] public Area2D SteeringRange;
     [Export] public int AttackRange;
 
     [ExportCategory("Miscellaneous")] 
-    [Export] public string[] AggroGroups;
     [Export] public AnimatedSprite2D Animations;
     [Export] private EStateMachine _stateMachine;
 
@@ -42,7 +39,7 @@ public partial class Enemy : CharacterBody2D
 
     private void OnEnemyHurtBoxEntered(Area2D area)
     {
-        if (!area.IsInGroup("PlayerHitBox")) return;
+        if (!area.IsInGroup("PlayerHitbox")) return;
 
         Hitbox hb = (Hitbox)area;
         

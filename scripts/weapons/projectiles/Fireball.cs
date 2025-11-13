@@ -5,8 +5,6 @@ public partial class Fireball : Node2D
 {
     [Export] private PackedScene _explosionParticles;
     [Export] private Area2D Hitbox;
-    private Vector2 _currPos;
-
     public override void _Ready()
     {
         Hitbox.AreaEntered += OnAreaEntered;
@@ -17,7 +15,6 @@ public partial class Fireball : Node2D
     {
         if (area.IsInGroup("EnemyHurtbox"))
         {
-            _currPos = GlobalPosition;
             QueueFree();
         }
     }

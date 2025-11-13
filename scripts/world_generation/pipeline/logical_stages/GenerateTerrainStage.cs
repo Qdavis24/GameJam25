@@ -5,12 +5,12 @@ namespace GameJam25.scripts.world_generation.pipeline.logical_stages
     public partial class GenerateTerrainStage : PipelineStage
     {
         // Stage parameters
-        [ExportCategory("MapSize")]
-        [Export] private int _rowLength = 100;
+        [ExportCategory("MapSize")] [Export] private int _rowLength = 100;
         [Export] private int _colLength = 100;
-        
-        [ExportCategory("Cellular Automata Params")]
-        [Export] private float[] _stateProbabilities = new float[] { .4f, .6f };
+
+        [ExportCategory("Cellular Automata Params")] [Export]
+        private float[] _stateProbabilities = new float[] { .4f, .6f };
+
         [Export] private int _walkableState = 0;
         [Export] private int _nonWalkableState = 1;
         [Export] private int _shrineState = -1;
@@ -21,42 +21,40 @@ namespace GameJam25.scripts.world_generation.pipeline.logical_stages
         private int[,] _matrix;
         private int[] _states;
 
-        public override void ProcessWorld()
+        public override void ProcessStage()
         {
             _matrix = new int[_rowLength, _colLength];
             _states = new int[] { _walkableState, _nonWalkableState };
-            // trigger stage logic 
+            // trigger stage logic
             Init();
             for (int i = 0; i < _numSmooths; i++)
                 Smooth(_smoothingNeighborDepth, _smoothingWraparound);
 
             // update Global Data (Logical World)
-            PipelineManager.LogicalWorldData.Matrix = _matrix;
-            PipelineManager.LogicalWorldData.RowLength = _rowLength;
-            PipelineManager.LogicalWorldData.ColLength = _colLength;
-            PipelineManager.LogicalWorldData.States = _states;
-            PipelineManager.LogicalWorldData.StateProbabilities = _stateProbabilities;
-            PipelineManager.LogicalWorldData.WalkableState = _walkableState;
-            PipelineManager.LogicalWorldData.NonWalkableState = _nonWalkableState;
-            PipelineManager.LogicalWorldData.ShrineState = _shrineState;
+            World.LogicalData.Matrix = _matrix;
+            World.LogicalData.RowLength = _rowLength;
+            World.LogicalData.ColLength = _colLength;
+            World.LogicalData.States = _states;
+            World.LogicalData.StateProbabilities = _stateProbabilities;
+            World.LogicalData.WalkableState = _walkableState;
+            World.LogicalData.NonWalkableState = _nonWalkableState;
+            World.LogicalData.ShrineState = _shrineState;
         }
 
         private void Init()
         {
+            for (int col = 0; col < _colLength; col++)
             for (int row = 0; row < _rowLength; row++)
             {
-                for (int col = 0; col < _colLength; col++)
+                float rInt = GD.Randf();
+                float cummulative = 0f;
+                for (int currState = 0; currState < _states.Length; currState++)
                 {
-                    float rInt = GD.Randf();
-                    float cummulative = 0f;
-                    for (int currState = 0; currState < _states.Length; currState++)
+                    cummulative += _stateProbabilities[currState];
+                    if (rInt <= cummulative)
                     {
-                        cummulative += _stateProbabilities[currState];
-                        if (rInt <= cummulative)
-                        {
-                            _matrix[row, col] = _states[currState];
-                            break;
-                        }
+                        _matrix[col, row] = _states[currState];
+                        break;
                     }
                 }
             }
@@ -65,16 +63,15 @@ namespace GameJam25.scripts.world_generation.pipeline.logical_stages
         private void Smooth(int neighborDepth, bool wrapAround)
         {
             int[,] copyArray = (int[,])_matrix.Clone();
+            for (int col = 0; col < _colLength; col++)
             for (int row = 0; row < _rowLength; row++)
             {
-                for (int col = 0; col < _colLength; col++)
-                {
-                    int newState =
-                        MatrixUtils.MajorityNeighbor(_matrix, _states,
-                            row, col, neighborDepth, wrapAround);
-                    copyArray[row, col] = newState;
-                }
+                int newState =
+                    MatrixUtils.MajorityNeighbor(_matrix, _states,
+                        col, row, neighborDepth, wrapAround);
+                copyArray[col, row] = newState;
             }
+
 
             _matrix = copyArray;
         }

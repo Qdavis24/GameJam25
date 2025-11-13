@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=3 uid="uid://s3w1eg52kr8u"]
 
-[ext_resource type="Script" uid="uid://636r6ategnc6" path="res://scripts/world_generation/World.cs" id="1_gxwrl"]
+[ext_resource type="Script" uid="uid://dq73tw5i6mbrk" path="res://scripts/world_generation/World.cs" id="1_132vp"]
 [ext_resource type="Resource" uid="uid://bfks6ydjmu5gu" path="res://resources/tile_config.tres" id="2_w0i7v"]
 [ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/world_generation/shrines/racoon_shrine.tscn" id="3_klido"]
 [ext_resource type="Script" uid="uid://bvu271y34tacx" path="res://scripts/world_generation/pipeline/WorldGenerationPipelineManager.cs" id="4_pfpup"]
@@ -72,6 +72,7 @@ shader_parameter/wind_speed = 2.4910001183225
 texture = ExtResource("6_pfpup")
 separation = Vector2i(0, 129)
 texture_region_size = Vector2i(256, 420)
+use_texture_padding = false
 1:0/0 = 0
 2:0/0 = 0
 5:0/0 = 0
@@ -131,9 +132,10 @@ sources/0 = SubResource("TileSetAtlasSource_gubng")
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5510204, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[node name="World" type="Node2D"]
+[node name="World" type="Node2D" node_paths=PackedStringArray("_worldGenPipelineManger")]
 y_sort_enabled = true
-script = ExtResource("1_gxwrl")
+script = ExtResource("1_132vp")
+_worldGenPipelineManger = NodePath("GenerationPipeline")
 metadata/_edit_horizontal_guides_ = [-21.0]
 
 [node name="BaseLayer" type="TileMapLayer" parent="."]
@@ -141,7 +143,7 @@ z_index = -1
 y_sort_enabled = true
 tile_set = SubResource("TileSet_nmbn7")
 
-[node name="ObstacleLayer" type="TileMapLayer" parent="."]
+[node name="ObstacleLayer" type="TileMapLayer" parent="." groups=["Obstacle"]]
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_683jg")
 tile_set = SubResource("TileSet_vbebb")
@@ -151,8 +153,6 @@ script = ExtResource("4_pfpup")
 
 [node name="GenerateTerrainStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("6_132vp")
-_rowLength = 125
-_colLength = 125
 _stateProbabilities = PackedFloat32Array(0.5, 0.5)
 _smoothingNeighborDepth = 2
 _numSmooths = 4
@@ -166,7 +166,7 @@ script = ExtResource("8_ysaxy")
 [node name="ConnectIslandsStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("9_s0qqk")
 _pathCurve = SubResource("Curve_xnpr7")
-_pathRadius = 2
+_pathRadius = 3
 _pathCurveMagnitude = 5
 
 [node name="MarkShrinesStage" type="Node" parent="GenerationPipeline"]

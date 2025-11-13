@@ -18,11 +18,11 @@ public partial class ConnectIslandsStage : PipelineStage
 
     private List<List<Vector2I>> _paths;
 
-    public override void ProcessWorld()
+    public override void ProcessStage()
     {
         // cache needed references from Global Data
-        _islandConnections = PipelineManager.LogicalWorldData.IslandEdges;
-        _matrix = PipelineManager.LogicalWorldData.Matrix;
+        _islandConnections = World.LogicalData.IslandEdges;
+        _matrix = World.LogicalData.Matrix;
 
         // build config for stage params (allows us to compress num of parameters)
         var pathConfig = new PathConfig(_pathRadius, _pathCurveMagnitude, _pathCurve);
@@ -38,7 +38,7 @@ public partial class ConnectIslandsStage : PipelineStage
             
 
         // update global data
-        PipelineManager.LogicalWorldData.Paths = _paths;
+        World.LogicalData.Paths = _paths;
     }
 
     private Vector2I[] FindClosestBorderCells(IslandEdge edge)
@@ -49,7 +49,7 @@ public partial class ConnectIslandsStage : PipelineStage
         var island2BorderCells = edge.Island2.BorderCells;
         for (int cell1 = 0; cell1 < island1BorderCells.Count; cell1++)
         {
-            for (int cell2 = cell1 + 1; cell2 < island2BorderCells.Count; cell2++)
+            for (int cell2 = 0; cell2 < island2BorderCells.Count; cell2++)
             {
                 float currDistance = (island1BorderCells[cell1] - island2BorderCells[cell2]).LengthSquared();
                 if (currDistance < minDistance)
@@ -60,7 +60,7 @@ public partial class ConnectIslandsStage : PipelineStage
                 }
             }
         }
-        GD.Print(closestCells[0], closestCells[1]);
+        
         return closestCells;
     }
 
@@ -95,12 +95,12 @@ public partial class ConnectIslandsStage : PipelineStage
             Vector2 curvedPos = straightPos + perpendicular * bendAmount * currCurveSize;
 
             // Convert to grid coordinates
-            int row = (int)Math.Round(curvedPos.X);
-            int col = (int)Math.Round(curvedPos.Y);
+            int col = (int)Math.Round(curvedPos.X);
+            int row = (int)Math.Round(curvedPos.Y);
 
-            currPath.Add(new Vector2I(row, col));
+            currPath.Add(new Vector2I(col, row));
 
-            MatrixUtils.SetNeighbors(_matrix, row, col, pathConfig.PathRadius, state, false);
+            MatrixUtils.SetNeighbors(_matrix, col, row, pathConfig.PathRadius, state, false);
         }
 
         _paths.Add(currPath);

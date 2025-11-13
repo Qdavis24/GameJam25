@@ -33,10 +33,10 @@ namespace GameJam25.scripts.world_generation.pipeline;
  */
 public abstract partial class PipelineStage : Node
 {
-    protected WorldGenerationPipelineManager PipelineManager;
+    protected World World;
     public override void _Ready()
     {
-        PipelineManager = (WorldGenerationPipelineManager) GetParent();
+        World = (World) GetParent().GetParent();
     }
-    public abstract void ProcessWorld();
+    public abstract void ProcessStage();
 }

@@ -1,8 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dyrdk24okgbja"]
+[gd_scene load_steps=39 format=3 uid="uid://dyrdk24okgbja"]
 
-[ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/enemies/EnemySpawner.cs" id="1_7lb27"]
-[ext_resource type="PackedScene" uid="uid://cfabk12i1kbjk" path="res://scenes/enemies/Wraith/wraith.tscn" id="2_abhiv"]
+[ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/EnemySpawner.cs" id="1_7lb27"]
+[ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_dva5f"]
+[ext_resource type="PackedScene" uid="uid://dtgtqkim67d2o" path="res://scenes/enemies/owl_wraith/owl_wraith.tscn" id="2_rua06"]
 [ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/characters/fox/shadow.png" id="3_abhiv"]
+[ext_resource type="PackedScene" uid="uid://dywc23eylfitj" path="res://scenes/enemies/bunny_wraith/bunny_wraith.tscn" id="4_dva5f"]
+[ext_resource type="Texture2D" uid="uid://bdgwg0ue5g3xb" path="res://assets/crystals/crystal_dark_64x64_24f_20d_no_border.png" id="5_rua06"]
 
 [sub_resource type="Curve" id="Curve_abhiv"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5132275, 0.1048305), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.5327357, 0.5327357, 0, 0]
@@ -18,7 +21,7 @@ fill = 1
 fill_from = Vector2(0.4957265, 0.47435898)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_abhiv"]
-radius = 1961.2141
+radius = 8000.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_abhiv"]
 particle_flag_disable_z = true
@@ -34,18 +37,207 @@ scale_min = 0.34
 scale_max = 15.309999
 color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
 
-[node name="WraithSpawner" type="Node2D" node_paths=PackedStringArray("_light", "_toggleRange", "_timer")]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dva5f"]
+radius = 71.0
+height = 142.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mr0n6"]
+radius = 28.0
+height = 162.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dva5f"]
+atlas = ExtResource("5_rua06")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ylut"]
+atlas = ExtResource("5_rua06")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k8p7h"]
+atlas = ExtResource("5_rua06")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p1xw"]
+atlas = ExtResource("5_rua06")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q2kbg"]
+atlas = ExtResource("5_rua06")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gt7ss"]
+atlas = ExtResource("5_rua06")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4q0qo"]
+atlas = ExtResource("5_rua06")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4si11"]
+atlas = ExtResource("5_rua06")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8kh4u"]
+atlas = ExtResource("5_rua06")
+region = Rect2(512, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w2vr4"]
+atlas = ExtResource("5_rua06")
+region = Rect2(576, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4a5oh"]
+atlas = ExtResource("5_rua06")
+region = Rect2(640, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kxdmi"]
+atlas = ExtResource("5_rua06")
+region = Rect2(704, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1wn4c"]
+atlas = ExtResource("5_rua06")
+region = Rect2(768, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_deryg"]
+atlas = ExtResource("5_rua06")
+region = Rect2(832, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_srw7b"]
+atlas = ExtResource("5_rua06")
+region = Rect2(896, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ky1rn"]
+atlas = ExtResource("5_rua06")
+region = Rect2(960, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xufym"]
+atlas = ExtResource("5_rua06")
+region = Rect2(1024, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xj4k4"]
+atlas = ExtResource("5_rua06")
+region = Rect2(1088, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t7axc"]
+atlas = ExtResource("5_rua06")
+region = Rect2(1152, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mx8e8"]
+atlas = ExtResource("5_rua06")
+region = Rect2(1216, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2rftw"]
+atlas = ExtResource("5_rua06")
+region = Rect2(1280, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t0bs7"]
+atlas = ExtResource("5_rua06")
+region = Rect2(1344, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pscgh"]
+atlas = ExtResource("5_rua06")
+region = Rect2(1408, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pwcnl"]
+atlas = ExtResource("5_rua06")
+region = Rect2(1472, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ptlav"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dva5f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ylut")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k8p7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1p1xw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q2kbg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gt7ss")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4q0qo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4si11")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8kh4u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w2vr4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4a5oh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kxdmi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1wn4c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_deryg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_srw7b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ky1rn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xufym")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xj4k4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t7axc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mx8e8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2rftw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t0bs7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pscgh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pwcnl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="WraithSpawner" type="Node2D" node_paths=PackedStringArray("_crystalHurtbox", "_crystalSprite", "_light", "_toggleRange", "_timer")]
+y_sort_enabled = true
 script = ExtResource("1_7lb27")
+_crystalHurtbox = NodePath("SpawnerCrystal/Hurtbox")
+_crystalSprite = NodePath("SpawnerCrystal/AnimatedSprite2D")
+_flashShaderMaterial = ExtResource("2_dva5f")
 _light = NodePath("PointLight2D")
 _lightRamp = SubResource("Curve_abhiv")
 _maxEnergy = 1.0
 _toggleRange = NodePath("toggleRange")
-_enemyTypes = Array[PackedScene]([ExtResource("2_abhiv")])
-_enemyTypeSpawnChance = PackedFloat32Array(1)
+_enemyTypes = Array[PackedScene]([ExtResource("4_dva5f"), ExtResource("2_rua06")])
+_enemyTypeSpawnChance = PackedFloat32Array(0.7, 0.3)
 _timer = NodePath("Timer")
 _spawnRadius = Vector2(100, 100)
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("3_abhiv")
@@ -56,6 +248,7 @@ texture = SubResource("GradientTexture2D_twont")
 texture_scale = 20.0
 
 [node name="toggleRange" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="toggleRange"]
 shape = SubResource("CircleShape2D_abhiv")
@@ -65,3 +258,24 @@ z_index = -1
 amount = 40
 lifetime = 5.0
 process_material = SubResource("ParticleProcessMaterial_abhiv")
+
+[node name="SpawnerCrystal" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnerCrystal"]
+position = Vector2(-1, -64)
+shape = SubResource("CapsuleShape2D_dva5f")
+
+[node name="Hurtbox" type="Area2D" parent="SpawnerCrystal"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnerCrystal/Hurtbox"]
+position = Vector2(-4, -73)
+shape = SubResource("CapsuleShape2D_mr0n6")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="SpawnerCrystal"]
+position = Vector2(0.9999995, -63)
+scale = Vector2(2.390625, 2.390625)
+sprite_frames = SubResource("SpriteFrames_ptlav")
+autoplay = "default"
+frame_progress = 0.62877727

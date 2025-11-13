@@ -14,11 +14,11 @@ public partial class SpawnShrinesStage : PipelineStage
     private TileMapLayer _baseTileMapLayer;
 
 
-    public override void ProcessWorld()
+    public override void ProcessStage()
     {
         // cache needed references from Global Data
-        _shrines = PipelineManager.LogicalWorldData.Shrines;
-        _baseTileMapLayer = PipelineManager.PhysicalWorldData.BaseTileMapLayer;
+        _shrines = World.LogicalData.Shrines;
+        _baseTileMapLayer = World.PhysicalData.BaseTileMapLayer;
         
         // trigger stage logic
         SpawnShrines();

@@ -8,6 +8,6 @@
     <None Include="**/*.md"/>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="scripts\world_generation\pipeline\debug_stages\" />
+    <Folder Include="scenes\world_generation\" />
   </ItemGroup>
 </Project>
