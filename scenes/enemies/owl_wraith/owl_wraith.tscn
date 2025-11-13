@@ -1,7 +1,8 @@
-[gd_scene load_steps=35 format=3 uid="uid://dtgtqkim67d2o"]
+[gd_scene load_steps=36 format=3 uid="uid://dtgtqkim67d2o"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_pkq8v"]
 [ext_resource type="Script" uid="uid://dx3v6yxf8sc1u" path="res://scripts/enemy_state_machines/base_classes/EStateMachine.cs" id="2_eieg8"]
+[ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_rvc00"]
 [ext_resource type="Script" uid="uid://cbwikvgq15dby" path="res://scripts/enemy_state_machines/reusable_states/ChaseState.cs" id="3_eieg8"]
 [ext_resource type="Script" uid="uid://3tcjxipqa6on" path="res://scripts/enemy_state_machines/reusable_states/KnockbackState.cs" id="4_oto54"]
 [ext_resource type="Script" uid="uid://bwdq54lyr2fds" path="res://scripts/enemy_state_machines/reusable_states/DeathState.cs" id="5_rvc00"]
@@ -171,7 +172,7 @@ scale_min = 3.0
 scale_max = 10.0
 color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
 
-[node name="OwlWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Animations", "_stateMachine") groups=["Enemies", "OwlWraiths"]]
+[node name="OwlWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Animations", "_flashTimer", "_stateMachine") groups=["Enemies", "OwlWraiths"]]
 y_sort_enabled = true
 collision_layer = 5
 motion_mode = 1
@@ -180,7 +181,9 @@ _health = 20
 SteeringRange = NodePath("SteeringRange")
 AttackRange = 500
 Animations = NodePath("WraithAnimations")
+_flashTimer = NodePath("Timer")
 _stateMachine = NodePath("WraithStateMachine")
+_flashShader = ExtResource("2_rvc00")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_q5y88")
@@ -268,6 +271,10 @@ show_behind_parent = true
 position = Vector2(0, -20.189999)
 scale = Vector2(1.29, 1.67)
 texture = ExtResource("11_rvc00")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
 
 [connection signal="body_entered" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeEntered"]
 [connection signal="body_exited" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeExited"]

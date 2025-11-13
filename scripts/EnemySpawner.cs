@@ -12,6 +12,7 @@ public partial class EnemySpawner : Node2D
     [Export] private Area2D _crystalHurtbox;
     [Export] private AnimatedSprite2D _crystalSprite;
     [Export] private ShaderMaterial _flashShaderMaterial;
+    [Export] private Timer _flashTimer;
     
     [ExportCategory("Light")]
     [Export] private PointLight2D _light;
@@ -46,8 +47,7 @@ public partial class EnemySpawner : Node2D
         _light.Energy = 0;
         _crystalHurtbox.AreaEntered += OnCrystalHurtboxEntered;
         _timer.Timeout += OnTimeout;
-        _toggleRange.BodyEntered += OnToggleRangeEntered;
-        _toggleRange.BodyExited += OnToggleRangeExited;
+        _flashTimer.Timeout += () => _crystalSprite.Material = null;
     }
 
     public override void _Process(double delta)
@@ -98,7 +98,7 @@ public partial class EnemySpawner : Node2D
         {
             _crystalHealth -= ((Hitbox)area).Damage;
             _crystalSprite.Material = _flashShaderMaterial;
-            area.TreeExited += () => { _crystalSprite.Material = null; };
+            _flashTimer.Start();
             if (_crystalHealth <= 0)
             {
                 EmitSignal(SignalName.SpawnerDestroyed);
@@ -106,21 +106,5 @@ public partial class EnemySpawner : Node2D
             }
         }
        
-    }
-    
-    private void OnToggleRangeEntered(Node2D body)
-    {
-        if (body.IsInGroup("Players"))
-        {
-            _timer.Start();
-        }
-    }
-    
-    private void OnToggleRangeExited(Node2D body)
-    {
-        if (body.IsInGroup("Players"))
-        {
-            _timer.Stop();
-        }
     }
 }

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://tknrqdiu3tio"]
+
+[ext_resource type="Script" uid="uid://jfdhlx28x3b7" path="res://scripts/weapons/stone_weapon/StoneWeapon.cs" id="1_eln4r"]
+[ext_resource type="PackedScene" uid="uid://ca1wtag2x7dhv" path="res://scenes/weapons/stone/stone.tscn" id="2_vq06o"]
+
+[node name="StoneWeapon" type="Node2D" node_paths=PackedStringArray("_timer")]
+script = ExtResource("1_eln4r")
+_stonePackedScene = ExtResource("2_vq06o")
+_timer = NodePath("Timer")
+_projSpeed = 500.0
+_projCount = 5
+_offset = 100.0
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true

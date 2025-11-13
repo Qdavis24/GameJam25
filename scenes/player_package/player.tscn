@@ -1,7 +1,8 @@
-[gd_scene load_steps=29 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=30 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
+[ext_resource type="PackedScene" uid="uid://tknrqdiu3tio" path="res://scenes/weapons/stone/stone_weapon.tscn" id="3_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://7subxsr3gb3o" path="res://scenes/weapons/fireball/fireball_weapon.tscn" id="3_vwqlx"]
 [ext_resource type="Texture2D" uid="uid://bkjnwy48gqesn" path="res://assets/characters/fox/fox_idle.png" id="4_p7c74"]
 [ext_resource type="Texture2D" uid="uid://b3f4pn3t8do7u" path="res://assets/characters/fox/fox_walk.png" id="5_gsthy"]
@@ -158,6 +159,8 @@ script = ExtResource("1_rdh6l")
 SlashAttack = ExtResource("2_fiwjr")
 LungeSpeed = 300.0
 LungeDuration = 0.3
+
+[node name="StoneWeapon" parent="." instance=ExtResource("3_rdh6l")]
 
 [node name="FireballWeapon" parent="." instance=ExtResource("3_vwqlx")]
 
