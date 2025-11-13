@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://w11lstxqrmpj"]
+
+[ext_resource type="PackedScene" uid="uid://ci3unkj74fw6k" path="res://scenes/ui/UpgradeScreen.tscn" id="1_d2gw2"]
+
+[node name="Ui" type="CanvasLayer"]
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_right = 4.0
+offset_bottom = 27.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="UpgradeScreen" parent="." instance=ExtResource("1_d2gw2")]
