@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=3 uid="uid://de5afvrruo3gg"]
+
+[ext_resource type="Script" uid="uid://blfn00ei20afo" path="res://scripts/ui/UpgradeButton.cs" id="1_mvdy7"]
+[ext_resource type="FontFile" uid="uid://blrxolrpmx4l2" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_mj8cb"]
+[ext_resource type="FontFile" uid="uid://cm33if0b0s0da" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="3_m074v"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mj8cb"]
+font = ExtResource("3_m074v")
+font_size = 34
+font_color = Color(0.6729947, 0.0024128908, 0.89600706, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_kmtkv"]
+font = ExtResource("2_mj8cb")
+font_size = 64
+
+[sub_resource type="LabelSettings" id="LabelSettings_66hf5"]
+font = ExtResource("3_m074v")
+font_size = 36
+
+[node name="UpgradeButton" type="Button"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mvdy7")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+expand_mode = 2
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.31
+alignment = 1
+
+[node name="Status" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Upgrade"
+label_settings = SubResource("LabelSettings_mj8cb")
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_kmtkv")
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_66hf5")
+horizontal_alignment = 1
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
