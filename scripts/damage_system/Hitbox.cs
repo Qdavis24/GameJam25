@@ -6,6 +6,6 @@ using Godot;
 
 public partial class Hitbox : Area2D
 {
-	[Export] public int Damage = 10;
-	[Export] public int KnockbackWeight = 800;
+    [Export] public int Damage = 10;
+    [Export] public int KnockbackWeight = 800;
 }

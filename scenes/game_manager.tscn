@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cdgwq2xridso1"]
+[gd_scene load_steps=6 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
 [ext_resource type="PackedScene" uid="uid://s3w1eg52kr8u" path="res://scenes/world_generation/world.tscn" id="2_oo155"]
 [ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player.tscn" id="3_udu3i"]
 [ext_resource type="PackedScene" uid="uid://qevbfpqv6q20" path="res://scenes/world_generation/player_spawn.tscn" id="4_oo155"]
 [ext_resource type="Script" uid="uid://c4jyj40wk318s" path="res://scripts/player_package/PlayerCamera.cs" id="5_eaq8r"]
-[ext_resource type="PackedScene" uid="uid://1ray5bkp2bm1" path="res://scenes/ui/ui.tscn" id="6_ternb"]
 
 [node name="GameManager" type="Node2D" node_paths=PackedStringArray("_cam")]
 y_sort_enabled = true
@@ -18,5 +17,3 @@ _cam = NodePath("Camera2D")
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("5_eaq8r")
 _speed = 0.1
-
-[node name="Ui" parent="." instance=ExtResource("6_ternb")]
