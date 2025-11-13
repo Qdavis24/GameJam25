@@ -55,6 +55,17 @@ public partial class Ui : CanvasLayer
 		_xpBar.MaxValue = xpForLevel;
 		_xpBar.Value = xp;
 	}
+	
+		
+	public void Upgrade(WeaponUpgrade weaponUpgrade) {
+		switch (weaponUpgrade.Weapon)
+		{
+		case Weapon.Fireball:
+			// TODO: Quinn uncomment
+			// fireball.Upgrade(weaponUpgrade);
+			break;
+		}
+	}
 
 	public override void _Process(double delta)
 	{

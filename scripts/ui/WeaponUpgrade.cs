@@ -13,7 +13,7 @@ public enum Stat
 	DamagePct,
 }
 
-public sealed class WeaponUpgrade
+public partial class WeaponUpgrade : Resource
 {
 	// -------- instance data (per rolled upgrade) --------
 	public Weapon Weapon { get; private set; }

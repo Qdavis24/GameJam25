@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 public partial class UpgradeButton : Button
 {
+	[Signal] public delegate void UpgradeClickedEventHandler(WeaponUpgrade weaponUpgrade);
+	
+	private WeaponUpgrade _weaponUpgrade;
+	
 	private TextureRect _icon;
 	private Label _title;
 	private Label _descr;
@@ -35,6 +39,12 @@ public partial class UpgradeButton : Button
 		
 	}
 	
+	// Automatically called when the button is pressed
+	private void _on_pressed()
+	{
+		EmitSignal(SignalName.UpgradeClicked, _weaponUpgrade);
+	}
+	
 	public async Task SpinAsync()
 	{
 		// optional: disable input during spin
@@ -52,6 +62,7 @@ public partial class UpgradeButton : Button
 			float t = (float)i / (steps - 1);
 			float delay = Mathf.Lerp(startDelay, endDelay, EaseOutCubic(t));
 
+			// CREATE WeaponUpgrade 
 			var flashUpgrade = WeaponUpgrade.Roll();
 			var tex   = Icons[flashUpgrade.Weapon];
 			var title = Names[flashUpgrade.Weapon];
@@ -62,11 +73,12 @@ public partial class UpgradeButton : Button
 			await ToSignal(GetTree().CreateTimer(delay), SceneTreeTimer.SignalName.Timeout);
 		}
 
-		var upgrade = WeaponUpgrade.Roll();
-		var finalTex   = Icons[upgrade.Weapon];
-		var finalTitle = Names[upgrade.Weapon];
-		var finalDesc  = upgrade.Description;
-		await FlashSwapAsync(finalTex, finalTitle, finalDesc, 0.12f, upgrade.Rarity);
+		// CREATE WeaponUpgrade 
+		_weaponUpgrade = WeaponUpgrade.Roll();
+		var finalTex   = Icons[_weaponUpgrade.Weapon];
+		var finalTitle = Names[_weaponUpgrade.Weapon];
+		var finalDesc  = _weaponUpgrade.Description;
+		await FlashSwapAsync(finalTex, finalTitle, finalDesc, 0.12f, _weaponUpgrade.Rarity);
 
 		MouseFilter = MouseFilterEnum.Pass;
 	}
@@ -111,7 +123,7 @@ public partial class UpgradeButton : Button
 		AddThemeStyleboxOverride("pressed", style);
 		AddThemeStyleboxOverride("disabled", style);
 		AddThemeStyleboxOverride("focus", hover);
-		// ---
+		// --- end of borders
 
 		// fade back in
 		var tweenIn = CreateTween().SetParallel();
