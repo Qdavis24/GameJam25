@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://ci3unkj74fw6k"]
+[gd_scene load_steps=4 format=3 uid="uid://ci3unkj74fw6k"]
 
+[ext_resource type="Script" uid="uid://b76aw4tgbd8fo" path="res://scripts/ui/UpgradeScreen.cs" id="1_3ha7n"]
 [ext_resource type="Texture2D" uid="uid://dxhu6kj1hf1kc" path="res://assets/ui/upgrade_screen/select_ui_frame.png" id="1_8hl3b"]
 [ext_resource type="PackedScene" uid="uid://de5afvrruo3gg" path="res://scenes/ui/UpgradeButton.tscn" id="2_cpd7a"]
 
@@ -11,6 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_3ha7n")
 
 [node name="Spacer" type="Control" parent="."]
 layout_mode = 2
