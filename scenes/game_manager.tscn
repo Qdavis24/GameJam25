@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=8 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
 [ext_resource type="PackedScene" uid="uid://s3w1eg52kr8u" path="res://scenes/world_generation/world.tscn" id="2_oo155"]
@@ -6,22 +6,16 @@
 [ext_resource type="PackedScene" uid="uid://qevbfpqv6q20" path="res://scenes/world_generation/player_spawn.tscn" id="4_oo155"]
 [ext_resource type="Script" uid="uid://c4jyj40wk318s" path="res://scripts/Camera.cs" id="5_eaq8r"]
 [ext_resource type="PackedScene" uid="uid://dyrdk24okgbja" path="res://scenes/enemies/wraith_spawner.tscn" id="5_jdad8"]
-[ext_resource type="PackedScene" uid="uid://b62p5uepb8f" path="res://scenes/debug/arrow.tscn" id="5_ternb"]
-[ext_resource type="PackedScene" uid="uid://rdssd7jn21gc" path="res://scenes/debug/label.tscn" id="6_q8mjp"]
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
 
-[node name="GameManager" type="Node2D" node_paths=PackedStringArray("_ui", "_cam")]
+[node name="GameManager" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_udu3i")
 _enemySpawnerNumEnemiesPerWave = 10.0
-_ui = NodePath("Ui")
 _worldPckdScene = ExtResource("2_oo155")
 _playerPckdScene = ExtResource("3_udu3i")
 _playerSpawnPckdScene = ExtResource("4_oo155")
-_enemySpawner = ExtResource("5_jdad8")
-_cam = NodePath("Camera2D")
-_arrow = ExtResource("5_ternb")
-_label = ExtResource("6_q8mjp")
+_enemySpawnerPckdScene = ExtResource("5_jdad8")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.8, 0.8)

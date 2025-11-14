@@ -17,32 +17,40 @@ public partial class GameManager : Node
 	[Export] private float _enemySpawnerWaveIntervalScalr = .9f;
 	[Export] private float _enemySpawnerNumWavesScalr = 1.1f;
 
-	[ExportCategory("Required Resources")] 
-	[Export] private Ui _ui;
+	[ExportCategory("External Required Resources")] 
+	[Export] private PackedScene _upgradePckdScene;
 	[Export] private PackedScene _worldPckdScene;
 	[Export] private PackedScene _playerPckdScene;
 	[Export] private PackedScene _playerSpawnPckdScene;
-	[Export] private PackedScene _enemySpawner;
-	[Export] private Camera _cam;
-	[Export] private PackedScene _arrow;
-	[Export] private PackedScene _label;
+	[Export] private PackedScene _enemySpawnerPckdScene;
+	[Export] private PackedScene _arrowPckdScene;
+	[Export] private PackedScene _labelPckdScene;
+	
+	// Internal Required Resources
+	private Ui _ui;
+	private Camera _cam;
 
-	public static GameManager Instance;
 
+	// State Instances
 	public World CurrWorld;
 	public FlowField CurrFlowField;
 	public Player Player;
-
 	private Vector2I _lastPlayerCoord;
 	private int _numSpawners;
-
 	private List<Node2D> _arrows = new();
 	
 
+	public static GameManager Instance;
+	
 	public override void _Ready()
 	{
+		_ui = GetNode<Ui>("Ui");
+		_cam = GetNode<Camera>("Camera2D");
+		
 		Instance = this;
+		
 		Player = _playerPckdScene.Instantiate<Player>();
+		Player.LevelChanged += OnLevelUp;
 		_ui.InitializeUiFromPlayer(Player);
 		AddChild(Player);
 		InitLevel();
@@ -52,7 +60,7 @@ public partial class GameManager : Node
 	public override void _PhysicsProcess(double delta)
 	{
 		UpdateFlowField(false);
-		
+		if (Input.IsActionJustPressed("DEBUG-trigger-upgrade")) OnLevelUp(2);
 	}
 	
 	private void UpdateFlowField(bool debug)
@@ -106,7 +114,7 @@ public partial class GameManager : Node
 		foreach (Shrine shrine in CurrWorld.LogicalData.Shrines)
 		{
 			_numSpawners++;
-			var newSpawner = _enemySpawner.Instantiate<EnemySpawner>();
+			var newSpawner = _enemySpawnerPckdScene.Instantiate<EnemySpawner>();
 			newSpawner.Init(_enemySpawnerHealth, _enemySpawnerWaveInterval, _enemySpawnerNumEnemiesPerWave,
 				_enemySpawnerNumWaves);
 			newSpawner.GlobalPosition = CurrWorld.PhysicalData.BaseTileMapLayer.MapToLocal(shrine.CenterTile);
@@ -136,6 +144,10 @@ public partial class GameManager : Node
 	}
 	
 	// Signal Callbacks below
+	private void OnLevelUp(int level)
+	{
+		_ui.TriggerRoll();
+	}
 	private void OnSpawnerDestroyed()
 	{
 		_numSpawners--;
@@ -147,7 +159,7 @@ public partial class GameManager : Node
 	// DEBUG STUFF BELOW
 	private void CreateArrow(int col, int row, Vector2 direction)
 	{
-		var arrow = _arrow.Instantiate<Polygon2D>();
+		var arrow = _arrowPckdScene.Instantiate<Polygon2D>();
 		var tilePos =
 			CurrWorld.PhysicalData.BaseTileMapLayer.ToGlobal(
 				CurrWorld.PhysicalData.BaseTileMapLayer.MapToLocal(new Vector2I(col, row)));
@@ -162,7 +174,7 @@ public partial class GameManager : Node
 
 	private void CreateLabel(int col, int row, string cost)
 	{
-		var l = _label.Instantiate<Label>();
+		var l = _labelPckdScene.Instantiate<Label>();
 		l.Text = cost;
 		l.Position = CurrWorld.PhysicalData.BaseTileMapLayer.MapToLocal(new Vector2I(col, row));
 		AddChild(l);

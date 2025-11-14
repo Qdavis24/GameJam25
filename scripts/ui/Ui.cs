@@ -21,8 +21,6 @@ public partial class Ui : CanvasLayer
     {
         Player = player;
 
-        Player.FireballW.Unlock();
-
         // subscribe 
         Player.StatsInitialized += (health, maxHealth, xp, maxXp, level) =>
         {
@@ -62,15 +60,9 @@ public partial class Ui : CanvasLayer
     }
 
 
-    public void Upgrade(WeaponUpgrade weaponUpgrade)
+    public void TriggerRoll()
     {
-        switch (weaponUpgrade.Weapon)
-        {
-            case Weapon.Fireball:
-
-                Player.FireballW.Upgrade(weaponUpgrade);
-                break;
-        }
+        _upgradeScreen.Show();
     }
 
     public override void _Process(double delta)

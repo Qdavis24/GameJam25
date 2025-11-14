@@ -19,9 +19,26 @@ public partial class FireballWeapon : WeaponBase
     private List<double> _currTimes;
 
     private float _distancePerFrame;
-    
-    
 
+
+    protected override void InitWeapon()
+    {
+        if (_burstsQueue != null)
+        {
+            var i = 0;
+            while (_burstsQueue.Count > 0)
+            {
+                CleanupBalls(i);
+                i++;
+            }
+        }
+        
+        _burstsQueue = new List<Node2D[]>();
+        _burstsDistances = new List<float>();
+        _currTimes = new List<double>();
+        _directions = new Vector2[(int)_projCount];
+        CalculateDirections();
+    }
     private void CalculateDirections()
     {
         float radIncr = (2 * Mathf.Pi) / _projCount;
@@ -46,11 +63,7 @@ public partial class FireballWeapon : WeaponBase
 
     public override void _Ready()
     {
-        _burstsQueue = new List<Node2D[]>();
-        _burstsDistances = new List<float>();
-        _currTimes = new List<double>();
-        _directions = new Vector2[(int)_projCount];
-        CalculateDirections();
+        InitWeapon();
 
         _distancePerFrame = _directions[0].Length();
         _timer.Timeout += OnTimeout;
@@ -100,6 +113,7 @@ public partial class FireballWeapon : WeaponBase
         for (int i = 0; i < (int)_projCount; i++)
         {
             var currFireball = _fireballPackedScene.Instantiate<Fireball>();
+            currFireball.Scale *= _projSize;
             currFireball.Damage = _projDamage;
             currFireball.Rotation = _directions[i].Angle();
             GetTree().Root.AddChild(currFireball);

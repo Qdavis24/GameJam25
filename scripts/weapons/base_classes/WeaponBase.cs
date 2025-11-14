@@ -2,7 +2,7 @@
 
 namespace GameJam25.scripts.weapons.base_classes;
 
-public partial class WeaponBase : Node2D
+public abstract partial class WeaponBase : Node2D
 {
     [Export] protected Timer _timer;
     [Export] protected float _projDamage = 10.0f;
@@ -15,6 +15,8 @@ public partial class WeaponBase : Node2D
         _timer.Start();
     }
 
+    
+
     public void Upgrade(WeaponUpgrade upgrade)
     {
         switch (upgrade.Stat)
@@ -26,7 +28,10 @@ public partial class WeaponBase : Node2D
                 _projDamage *= 1.0f + upgrade.Value/100.0f;
                 break;
             case Stat.ProjectileCount:
-                _projCount *= 1 + upgrade.Value/100.0f;
+                _timer.Stop();
+                _projCount += upgrade.Value;
+                InitWeapon();
+                _timer.Start();
                 break;
             case Stat.ProjectileSpeedPct:
                 _projSpeed *= 1.0f + upgrade.Value/100.0f;
@@ -37,5 +42,7 @@ public partial class WeaponBase : Node2D
             
         }
     }
-  
+
+    protected abstract void InitWeapon();
+
 }

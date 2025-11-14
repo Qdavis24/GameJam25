@@ -13,17 +13,22 @@ public partial class StoneWeapon : WeaponBase
     private Queue<int> _destroyedStones;
     private float _angleBetweenStones;
 
-    
 
-    private void InitWeapon()
+    protected override void InitWeapon()
     {
+        if (_stones != null)
+            foreach (Stone stone in _stones)
+            {
+                stone.Free();
+            }
+                
         _stones = new Stone[(int)_projCount];
         _stoneAngles = new float[(int)_projCount];
         _destroyedStones = new Queue<int>();
-        
+
         for (int i = 0; i < (int)_projCount; i++) _destroyedStones.Enqueue(i);
         _angleBetweenStones = (2 * Mathf.Pi) / (int)_projCount;
-        
+
         GetStartingAngles();
     }
 
@@ -46,12 +51,12 @@ public partial class StoneWeapon : WeaponBase
     public override void _PhysicsProcess(double delta)
     {
         var currRadIncrease = (_projSpeed / _offset) * delta;
-        
+
         for (int i = 0; i < (int)_projCount; i++)
         {
             _stoneAngles[i] += (float)currRadIncrease;
 
-            if (IsInstanceValid(_stones[i]))
+            if (_stones[i] != null)
             {
                 var newPos = Vector2.FromAngle(_stoneAngles[i]) * _offset;
                 _stones[i].Rotation = newPos.Angle();
@@ -71,6 +76,7 @@ public partial class StoneWeapon : WeaponBase
         var currIndex = _destroyedStones.Dequeue();
 
         var newStone = _stonePackedScene.Instantiate<Stone>();
+        newStone.Scale *= _projSize;
         newStone.Damage = _projDamage;
         newStone.Position += Vector2.FromAngle(_stoneAngles[currIndex]) * _offset;
 
@@ -85,5 +91,9 @@ public partial class StoneWeapon : WeaponBase
 
         AddChild(newStone);
     }
-    
+
+    private void OnStoneDestroyed()
+    {
+        
+    }
 }
