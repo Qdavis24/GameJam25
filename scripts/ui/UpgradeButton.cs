@@ -17,14 +17,14 @@ public partial class UpgradeButton : Button
 	public static readonly Dictionary<Weapon, Texture2D> Icons = new()
 	{
 		{ Weapon.Fireball, GD.Load<Texture2D>("res://assets/ui/upgrade_screen/icons/fireball.png") },
-		{ Weapon.Water,    GD.Load<Texture2D>("res://assets/ui/upgrade_screen/icons/stick.png") },
-		{ Weapon.Cloud,     GD.Load<Texture2D>("res://assets/ui/upgrade_screen/icons/bird.png") },
+		{ Weapon.Water,    GD.Load<Texture2D>("res://assets/ui/upgrade_screen/icons/water.png") },
+		{ Weapon.Cloud,     GD.Load<Texture2D>("res://assets/ui/upgrade_screen/icons/cloud.png") },
 		{ Weapon.Stone,    GD.Load<Texture2D>("res://assets/ui/upgrade_screen/icons/stone.png") },
 	};
 
 	public static readonly Dictionary<Weapon, string> Names = new()
 	{
-		{ Weapon.Fireball, "Flaming fireball" },
+		{ Weapon.Fireball, "Feasting fireball" },
 		{ Weapon.Water,    "Darting droplet" },
 		{ Weapon.Cloud,    "Creeping cloud" },
 		{ Weapon.Stone,    "Shielding stone" },
@@ -90,7 +90,7 @@ public partial class UpgradeButton : Button
 		{
 			return new UpgradeDisplayData(
 				Icons[upg.Weapon],
-				"Upgrade",
+				"upgrade",
 				Names[upg.Weapon],
 				upg.Description,
 				upg.Rarity
@@ -98,7 +98,7 @@ public partial class UpgradeButton : Button
 		}
 		return new UpgradeDisplayData(
 			Icons[upg.Weapon],
-			"Unlock",
+			"unlock",
 			Names[upg.Weapon],
 			" ",
 			upg.Rarity
@@ -132,6 +132,8 @@ public partial class UpgradeButton : Button
 	
 	private void Display(UpgradeDisplayData data)
 	{
+		_descr.Visible = true;
+		
 		Texture2D tex = data.Icon;
 		string status = data.Status;
 		string title = data.Title;
@@ -140,16 +142,27 @@ public partial class UpgradeButton : Button
 		
 		// swap contents
 		if (tex != null) _icon.Texture = tex;
+		if (!string.IsNullOrEmpty(status)) _status.Text = status;
 		if (!string.IsNullOrEmpty(title)) _title.Text = title;
 		if (!string.IsNullOrEmpty(desc))  _descr.Text  = desc;
+		
+			//Rarity.Grey   => new Color("#a0a0a0"),
+			//Rarity.Blue   => new Color("#3b82f6"),
+			//Rarity.Purple => new Color("#a855f7"),
+			//Rarity.Yellow => new Color("#facc15"),
 		Color rarityColor = rarity switch
 		{
-			Rarity.Grey   => new Color("#a0a0a0"),
-			Rarity.Blue   => new Color("#3b82f6"),
-			Rarity.Purple => new Color("#a855f7"),
-			Rarity.Yellow => new Color("#facc15"),
+			Rarity.Grey   => new Color("969696ff"),
+			Rarity.Blue   => new Color("0e4ca7ff"),
+			Rarity.Purple => new Color("74008fff"),
+			Rarity.Yellow => new Color("edba00ff"),
 			_             => new Color("white")
 		};
+		
+		if (status == "unlock") {
+			rarityColor = new Color("2e5c00ff");
+			_descr.Visible = false;
+		}
 				
 		// RARITY BORDER ---
 		var style = new StyleBoxFlat

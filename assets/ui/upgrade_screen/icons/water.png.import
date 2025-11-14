@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bocevgloql0pw"
-path="res://.godot/imported/thorn.png-f1ad2982be4718d7f35d3cca0311b718.ctex"
+uid="uid://dux5q5pgboe5g"
+path="res://.godot/imported/water.png-b86f77a4b1ae855566bdf02f0b4dc9cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/upgrade_screen/icons/thorn.png"
-dest_files=["res://.godot/imported/thorn.png-f1ad2982be4718d7f35d3cca0311b718.ctex"]
+source_file="res://assets/ui/upgrade_screen/icons/water.png"
+dest_files=["res://.godot/imported/water.png-b86f77a4b1ae855566bdf02f0b4dc9cf.ctex"]
 
 [params]
 
