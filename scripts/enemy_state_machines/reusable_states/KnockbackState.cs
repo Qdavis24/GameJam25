@@ -9,7 +9,7 @@ public partial class KnockbackState : EState
     [ExportCategory("Knockback")] [Export] public Curve KnockbackCurve;
 
     [Export] private double _knockBackDuration;
-    private int _knockbackWeight;
+    private float _knockbackWeight;
 
     [ExportCategory("special effects")] [Export]
     private GpuParticles2D _hitEffect;

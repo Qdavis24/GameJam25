@@ -53,11 +53,10 @@ trail_lifetime = 0.2
 trail_sections = 3
 process_material = SubResource("ParticleProcessMaterial_wgsim")
 
-[node name="HitBox" type="Area2D" parent="." groups=["EnemyHitBox"]]
+[node name="HitBox" type="Area2D" parent="." groups=["EnemyHitbox"]]
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("2_jjf1j")
-Damage = 30
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 shape = SubResource("CircleShape2D_jjf1j")

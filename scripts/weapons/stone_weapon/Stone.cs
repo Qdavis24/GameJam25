@@ -1,14 +1,26 @@
 using Godot;
 using System;
+using GameJam25.scripts.damage_system;
 
 public partial class Stone : Node2D
 {
     [Signal]
     public delegate void StoneDestroyedEventHandler();
     [Export] private PackedScene _explosionParticles;
-    [Export] private Area2D _hitbox;
-    private Vector2 _velocity;
-    private int _speed;
+    [Export] private Hitbox _hitbox;
+   
+    
+    public float Damage
+    {
+        get
+        {
+            return _hitbox.Damage;
+        }
+        set
+        {
+            _hitbox.Damage = value;
+        }
+    }
     
     public override void _Ready()
     {

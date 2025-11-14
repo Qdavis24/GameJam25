@@ -2,76 +2,75 @@ using Godot;
 using System;
 
 public partial class Ui : CanvasLayer
-{	
-	private Player _player;
-	private ProgressBar _xpBar;
-	private ProgressBar _healthBar;
-	private UpgradeScreen _upgradeScreen;
+{
+    [ExportCategory("Required Resources")]
+    [Export] ProgressBar _xpBar;
+    [Export] ProgressBar _healthBar;
+    [Export]UpgradeScreen _upgradeScreen;
+    
+    private Player _player;
+    
+    public void InitializeUiFromPlayer(Player player)
+    {
+        _player = player;
 
-	public override void _Ready()
-	{
-		_xpBar = GetNode<ProgressBar>("XpBar");
-		_healthBar = GetNode<ProgressBar>("HealthBar");
-		_upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
-	}
-	
-	public void InitializeUiFromPlayer(Player player)
-	{
-		_player = player;
-		var fireball = _player.GetNode<FireballWeapon>("FireballWeapon");
-		
-		fireball.Enable();
-		
-		// set initial progress bar values
-		_healthBar.MaxValue = _player.MaxHealth;
-		_healthBar.Value = _player.Health;
-		_xpBar.MaxValue = _player.GetXpForLevel(_player.Level);
-		_xpBar.Value = _player.Xp;
+        _player.FireballW.Unlock();
+        
+        // subscribe 
+        _player.StatsInitialized += (health, maxHealth, xp, maxXp, level) =>
+        {
+            // set initial progress bar values
+            _healthBar.MaxValue = health;
+            _healthBar.Value = maxHealth;
+            _xpBar.MaxValue = maxXp;
+            _xpBar.Value = xp;
+        };
+        _player.HealthChanged += health => UpdateHealth(health);
+        _player.MaxHealthChanged += maxHealth => UpdateMaxHealth(maxHealth);
+        _player.XpChanged += xp => UpdateXp(xp);
+    }
 
-		// subscribe 
-		_player.HealthChanged += health => UpdateHealth(health);
-		_player.MaxHealthChanged += maxHealth => UpdateMaxHealth(maxHealth);
-		_player.XpChanged += xp => UpdateXp(xp);
-	}
-	
-	private void UpdateHealth(int health) 
-	{
-		// check if died and do death screen logic here
-		_healthBar.Value = health;
-	}
-	
-	private void UpdateMaxHealth (int maxHealth)
-	{
-		_healthBar.MaxValue = maxHealth;
-	}
-	
-	private void UpdateXp(int xp) {
-		int xpForLevel = _player.GetXpForLevel(_player.Level);
-		
-		if (xp >= xpForLevel) {
-			_upgradeScreen.Show();
-		}
-		
-		_xpBar.MaxValue = xpForLevel;
-		_xpBar.Value = xp;
-	}
-	
-		
-	public void Upgrade(WeaponUpgrade weaponUpgrade) {
-		switch (weaponUpgrade.Weapon)
-		{
-		case Weapon.Fireball:
-			// TODO: Quinn uncomment
-			// fireball.Upgrade(weaponUpgrade);
-			break;
-		}
-	}
+    private void UpdateHealth(float health)
+    {
+        // check if died and do death screen logic here
+        _healthBar.Value = health;
+    }
 
-	public override void _Process(double delta)
-	{
-		if (Input.IsActionJustPressed("DEBUG-trigger-upgrade"))
-		{
-			_upgradeScreen.Show();
-		}
-	}
+    private void UpdateMaxHealth(float maxHealth)
+    {
+        _healthBar.MaxValue = maxHealth;
+    }
+
+    private void UpdateXp(int xp)
+    {
+        int xpForLevel = xp;
+
+        if (xp >= xpForLevel)
+        {
+            _upgradeScreen.Show();
+        }
+
+        _xpBar.MaxValue = xpForLevel;
+        _xpBar.Value = xp;
+    }
+
+
+    public void Upgrade(WeaponUpgrade weaponUpgrade)
+    {
+        switch (weaponUpgrade.Weapon)
+        {
+            case Weapon.Fireball:
+
+                _player.FireballW.Upgrade(weaponUpgrade);
+                break;
+        }
+    }
+
+    public override void _Process(double delta)
+    {
+        if (Input.IsActionJustPressed("DEBUG-trigger-upgrade"))
+        {
+            _upgradeScreen.Show();
+        }
+    }
 }

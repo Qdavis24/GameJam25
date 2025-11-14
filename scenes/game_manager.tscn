@@ -10,10 +10,11 @@
 [ext_resource type="PackedScene" uid="uid://rdssd7jn21gc" path="res://scenes/debug/label.tscn" id="6_q8mjp"]
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
 
-[node name="GameManager" type="Node2D" node_paths=PackedStringArray("_cam")]
+[node name="GameManager" type="Node2D" node_paths=PackedStringArray("_ui", "_cam")]
 y_sort_enabled = true
 script = ExtResource("1_udu3i")
 _enemySpawnerNumEnemiesPerWave = 10.0
+_ui = NodePath("Ui")
 _worldPckdScene = ExtResource("2_oo155")
 _playerPckdScene = ExtResource("3_udu3i")
 _playerSpawnPckdScene = ExtResource("4_oo155")

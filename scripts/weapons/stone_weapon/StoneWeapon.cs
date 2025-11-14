@@ -1,13 +1,11 @@
 using System.Collections.Generic;
+using GameJam25.scripts.weapons.base_classes;
 using Godot;
 
 
-public partial class StoneWeapon : Node2D
+public partial class StoneWeapon : WeaponBase
 {
     [Export] private PackedScene _stonePackedScene;
-    [Export] private Timer _timer;
-    [Export] private float _projSpeed; // pxls traveled along circumfrence of cirlce (arc length)
-    [Export] private int _projCount;
     [Export] private float _offset = 50.0f;
 
     private Stone[] _stones;
@@ -15,15 +13,16 @@ public partial class StoneWeapon : Node2D
     private Queue<int> _destroyedStones;
     private float _angleBetweenStones;
 
+    
 
     private void InitWeapon()
     {
-        _stones = new Stone[_projCount];
-        _stoneAngles = new float[_projCount];
+        _stones = new Stone[(int)_projCount];
+        _stoneAngles = new float[(int)_projCount];
         _destroyedStones = new Queue<int>();
         
-        for (int i = 0; i < _projCount; i++) _destroyedStones.Enqueue(i);
-        _angleBetweenStones = (2 * Mathf.Pi) / _projCount;
+        for (int i = 0; i < (int)_projCount; i++) _destroyedStones.Enqueue(i);
+        _angleBetweenStones = (2 * Mathf.Pi) / (int)_projCount;
         
         GetStartingAngles();
     }
@@ -31,7 +30,7 @@ public partial class StoneWeapon : Node2D
     private void GetStartingAngles()
     {
         var currRad = 0.0f;
-        for (int i = 0; i < _projCount; i++)
+        for (int i = 0; i < (int)_projCount; i++)
         {
             _stoneAngles[i] = currRad;
             currRad += _angleBetweenStones;
@@ -48,7 +47,7 @@ public partial class StoneWeapon : Node2D
     {
         var currRadIncrease = (_projSpeed / _offset) * delta;
         
-        for (int i = 0; i < _projCount; i++)
+        for (int i = 0; i < (int)_projCount; i++)
         {
             _stoneAngles[i] += (float)currRadIncrease;
 
@@ -72,6 +71,7 @@ public partial class StoneWeapon : Node2D
         var currIndex = _destroyedStones.Dequeue();
 
         var newStone = _stonePackedScene.Instantiate<Stone>();
+        newStone.Damage = _projDamage;
         newStone.Position += Vector2.FromAngle(_stoneAngles[currIndex]) * _offset;
 
         _stones[currIndex] = newStone;

@@ -153,14 +153,18 @@ height = 38.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_s5buh"]
 radius = 22.0
 
-[node name="Player" type="CharacterBody2D" groups=["Players"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("FireballW", "StoneW") groups=["Players"]]
 y_sort_enabled = true
 script = ExtResource("1_rdh6l")
+MaxHealth = 100
 SlashAttack = ExtResource("2_fiwjr")
 LungeSpeed = 300.0
 LungeDuration = 0.3
+FireballW = NodePath("FireballWeapon")
+StoneW = NodePath("StoneWeapon")
 
 [node name="StoneWeapon" parent="." instance=ExtResource("3_rdh6l")]
+_projCount = 5.0
 
 [node name="FireballWeapon" parent="." instance=ExtResource("3_vwqlx")]
 

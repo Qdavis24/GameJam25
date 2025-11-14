@@ -4,215 +4,179 @@ using GameJam25.scripts.damage_system;
 
 public partial class Player : CharacterBody2D
 {
-	[Signal] public delegate void HealthChangedEventHandler(int newHealth);
-	[Signal] public delegate void MaxHealthChangedEventHandler(int newMaxHealth);
-	[Signal] public delegate void XpChangedEventHandler(int newXp);
-	[Signal] public delegate void LevelChangedEventHandler(int newLevel);
+    [Signal]
+    public delegate void StatsInitializedEventHandler(float health, float maxHealth, int xp, int maxXp, float level);
 
-	// Values used by UI for display or game logic
-	// Setters implemented below to emit changes to UI.
-	private int _health = 3;
-	private int _maxHealth = 3;
-	private int _xp = 0;
-	private int _level = 1;
+    [Signal]
+    public delegate void HealthChangedEventHandler(float newHealth);
 
-	// Current Health
-	[Export]
-	public int Health
-	{
-		get => _health;
-		set
-		{
-			if (_health == value) return;
-			_health = Mathf.Clamp(value, 0, MaxHealth);
-			EmitSignal(SignalName.HealthChanged, _health);
-		}
-	}
+    [Signal]
+    public delegate void MaxHealthChangedEventHandler(float newMaxHealth);
 
-	// Max Health
-	[Export]
-	public int MaxHealth
-	{
-		get => _maxHealth;
-		set
-		{
-			if (_maxHealth == value) return;
-			_maxHealth = Mathf.Max(1, value);
-			EmitSignal(SignalName.MaxHealthChanged, _maxHealth);
-		}
-	}
+    [Signal]
+    public delegate void XpChangedEventHandler(int newXp);
 
-	// Experience
-	[Export]
-	public int Xp
-	{
-		get => _xp;
-		set
-		{
-			if (_xp == value) return;
-			_xp = Mathf.Max(0, value);
-			EmitSignal(SignalName.XpChanged, _xp);
-		}
-	}
+    [Signal]
+    public delegate void LevelChangedEventHandler(int newLevel);
 
-	// Level
-	[Export]
-	public int Level
-	{
-		get => _level;
-		set
-		{
-			if (_level == value) return;
-			_level = Mathf.Max(1, value);
-			EmitSignal(SignalName.LevelChanged, _level);
-		}
-	}
-	
-	[Export] public float Speed = 400f;
-	[Export] public string AnimationSet = "fox";
-		
-	[Export] public PackedScene SlashAttack;
-	[Export] private float LungeSpeed = 700f;
-	[Export] private float LungeDuration = 0.35f;
+    [ExportCategory("Stats")] 
+    [Export] private int _maxXp = 100;
+    [Export] private float _maxHealth = 100.0f;
+    [Export] public float Speed = 400f;
+    [Export] private float LungeSpeed = 700f;
+    [Export] private float LungeDuration = 0.35f;
 
-	private float currHealth;
+    [ExportCategory("Required Resources")] 
+    [Export] public string AnimationSet = "fox";
+    [Export] public PackedScene SlashAttack;
+    [Export] private AnimatedSprite2D _anim;
+    [Export] private AudioStreamPlayer _audio;
 
-	private bool lunging = false;
-	private float lungeTime = 0f;
-	private Vector2 lungeDir = Vector2.Right;
-	
-	private AnimatedSprite2D _anim;
-	private Sprite2D _sprite;
-	private AudioStreamPlayer _audio;
-	
-	public int GetXpForLevel(int level, float baseXp = 100f, float growth = 1.2f)
-	{
-		return Mathf.FloorToInt(baseXp * Mathf.Pow(growth, level - 1));
-	}
-	
-	private void Slash(Vector2 dir)
-	{
-		lunging = true;
-		lungeTime = LungeDuration;
-		lungeDir = dir;
-		Velocity = dir * LungeSpeed;
+    // Weapon refs
+    [Export] public FireballWeapon FireballW;
+    [Export] public StoneWeapon StoneW;
+    
+    // Player current stats
+    private float _health;
+    private int _xp;
+    private int _level;
 
-		var slash = SlashAttack.Instantiate<SlashAttackNode2d>();
-		slash.Position = dir.Normalized() * 10f; // a little in front of char
-		slash.Direction = dir;
-		AddChild(slash);
-	}
+    // Lunge State vars
+    private bool lunging = false;
+    private float lungeTime = 0f;
+    private Vector2 lungeDir = Vector2.Right;
 
-	private void TakeDamage(int amount, Vector2 dir)
-	{
-		currHealth -= amount;
-	}
+    public override void _Ready()
+    {
+        _health = _maxHealth;
+        _xp = 0;
+        _level = 1;
+        EmitSignalStatsInitialized(_health, _maxHealth, _xp, _maxXp, _level);
 
-	private void Move(Vector2 moveDir) {
-		float offset = 8.130104f; // isometric diagonal offset
+        _audio = GetNode<AudioStreamPlayer>("WalkSound");
+        _anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
-		 // Nudge diagonal movement to match isometric tile perspective
-		 if (moveDir.X != 0 && moveDir.Y != 0)
-		 {
-		 	bool up = moveDir.Y < 0;
-		 	bool right = moveDir.X > 0;
-		
-		 	// Map the four diagonals to ±offset:
-		 	// up-right  -> +offset
-		 	// up-left   -> -offset
-		 	// down-left -> +offset
-		 	// down-right-> -offset
-		 	float angleOffset =
-		 		(right ? -1f : 1f) * (up ? -1f : 1f) * Mathf.DegToRad(offset);
-		
-		 	moveDir = moveDir.Rotated(angleOffset).Normalized();
-		 }
+        _anim.Play(AnimationSet + "_idle");
+    }
 
-		// Slow down vertical only movement
-		float speed = Speed;
-		if (moveDir.X == 0 && moveDir.Y != 0)
-			speed *= 0.9f;
+    public override void _PhysicsProcess(double delta)
+    {
+        GetInput(delta);
+        MoveAndSlide();
+    }
+    
 
-		// Move
-		Velocity = moveDir * speed;
-	}
+    private void Slash(Vector2 dir)
+    {
+        lunging = true;
+        lungeTime = LungeDuration;
+        lungeDir = dir;
+        Velocity = dir * LungeSpeed;
 
-	private void UpdateAnimation(Vector2 moveDir) {
-		void Play(string animation)
-		{
-			if (_anim.Animation != AnimationSet + "_" + animation)
-				_anim.Play(AnimationSet + "_" + animation);
-		}
+        var slash = SlashAttack.Instantiate<SlashAttackNode2d>();
+        slash.Position = dir.Normalized() * 10f; // a little in front of char
+        slash.Direction = dir;
+        AddChild(slash);
+    }
+    
+    private void Move(Vector2 moveDir)
+    {
+        float offset = 8.130104f; // isometric diagonal offset
 
-		// Flip sprite horizontally for left vs right movement
-		if (moveDir.X != 0) _anim.FlipH = moveDir.X < 0;
+        // Nudge diagonal movement to match isometric tile perspective
+        if (moveDir.X != 0 && moveDir.Y != 0)
+        {
+            bool up = moveDir.Y < 0;
+            bool right = moveDir.X > 0;
 
-		if (moveDir == Vector2.Zero) {
-			Play("idle");
-		}
-		else {
-			Sfx.I.PlayFootstep(_audio.Stream, GlobalPosition);
-			Play("walk");
-		}
-	}
+            // Map the four diagonals to ±offset:
+            // up-right  -> +offset
+            // up-left   -> -offset
+            // down-left -> +offset
+            // down-right-> -offset
+            float angleOffset =
+                (right ? -1f : 1f) * (up ? -1f : 1f) * Mathf.DegToRad(offset);
 
-	private void GetInput(double delta)
-	{		
-		if (lunging)
-		{
-			lungeTime -= (float)delta;
-			Velocity = lungeDir * LungeSpeed;
-			
-			_anim.Play(AnimationSet + "_walk");
-			
-			if (lungeDir.X != 0) 
-				_anim.FlipH = lungeDir.X < 0;
+            moveDir = moveDir.Rotated(angleOffset).Normalized();
+        }
 
-			if (lungeTime <= 0f)
-				lunging = false;
-				
-			return;
-		}
+        // Slow down vertical only movement
+        float speed = Speed;
+        if (moveDir.X == 0 && moveDir.Y != 0)
+            speed *= 0.9f;
 
-		if (Input.IsActionJustPressed("attack"))
-		{
-			Vector2 mousePos = GetGlobalMousePosition();
-			Vector2 dir = (mousePos - GlobalPosition).Normalized();
-			if (dir == Vector2.Zero) dir = Vector2.Right;
+        // Move
+        Velocity = moveDir * speed;
+    }
 
-			Slash(dir);
-			return;
-		}
+    private void UpdateAnimation(Vector2 moveDir)
+    {
+        void Play(string animation)
+        {
+            if (_anim.Animation != AnimationSet + "_" + animation)
+                _anim.Play(AnimationSet + "_" + animation);
+        }
 
-		Vector2 moveDir = Input.GetVector("left", "right", "up", "down");
+        // Flip sprite horizontally for left vs right movement
+        if (moveDir.X != 0) _anim.FlipH = moveDir.X < 0;
 
-		Move(moveDir);
-		UpdateAnimation(moveDir);
-	}
-	
-	public override void _Ready()
-	{
-		currHealth = Health;
-		_audio = GetNode<AudioStreamPlayer>("WalkSound");
-		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        if (moveDir == Vector2.Zero)
+        {
+            Play("idle");
+        }
+        else
+        {
+            Sfx.I.PlayFootstep(_audio.Stream, GlobalPosition);
+            Play("walk");
+        }
+    }
 
-		_anim.Play(AnimationSet + "_idle");
-		Xp = 70;
-	}
+    private void GetInput(double delta)
+    {
+        if (lunging)
+        {
+            lungeTime -= (float)delta;
+            Velocity = lungeDir * LungeSpeed;
 
-	public override void _PhysicsProcess(double delta)
-	{
-		GetInput(delta);
-		MoveAndSlide();
-	}
+            _anim.Play(AnimationSet + "_walk");
 
-	private void OnPlayerHurtBoxEntered(Area2D area)
-	{
-		if (area.IsInGroup("EnemyHitBox"))
-		{
-			Hitbox hb = (Hitbox)area;
-			TakeDamage(hb.Damage, GlobalPosition-hb.GlobalPosition);
-			
-		}
-	}
+            if (lungeDir.X != 0)
+                _anim.FlipH = lungeDir.X < 0;
+
+            if (lungeTime <= 0f)
+                lunging = false;
+
+            return;
+        }
+
+        if (Input.IsActionJustPressed("attack"))
+        {
+            Vector2 mousePos = GetGlobalMousePosition();
+            Vector2 dir = (mousePos - GlobalPosition).Normalized();
+            if (dir == Vector2.Zero) dir = Vector2.Right;
+
+            Slash(dir);
+            return;
+        }
+
+        Vector2 moveDir = Input.GetVector("left", "right", "up", "down");
+
+        Move(moveDir);
+        UpdateAnimation(moveDir);
+    }
+
+    private void TakeDamage(float amount, Vector2 dir)
+    {
+        _health = Mathf.Clamp(_health - amount, 0, _maxHealth);
+        EmitSignalHealthChanged(_health);
+    }
+    // Physics Signals below
+    private void OnPlayerHurtBoxEntered(Area2D area)
+    {
+        if (area.IsInGroup("EnemyHitbox"))
+        {
+            Hitbox hb = (Hitbox)area;
+            TakeDamage(hb.Damage, GlobalPosition - hb.GlobalPosition);
+        }
+    }
 }

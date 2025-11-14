@@ -16,8 +16,9 @@ public partial class GameManager : Node
 	[Export] private float _enemySpawnerNumEnemiesPerWaveScalr = 1.1f;
 	[Export] private float _enemySpawnerWaveIntervalScalr = .9f;
 	[Export] private float _enemySpawnerNumWavesScalr = 1.1f;
-	
-	[ExportCategory("Required Resources")]
+
+	[ExportCategory("Required Resources")] 
+	[Export] private Ui _ui;
 	[Export] private PackedScene _worldPckdScene;
 	[Export] private PackedScene _playerPckdScene;
 	[Export] private PackedScene _playerSpawnPckdScene;
@@ -41,6 +42,9 @@ public partial class GameManager : Node
 	public override void _Ready()
 	{
 		Instance = this;
+		Player = _playerPckdScene.Instantiate<Player>();
+		_ui.InitializeUiFromPlayer(Player);
+		AddChild(Player);
 		InitLevel();
 	}
 
@@ -50,75 +54,7 @@ public partial class GameManager : Node
 		UpdateFlowField(false);
 		
 	}
-
-	public void InitLevel()
-	{
-		SpawnNewWorld();
-		SpawnPlayer();
-		CurrFlowField = new FlowField(CurrWorld.LogicalData.Matrix,
-			CurrWorld.LogicalData.NonWalkableState);
-		SpawnEnemySpawners();
-		ScaleDifficulty();
-	}
-
-	private void ScaleDifficulty()
-	{
-		_enemySpawnerHealth *= _enemySpawnerHealthScalr;
-		_enemySpawnerWaveInterval *= _enemySpawnerWaveIntervalScalr;
-		_enemySpawnerNumEnemiesPerWave *= _enemySpawnerNumEnemiesPerWaveScalr;
-		_enemySpawnerNumWaves *= _enemySpawnerNumWavesScalr;
-	}
-
-	private void OnSpawnerDestroyed()
-	{
-		_numSpawners--;
-		if (_numSpawners <= 0)
-		{
-			GD.Print("Level Complete");
-		}
-	}
-	private void SpawnEnemySpawners()
-	{
-		_numSpawners = 0;
-		foreach (Shrine shrine in CurrWorld.LogicalData.Shrines)
-		{
-			_numSpawners++;
-			var newSpawner = _enemySpawner.Instantiate<EnemySpawner>();
-			newSpawner.Init(_enemySpawnerHealth, _enemySpawnerWaveInterval, _enemySpawnerNumEnemiesPerWave,
-				_enemySpawnerNumWaves);
-			newSpawner.GlobalPosition = CurrWorld.PhysicalData.BaseTileMapLayer.MapToLocal(shrine.CenterTile);
-			newSpawner.SpawnerDestroyed += OnSpawnerDestroyed;
-			CurrWorld.AddChild(newSpawner);
-		}
-	}
-
-	private void SpawnNewWorld()
-	{
-		if (CurrWorld != null) CurrWorld.QueueFree();
-		CurrWorld = _worldPckdScene.Instantiate<World>();
-		AddChild(CurrWorld);
-	}
-
-	private void SpawnPlayer()
-	{
-		if (Player == null)
-		{
-			Player = _playerPckdScene.Instantiate<Player>();
-			AddChild(Player);
-			GetNode<Ui>("Ui").InitializeUiFromPlayer(Player);
-		}
-
-		var spawnPortal = _playerSpawnPckdScene.Instantiate<PlayerSpawn>();
-		spawnPortal.GlobalPosition = CurrWorld.LogicalData.PlayerSpawn;
-		AddChild(spawnPortal);
-		_cam.Target = spawnPortal;
-		spawnPortal.PortalOpen += () =>
-		{
-			Player.GlobalPosition = spawnPortal.GlobalPosition;
-			_cam.Target = Player;
-		};
-	}
-
+	
 	private void UpdateFlowField(bool debug)
 	{
 		var currPlayerCoord =
@@ -144,7 +80,70 @@ public partial class GameManager : Node
 			}
 		}
 	}
+
+	public void InitLevel()
+	{
+		SpawnNewWorld();
+		SpawnPlayer();
+		CurrFlowField = new FlowField(CurrWorld.LogicalData.Matrix,
+			CurrWorld.LogicalData.NonWalkableState);
+		SpawnEnemySpawners();
+		ScaleDifficulty();
+	}
+
+	private void ScaleDifficulty()
+	{
+		_enemySpawnerHealth *= _enemySpawnerHealthScalr;
+		_enemySpawnerWaveInterval *= _enemySpawnerWaveIntervalScalr;
+		_enemySpawnerNumEnemiesPerWave *= _enemySpawnerNumEnemiesPerWaveScalr;
+		_enemySpawnerNumWaves *= _enemySpawnerNumWavesScalr;
+	}
+
+
+	private void SpawnEnemySpawners()
+	{
+		_numSpawners = 0;
+		foreach (Shrine shrine in CurrWorld.LogicalData.Shrines)
+		{
+			_numSpawners++;
+			var newSpawner = _enemySpawner.Instantiate<EnemySpawner>();
+			newSpawner.Init(_enemySpawnerHealth, _enemySpawnerWaveInterval, _enemySpawnerNumEnemiesPerWave,
+				_enemySpawnerNumWaves);
+			newSpawner.GlobalPosition = CurrWorld.PhysicalData.BaseTileMapLayer.MapToLocal(shrine.CenterTile);
+			newSpawner.SpawnerDestroyed += OnSpawnerDestroyed;
+			CurrWorld.AddChild(newSpawner);
+		}
+	}
+
+	private void SpawnNewWorld()
+	{
+		if (CurrWorld != null) CurrWorld.QueueFree();
+		CurrWorld = _worldPckdScene.Instantiate<World>();
+		AddChild(CurrWorld);
+	}
+
+	private void SpawnPlayer()
+	{
+		var spawnPortal = _playerSpawnPckdScene.Instantiate<PlayerSpawn>();
+		spawnPortal.GlobalPosition = CurrWorld.LogicalData.PlayerSpawn;
+		AddChild(spawnPortal);
+		_cam.Target = spawnPortal;
+		spawnPortal.PortalOpen += () =>
+		{
+			Player.GlobalPosition = spawnPortal.GlobalPosition;
+			_cam.Target = Player;
+		};
+	}
 	
+	// Signal Callbacks below
+	private void OnSpawnerDestroyed()
+	{
+		_numSpawners--;
+		if (_numSpawners <= 0)
+		{
+			GD.Print("Level Complete");
+		}
+	}
 	// DEBUG STUFF BELOW
 	private void CreateArrow(int col, int row, Vector2 direction)
 	{

@@ -1,10 +1,24 @@
+using GameJam25.scripts.damage_system;
 using Godot;
 
 
 public partial class Fireball : Node2D
 {
     [Export] private PackedScene _explosionParticles;
-    [Export] private Area2D _hitbox;
+    [Export] private Hitbox _hitbox;
+
+    public float Damage
+    {
+        get
+        {
+            return _hitbox.Damage;
+        }
+        set
+        {
+            _hitbox.Damage = value;
+        }
+    }
+
     public override void _Ready()
     {
         _hitbox.AreaEntered += OnAreaEntered;

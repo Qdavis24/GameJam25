@@ -4,7 +4,8 @@ using GameJam25.scripts.enemy_state_machines.base_classes;
 
 public partial class Enemy : CharacterBody2D
 {
-    [ExportCategory("stats")] [Export] private int _health; //starting health
+    [ExportCategory("stats")] 
+    [Export] private float _maxHealth; //starting health
 
     [ExportCategory("Distance Ranges")] 
     [Export] public Area2D SteeringRange;
@@ -16,10 +17,10 @@ public partial class Enemy : CharacterBody2D
     [Export] private EStateMachine _stateMachine;
     [Export] private ShaderMaterial _flashShader;
 
-    public float Health;
+    public float Health; // public so states can use this
 
 
-    public void TakeDamage(int amount, int knockbackWeight, Vector2 direction)
+    public void TakeDamage(float amount, float knockbackWeight, Vector2 direction)
     {
         if (_stateMachine.CurrState.Name == "DeathState") return;
         Health -= amount;
@@ -31,7 +32,7 @@ public partial class Enemy : CharacterBody2D
     public override void _Ready()
     {
         _flashTimer.Timeout += () => Animations.Material = null;
-        Health = _health;
+        Health = _maxHealth;
     }
 
 

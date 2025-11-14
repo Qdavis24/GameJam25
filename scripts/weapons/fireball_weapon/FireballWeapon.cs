@@ -2,18 +2,15 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameJam25.scripts.weapons.base_classes;
 using Vector2 = Godot.Vector2;
 
-public partial class FireballWeapon : Node2D
+public partial class FireballWeapon : WeaponBase
 {
     [Export] private PackedScene _fireballPackedScene;
     [Export] private Curve _speedRamp;
-    [Export] private Timer _timer;
     [Export] private double _fireballLifetime;
-    [Export] private float _projSpeed;
-    [Export] private int _projCount;
     
-
     private Node2D[] _fireballs;
     private Vector2[] _directions;
 
@@ -22,6 +19,8 @@ public partial class FireballWeapon : Node2D
     private List<double> _currTimes;
 
     private float _distancePerFrame;
+    
+    
 
     private void CalculateDirections()
     {
@@ -50,7 +49,7 @@ public partial class FireballWeapon : Node2D
         _burstsQueue = new List<Node2D[]>();
         _burstsDistances = new List<float>();
         _currTimes = new List<double>();
-        _directions = new Vector2[_projCount];
+        _directions = new Vector2[(int)_projCount];
         CalculateDirections();
 
         _distancePerFrame = _directions[0].Length();
@@ -97,10 +96,11 @@ public partial class FireballWeapon : Node2D
     {
         _currTimes.Add(0);
 
-        _fireballs = new Node2D[_projCount];
-        for (int i = 0; i < _projCount; i++)
+        _fireballs = new Node2D[(int)_projCount];
+        for (int i = 0; i < (int)_projCount; i++)
         {
-            var currFireball = _fireballPackedScene.Instantiate<Node2D>();
+            var currFireball = _fireballPackedScene.Instantiate<Fireball>();
+            currFireball.Damage = _projDamage;
             currFireball.Rotation = _directions[i].Angle();
             GetTree().Root.AddChild(currFireball);
             currFireball.GlobalPosition = GlobalPosition;
