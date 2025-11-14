@@ -3,21 +3,28 @@ using System;
 
 public partial class Ui : CanvasLayer
 {
-    [ExportCategory("Required Resources")]
-    [Export] ProgressBar _xpBar;
-    [Export] ProgressBar _healthBar;
-    [Export]UpgradeScreen _upgradeScreen;
-    
-    private Player _player;
-    
+    // required internal children
+    private ProgressBar _xpBar;
+    private ProgressBar _healthBar;
+    private UpgradeScreen _upgradeScreen;
+
+    public Player Player {get; private set;}
+
+    public override void _Ready()
+    {
+        _xpBar = GetNode<ProgressBar>("XpBar");
+        _healthBar = GetNode<ProgressBar>("HealthBar");
+        _upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
+    }
+
     public void InitializeUiFromPlayer(Player player)
     {
-        _player = player;
+        Player = player;
 
-        _player.FireballW.Unlock();
-        
+        Player.FireballW.Unlock();
+
         // subscribe 
-        _player.StatsInitialized += (health, maxHealth, xp, maxXp, level) =>
+        Player.StatsInitialized += (health, maxHealth, xp, maxXp, level) =>
         {
             // set initial progress bar values
             _healthBar.MaxValue = health;
@@ -25,9 +32,9 @@ public partial class Ui : CanvasLayer
             _xpBar.MaxValue = maxXp;
             _xpBar.Value = xp;
         };
-        _player.HealthChanged += health => UpdateHealth(health);
-        _player.MaxHealthChanged += maxHealth => UpdateMaxHealth(maxHealth);
-        _player.XpChanged += xp => UpdateXp(xp);
+        Player.HealthChanged += health => UpdateHealth(health);
+        Player.MaxHealthChanged += maxHealth => UpdateMaxHealth(maxHealth);
+        Player.XpChanged += xp => UpdateXp(xp);
     }
 
     private void UpdateHealth(float health)
@@ -61,7 +68,7 @@ public partial class Ui : CanvasLayer
         {
             case Weapon.Fireball:
 
-                _player.FireballW.Upgrade(weaponUpgrade);
+                Player.FireballW.Upgrade(weaponUpgrade);
                 break;
         }
     }

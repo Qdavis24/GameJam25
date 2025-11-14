@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public enum Weapon { Fireball, Stick, Bird, Stone, Thorn }
+public enum Weapon { Fireball, Water, Cloud, Stone }
 public enum Rarity { Grey, Blue, Purple, Yellow }
 public enum Stat
 {
@@ -79,7 +79,7 @@ public partial class WeaponUpgrade : Resource
 			Stat.SizePct             => $"+{upg.Value:0}% Size",
 			Stat.CooldownPct         => $"-{upg.Value:0}% Cooldown",
 			Stat.ProjectileSpeedPct  => $"+{upg.Value:0}% Projectile Speed",
-			Stat.ProjectileCount        => $"+{FormatProjectileValue(upg.Value)} Projectile{Plural(upg.Value)}",
+			Stat.ProjectileCount     => $"+{FormatProjectileValue(upg.Value)} Projectile{Plural(upg.Value)}",
 			Stat.DamagePct           => $"+{upg.Value:0}% Damage",
 			_ => ""
 		};
