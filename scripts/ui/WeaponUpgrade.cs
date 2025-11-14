@@ -76,11 +76,11 @@ public partial class WeaponUpgrade : Resource
 		// human-friendly description (note cooldown uses "-%")
 		upg.Description = upg.Stat switch
 		{
-			Stat.SizePct             => $"+{upg.Value:0}% Size",
-			Stat.CooldownPct         => $"-{upg.Value:0}% Cooldown",
-			Stat.ProjectileSpeedPct  => $"+{upg.Value:0}% Projectile Speed",
-			Stat.ProjectileCount     => $"+{FormatProjectileValue(upg.Value)} Projectile{Plural(upg.Value)}",
-			Stat.DamagePct           => $"+{upg.Value:0}% Damage",
+			Stat.SizePct             => $"+{upg.Value:0}% size",
+			Stat.CooldownPct         => $"-{upg.Value:0}% cooldown",
+			Stat.ProjectileSpeedPct  => $"+{upg.Value:0}% projectile speed",
+			Stat.ProjectileCount     => $"+{FormatProjectileValue(upg.Value)} projectile{Plural(upg.Value)}",
+			Stat.DamagePct           => $"+{upg.Value:0}% damage",
 			_ => ""
 		};
 
