@@ -1,0 +1,106 @@
+[gd_scene load_steps=6 format=3 uid="uid://dhg5dra5mmuyc"]
+
+[ext_resource type="Script" uid="uid://cvjkvjqso34bb" path="res://scripts/ui/PauseScreen.cs" id="1_yv4u6"]
+[ext_resource type="FontFile" uid="uid://blrxolrpmx4l2" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_uuji5"]
+[ext_resource type="FontFile" uid="uid://cm33if0b0s0da" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="3_uuji5"]
+
+[sub_resource type="Theme" id="Theme_8abry"]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/font_sizes/font_size = 59
+Button/fonts/font = ExtResource("2_uuji5")
+Label/font_sizes/font_size = 193
+Label/fonts/font = ExtResource("2_uuji5")
+
+[sub_resource type="Theme" id="Theme_kh7v7"]
+RichTextLabel/font_sizes/normal_font_size = 56
+RichTextLabel/fonts/normal_font = ExtResource("3_uuji5")
+
+[node name="PauseScreen" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yv4u6")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme = SubResource("Theme_8abry")
+
+[node name="GamePausedLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Game Paused"
+
+[node name="pause" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Unpause" type="Button" parent="CenterContainer/VBoxContainer/pause"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "unpause"
+
+[node name="Settings" type="Button" parent="CenterContainer/VBoxContainer/pause"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "settings"
+
+[node name="Menu" type="Button" parent="CenterContainer/VBoxContainer/pause"]
+layout_mode = 2
+text = "quit to main menu"
+
+[node name="settings" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SettingsLabel" type="Label" parent="CenterContainer/VBoxContainer/settings"]
+layout_mode = 2
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="volume" type="Panel" parent="CenterContainer/VBoxContainer/settings"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/settings/volume"]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 974.0
+offset_bottom = 46.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/VBoxContainer/settings/volume/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_kh7v7")
+text = "volume
+"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/settings/volume/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 1.89
+min_value = -30.0
+max_value = 0.0
+tick_count = 5
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="SPACER" type="Control" parent="CenterContainer/VBoxContainer/settings/volume/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="LeaveSettings" type="Button" parent="CenterContainer/VBoxContainer/settings"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "go back"

@@ -24,7 +24,7 @@ public partial class UpgradeScreen : Panel
 	public override void _Ready()
 	{
 		ProcessMode = Node.ProcessModeEnum.WhenPaused;
-		Hide();
+		this.Visible = false;
 		
 		_ui = GetParent<Ui>();
 
@@ -40,8 +40,8 @@ public partial class UpgradeScreen : Panel
 	public void Show()
 	{
 		GetTree().Paused = true;
-		this.Visible = true;
-		Sfx.I.PlayUi(SlotSound);
+		Visible = true;
+		Sfx.I.PlayUi(SlotSound, 1f);
 		_button1.SpinAsync(_unlocked);
 		_button2.SpinAsync(_unlocked);
 		_button3.SpinAsync(_unlocked);

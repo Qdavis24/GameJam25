@@ -1,11 +1,11 @@
 [gd_scene load_steps=12 format=3 uid="uid://cnrgwrvkm8ajt"]
 
 [ext_resource type="Script" uid="uid://b76aw4tgbd8fo" path="res://scripts/ui/UpgradeScreen.cs" id="1_3ha7n"]
-[ext_resource type="Texture2D" uid="uid://b0aidnsuoui5r" path="res://assets/ui/upgrade_screen/select_ui_frame.png" id="1_8hl3b"]
+[ext_resource type="Texture2D" uid="uid://w7sf07s1l4ty" path="res://assets/ui/upgrade_screen/select_ui_frame.png" id="1_8hl3b"]
 [ext_resource type="PackedScene" uid="uid://de5afvrruo3gg" path="res://scenes/ui/UpgradeButton.tscn" id="2_cpd7a"]
-[ext_resource type="AudioStream" uid="uid://dxh0xpufm0su5" path="res://assets/sounds/roll_1.wav" id="2_p5b6j"]
-[ext_resource type="AudioStream" uid="uid://bt6n67tugs6nf" path="res://assets/sounds/roll_2.wav" id="3_7q1e3"]
-[ext_resource type="AudioStream" uid="uid://82rkd7mwp7xa" path="res://assets/sounds/roll_3.wav" id="4_p5b6j"]
+[ext_resource type="AudioStream" uid="uid://bf8may5x3xdxt" path="res://assets/sounds/roll_1.wav" id="2_p5b6j"]
+[ext_resource type="AudioStream" uid="uid://d4gaev2o5634e" path="res://assets/sounds/roll_2.wav" id="3_7q1e3"]
+[ext_resource type="AudioStream" uid="uid://p63425cvp0i7" path="res://assets/sounds/roll_3.wav" id="4_p5b6j"]
 [ext_resource type="Shader" uid="uid://d4b8m5gw27t0l" path="res://shaders/UpgradeScroll.gdshader" id="5_7q1e3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7q1e3"]
@@ -14,7 +14,7 @@ bg_color = Color(0, 0, 0, 0.21960784)
 [sub_resource type="Theme" id="Theme_t8pb6"]
 Panel/styles/panel = SubResource("StyleBoxFlat_7q1e3")
 
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fl10o"]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_7q1e3"]
 streams_count = 3
 stream_0/stream = ExtResource("2_p5b6j")
 stream_1/stream = ExtResource("3_7q1e3")
@@ -36,7 +36,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource("Theme_t8pb6")
 script = ExtResource("1_3ha7n")
-SlotSound = SubResource("AudioStreamRandomizer_fl10o")
+SlotSound = SubResource("AudioStreamRandomizer_7q1e3")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_t8pb6")

@@ -7,6 +7,7 @@ public partial class Ui : CanvasLayer
 	private ProgressBar _xpBar;
 	private ProgressBar _healthBar;
 	private UpgradeScreen _upgradeScreen;
+	private PauseScreen _pauseScreen;
 
 	public Player Player {get; private set;}
 
@@ -16,6 +17,7 @@ public partial class Ui : CanvasLayer
 		_xpBar = GetNode<ProgressBar>("XpBar");
 		_healthBar = GetNode<ProgressBar>("HealthBar");
 		_upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
+		_pauseScreen = GetNode<PauseScreen>("PauseScreen");
 	}
 
 	public void InitializeUiFromPlayer(Player player)
