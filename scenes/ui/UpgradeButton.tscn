@@ -1,15 +1,17 @@
 [gd_scene load_steps=9 format=3 uid="uid://de5afvrruo3gg"]
 
-[ext_resource type="Shader" uid="uid://bq0aepeqlbgjn" path="res://shaders/UpgradeButton.gdshader" id="1_m074v"]
+[ext_resource type="Shader" uid="uid://byq328ei2v1ah" path="res://shaders/UpgradeButtonSMEAR.gdshader" id="1_m074v"]
 [ext_resource type="Script" uid="uid://blfn00ei20afo" path="res://scripts/ui/UpgradeButton.cs" id="1_mvdy7"]
 [ext_resource type="Texture2D" uid="uid://w2f4tpkoqpd6" path="res://assets/ui/heart.png" id="2_m074v"]
 [ext_resource type="FontFile" uid="uid://blrxolrpmx4l2" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_mj8cb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mj8cb"]
 shader = ExtResource("1_m074v")
-shader_parameter/strength = 0.35
+shader_parameter/erosion_amount = 0.18
+shader_parameter/edge_softness = 0.12
+shader_parameter/noise_strength = 0.25
 shader_parameter/scale = 20.0
-shader_parameter/alpha = 0.75
+shader_parameter/scroll_speed = Vector2(0.25, 0.12)
 
 [sub_resource type="LabelSettings" id="LabelSettings_mj8cb"]
 font = ExtResource("2_mj8cb")
@@ -18,7 +20,7 @@ font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_kmtkv"]
 font = ExtResource("2_mj8cb")
-font_size = 64
+font_size = 56
 font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_66hf5"]

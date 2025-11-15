@@ -8,9 +8,8 @@ public partial class SlashAttackNode2d : Node2D
 	[Export] public float Lifetime = 0.2f;
 
 	[Export] public AudioStream SlashSfx;
-
+	
 	private AnimatedSprite2D _anim;
-	private AudioStreamPlayer _audio;
 
 	public override void _Ready()
 	{
