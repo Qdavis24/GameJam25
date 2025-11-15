@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://w11lstxqrmpj"]
 
-[ext_resource type="PackedScene" uid="uid://ci3unkj74fw6k" path="res://scenes/ui/UpgradeScreen.tscn" id="1_d2gw2"]
+[ext_resource type="PackedScene" uid="uid://cnrgwrvkm8ajt" path="res://scenes/ui/UpgradeScreen.tscn" id="1_d2gw2"]
 [ext_resource type="Script" uid="uid://bu3whablyvrhm" path="res://scripts/ui/Ui.cs" id="1_m01cm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m01cm"]
@@ -17,6 +17,8 @@ ProgressBar/styles/fill = SubResource("StyleBoxFlat_s64wo")
 
 [node name="Ui" type="CanvasLayer"]
 script = ExtResource("1_m01cm")
+
+[node name="UpgradeScreen" parent="." instance=ExtResource("1_d2gw2")]
 
 [node name="XpBar" type="ProgressBar" parent="."]
 anchors_preset = 10
@@ -35,5 +37,3 @@ grow_horizontal = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_m01cm")
 metadata/_edit_use_anchors_ = true
-
-[node name="UpgradeScreen" parent="." instance=ExtResource("1_d2gw2")]

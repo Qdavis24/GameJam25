@@ -24,10 +24,10 @@ public partial class UpgradeButton : Button
 
 	public static readonly Dictionary<Weapon, string> Names = new()
 	{
-		{ Weapon.Fireball, "Feasting fireball" },
-		{ Weapon.Water,    "Darting droplet" },
-		{ Weapon.Cloud,    "Creeping cloud" },
-		{ Weapon.Stone,    "Shielding stone" },
+		{ Weapon.Fireball, "Feasting Fireball" },
+		{ Weapon.Water,    "Darting Droplet" },
+		{ Weapon.Cloud,    "Creeping Cloud" },
+		{ Weapon.Stone,    "Shielding Stone" },
 	};
 	
 	public readonly record struct UpgradeDisplayData(
@@ -58,7 +58,7 @@ public partial class UpgradeButton : Button
 		MouseFilter = MouseFilterEnum.Ignore;
 
 		// spin parameters (tweak to taste)
-		int steps = 8;              // total flashes before stopping
+		int steps = 7;              // total flashes before stopping
 		float startDelay = 0.03f;    // fastest step
 		float endDelay = 0.20f;      // last slow step
 
@@ -152,13 +152,13 @@ public partial class UpgradeButton : Button
 			//Rarity.Yellow => new Color("#facc15"),
 		Color rarityColor = rarity switch
 		{
-			Rarity.Grey   => new Color("969696ff"),
+			Rarity.Grey   => new Color("434343ff"),
 			Rarity.Blue   => new Color("0e4ca7ff"),
 			Rarity.Purple => new Color("74008fff"),
-			Rarity.Yellow => new Color("edba00ff"),
+			Rarity.Yellow => new Color("c59a00ff"),
 			_             => new Color("white")
 		};
-		
+				
 		if (status == "unlock") {
 			rarityColor = new Color("2e5c00ff");
 			_descr.Visible = false;
@@ -167,15 +167,18 @@ public partial class UpgradeButton : Button
 		// RARITY BORDER ---
 		var style = new StyleBoxFlat
 		{
-			BorderWidthLeft = 10,
-			BorderWidthRight = 10,
-			BorderWidthTop = 10,
-			BorderWidthBottom = 10,
-			BorderColor = rarityColor,
-			BgColor = new Color(0.0f, 0.0f, 0.0f, 0.2f),
+			BgColor = rarityColor with { A = 0.4f },
+			//////////
+			//BorderWidthLeft = 10,
+			//BorderWidthRight = 10,
+			//BorderWidthTop = 10,
+			//BorderWidthBottom = 10,
+			//BorderColor = rarityColor,
+			//BgColor = new Color(0.0f, 0.0f, 0.0f, 0.2f),
 		};
 		var hover = style.Duplicate() as StyleBoxFlat;
-		hover.BgColor = new Color(0.0f, 0.0f, 0.0f, 0.15f);
+		//hover.BgColor = new Color(0.0f, 0.0f, 0.0f, 0.15f);
+		hover.BgColor = rarityColor with { A = 0.3f };
 		AddThemeStyleboxOverride("normal", style);
 		AddThemeStyleboxOverride("hover", hover);
 		AddThemeStyleboxOverride("pressed", style);

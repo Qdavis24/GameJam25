@@ -1,10 +1,32 @@
-[gd_scene load_steps=4 format=3 uid="uid://ci3unkj74fw6k"]
+[gd_scene load_steps=12 format=3 uid="uid://cnrgwrvkm8ajt"]
 
 [ext_resource type="Script" uid="uid://b76aw4tgbd8fo" path="res://scripts/ui/UpgradeScreen.cs" id="1_3ha7n"]
-[ext_resource type="Texture2D" uid="uid://dxhu6kj1hf1kc" path="res://assets/ui/upgrade_screen/select_ui_frame.png" id="1_8hl3b"]
+[ext_resource type="Texture2D" uid="uid://b0aidnsuoui5r" path="res://assets/ui/upgrade_screen/select_ui_frame.png" id="1_8hl3b"]
 [ext_resource type="PackedScene" uid="uid://de5afvrruo3gg" path="res://scenes/ui/UpgradeButton.tscn" id="2_cpd7a"]
+[ext_resource type="AudioStream" uid="uid://dxh0xpufm0su5" path="res://assets/sounds/roll_1.wav" id="2_p5b6j"]
+[ext_resource type="AudioStream" uid="uid://bt6n67tugs6nf" path="res://assets/sounds/roll_2.wav" id="3_7q1e3"]
+[ext_resource type="AudioStream" uid="uid://82rkd7mwp7xa" path="res://assets/sounds/roll_3.wav" id="4_p5b6j"]
+[ext_resource type="Shader" uid="uid://d4b8m5gw27t0l" path="res://shaders/UpgradeScroll.gdshader" id="5_7q1e3"]
 
-[node name="UpgradeScreen" type="HBoxContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7q1e3"]
+bg_color = Color(0, 0, 0, 0.21960784)
+
+[sub_resource type="Theme" id="Theme_t8pb6"]
+Panel/styles/panel = SubResource("StyleBoxFlat_7q1e3")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fl10o"]
+streams_count = 3
+stream_0/stream = ExtResource("2_p5b6j")
+stream_1/stream = ExtResource("3_7q1e3")
+stream_2/stream = ExtResource("4_p5b6j")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t8pb6"]
+shader = ExtResource("5_7q1e3")
+shader_parameter/amplitude = 3.0
+shader_parameter/frequency = 6.0
+shader_parameter/speed = 1.0
+
+[node name="UpgradeScreen" type="Panel"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,29 +34,28 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = SubResource("Theme_t8pb6")
 script = ExtResource("1_3ha7n")
+SlotSound = SubResource("AudioStreamRandomizer_fl10o")
 
-[node name="Spacer" type="Control" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Spacer" type="Control" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
-layout_mode = 2
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_t8pb6")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3125
+anchor_top = 0.15555556
+anchor_right = 0.69166666
+anchor_bottom = 0.8148148
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 4.12
 texture = ExtResource("1_8hl3b")
 expand_mode = 2
 stretch_mode = 4
+metadata/_edit_use_anchors_ = true
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TextureRect"]
+[node name="MarginContainer" type="MarginContainer" parent="TextureRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,25 +67,17 @@ theme_override_constants/margin_top = 80
 theme_override_constants/margin_right = 44
 theme_override_constants/margin_bottom = 120
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TextureRect/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TextureRect/MarginContainer"]
 layout_mode = 2
 
-[node name="UpgradeButton" parent="VBoxContainer/TextureRect/MarginContainer/VBoxContainer" instance=ExtResource("2_cpd7a")]
+[node name="UpgradeButton" parent="TextureRect/MarginContainer/VBoxContainer" instance=ExtResource("2_cpd7a")]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="UpgradeButton2" parent="VBoxContainer/TextureRect/MarginContainer/VBoxContainer" instance=ExtResource("2_cpd7a")]
+[node name="UpgradeButton2" parent="TextureRect/MarginContainer/VBoxContainer" instance=ExtResource("2_cpd7a")]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="UpgradeButton3" parent="VBoxContainer/TextureRect/MarginContainer/VBoxContainer" instance=ExtResource("2_cpd7a")]
+[node name="UpgradeButton3" parent="TextureRect/MarginContainer/VBoxContainer" instance=ExtResource("2_cpd7a")]
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="Spacer2" type="Control" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Spacer2" type="Control" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3

@@ -46,8 +46,24 @@ public partial class Sfx : Node
 			VolumeDb = volumeDb,
 			PitchScale = pitch
 		};
+		
+		AddChild(p);
+		p.Finished += () => p.QueueFree();
+		p.Play();
+	}
+	
+	public void PlayUi(AudioStream stream, float volumeDb = -6f, float pitch = 1f)
+	{
+		if (stream == null) return;
 
-		AddChild(p);              // lives under the autoload (not your attack node)
+		var p = new AudioStreamPlayer
+		{
+			Stream = stream,
+			VolumeDb = volumeDb,
+			PitchScale = pitch
+		};
+
+		AddChild(p);
 		p.Finished += () => p.QueueFree();
 		p.Play();
 	}
