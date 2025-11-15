@@ -24,7 +24,7 @@ public partial class UpgradeScreen : Panel
 	public override void _Ready()
 	{
 		ProcessMode = Node.ProcessModeEnum.WhenPaused;
-		Hide();
+		this.Visible = false;
 		
 		_ui = GetParent<Ui>();
 		_player = _ui.GetPlayer();
