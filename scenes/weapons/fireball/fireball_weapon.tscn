@@ -1,20 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://7subxsr3gb3o"]
+[gd_scene load_steps=3 format=3 uid="uid://7subxsr3gb3o"]
 
 [ext_resource type="Script" uid="uid://dqsiueykhc37" path="res://scripts/weapons/fireball_weapon/FireballWeapon.cs" id="1_ekx4o"]
 [ext_resource type="PackedScene" uid="uid://cyjhlvykvi3fn" path="res://scenes/weapons/fireball/fireball.tscn" id="2_s5frb"]
 
-[sub_resource type="Curve" id="Curve_s5frb"]
-_data = [Vector2(0, 0.5617978), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[node name="FireballWeapon" type="Node2D" node_paths=PackedStringArray("_timer")]
-y_sort_enabled = true
+[node name="FireballWeapon" type="Node2D"]
 script = ExtResource("1_ekx4o")
 _fireballPackedScene = ExtResource("2_s5frb")
-_speedRamp = SubResource("Curve_s5frb")
-_fireballLifetime = 3.0
-_timer = NodePath("Timer")
-_projSpeed = 500.0
+_oscillationLength = 500.0
+_oscillationMag = 0.6
+_projSpeed = 200.0
+_projCount = 4.0
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 3.0

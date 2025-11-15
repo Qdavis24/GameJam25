@@ -17,13 +17,11 @@ public partial class ChaseState : EState
 
     [ExportCategory("Boids Behavior")] [Export]
     private float _separationForce = 1.0f;
-
     [Export] private float _alignmentForce = .8f;
     [Export] private float _cohesionForce = .7f;
 
-    [ExportCategory("General Behavior")] [Export]
-    private float _boidsInfluence;
-
+    [ExportCategory("General Behavior")] 
+    [Export] private float _boidsInfluence;
     [Export] private float _flowFieldInfluence;
     [Export] private float _minSpeed;
     [Export] private float _maxSpeed;

@@ -1,7 +1,8 @@
-[gd_scene load_steps=30 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=31 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
+[ext_resource type="PackedScene" uid="uid://rmamf56uxsh1" path="res://scenes/weapons/water/water_weapon.tscn" id="3_fiwjr"]
 [ext_resource type="PackedScene" uid="uid://tknrqdiu3tio" path="res://scenes/weapons/stone/stone_weapon.tscn" id="3_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://7subxsr3gb3o" path="res://scenes/weapons/fireball/fireball_weapon.tscn" id="3_vwqlx"]
 [ext_resource type="Texture2D" uid="uid://bkjnwy48gqesn" path="res://assets/characters/fox/fox_idle.png" id="4_p7c74"]
@@ -153,15 +154,14 @@ height = 38.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_s5buh"]
 radius = 22.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("FireballW", "StoneW") groups=["Players"]]
+[node name="Player" type="CharacterBody2D" groups=["Players"]]
 y_sort_enabled = true
 script = ExtResource("1_rdh6l")
-MaxHealth = 100
-SlashAttack = ExtResource("2_fiwjr")
 LungeSpeed = 300.0
 LungeDuration = 0.3
-FireballW = NodePath("FireballWeapon")
-StoneW = NodePath("StoneWeapon")
+SlashAttack = ExtResource("2_fiwjr")
+
+[node name="WaterWeapon" parent="." instance=ExtResource("3_fiwjr")]
 
 [node name="StoneWeapon" parent="." instance=ExtResource("3_rdh6l")]
 _projCount = 5.0

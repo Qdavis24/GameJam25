@@ -6,6 +6,8 @@ public partial class Fireball : Node2D
 {
     [Export] private PackedScene _explosionParticles;
     [Export] private Hitbox _hitbox;
+    [Export] private AudioStreamPlayer2D _fireStreamPlayer;
+    [Export] private AudioStreamPlayer2D _wooshStreamPlayer;
 
     public float Damage
     {
@@ -23,6 +25,11 @@ public partial class Fireball : Node2D
     {
         _hitbox.AreaEntered += OnAreaEntered;
         _hitbox.BodyEntered += OnBodyEntered;
+        _fireStreamPlayer.PitchScale *= .5f + GD.Randf();
+        _wooshStreamPlayer.PitchScale *= .5f + GD.Randf();
+        _fireStreamPlayer.Play();
+        _wooshStreamPlayer.Play();
+        
     }
 
     private void SpawnExplosion()

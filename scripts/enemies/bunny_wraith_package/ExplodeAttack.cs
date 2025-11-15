@@ -6,6 +6,8 @@ public partial class ExplodeAttack : Node2D
     [Signal]
     public delegate void AttackFinishedEventHandler();
 
+    [Export] private AudioStreamPlayer2D _audioStreamPlayer;
+    [Export] private AudioStream[] _audioStreams;
     [Export] private GpuParticles2D _explodeEffect;
     [Export] private PointLight2D _explodeLight;
     [Export] private float _lightIntensity;
@@ -14,6 +16,8 @@ public partial class ExplodeAttack : Node2D
 
     public override void _Ready()
     {
+        _audioStreamPlayer.Stream = _audioStreams[GD.Randi()%_audioStreams.Length];
+        _audioStreamPlayer.Play();
         _explodeLight.Energy = 0;
         _explodeEffect.Emitting = true;
         _explodeEffect.Finished += OnFinished;

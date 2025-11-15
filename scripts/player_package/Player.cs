@@ -177,6 +177,7 @@ public partial class Player : CharacterBody2D
 
     private void TakeDamage(float amount, Vector2 dir)
     {
+        GameManager.Instance.Cam.Shake(amount);
         _health = Mathf.Clamp(_health - amount, 0, _maxHealth);
         EmitSignalHealthChanged(_health);
     }
@@ -198,7 +199,7 @@ public partial class Player : CharacterBody2D
 
     public void UnlockWeapon(Weapon weapon)
     {
-        _weapons[weapon].Unlock();
+        _weapons[weapon].InitWeapon();
     }
 
     // Physics Signals below

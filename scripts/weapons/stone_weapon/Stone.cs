@@ -4,51 +4,42 @@ using GameJam25.scripts.damage_system;
 
 public partial class Stone : Node2D
 {
-    [Signal]
-    public delegate void StoneDestroyedEventHandler();
-    [Export] private PackedScene _explosionParticles;
-    [Export] private Hitbox _hitbox;
-   
-    
+    public Timer Timer;
+    private AnimatedSprite2D _sprite;
+    private GpuParticles2D _explosionParticles;
+    private Hitbox _hitbox;
+
     public float Damage
     {
-        get
-        {
-            return _hitbox.Damage;
-        }
-        set
-        {
-            _hitbox.Damage = value;
-        }
+        get { return _hitbox.Damage; }
+        set { _hitbox.Damage = value; }
     }
-    
+
     public override void _Ready()
     {
+        _sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        _explosionParticles = GetNode<GpuParticles2D>("GPUParticles2D");
+        _hitbox = GetNode<Hitbox>("Hitbox");
+        Timer = GetNode<Timer>("Timer");
+
+        Timer.Timeout += () =>
+        {
+            _sprite.Visible = true;
+            _hitbox.SetDeferred(Area2D.PropertyName.Monitorable, true);
+            _hitbox.SetDeferred(Area2D.PropertyName.Monitoring, true);
+        };
         
         _hitbox.AreaEntered += OnAreaEntered;
-        
     }
     
-    private void SpawnExplosion()
-    {
-        var explodeParticles = _explosionParticles.Instantiate<GpuParticles2D>();
-        explodeParticles.Emitting = true;
-        explodeParticles.Finished += () => explodeParticles.QueueFree();
-        GetTree().Root.AddChild(explodeParticles);
-        explodeParticles.GlobalPosition = GlobalPosition;
-    }
     
     public void OnAreaEntered(Area2D area)
     {
         if (!area.IsInGroup("EnemyHurtbox")) return;
-        //SpawnExplosion();
-        
-        QueueFree();
-    }
-
-    public override void _ExitTree()
-    {
-        EmitSignalStoneDestroyed();
-        base._ExitTree();
+        _explosionParticles.Emitting = true;
+        _sprite.Visible = false;
+        _hitbox.SetDeferred(Area2D.PropertyName.Monitorable, false);
+        _hitbox.SetDeferred(Area2D.PropertyName.Monitoring, false);
+        Timer.Start();
     }
 }

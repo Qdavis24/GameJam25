@@ -12,6 +12,7 @@ public partial class Ui : CanvasLayer
 
     public override void _Ready()
     {
+        
         _xpBar = GetNode<ProgressBar>("XpBar");
         _healthBar = GetNode<ProgressBar>("HealthBar");
         _upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
@@ -20,6 +21,8 @@ public partial class Ui : CanvasLayer
     public void InitializeUiFromPlayer(Player player)
     {
         Player = player;
+        
+        Player.LevelChanged += LevelUp;
 
         // subscribe 
         Player.StatsInitialized += (health, maxHealth, xp, maxXp, level) =>
@@ -60,7 +63,7 @@ public partial class Ui : CanvasLayer
     }
 
 
-    public void TriggerRoll()
+    public void LevelUp(int level)
     {
         _upgradeScreen.Show();
     }

@@ -8,120 +8,100 @@ using Vector2 = Godot.Vector2;
 public partial class FireballWeapon : WeaponBase
 {
     [Export] private PackedScene _fireballPackedScene;
-    [Export] private Curve _speedRamp;
-    [Export] private double _fireballLifetime;
+    [Export] private float _oscillationLength;
+    [Export] private float _oscillationMag;
+    
+    private Timer _timer;
     
     private Node2D[] _fireballs;
     private Vector2[] _directions;
-
-    private List<Node2D[]> _burstsQueue;
+    private List<Node2D[]> _bursts;
     private List<float> _burstsDistances;
-    private List<double> _currTimes;
-
-    private float _distancePerFrame;
 
 
-    protected override void InitWeapon()
+    public override void InitWeapon()
     {
-        if (_burstsQueue != null)
-        {
-            var i = 0;
-            while (_burstsQueue.Count > 0)
-            {
-                CleanupBalls(i);
-                i++;
-            }
-        }
-        
-        _burstsQueue = new List<Node2D[]>();
-        _burstsDistances = new List<float>();
-        _currTimes = new List<double>();
         _directions = new Vector2[(int)_projCount];
+        _timer.WaitTime = _projCooldown;
         CalculateDirections();
+        OnTimeout();
+        _timer.Start();
+        _active = true;
     }
     private void CalculateDirections()
     {
-        float radIncr = (2 * Mathf.Pi) / _projCount;
+        float radIncr = (2 * Mathf.Pi) / (int)_projCount;
         float currRad = 0;
-        for (int i = 0; i < _projCount; i++)
+        for (int i = 0; i < (int)_projCount; i++)
         {
             _directions[i] = Vector2.FromAngle(currRad);
             currRad += radIncr;
         }
     }
-
-    private void CleanupBalls(int burstIndex)
-    {
-        foreach (Node2D fireball in _burstsQueue[burstIndex])
-        {
-            if (IsInstanceValid(fireball))
-                fireball.QueueFree();
-        }
-        _burstsQueue.RemoveAt(burstIndex);
-        _currTimes.RemoveAt(burstIndex);
-    }
-
+    
     public override void _Ready()
     {
-        InitWeapon();
-
-        _distancePerFrame = _directions[0].Length();
+        _timer = GetNode<Timer>("Timer");
         _timer.Timeout += OnTimeout;
+        
+        _bursts = new List<Node2D[]>();
+        _burstsDistances = new List<float>();
     }
 
 
     public override void _PhysicsProcess(double delta)
     {
-        for (int i = 0; i < _burstsQueue.Count; i++)
+        if (!_active) return;
+        
+        var burstsToRemove = new List<int>();
+        var distanceTraveled = _directions[0].Length() * _projSpeed * (float)delta;
+        for (int i = 0; i < _bursts.Count; i++) // go through each burst
         {
-            _currTimes[i] += delta;
-            // trigger deque for a burst
-            if (_currTimes[i] >= _fireballLifetime)
+            bool burstFinished = true;
+            for (int j = 0; j < _bursts[i].Length; j++) // position each fireball in a single burst
             {
-                CleanupBalls(i);
-                continue;
-            }
-
-            
-            // position each fireball in a burst
-            for (int j = 0; j < _projCount; j++)
-            {
-                if (IsInstanceValid(_burstsQueue[i][j]))
+                if (IsInstanceValid(_bursts[i][j]))
                 {
+                    burstFinished = false;
                     Vector2 dir =
                         _directions[j] *
-                        _speedRamp.Sample((float)(_currTimes[i] / _fireballLifetime)) *
                         _projSpeed;
                     Vector2 perpDir = new Vector2(-dir.Y, dir.X);
-                    dir += perpDir * (float) Math.Sin((_burstsDistances[i] / 50) * Mathf.Tau) *.5f;
-                    _burstsQueue[i][j].GlobalPosition += dir * (float)delta;
-                    _burstsQueue[i][j].Rotation = dir.Angle();
+                    dir += perpDir * (float) Math.Sin((_burstsDistances[i] / _oscillationLength) * Mathf.Tau) * _oscillationMag;
+                    _bursts[i][j].GlobalPosition += dir * (float)delta;
+                    _bursts[i][j].Rotation = dir.Angle();
                 }
             }
 
-            _burstsDistances[i] += _distancePerFrame;
+            if (burstFinished) burstsToRemove.Add(i);
+            _burstsDistances[i] += distanceTraveled;
+        }
 
+        foreach (int index in burstsToRemove)
+        {
+            _bursts.RemoveAt(index);
+            _burstsDistances.RemoveAt(index);
         }
         
     }
 
     private void OnTimeout()
     {
-        _currTimes.Add(0);
-
         _fireballs = new Node2D[(int)_projCount];
         for (int i = 0; i < (int)_projCount; i++)
         {
             var currFireball = _fireballPackedScene.Instantiate<Fireball>();
+            currFireball.GlobalPosition = GlobalPosition;
+            GetTree().Root.AddChild(currFireball);
+            
             currFireball.Scale *= _projSize;
             currFireball.Damage = _projDamage;
             currFireball.Rotation = _directions[i].Angle();
-            GetTree().Root.AddChild(currFireball);
-            currFireball.GlobalPosition = GlobalPosition;
+            
             _fireballs[i] = currFireball;
         }
 
         _burstsDistances.Add(0.0f);
-        _burstsQueue.Add(_fireballs);
+        _bursts.Add(_fireballs);
     }
 }

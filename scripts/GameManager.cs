@@ -18,7 +18,6 @@ public partial class GameManager : Node
 	[Export] private float _enemySpawnerNumWavesScalr = 1.1f;
 
 	[ExportCategory("External Required Resources")] 
-	[Export] private PackedScene _upgradePckdScene;
 	[Export] private PackedScene _worldPckdScene;
 	[Export] private PackedScene _playerPckdScene;
 	[Export] private PackedScene _playerSpawnPckdScene;
@@ -28,7 +27,7 @@ public partial class GameManager : Node
 	
 	// Internal Required Resources
 	private Ui _ui;
-	private Camera _cam;
+	public Camera Cam;
 
 
 	// State Instances
@@ -45,12 +44,11 @@ public partial class GameManager : Node
 	public override void _Ready()
 	{
 		_ui = GetNode<Ui>("Ui");
-		_cam = GetNode<Camera>("Camera2D");
+		Cam = GetNode<Camera>("Camera2D");
 		
 		Instance = this;
 		
 		Player = _playerPckdScene.Instantiate<Player>();
-		Player.LevelChanged += OnLevelUp;
 		_ui.InitializeUiFromPlayer(Player);
 		AddChild(Player);
 		InitLevel();
@@ -60,7 +58,7 @@ public partial class GameManager : Node
 	public override void _PhysicsProcess(double delta)
 	{
 		UpdateFlowField(false);
-		if (Input.IsActionJustPressed("DEBUG-trigger-upgrade")) OnLevelUp(2);
+		if (Input.IsActionJustPressed("DEBUG-trigger-upgrade")) _ui.LevelUp(1);
 	}
 	
 	private void UpdateFlowField(bool debug)
@@ -135,19 +133,14 @@ public partial class GameManager : Node
 		var spawnPortal = _playerSpawnPckdScene.Instantiate<PlayerSpawn>();
 		spawnPortal.GlobalPosition = CurrWorld.LogicalData.PlayerSpawn;
 		AddChild(spawnPortal);
-		_cam.Target = spawnPortal;
+		Cam.Target = spawnPortal;
 		spawnPortal.PortalOpen += () =>
 		{
 			Player.GlobalPosition = spawnPortal.GlobalPosition;
-			_cam.Target = Player;
+			Cam.Target = Player;
 		};
 	}
 	
-	// Signal Callbacks below
-	private void OnLevelUp(int level)
-	{
-		_ui.TriggerRoll();
-	}
 	private void OnSpawnerDestroyed()
 	{
 		_numSpawners--;

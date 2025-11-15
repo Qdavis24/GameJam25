@@ -173,6 +173,7 @@ _hitbox = NodePath("Hitbox")
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_sk7d1")
+Damage = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("CircleShape2D_sk7d1")

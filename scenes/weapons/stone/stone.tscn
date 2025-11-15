@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://cyoad0s6jh8fb" path="res://assets/crystals/crystal_dark_64x64_24f_20d_normal.png" id="1_6dxeq"]
 [ext_resource type="Script" uid="uid://klt23un5deom" path="res://scripts/weapons/stone_weapon/Stone.cs" id="1_adcde"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_adcde"]
-[ext_resource type="PackedScene" uid="uid://bc8136epjg2t4" path="res://scenes/weapons/fireball/explode.tscn" id="2_evfcf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6dxeq"]
 radius = 14.0
@@ -185,16 +184,17 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Stone" type="Node2D" node_paths=PackedStringArray("_hitbox")]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sxm6i"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+
+[node name="Stone" type="Node2D"]
 script = ExtResource("1_adcde")
-_explosionParticles = ExtResource("2_evfcf")
-_hitbox = NodePath("Hitbox")
 
 [node name="Hitbox" type="Area2D" parent="." groups=["PlayerHitbox"]]
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("2_adcde")
-KnockbackWeight = 500
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 rotation = 1.5707964
@@ -204,3 +204,10 @@ shape = SubResource("CapsuleShape2D_6dxeq")
 rotation = 1.5707964
 sprite_frames = SubResource("SpriteFrames_o1jpl")
 frame_progress = 0.076768026
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_sxm6i")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true

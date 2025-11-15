@@ -184,7 +184,6 @@ y_sort_enabled = true
 collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_cqb61")
-_health = 20
 SteeringRange = NodePath("SteeringRange")
 AttackRange = 50
 Animations = NodePath("WraithAnimations")
@@ -257,11 +256,11 @@ collision_mask = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SteeringRange"]
 shape = SubResource("CircleShape2D_voie1")
 
-[node name="HurtBox" type="Area2D" parent="." groups=["EnemyHurtbox"]]
+[node name="Hurtbox" type="Area2D" parent="." groups=["EnemyHurtbox"]]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(0, 8)
 shape = SubResource("CapsuleShape2D_pdrcd")
 
@@ -283,4 +282,4 @@ one_shot = true
 
 [connection signal="body_entered" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeEntered"]
 [connection signal="body_exited" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeExited"]
-[connection signal="area_entered" from="HurtBox" to="." method="OnEnemyHurtBoxEntered"]
+[connection signal="area_entered" from="Hurtbox" to="." method="OnEnemyHurtBoxEntered"]

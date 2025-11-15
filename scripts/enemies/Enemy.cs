@@ -16,6 +16,7 @@ public partial class Enemy : CharacterBody2D
     [Export] private Timer _flashTimer;
     [Export] private EStateMachine _stateMachine;
     [Export] private ShaderMaterial _flashShader;
+    public Area2D Hurtbox;
 
     public float Health; // public so states can use this
 
@@ -31,7 +32,11 @@ public partial class Enemy : CharacterBody2D
 
     public override void _Ready()
     {
+        Hurtbox = GetNode<Area2D>("Hurtbox");
+        
+        Hurtbox.AreaEntered += OnEnemyHurtBoxEntered;
         _flashTimer.Timeout += () => Animations.Material = null;
+        
         Health = _maxHealth;
     }
 
