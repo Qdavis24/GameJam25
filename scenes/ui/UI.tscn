@@ -1,38 +1,110 @@
-[gd_scene load_steps=7 format=3 uid="uid://w11lstxqrmpj"]
+[gd_scene load_steps=12 format=3 uid="uid://w11lstxqrmpj"]
 
 [ext_resource type="PackedScene" uid="uid://cnrgwrvkm8ajt" path="res://scenes/ui/UpgradeScreen.tscn" id="1_d2gw2"]
 [ext_resource type="Script" uid="uid://bu3whablyvrhm" path="res://scripts/ui/Ui.cs" id="1_m01cm"]
+[ext_resource type="Texture2D" uid="uid://w2f4tpkoqpd6" path="res://assets/ui/heart.png" id="3_nnfdp"]
+[ext_resource type="Texture2D" uid="uid://7ci5xohqb3ky" path="res://assets/ui/xp.png" id="3_s64wo"]
+[ext_resource type="FontFile" uid="uid://blrxolrpmx4l2" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="5_dqg8s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dqg8s"]
+bg_color = Color(0, 0, 0, 0.20784314)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m01cm"]
 bg_color = Color(0, 0.654902, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="Theme" id="Theme_nnfdp"]
+default_font = ExtResource("5_dqg8s")
+default_font_size = 26
+ProgressBar/colors/font_color = Color(1, 1, 1, 1)
+ProgressBar/colors/font_outline_color = Color(0, 0, 0, 1)
+ProgressBar/constants/outline_size = 4
+ProgressBar/styles/background = SubResource("StyleBoxFlat_dqg8s")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_m01cm")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tnv4l"]
+bg_color = Color(0, 0, 0, 0.20784314)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s64wo"]
 bg_color = Color(0.8352941, 0, 0.023529412, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="Theme" id="Theme_m01cm"]
+default_font = ExtResource("5_dqg8s")
+default_font_size = 29
+ProgressBar/colors/font_color = Color(1, 1, 1, 1)
+ProgressBar/colors/font_outline_color = Color(0, 0, 0, 1)
+ProgressBar/constants/outline_size = 4
+ProgressBar/styles/background = SubResource("StyleBoxFlat_tnv4l")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_s64wo")
 
 [node name="Ui" type="CanvasLayer"]
 script = ExtResource("1_m01cm")
 
 [node name="UpgradeScreen" parent="." instance=ExtResource("1_d2gw2")]
+SlotSound = null
+
+[node name="XpIcon" type="TextureRect" parent="."]
+anchors_preset = -1
+anchor_left = 0.007
+anchor_top = 0.012074074
+anchor_right = 0.020958334
+anchor_bottom = 0.037
+offset_left = -0.44000053
+offset_top = -0.03999996
+offset_right = -0.24000168
+offset_bottom = 0.040000916
+texture = ExtResource("3_s64wo")
+expand_mode = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="XpBar" type="ProgressBar" parent="."]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 27.0
+anchors_preset = -1
+anchor_right = 0.23854166
+offset_left = 54.0
+offset_top = 14.0
+offset_right = 54.0
+offset_bottom = 41.0
 grow_horizontal = 2
 theme = SubResource("Theme_nnfdp")
-show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="HealthIcon" type="TextureRect" parent="."]
+anchors_preset = -1
+anchor_left = 0.007
+anchor_top = 0.053000003
+anchor_right = 0.021000002
+anchor_bottom = 0.07700001
+offset_left = -0.44000053
+offset_top = -0.24000168
+offset_right = -1.3200035
+offset_bottom = -0.16001129
+texture = ExtResource("3_nnfdp")
+expand_mode = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 anchors_preset = -1
 anchor_right = 0.23871528
-offset_top = 30.0
-offset_bottom = 57.0
+anchor_bottom = 0.0018518518
+offset_left = 54.0
+offset_top = 57.0
+offset_right = 54.00003
+offset_bottom = 84.0
 grow_horizontal = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_m01cm")
