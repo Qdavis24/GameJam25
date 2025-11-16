@@ -78,14 +78,14 @@ offset_bottom = 46.0
 layout_mode = 2
 size_flags_horizontal = 3
 theme = SubResource("Theme_kh7v7")
-text = "volume
+text = "sfx volume
 "
 fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/settings/volume/HBoxContainer"]
+[node name="SfxSlider" type="HSlider" parent="CenterContainer/VBoxContainer/settings/volume/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -100,7 +100,46 @@ ticks_position = 3
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
+[node name="music" type="Panel" parent="CenterContainer/VBoxContainer/settings"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/settings/music"]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 974.0
+offset_bottom = 46.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/VBoxContainer/settings/music/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_kh7v7")
+text = "music volume
+"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="CenterContainer/VBoxContainer/settings/music/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 1.89
+min_value = -30.0
+max_value = 0.0
+tick_count = 5
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="SPACER" type="Control" parent="CenterContainer/VBoxContainer/settings/music/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
 [node name="LeaveSettings" type="Button" parent="CenterContainer/VBoxContainer/settings"]
 layout_mode = 2
 size_flags_vertical = 4
 text = "go back"
+
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/settings/volume/HBoxContainer/SfxSlider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/settings/music/HBoxContainer/MusicSlider" to="." method="_on_music_slider_value_changed"]

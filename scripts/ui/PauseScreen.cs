@@ -26,7 +26,14 @@ public partial class PauseScreen : Panel
 		GetNode<Button>("CenterContainer/VBoxContainer/pause/Menu").Pressed += MainMenuPressed;
 		GetNode<Button>("CenterContainer/VBoxContainer/pause/Unpause").Pressed += UnpausePressed;
 
-		GetNode<Button>("CenterContainer/VBoxContainer/settings/LeaveSettings").Pressed += LeaveSettingsPressed;
+		string settings = "CenterContainer/VBoxContainer/settings/";
+		GetNode<Button>(settings + "LeaveSettings").Pressed += LeaveSettingsPressed;
+		
+		double sfxCurrent = AudioServer.GetBusVolumeDb(AudioServer.GetBusIndex("SFX"));
+		GetNode<HSlider>(settings + "volume/HBoxContainer/SfxSlider").Value = sfxCurrent;
+		
+		double musicCurrent = AudioServer.GetBusVolumeDb(AudioServer.GetBusIndex("Music"));
+		GetNode<HSlider>(settings + "music/HBoxContainer/MusicSlider").Value = musicCurrent;
 
 		ProcessMode = Node.ProcessModeEnum.Always;
 		this.Visible = false;
@@ -62,5 +69,18 @@ public partial class PauseScreen : Panel
 	{
 		_settingsContainer.Visible = false;
 		_pauseContainer.Visible = true;
+	}
+	
+	
+	private void _on_sfx_slider_value_changed(double value)
+	{
+		int bus = AudioServer.GetBusIndex("SFX");
+		AudioServer.SetBusVolumeDb(bus, (float)value);
+	}
+	
+	private void _on_music_slider_value_changed(double value)
+	{
+		int bus = AudioServer.GetBusIndex("Music");
+		AudioServer.SetBusVolumeDb(bus, (float)value);
 	}
 }

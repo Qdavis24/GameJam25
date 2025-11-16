@@ -9,7 +9,7 @@ public partial class Sfx : Node
 	private bool _footstepPlaying = false;
 	
 	private const string SfxBus = "SFX";
-	private const string UiBus  = "UI";
+	private const string MusicBus  = "Music";
 
 	public void PlayFootstep(AudioStream stream, Vector2 pos)
 	{
@@ -87,7 +87,7 @@ public partial class Sfx : Node
 			Stream = stream,
 			VolumeDb = volumeDb,
 			PitchScale = pitch,
-			Bus = UiBus
+			Bus = SfxBus
 		};
 
 		AddChild(p);
