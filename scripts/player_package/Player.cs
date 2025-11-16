@@ -20,6 +20,9 @@ public partial class Player : CharacterBody2D
 
 	[Signal]
 	public delegate void LevelChangedEventHandler(int newLevel);
+	
+	[Signal]
+	public delegate void DiedEventHandler();
 
 	[ExportCategory("Stats")] [Export] private int _maxXp = 100;
 	[Export] private float _maxHealth = 100.0f;
@@ -179,6 +182,13 @@ public partial class Player : CharacterBody2D
 	{
 		GameManager.Instance.Cam.Shake(amount);
 		_health = Mathf.Clamp(_health - amount, 0, _maxHealth);
+		
+		if (_health == 0)
+		{
+			EmitSignalDied(); // send stats here?
+			return;
+		}
+		
 		EmitSignalHealthChanged(_health);
 	}
 

@@ -8,6 +8,7 @@ public partial class Ui : CanvasLayer
 	private ProgressBar _healthBar;
 	private UpgradeScreen _upgradeScreen;
 	private PauseScreen _pauseScreen;
+	private DeathScreen _deathScreen;
 
 	public Player Player {get; private set;}
 
@@ -18,6 +19,7 @@ public partial class Ui : CanvasLayer
 		_healthBar = GetNode<ProgressBar>("HealthBar");
 		_upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
 		_pauseScreen = GetNode<PauseScreen>("PauseScreen");
+		_deathScreen = GetNode<DeathScreen>("DeathScreen");
 	}
 
 	public void InitializeUiFromPlayer(Player player)
@@ -38,6 +40,7 @@ public partial class Ui : CanvasLayer
 		Player.HealthChanged += health => UpdateHealth(health);
 		Player.MaxHealthChanged += maxHealth => UpdateMaxHealth(maxHealth);
 		Player.XpChanged += xp => UpdateXp(xp);
+		Player.Died += ShowDeathScreen;
 	}
 
 	private void UpdateHealth(float health)
@@ -68,6 +71,11 @@ public partial class Ui : CanvasLayer
 	public void LevelUp(int level)
 	{
 		_upgradeScreen.Show();
+	}
+	
+	public void ShowDeathScreen()
+	{
+		_deathScreen.Show();
 	}
 
 	public override void _Process(double delta)

@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://dox5xw1hpjw6a"]
+
+[ext_resource type="Script" uid="uid://c4ktbxt8w6sfp" path="res://scripts/ui/DeathScreen.cs" id="1_yar2g"]
+[ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xj0m4"]
+
+[sub_resource type="Theme" id="Theme_tmfs4"]
+default_font = ExtResource("2_xj0m4")
+default_font_size = 200
+Label/colors/font_color = Color(0.8828571, 0, 0.17124498, 1)
+
+[sub_resource type="Theme" id="Theme_mwkx4"]
+default_font = ExtResource("2_xj0m4")
+default_font_size = 49
+
+[node name="DeathScreen" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yar2g")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_tmfs4")
+text = "You Died"
+
+[node name="Menu" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_mwkx4")
+text = "main menu"

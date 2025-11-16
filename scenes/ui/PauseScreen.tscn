@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dhg5dra5mmuyc"]
 
 [ext_resource type="Script" uid="uid://cvjkvjqso34bb" path="res://scripts/ui/PauseScreen.cs" id="1_yv4u6"]
-[ext_resource type="FontFile" uid="uid://blrxolrpmx4l2" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_uuji5"]
-[ext_resource type="FontFile" uid="uid://cm33if0b0s0da" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="3_uuji5"]
+[ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_uuji5"]
+[ext_resource type="FontFile" uid="uid://gr65klg0w4k1" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="3_uuji5"]
 
 [sub_resource type="Theme" id="Theme_8abry"]
 Button/colors/font_color = Color(1, 1, 1, 1)
@@ -54,7 +54,7 @@ text = "settings"
 
 [node name="Menu" type="Button" parent="CenterContainer/VBoxContainer/pause"]
 layout_mode = 2
-text = "quit to main menu"
+text = "main menu"
 
 [node name="settings" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2

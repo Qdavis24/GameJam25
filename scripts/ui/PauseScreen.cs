@@ -28,7 +28,6 @@ public partial class PauseScreen : Panel
 
 		GetNode<Button>("CenterContainer/VBoxContainer/settings/LeaveSettings").Pressed += LeaveSettingsPressed;
 
-		
 		ProcessMode = Node.ProcessModeEnum.Always;
 		this.Visible = false;
 	}
