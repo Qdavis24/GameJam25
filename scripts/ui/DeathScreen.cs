@@ -11,8 +11,6 @@ public partial class DeathScreen : Panel
 	}
 	
 	public void Show() {
-		// TODO: implement audio bus and find out if we need this here
-		//var timer = GetTree().CreateTimer(0.01, processInPhysics: false, processAlways: true);
 		GetTree().Paused = true;
 		this.Visible = true;
 		Modulate = new Color(Modulate, 1); // ensure alpha is 1 (visible)

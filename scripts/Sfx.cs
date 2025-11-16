@@ -7,6 +7,9 @@ public partial class Sfx : Node
 	public override void _EnterTree() => I = this;
 
 	private bool _footstepPlaying = false;
+	
+	private const string SfxBus = "SFX";
+	private const string UiBus  = "UI";
 
 	public void PlayFootstep(AudioStream stream, Vector2 pos)
 	{
@@ -19,7 +22,8 @@ public partial class Sfx : Node
 			Stream = stream,
 			GlobalPosition = pos,
 			VolumeDb = -6f,
-			PitchScale = (float)GD.RandRange(0.9, 1.1)
+			PitchScale = (float)GD.RandRange(0.9, 1.1),
+			Bus = SfxBus
 		};
 
 		AddChild(p);
@@ -48,7 +52,8 @@ public partial class Sfx : Node
 			Stream = stream,
 			GlobalPosition = pos,
 			VolumeDb = volumeDb,
-			PitchScale = pitch
+			PitchScale = pitch,
+			Bus = SfxBus
 		};
 		
 		AddChild(p);
@@ -64,9 +69,10 @@ public partial class Sfx : Node
 		{
 			Stream = stream,
 			VolumeDb = volumeDb,
-			PitchScale = pitch
+			PitchScale = pitch,
+			Bus = SfxBus
 		};
-    
+	
 		// Parent to the target so it follows automatically
 		target.AddChild(p);
 		p.Finished += () => p.QueueFree();
@@ -80,11 +86,17 @@ public partial class Sfx : Node
 		{
 			Stream = stream,
 			VolumeDb = volumeDb,
-			PitchScale = pitch
+			PitchScale = pitch,
+			Bus = UiBus
 		};
 
 		AddChild(p);
 		p.Finished += () => p.QueueFree();
 		p.Play();
+	}
+	
+	public override void _Ready()
+	{
+		ProcessMode = Node.ProcessModeEnum.Always;
 	}
 }
