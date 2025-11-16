@@ -1,9 +1,9 @@
 [gd_scene load_steps=22 format=3 uid="uid://cv7kwyk1tkub8"]
 
 [ext_resource type="Script" uid="uid://dq73tw5i6mbrk" path="res://scripts/world_generation/World.cs" id="1_gtsrf"]
-[ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="2_sjuof"]
+[ext_resource type="Texture2D" uid="uid://dqep2vtnrtql8" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="2_sjuof"]
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="3_dd8c7"]
-[ext_resource type="Texture2D" uid="uid://dk3ll26gafdx3" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="4_am4jb"]
+[ext_resource type="Texture2D" uid="uid://02wpitircr3d" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="4_am4jb"]
 [ext_resource type="Script" uid="uid://bvu271y34tacx" path="res://scripts/world_generation/pipeline/WorldGenerationPipelineManager.cs" id="5_7cx2a"]
 [ext_resource type="Script" uid="uid://csuwanyvgyjhk" path="res://scripts/world_generation/pipeline/logical_stages/GenerateTerrainStage.cs" id="6_4afmt"]
 [ext_resource type="Script" uid="uid://xwgx2tol2mjl" path="res://scripts/world_generation/pipeline/logical_stages/FindIslandsStage.cs" id="7_m2qgm"]

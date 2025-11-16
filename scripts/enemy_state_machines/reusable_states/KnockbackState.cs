@@ -6,9 +6,9 @@ namespace GameJam25.scripts.enemy_state_machines.reusable_states;
 
 public partial class KnockbackState : EState
 {
-    [ExportCategory("Knockback")] [Export] public Curve KnockbackCurve;
-
-    [Export] private double _knockBackDuration;
+    [ExportCategory("Knockback")] 
+    [Export] public Curve KnockbackCurve;
+    [Export] private double _knockBackDuration = .3;
     private float _knockbackWeight;
 
     [ExportCategory("special effects")] [Export]
@@ -52,5 +52,4 @@ public partial class KnockbackState : EState
             else _stateMachine.TransitionTo("ChaseState");
         }
     }
-    
 }

@@ -31,8 +31,8 @@ public partial class ExplodeState : EState
         if (_currTime < 0)
         {
             var explosion = _explosionAttackScene.Instantiate<ExplodeAttack>();
-            GetTree().Root.AddChild(explosion);
             explosion.GlobalPosition = GlobalPosition;
+            GetTree().Root.AddChild(explosion);
             _stateMachine.Owner.QueueFree();
         }
     }

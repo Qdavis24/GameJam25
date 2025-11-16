@@ -3,13 +3,13 @@
 [ext_resource type="Script" uid="uid://jfdhlx28x3b7" path="res://scripts/weapons/stone_weapon/StoneWeapon.cs" id="1_eln4r"]
 [ext_resource type="PackedScene" uid="uid://ca1wtag2x7dhv" path="res://scenes/weapons/stone/stone.tscn" id="2_vq06o"]
 
-[node name="StoneWeapon" type="Node2D" node_paths=PackedStringArray("_timer")]
+[node name="StoneWeapon" type="Node2D"]
 script = ExtResource("1_eln4r")
 _stonePackedScene = ExtResource("2_vq06o")
-_timer = NodePath("Timer")
-_projSpeed = 500.0
-_projCount = 5
-_offset = 100.0
+_offset = 55.0
+_projSpeed = 200.0
+_projCount = 3.0
+_projSize = 0.5
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5

@@ -6,7 +6,7 @@ using Godot;
 public partial class StoneWeapon : WeaponBase
 {
     [Export] private PackedScene _stonePackedScene;
-    [Export] private float _offset = 50.0f;
+    [Export] private float _offset = 60.0f;
 
     private Stone[] _stones;
     private float[] _stoneAngles;

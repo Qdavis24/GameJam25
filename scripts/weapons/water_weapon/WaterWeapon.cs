@@ -12,14 +12,13 @@ public partial class WaterWeapon : WeaponBase
     private Timer _timer;
     
     private float[] _dropAngles;
-    private float _offset = 100.0f;
+    private float _offset = 80.0f;
 
 
     public override void _Ready()
     {
         _timer = GetNode<Timer>("Timer");
         _timer.Timeout += OnTimeout;
-        InitWeapon();
     }
 
 

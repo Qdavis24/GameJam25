@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://n41ha5q3hksi" path="res://scripts/weapons/fireball_weapon/Fireball.cs" id="1_4h438"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_4h438"]
-[ext_resource type="PackedScene" uid="uid://bc8136epjg2t4" path="res://scenes/weapons/fireball/explode.tscn" id="2_bvcyv"]
-[ext_resource type="Texture2D" uid="uid://blklr2ns14mq3" path="res://assets/characters/fox/attack/fireball.png" id="4_s0qqh"]
+[ext_resource type="PackedScene" uid="uid://bc8136epjg2t4" path="res://scenes/weapons/fireball/fireball_explode.tscn" id="2_bvcyv"]
+[ext_resource type="Texture2D" uid="uid://gk17wi7alwc2" path="res://assets/characters/fox/attack/fireball.png" id="4_s0qqh"]
 [ext_resource type="AudioStream" uid="uid://dkn7kpuydgm8k" path="res://assets/sounds/fireball/fire.wav" id="5_xt8ci"]
 [ext_resource type="AudioStream" uid="uid://bsyr1q0oadd0" path="res://assets/sounds/fireball/woosh.wav" id="6_1npbi"]
 
@@ -190,12 +190,16 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="fireball" type="Node2D" node_paths=PackedStringArray("_hitbox", "_fireStreamPlayer", "_wooshStreamPlayer")]
+[node name="fireball" type="Node2D" node_paths=PackedStringArray("_hitbox")]
+z_index = -1
+y_sort_enabled = true
 script = ExtResource("1_4h438")
+_wooshStream = ExtResource("6_1npbi")
+_fireStream = ExtResource("5_xt8ci")
+_wooshVolume = -30.0
+_fireVolume = -30.0
 _explosionParticles = ExtResource("2_bvcyv")
 _hitbox = NodePath("Hitbox")
-_fireStreamPlayer = NodePath("FireStreamPlayer")
-_wooshStreamPlayer = NodePath("WoosStreamPlayer")
 
 [node name="Hitbox" type="Area2D" parent="." groups=["PlayerHitbox"]]
 collision_layer = 2

@@ -93,7 +93,7 @@ public partial class FireballWeapon : WeaponBase
             var currFireball = _fireballPackedScene.Instantiate<Fireball>();
             currFireball.GlobalPosition = GlobalPosition;
             GetTree().Root.AddChild(currFireball);
-            
+            currFireball.ExplosionScale = _projSize;
             currFireball.Scale *= _projSize;
             currFireball.Damage = _projDamage;
             currFireball.Rotation = _directions[i].Angle();

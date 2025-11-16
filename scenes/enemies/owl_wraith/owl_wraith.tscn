@@ -1,17 +1,28 @@
-[gd_scene load_steps=36 format=3 uid="uid://dtgtqkim67d2o"]
+[gd_scene load_steps=41 format=3 uid="uid://dtgtqkim67d2o"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_pkq8v"]
 [ext_resource type="Script" uid="uid://dx3v6yxf8sc1u" path="res://scripts/enemy_state_machines/base_classes/EStateMachine.cs" id="2_eieg8"]
+[ext_resource type="AudioStream" uid="uid://ct748j1w2mwkf" path="res://assets/sounds/thuds/hitsound.wav" id="2_fwxpa"]
 [ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_rvc00"]
 [ext_resource type="Script" uid="uid://cbwikvgq15dby" path="res://scripts/enemy_state_machines/reusable_states/ChaseState.cs" id="3_eieg8"]
+[ext_resource type="AudioStream" uid="uid://0wvqowwkx43i" path="res://assets/sounds/thuds/fleshy hit.wav" id="3_hvou1"]
+[ext_resource type="AudioStream" uid="uid://crvcj0hi56575" path="res://assets/sounds/thuds/fleshy hit 2.wav" id="4_kelde"]
 [ext_resource type="Script" uid="uid://3tcjxipqa6on" path="res://scripts/enemy_state_machines/reusable_states/KnockbackState.cs" id="4_oto54"]
+[ext_resource type="AudioStream" uid="uid://ckxrfox7070pk" path="res://assets/sounds/thuds/fleshy hit (1).wav" id="5_fkf4r"]
 [ext_resource type="Script" uid="uid://bwdq54lyr2fds" path="res://scripts/enemy_state_machines/reusable_states/DeathState.cs" id="5_rvc00"]
 [ext_resource type="Script" uid="uid://op8oiyqpgdc1" path="res://scripts/enemy_state_machines/base_classes/EInstanceContext.cs" id="7_yqrye"]
 [ext_resource type="Script" uid="uid://dlgs75em0lmb6" path="res://scripts/enemy_state_machines/custom_states/ShootState.cs" id="8_s7auy"]
 [ext_resource type="PackedScene" uid="uid://bb1am2rf2c6lb" path="res://scenes/enemies/owl_wraith/shadow_ball.tscn" id="9_eieg8"]
 [ext_resource type="PackedScene" uid="uid://chvr7h6jkalhr" path="res://scenes/enemies/Particle_Effects/death_particles.tscn" id="9_mguii"]
-[ext_resource type="Texture2D" uid="uid://drp4ukbvg0k4g" path="res://assets/enemies/owl_wraith.png" id="11_oto54"]
-[ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/characters/fox/shadow.png" id="11_rvc00"]
+[ext_resource type="Texture2D" uid="uid://cxut1skvasprb" path="res://assets/enemies/owl_wraith.png" id="11_oto54"]
+[ext_resource type="Texture2D" uid="uid://bsii8213thyr1" path="res://assets/characters/fox/shadow.png" id="11_rvc00"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_w2b4p"]
+streams_count = 4
+stream_0/stream = ExtResource("2_fwxpa")
+stream_1/stream = ExtResource("3_hvou1")
+stream_2/stream = ExtResource("4_kelde")
+stream_3/stream = ExtResource("5_fkf4r")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
 radius = 15.0
@@ -172,17 +183,20 @@ scale_min = 3.0
 scale_max = 10.0
 color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
 
-[node name="OwlWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Animations", "_flashTimer", "_stateMachine") groups=["Enemies", "OwlWraiths"]]
+[node name="OwlWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Animations", "_flashTimer", "_stateMachine", "_damageIntervalTimer") groups=["Enemies", "OwlWraiths"]]
 y_sort_enabled = true
 collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_pkq8v")
+_hitSounds = SubResource("AudioStreamRandomizer_w2b4p")
+_maxHealth = 30.0
 SteeringRange = NodePath("SteeringRange")
 AttackRange = 500
 Animations = NodePath("WraithAnimations")
-_flashTimer = NodePath("Timer")
+_flashTimer = NodePath("FlashTimer")
 _stateMachine = NodePath("WraithStateMachine")
 _flashShader = ExtResource("2_rvc00")
+_damageIntervalTimer = NodePath("DamageInterval")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_q5y88")
@@ -271,9 +285,12 @@ position = Vector2(0, -20.189999)
 scale = Vector2(1.29, 1.67)
 texture = ExtResource("11_rvc00")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="FlashTimer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
+
+[node name="DamageInterval" type="Timer" parent="."]
+wait_time = 0.2
 
 [connection signal="body_entered" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeEntered"]
 [connection signal="body_exited" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeExited"]

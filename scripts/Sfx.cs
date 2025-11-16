@@ -37,7 +37,11 @@ public partial class Sfx : Node
 	
 	public void Play2D(AudioStream stream, Vector2 pos, float volumeDb = -6f, float pitch = 1f)
 	{
-		if (stream == null) return;
+		if (stream == null)
+		{
+			GD.PrintErr("SFX stream is null");
+			return;
+		}
 
 		var p = new AudioStreamPlayer2D
 		{
@@ -52,6 +56,22 @@ public partial class Sfx : Node
 		p.Play();
 	}
 	
+	public void PlayFollowing(AudioStream stream, Node2D target, float volumeDb = -6f, float pitch = 1f)
+	{
+		if (stream == null || target == null) return;
+
+		var p = new AudioStreamPlayer2D
+		{
+			Stream = stream,
+			VolumeDb = volumeDb,
+			PitchScale = pitch
+		};
+    
+		// Parent to the target so it follows automatically
+		target.AddChild(p);
+		p.Finished += () => p.QueueFree();
+		p.Play();
+	}
 	public void PlayUi(AudioStream stream, float volumeDb = -6f, float pitch = 1f)
 	{
 		if (stream == null) return;

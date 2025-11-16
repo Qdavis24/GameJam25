@@ -4,10 +4,15 @@ using Godot;
 
 public partial class Fireball : Node2D
 {
+    [ExportCategory("sound FX")] 
+    [Export] private AudioStream _wooshStream;
+    [Export] private AudioStream _fireStream;
+    [Export] private float _wooshVolume;
+    [Export] private float _fireVolume;
+    
+    
     [Export] private PackedScene _explosionParticles;
     [Export] private Hitbox _hitbox;
-    [Export] private AudioStreamPlayer2D _fireStreamPlayer;
-    [Export] private AudioStreamPlayer2D _wooshStreamPlayer;
 
     public float Damage
     {
@@ -21,24 +26,23 @@ public partial class Fireball : Node2D
         }
     }
 
+    public float ExplosionScale;
+
     public override void _Ready()
     {
         _hitbox.AreaEntered += OnAreaEntered;
         _hitbox.BodyEntered += OnBodyEntered;
-        _fireStreamPlayer.PitchScale *= .5f + GD.Randf();
-        _wooshStreamPlayer.PitchScale *= .5f + GD.Randf();
-        _fireStreamPlayer.Play();
-        _wooshStreamPlayer.Play();
-        
+        Sfx.I.PlayFollowing(_fireStream,  this,_fireVolume,.5f + GD.Randf());
+        Sfx.I.Play2D(_wooshStream, GlobalPosition, _wooshVolume, pitch: .5f + GD.Randf());
     }
 
     private void SpawnExplosion()
     {
-        var explodeParticles = _explosionParticles.Instantiate<GpuParticles2D>();
-        explodeParticles.Emitting = true;
-        explodeParticles.Finished += () => explodeParticles.QueueFree();
-        GetTree().Root.CallDeferred("add_child",  explodeParticles);
-        explodeParticles.GlobalPosition = GlobalPosition;
+        var explosion = _explosionParticles.Instantiate<FireballExplode>();
+        explosion._hitbox.Damage = Damage;
+        explosion.Scale *= ExplosionScale;
+        GetTree().Root.CallDeferred("add_child",  explosion);
+        explosion.GlobalPosition = GlobalPosition;
     }
     private void OnAreaEntered(Area2D area)
     {

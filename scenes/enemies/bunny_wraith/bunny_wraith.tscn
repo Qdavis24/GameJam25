@@ -1,17 +1,28 @@
-[gd_scene load_steps=37 format=3 uid="uid://dywc23eylfitj"]
+[gd_scene load_steps=42 format=3 uid="uid://dywc23eylfitj"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_cqb61"]
 [ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_hiihx"]
+[ext_resource type="AudioStream" uid="uid://ct748j1w2mwkf" path="res://assets/sounds/thuds/hitsound.wav" id="2_ol46e"]
 [ext_resource type="Script" uid="uid://dx3v6yxf8sc1u" path="res://scripts/enemy_state_machines/base_classes/EStateMachine.cs" id="2_w628p"]
+[ext_resource type="AudioStream" uid="uid://0wvqowwkx43i" path="res://assets/sounds/thuds/fleshy hit.wav" id="3_53d7h"]
 [ext_resource type="Script" uid="uid://cbwikvgq15dby" path="res://scripts/enemy_state_machines/reusable_states/ChaseState.cs" id="3_xdc4i"]
+[ext_resource type="AudioStream" uid="uid://crvcj0hi56575" path="res://assets/sounds/thuds/fleshy hit 2.wav" id="4_87glh"]
 [ext_resource type="Script" uid="uid://3tcjxipqa6on" path="res://scripts/enemy_state_machines/reusable_states/KnockbackState.cs" id="4_uyoe8"]
 [ext_resource type="Script" uid="uid://bwdq54lyr2fds" path="res://scripts/enemy_state_machines/reusable_states/DeathState.cs" id="5_iuhr7"]
+[ext_resource type="AudioStream" uid="uid://ckxrfox7070pk" path="res://assets/sounds/thuds/fleshy hit (1).wav" id="5_rlrlu"]
 [ext_resource type="PackedScene" uid="uid://ct0g3652cw1dx" path="res://scenes/enemies/bunny_wraith/explode_attack.tscn" id="6_ns0ja"]
 [ext_resource type="PackedScene" uid="uid://chvr7h6jkalhr" path="res://scenes/enemies/Particle_Effects/death_particles.tscn" id="6_s0hyp"]
 [ext_resource type="Script" uid="uid://op8oiyqpgdc1" path="res://scripts/enemy_state_machines/base_classes/EInstanceContext.cs" id="7_ktkax"]
 [ext_resource type="Script" uid="uid://bu8otgwd2la2k" path="res://scripts/enemy_state_machines/custom_states/ExplodeState.cs" id="8_t25d3"]
-[ext_resource type="Texture2D" uid="uid://80kvo112cxb3" path="res://assets/enemies/bunny_wraith.png" id="11_d3oxt"]
-[ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/characters/fox/shadow.png" id="11_hiihx"]
+[ext_resource type="Texture2D" uid="uid://so01yr8b37d5" path="res://assets/enemies/bunny_wraith.png" id="11_d3oxt"]
+[ext_resource type="Texture2D" uid="uid://bsii8213thyr1" path="res://assets/characters/fox/shadow.png" id="11_hiihx"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_qknn0"]
+streams_count = 4
+stream_0/stream = ExtResource("2_ol46e")
+stream_1/stream = ExtResource("3_53d7h")
+stream_2/stream = ExtResource("4_87glh")
+stream_3/stream = ExtResource("5_rlrlu")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
 radius = 15.0
@@ -179,17 +190,20 @@ scale_min = 3.0
 scale_max = 10.0
 color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
 
-[node name="BunnyWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Animations", "_flashTimer", "_stateMachine") groups=["BunnyWraiths", "Enemies"]]
+[node name="BunnyWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Animations", "_flashTimer", "_stateMachine", "_damageIntervalTimer") groups=["BunnyWraiths", "Enemies"]]
 y_sort_enabled = true
 collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_cqb61")
+_hitSounds = SubResource("AudioStreamRandomizer_qknn0")
+_maxHealth = 20.0
 SteeringRange = NodePath("SteeringRange")
 AttackRange = 50
 Animations = NodePath("WraithAnimations")
-_flashTimer = NodePath("Timer")
+_flashTimer = NodePath("FlashTimer")
 _stateMachine = NodePath("WraithStateMachine")
 _flashShader = ExtResource("2_hiihx")
+_damageIntervalTimer = NodePath("DamageInterval")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_q5y88")
@@ -241,7 +255,7 @@ script = ExtResource("7_ktkax")
 
 [node name="ExplodeState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("8_t25d3")
-_explosionDelay = 0.2
+_explosionDelay = 10.0
 _explosionAttackScene = ExtResource("6_ns0ja")
 
 [node name="WraithAnimations" type="AnimatedSprite2D" parent="."]
@@ -276,9 +290,12 @@ position = Vector2(-2, -21.999992)
 scale = Vector2(1.29, 1.67)
 texture = ExtResource("11_hiihx")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="FlashTimer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
+
+[node name="DamageInterval" type="Timer" parent="."]
+wait_time = 0.2
 
 [connection signal="body_entered" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeEntered"]
 [connection signal="body_exited" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeExited"]

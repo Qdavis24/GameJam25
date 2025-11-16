@@ -1,8 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://p50l3xkcqjeg"]
+[gd_scene load_steps=25 format=3 uid="uid://p50l3xkcqjeg"]
 
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="1_iyrkn"]
 [ext_resource type="Script" uid="uid://domkigrbuc7kq" path="res://scripts/weapons/water_weapon/Water.cs" id="1_vyfiw"]
+[ext_resource type="AudioStream" uid="uid://bsyr1q0oadd0" path="res://assets/sounds/fireball/woosh.wav" id="2_85s44"]
 [ext_resource type="Texture2D" uid="uid://dak3xgorxkso1" path="res://assets/projectiles/dartingdroplet.png" id="3_vyfiw"]
+[ext_resource type="AudioStream" uid="uid://cyasouu6uhuyf" path="res://assets/sounds/wateridle.wav" id="4_68ykq"]
 
 [sub_resource type="Curve" id="Curve_vyfiw"]
 _data = [Vector2(0, 0.30337083), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -113,11 +115,50 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_vyfiw"]
 radius = 105.01904
 
-[node name="Water" type="Node2D"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_85s44"]
+lifetime_randomness = 0.6
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+direction = Vector3(-1, 1, 0)
+spread = 180.0
+initial_velocity_min = 337.77
+initial_velocity_max = 372.34
+gravity = Vector3(0, 0, 0)
+damping_min = 0.3
+damping_max = 1.0
+scale_min = 0.0
+scale_max = 4.0
+color = Color(0.30980393, 1, 1, 1)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7nt32"]
+lifetime_randomness = 1.0
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+emission_shape_scale = Vector3(0, 0, 0)
+direction = Vector3(-1, 1, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 220.0
+gravity = Vector3(0, 0, 0)
+damping_min = 0.3
+damping_max = 1.0
+scale_min = 0.7
+scale_max = 0.7
+color = Color(0.34901962, 0.9764706, 1, 1)
+
+[node name="Water" type="Node2D" node_paths=PackedStringArray("Timer", "Sprite", "_explosionParticles", "_trailParticles", "_hitbox", "_lockOnRange")]
 script = ExtResource("1_vyfiw")
+_wooshStream = ExtResource("2_85s44")
+_waterStream = ExtResource("4_68ykq")
 _speedRamp = SubResource("Curve_vyfiw")
 _timeToMaxSpeed = 1.0
 _loseControlDistance = 50.0
+Timer = NodePath("Timer")
+Sprite = NodePath("AnimatedSprite2D")
+_explosionParticles = NodePath("ExplodeEffect")
+_trailParticles = NodePath("trail")
+_hitbox = NodePath("Hitbox")
+_lockOnRange = NodePath("LockOnRange")
 
 [node name="Hitbox" type="Area2D" parent="." groups=["PlayerHitbox"]]
 collision_layer = 2
@@ -144,3 +185,14 @@ collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LockOnRange"]
 shape = SubResource("CircleShape2D_vyfiw")
+
+[node name="trail" type="GPUParticles2D" parent="."]
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_85s44")
+
+[node name="ExplodeEffect" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 100
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_7nt32")

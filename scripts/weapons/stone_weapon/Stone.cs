@@ -4,6 +4,9 @@ using GameJam25.scripts.damage_system;
 
 public partial class Stone : Node2D
 {
+	[ExportCategory("Sound Fx")] 
+	[Export] private AudioStream _crumbleSound;
+	
 	public Timer Timer;
 	private Sprite2D _sprite;
 	private GpuParticles2D _explosionParticles;
@@ -36,6 +39,7 @@ public partial class Stone : Node2D
 	public void OnAreaEntered(Area2D area)
 	{
 		if (!area.IsInGroup("EnemyHurtbox")) return;
+		Sfx.I.Play2D(_crumbleSound, GlobalPosition, -25, GD.Randf() * 2);
 		_explosionParticles.Emitting = true;
 		_sprite.Visible = false;
 		_hitbox.SetDeferred(Area2D.PropertyName.Monitorable, false);

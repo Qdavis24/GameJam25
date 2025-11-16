@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://ce3laeov33ym6"]
 
 [ext_resource type="Script" uid="uid://c5m1jpanh83wy" path="res://scripts/debug/Testflowfield.cs" id="1_p8cgi"]
-[ext_resource type="Texture2D" uid="uid://bh8xrrqk3y2ag" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="2_fk6ix"]
+[ext_resource type="Texture2D" uid="uid://dqep2vtnrtql8" path="res://assets/tile_sets/base_layer_terrain/spritesheet_nature-blocks.png" id="2_fk6ix"]
 [ext_resource type="PackedScene" uid="uid://rdssd7jn21gc" path="res://scenes/debug/label.tscn" id="2_wvwan"]
 [ext_resource type="PackedScene" uid="uid://b62p5uepb8f" path="res://scenes/debug/arrow.tscn" id="3_tr8oa"]
 [ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player.tscn" id="4_wvwan"]
@@ -55,10 +55,10 @@ sources/0 = SubResource("TileSetAtlasSource_wvwan")
 
 [node name="Testflowfield" type="Node2D" node_paths=PackedStringArray("tilemap")]
 script = ExtResource("1_p8cgi")
-tilemap = NodePath("BaseLayer")
 label = ExtResource("2_wvwan")
 Size = 300
 Arrow = ExtResource("3_tr8oa")
+tilemap = NodePath("BaseLayer")
 
 [node name="BaseLayer" type="TileMapLayer" parent="."]
 z_index = -1

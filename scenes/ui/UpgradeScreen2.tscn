@@ -1,19 +1,14 @@
-[gd_scene load_steps=12 format=3 uid="uid://85ihfungcggq"]
+[gd_scene load_steps=11 format=3 uid="uid://85ihfungcggq"]
 
-[ext_resource type="Shader" uid="uid://bhwg1m0v34tg2" path="res://shaders/PauseBackground.gdshader" id="1_7yh4n"]
 [ext_resource type="Script" uid="uid://b76aw4tgbd8fo" path="res://scripts/ui/UpgradeScreen.cs" id="2_3cssy"]
-[ext_resource type="AudioStream" uid="uid://dxh0xpufm0su5" path="res://assets/sounds/roll_1.wav" id="3_wvl3i"]
-[ext_resource type="AudioStream" uid="uid://bt6n67tugs6nf" path="res://assets/sounds/roll_2.wav" id="4_y606k"]
-[ext_resource type="AudioStream" uid="uid://82rkd7mwp7xa" path="res://assets/sounds/roll_3.wav" id="5_e4vdh"]
+[ext_resource type="AudioStream" uid="uid://bf8may5x3xdxt" path="res://assets/sounds/roll_1.wav" id="3_wvl3i"]
+[ext_resource type="AudioStream" uid="uid://d4gaev2o5634e" path="res://assets/sounds/roll_2.wav" id="4_y606k"]
+[ext_resource type="AudioStream" uid="uid://p63425cvp0i7" path="res://assets/sounds/roll_3.wav" id="5_e4vdh"]
 [ext_resource type="Shader" uid="uid://d4b8m5gw27t0l" path="res://shaders/UpgradeScroll.gdshader" id="6_d7cod"]
-[ext_resource type="Texture2D" uid="uid://b0aidnsuoui5r" path="res://assets/ui/upgrade_screen/select_ui_frame.png" id="7_dsxno"]
+[ext_resource type="Texture2D" uid="uid://w7sf07s1l4ty" path="res://assets/ui/upgrade_screen/select_ui_frame.png" id="7_dsxno"]
 [ext_resource type="PackedScene" uid="uid://de5afvrruo3gg" path="res://scenes/ui/UpgradeButton.tscn" id="8_4a40l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fl10o"]
-shader = ExtResource("1_7yh4n")
-shader_parameter/tint_color = Color(0, 0, 0, 0.55)
-shader_parameter/speed = 0.25
-shader_parameter/strength = 0.015
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fl10o"]
 streams_count = 3

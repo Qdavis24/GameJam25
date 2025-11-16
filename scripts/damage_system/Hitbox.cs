@@ -6,6 +6,11 @@ using Godot;
 
 public partial class Hitbox : Area2D
 {
-	[Export] public float Damage = 10;
-	[Export] public float KnockbackWeight = 800;
+	[Export] public float Damage = 10f;
+	public float KnockbackWeight;
+
+	public override void _Ready()
+	{
+		KnockbackWeight = Damage * 20f; // 3 pixels per frame per damage point
+	}
 }

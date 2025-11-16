@@ -5,10 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://rmamf56uxsh1" path="res://scenes/weapons/water/water_weapon.tscn" id="3_fiwjr"]
 [ext_resource type="PackedScene" uid="uid://tknrqdiu3tio" path="res://scenes/weapons/stone/stone_weapon.tscn" id="3_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://7subxsr3gb3o" path="res://scenes/weapons/fireball/fireball_weapon.tscn" id="3_vwqlx"]
-[ext_resource type="Texture2D" uid="uid://bkjnwy48gqesn" path="res://assets/characters/fox/fox_idle.png" id="4_p7c74"]
-[ext_resource type="Texture2D" uid="uid://b3f4pn3t8do7u" path="res://assets/characters/fox/fox_walk.png" id="5_gsthy"]
-[ext_resource type="Texture2D" uid="uid://cym3xbms17s5g" path="res://assets/characters/fox/shadow.png" id="6_bdfls"]
-[ext_resource type="AudioStream" uid="uid://brouw7k3a3cpi" path="res://assets/sounds/walk.wav" id="7_i0p41"]
+[ext_resource type="Texture2D" uid="uid://ciit1agds6ihw" path="res://assets/characters/fox/fox_idle.png" id="4_p7c74"]
+[ext_resource type="Texture2D" uid="uid://d0iwaudfkk3uw" path="res://assets/characters/fox/fox_walk.png" id="5_gsthy"]
+[ext_resource type="Texture2D" uid="uid://bsii8213thyr1" path="res://assets/characters/fox/shadow.png" id="6_bdfls"]
+[ext_resource type="AudioStream" uid="uid://dnxstr2v18wxm" path="res://assets/sounds/walk.wav" id="7_i0p41"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6qmwb"]
 atlas = ExtResource("4_p7c74")
@@ -164,7 +164,6 @@ SlashAttack = ExtResource("2_fiwjr")
 [node name="WaterWeapon" parent="." instance=ExtResource("3_fiwjr")]
 
 [node name="StoneWeapon" parent="." instance=ExtResource("3_rdh6l")]
-_projCount = 5.0
 
 [node name="FireballWeapon" parent="." instance=ExtResource("3_vwqlx")]
 

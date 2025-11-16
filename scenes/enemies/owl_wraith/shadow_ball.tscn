@@ -1,7 +1,7 @@
 [gd_scene load_steps=28 format=3 uid="uid://bb1am2rf2c6lb"]
 
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="1_sk7d1"]
-[ext_resource type="Texture2D" uid="uid://blklr2ns14mq3" path="res://assets/characters/fox/attack/fireball.png" id="1_u2gc2"]
+[ext_resource type="Texture2D" uid="uid://gk17wi7alwc2" path="res://assets/characters/fox/attack/fireball.png" id="1_u2gc2"]
 [ext_resource type="Script" uid="uid://cxqlqx315740e" path="res://scripts/enemies/owl_wraith_package/ShadowBall.cs" id="1_umkxh"]
 [ext_resource type="PackedScene" uid="uid://caggavvwa6pc8" path="res://scenes/enemies/owl_wraith/proj_explode_effect.tscn" id="2_2fh2j"]
 
