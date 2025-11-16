@@ -41,6 +41,7 @@ OwlWraiths=""
 BunnyWraiths=""
 PlayerHitbox=""
 EnemyHitbox=""
+Xp=""
 
 [input]
 

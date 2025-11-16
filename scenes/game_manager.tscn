@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=9 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
+[ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/xp_system/xp.tscn" id="2_jdad8"]
 [ext_resource type="PackedScene" uid="uid://s3w1eg52kr8u" path="res://scenes/world_generation/world.tscn" id="2_oo155"]
 [ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player.tscn" id="3_udu3i"]
 [ext_resource type="PackedScene" uid="uid://qevbfpqv6q20" path="res://scenes/world_generation/player_spawn.tscn" id="4_oo155"]
@@ -14,6 +15,7 @@ script = ExtResource("1_udu3i")
 _enemySpawnerNumEnemiesPerWave = 10.0
 _enemySpawnerWaveInterval = 30.0
 _enemySpawnerNumWaves = 5.0
+_xpOrbPckdScene = ExtResource("2_jdad8")
 _worldPckdScene = ExtResource("2_oo155")
 _playerPckdScene = ExtResource("3_udu3i")
 _playerSpawnPckdScene = ExtResource("4_oo155")

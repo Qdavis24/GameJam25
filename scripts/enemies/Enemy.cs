@@ -10,6 +10,8 @@ public partial class Enemy : CharacterBody2D
 	[ExportCategory("stats")] 
 	[Export] private float _maxHealth; //starting health
 
+	[Export] public int XpReward = 3;
+
 	[ExportCategory("Distance Ranges")] 
 	[Export] public Area2D SteeringRange;
 	[Export] public int AttackRange;

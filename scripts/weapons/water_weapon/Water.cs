@@ -72,7 +72,7 @@ public partial class Water : Node2D
 
     public void OnTimeout()
     {
-        Sfx.I.Play2D(_wooshStream, GlobalPosition, -30);
+        Sfx.I.Play2D(_wooshStream, GlobalPosition, -25);
         _trailParticles.Amount *= 2;
         Reparent(GetTree().Root);
         _active = true;

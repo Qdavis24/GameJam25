@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=33 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
@@ -9,6 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://d0iwaudfkk3uw" path="res://assets/characters/fox/fox_walk.png" id="5_gsthy"]
 [ext_resource type="Texture2D" uid="uid://bsii8213thyr1" path="res://assets/characters/fox/shadow.png" id="6_bdfls"]
 [ext_resource type="AudioStream" uid="uid://dnxstr2v18wxm" path="res://assets/sounds/walk.wav" id="7_i0p41"]
+
+[sub_resource type="Curve" id="Curve_fiwjr"]
+_data = [Vector2(0, 0.15730345), 0.0, -0.38083962, 0, 0, Vector2(1, 1), 0.6891386, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6qmwb"]
 atlas = ExtResource("4_p7c74")
@@ -154,11 +158,17 @@ height = 38.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_s5buh"]
 radius = 22.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_fiwjr"]
+radius = 503.00894
+
 [node name="Player" type="CharacterBody2D" groups=["Players"]]
 y_sort_enabled = true
 script = ExtResource("1_rdh6l")
 LungeSpeed = 300.0
 LungeDuration = 0.3
+_xpSpeedRamp = SubResource("Curve_fiwjr")
+_xpMagnetSpeed = 15.0
+_xpAcquireRange = 50.0
 SlashAttack = ExtResource("2_fiwjr")
 
 [node name="WaterWeapon" parent="." instance=ExtResource("3_fiwjr")]
@@ -186,12 +196,19 @@ stream = SubResource("AudioStreamRandomizer_pwcne")
 position = Vector2(1, 0)
 shape = SubResource("CapsuleShape2D_s5buh")
 
-[node name="HurtBox" type="Area2D" parent="." groups=["PlayerHurtbox"]]
+[node name="Hurtbox" type="Area2D" parent="." groups=["PlayerHurtbox"]]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(-1, 0)
 shape = SubResource("CircleShape2D_s5buh")
 
-[connection signal="area_entered" from="HurtBox" to="." method="OnPlayerHurtBoxEntered"]
+[node name="PickupRange" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupRange"]
+shape = SubResource("CircleShape2D_fiwjr")
+
+[connection signal="area_entered" from="Hurtbox" to="." method="OnPlayerHurtBoxEntered"]

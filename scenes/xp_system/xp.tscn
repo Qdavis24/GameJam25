@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3 uid="uid://chbtc3k4s18uw"]
+
+[ext_resource type="Script" uid="uid://v3vvdpy1fykw" path="res://scripts/xp_system/Xp.cs" id="1_3akfm"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3akfm"]
+blend_mode = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_elyt5"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_elyt5"]
+blend_mode = 1
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3akfm"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 180.0
+initial_velocity_min = 4.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, -2, 0)
+damping_min = 1.0
+damping_max = 2.0
+scale_min = 0.099999994
+color = Color(1, 1, 0, 1)
+hue_variation_min = -0.100000024
+hue_variation_max = 0.09999997
+
+[node name="XpOrb" type="Area2D" node_paths=PackedStringArray("_colorRect", "_particles") groups=["Xp"]]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_3akfm")
+_colorRect = NodePath("ColorRect")
+_particles = NodePath("Xp")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("CanvasItemMaterial_3akfm")
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(1, 1, 0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_elyt5")
+
+[node name="Xp" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_elyt5")
+amount = 10
+lifetime = 3.0
+process_material = SubResource("ParticleProcessMaterial_3akfm")

@@ -20,17 +20,19 @@ public partial class DeathState : EState
 		Vector3 materialDir = new Vector3(dir.X, dir.Y, 0);
 		_deathEffectMaterial.Direction = materialDir;
 		_deathEffect.Emitting = true;
+		_deathEffect.Finished += (Exit);
+		GameManager.Instance.XpPool.SpawnXpAt(_stateMachine.Owner.XpReward, GlobalPosition);
+		
 	}
 
 	public override void Exit()
 	{
+		_stateMachine.Owner.QueueFree();
 	}
 
 
 	public override void Update(double delta)
 	{
-		if (!_deathEffect.Emitting)
-			_stateMachine.Owner.QueueFree();
 	}
 
 	public override void PhysicsUpdate(double delta)

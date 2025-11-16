@@ -26,7 +26,7 @@ public partial class Ui : CanvasLayer
 	{
 		Player = player;
 		
-		Player.LevelChanged += LevelUp;
+		Player.LevelChanged += PlayerLevelUp;
 
 		// subscribe 
 		Player.StatsInitialized += (health, maxHealth, xp, maxXp, level) =>
@@ -56,19 +56,12 @@ public partial class Ui : CanvasLayer
 
 	private void UpdateXp(int xp)
 	{
-		int xpForLevel = xp;
-
-		if (xp >= xpForLevel)
-		{
-			_upgradeScreen.Show();
-		}
-
-		_xpBar.MaxValue = xpForLevel;
+		_xpBar.MaxValue = Player.MaxXp;
 		_xpBar.Value = xp;
 	}
 
 
-	public void LevelUp(int level)
+	public void PlayerLevelUp(int level)
 	{
 		_upgradeScreen.Show();
 	}

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using GameJam25.scripts;
 using GameJam25.scripts.world_generation;
 
 public partial class GameManager : Node
@@ -18,6 +19,7 @@ public partial class GameManager : Node
 	[Export] private float _enemySpawnerNumWavesScalr = 1.1f;
 
 	[ExportCategory("External Required Resources")] 
+	[Export] private PackedScene _xpOrbPckdScene;
 	[Export] private PackedScene _worldPckdScene;
 	[Export] private PackedScene _playerPckdScene;
 	[Export] private PackedScene _playerSpawnPckdScene;
@@ -31,6 +33,7 @@ public partial class GameManager : Node
 
 
 	// State Instances
+	public XpPool XpPool;
 	public World CurrWorld;
 	public FlowField CurrFlowField;
 	public Player Player;
@@ -52,13 +55,13 @@ public partial class GameManager : Node
 		_ui.InitializeUiFromPlayer(Player);
 		AddChild(Player);
 		InitLevel();
+		XpPool = new XpPool(_xpOrbPckdScene, 100, CurrWorld);
 	}
 
 
 	public override void _PhysicsProcess(double delta)
 	{
 		UpdateFlowField(false);
-		if (Input.IsActionJustPressed("DEBUG-trigger-upgrade")) _ui.LevelUp(1);
 	}
 	
 	private void UpdateFlowField(bool debug)
