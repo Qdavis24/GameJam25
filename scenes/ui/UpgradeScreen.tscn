@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://b76aw4tgbd8fo" path="res://scripts/ui/UpgradeScreen.cs" id="1_3ha7n"]
 [ext_resource type="Texture2D" uid="uid://w7sf07s1l4ty" path="res://assets/ui/upgrade_screen/select_ui_frame.png" id="1_8hl3b"]
 [ext_resource type="PackedScene" uid="uid://de5afvrruo3gg" path="res://scenes/ui/UpgradeButton.tscn" id="2_cpd7a"]
-[ext_resource type="AudioStream" uid="uid://bf8may5x3xdxt" path="res://assets/sounds/roll_1.wav" id="2_p5b6j"]
-[ext_resource type="AudioStream" uid="uid://d4gaev2o5634e" path="res://assets/sounds/roll_2.wav" id="3_7q1e3"]
-[ext_resource type="AudioStream" uid="uid://p63425cvp0i7" path="res://assets/sounds/roll_3.wav" id="4_p5b6j"]
+[ext_resource type="AudioStream" uid="uid://tg8gwcrtqdro" path="res://assets/sounds/gamble/roll_1.wav" id="2_p5b6j"]
+[ext_resource type="AudioStream" uid="uid://csj3ru5a87le" path="res://assets/sounds/gamble/roll_2.wav" id="3_7q1e3"]
+[ext_resource type="AudioStream" uid="uid://dlnxwp4auuqaj" path="res://assets/sounds/gamble/roll_3.mp3" id="4_p5b6j"]
 [ext_resource type="Shader" uid="uid://d4b8m5gw27t0l" path="res://shaders/UpgradeScroll.gdshader" id="5_7q1e3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7q1e3"]
