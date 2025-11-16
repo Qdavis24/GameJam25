@@ -255,7 +255,7 @@ script = ExtResource("7_ktkax")
 
 [node name="ExplodeState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("8_t25d3")
-_explosionDelay = 10.0
+_explosionDelay = 0.5
 _explosionAttackScene = ExtResource("6_ns0ja")
 
 [node name="WraithAnimations" type="AnimatedSprite2D" parent="."]

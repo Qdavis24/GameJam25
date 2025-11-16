@@ -24,6 +24,7 @@ public partial class FireballExplode : Node2D
     public override void _PhysicsProcess(double delta)
     {
         _currTime = Math.Clamp(_currTime + delta, 0, .2);
+        if (_currTime >= .2f) _hitbox.SetDeferred(Area2D.PropertyName.Monitorable, false);
         _explodeLight.Energy = (float)Math.Sin(_currTime/.2 * Mathf.Pi) * _lightIntensity;
     }
     
