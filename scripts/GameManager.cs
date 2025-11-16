@@ -22,7 +22,8 @@ public partial class GameManager : Node
 	[Export] private PackedScene _xpOrbPckdScene;
 	[Export] private PackedScene _worldPckdScene;
 	[Export] private PackedScene _playerPckdScene;
-	[Export] private PackedScene _playerSpawnPckdScene;
+	[Export] private PackedScene _playerEnterPortal;
+	[Export] private PackedScene _playerExitPortal;
 	[Export] private PackedScene _enemySpawnerPckdScene;
 	[Export] private PackedScene _arrowPckdScene;
 	[Export] private PackedScene _labelPckdScene;
@@ -133,7 +134,7 @@ public partial class GameManager : Node
 
 	private void SpawnPlayer()
 	{
-		var spawnPortal = _playerSpawnPckdScene.Instantiate<PlayerSpawn>();
+		var spawnPortal = _playerEnterPortal.Instantiate<EnterPortal>();
 		spawnPortal.GlobalPosition = CurrWorld.LogicalData.PlayerSpawn;
 		AddChild(spawnPortal);
 		Cam.Target = spawnPortal;
@@ -144,12 +145,16 @@ public partial class GameManager : Node
 		};
 	}
 	
-	private void OnSpawnerDestroyed()
+	private void OnSpawnerDestroyed(Vector2 pos)
 	{
+		GD.Print("spawner destroyed");
 		_numSpawners--;
 		if (_numSpawners <= 0)
 		{
-			GD.Print("Level Complete");
+			var exitPortal = _playerExitPortal.Instantiate<ExitPortal>();
+			exitPortal.GlobalPosition = pos;
+			exitPortal.PlayerEnteredPortal += InitLevel;
+			CurrWorld.CallDeferred("add_child", exitPortal);
 		}
 	}
 	// DEBUG STUFF BELOW

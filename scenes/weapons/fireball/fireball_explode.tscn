@@ -41,7 +41,6 @@ fill_to = Vector2(0.85046726, 0.24299066)
 radius = 96.18
 
 [node name="FireballExplode" type="Node2D" node_paths=PackedStringArray("_explodeEffect", "_explodeLight", "_hitbox")]
-z_index = -1
 y_sort_enabled = true
 script = ExtResource("1_cpsw5")
 _audioStreams = SubResource("AudioStreamRandomizer_1it7h")

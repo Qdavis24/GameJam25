@@ -144,6 +144,7 @@ y_sort_enabled = true
 tile_set = SubResource("TileSet_nmbn7")
 
 [node name="ObstacleLayer" type="TileMapLayer" parent="." groups=["Obstacle"]]
+z_index = 1
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_683jg")
 tile_set = SubResource("TileSet_vbebb")

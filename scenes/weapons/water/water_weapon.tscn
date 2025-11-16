@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://p50l3xkcqjeg" path="res://scenes/weapons/water/water.tscn" id="2_60xuw"]
 
 [node name="WaterWeapon" type="Node2D"]
-y_sort_enabled = true
 script = ExtResource("1_xdvk7")
 _waterPackedScene = ExtResource("2_60xuw")
 _projCooldown = 10.0

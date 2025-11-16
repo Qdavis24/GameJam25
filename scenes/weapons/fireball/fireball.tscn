@@ -191,7 +191,7 @@ animations = [{
 }]
 
 [node name="fireball" type="Node2D" node_paths=PackedStringArray("_hitbox")]
-z_index = -1
+z_index = 1
 y_sort_enabled = true
 script = ExtResource("1_4h438")
 _wooshStream = ExtResource("6_1npbi")
@@ -224,12 +224,3 @@ rotation = -1.5707964
 scale = Vector2(1.2, 1.2)
 sprite_frames = SubResource("SpriteFrames_k38kp")
 autoplay = "default"
-
-[node name="FireStreamPlayer" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("5_xt8ci")
-volume_db = -6.0
-
-[node name="WoosStreamPlayer" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("6_1npbi")
-volume_db = -10.0
-pitch_scale = 2.5

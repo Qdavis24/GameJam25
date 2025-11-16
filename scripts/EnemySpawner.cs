@@ -5,7 +5,7 @@ using GameJam25.scripts.damage_system;
 
 public partial class EnemySpawner : Node2D
 {
-    [Signal] public delegate void SpawnerDestroyedEventHandler();
+    [Signal] public delegate void SpawnerDestroyedEventHandler(Vector2 pos);
     
     [ExportCategory("Spawner Crystal")] 
     [Export] private float _maxCrystalHealth;
@@ -20,7 +20,6 @@ public partial class EnemySpawner : Node2D
     [Export] private float _maxEnergy;
 
     [ExportCategory("Spawner Config")] 
-    [Export] private Area2D _toggleRange;
     [Export] private PackedScene[] _enemyTypes;
     [Export] private float[] _enemyTypeSpawnChance;
     [Export] private Timer _timer;
@@ -101,7 +100,7 @@ public partial class EnemySpawner : Node2D
             _flashTimer.Start();
             if (_crystalHealth <= 0)
             {
-                EmitSignal(SignalName.SpawnerDestroyed);
+                EmitSignal(SignalName.SpawnerDestroyed, GlobalPosition);
                 QueueFree();
             }
         }
