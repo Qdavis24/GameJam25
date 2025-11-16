@@ -54,7 +54,7 @@ text = "settings"
 
 [node name="Menu" type="Button" parent="CenterContainer/VBoxContainer/pause"]
 layout_mode = 2
-text = "quit to main menu"
+text = "main menu"
 
 [node name="settings" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2

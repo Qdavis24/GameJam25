@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://w11lstxqrmpj"]
+[gd_scene load_steps=14 format=3 uid="uid://w11lstxqrmpj"]
 
 [ext_resource type="PackedScene" uid="uid://cnrgwrvkm8ajt" path="res://scenes/ui/UpgradeScreen.tscn" id="1_d2gw2"]
 [ext_resource type="Script" uid="uid://bu3whablyvrhm" path="res://scripts/ui/Ui.cs" id="1_m01cm"]
 [ext_resource type="PackedScene" uid="uid://dhg5dra5mmuyc" path="res://scenes/ui/PauseScreen.tscn" id="2_tnv4l"]
+[ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="3_j3nm3"]
 [ext_resource type="Texture2D" uid="uid://6j3o18xex4il" path="res://assets/ui/heart.png" id="3_nnfdp"]
 [ext_resource type="Texture2D" uid="uid://7ci5xohqb3ky" path="res://assets/ui/xp.png" id="3_s64wo"]
 [ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="5_dqg8s"]
@@ -57,6 +58,8 @@ ProgressBar/styles/fill = SubResource("StyleBoxFlat_s64wo")
 script = ExtResource("1_m01cm")
 
 [node name="PauseScreen" parent="." instance=ExtResource("2_tnv4l")]
+
+[node name="DeathScreen" parent="." instance=ExtResource("3_j3nm3")]
 
 [node name="UpgradeScreen" parent="." instance=ExtResource("1_d2gw2")]
 
