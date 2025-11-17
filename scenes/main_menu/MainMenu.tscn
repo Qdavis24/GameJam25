@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3 uid="uid://dq2mhqcvxoppe"]
+
+[ext_resource type="Texture2D" uid="uid://r8e85o7y176c" path="res://assets/ui/Background3.png" id="1_xr86y"]
+[ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xr86y"]
+[ext_resource type="Shader" uid="uid://d0ye3o780v4h2" path="res://scenes/main_menu/MainMenuTitleText.gdshader" id="4_qmweu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xr86y"]
+bg_color = Color(0, 0, 0, 0.40392157)
+
+[sub_resource type="Theme" id="Theme_qmweu"]
+Button/font_sizes/font_size = 78
+Button/fonts/font = ExtResource("2_xr86y")
+Button/styles/normal = SubResource("StyleBoxFlat_xr86y")
+Label/colors/font_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0.78039217, 0, 0.49411765, 0.40784314)
+Label/constants/shadow_offset_x = 1
+Label/font_sizes/font_size = 230
+Label/fonts/font = ExtResource("2_xr86y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f1mbi"]
+shader = ExtResource("4_qmweu")
+shader_parameter/wobble_strength = 2.0
+shader_parameter/wobble_speed = 8.0
+shader_parameter/wobble_freq = 20.0
+shader_parameter/shake_strength = 1.0
+shader_parameter/shake_speed = 25.0
+
+[node name="MainMenu" type="CanvasLayer"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_xr86y")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme = SubResource("Theme_qmweu")
+
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+material = SubResource("ShaderMaterial_f1mbi")
+layout_mode = 2
+text = "Cursed Critters"
+
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "start game"
