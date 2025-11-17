@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dq2mhqcvxoppe"]
+[gd_scene load_steps=8 format=3 uid="uid://dq2mhqcvxoppe"]
 
 [ext_resource type="Texture2D" uid="uid://r8e85o7y176c" path="res://assets/ui/Background3.png" id="1_xr86y"]
 [ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xr86y"]
@@ -25,6 +25,8 @@ shader_parameter/wobble_freq = 20.0
 shader_parameter/shake_strength = 1.0
 shader_parameter/shake_speed = 25.0
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_xr86y"]
+
 [node name="MainMenu" type="CanvasLayer"]
 
 [node name="TextureRect" type="TextureRect" parent="."]
@@ -35,24 +37,48 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_xr86y")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="Start" type="CenterContainer" parent="."]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Start"]
 layout_mode = 2
 theme = SubResource("Theme_qmweu")
 
-[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="Start/VBoxContainer"]
 material = SubResource("ShaderMaterial_f1mbi")
 layout_mode = 2
 text = "Cursed Critters"
 
-[node name="Button" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="Start/VBoxContainer"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "start game"
+
+[node name="CharacterSelect" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="CharacterSelect"]
+layout_mode = 2
+columns = 2
+
+[node name="Fox" type="AnimatedSprite2D" parent="CharacterSelect/GridContainer"]
+sprite_frames = SubResource("SpriteFrames_xr86y")
+
+[node name="Bunny" type="AnimatedSprite2D" parent="CharacterSelect/GridContainer"]
+sprite_frames = SubResource("SpriteFrames_xr86y")
+
+[node name="Racoon" type="AnimatedSprite2D" parent="CharacterSelect/GridContainer"]
+sprite_frames = SubResource("SpriteFrames_xr86y")
+
+[node name="Frog" type="AnimatedSprite2D" parent="CharacterSelect/GridContainer"]
+sprite_frames = SubResource("SpriteFrames_xr86y")

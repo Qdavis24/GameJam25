@@ -39,7 +39,7 @@ public partial class Player : CharacterBody2D
 	[Export] private float _xpAcquireRange = 70f;
 
 	[ExportCategory("Required Resources")] [Export]
-	public string AnimationSet = "fox";
+	public string AnimationSet = "rabbit";
 
 	[Export] public PackedScene SlashAttack;
 
