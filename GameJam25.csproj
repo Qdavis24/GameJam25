@@ -8,6 +8,7 @@
     <None Include="**/*.md"/>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="scenes\enemies\deer_wraith\" />
     <Folder Include="scenes\world_generation\" />
   </ItemGroup>
 </Project>
