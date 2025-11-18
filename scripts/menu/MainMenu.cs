@@ -3,13 +3,17 @@ using System;
 
 public partial class MainMenu : CanvasLayer
 {	
+	private Ui _ui;
 	private CenterContainer _startScreen;
 	private Control _characterSelectScreen;
 
 	public override void _Ready()
 	{
-		//_ui = GetNode<CenterContainer>("../Ui");
-		//_ui.MainMenuRequested += OnMainMenuRequested;
+		ProcessMode = Node.ProcessModeEnum.Always;
+		GetTree().Paused = true;
+
+		_ui = GetNode<Ui>("../Ui");
+		_ui.MainMenuRequestedUi += OnMainMenuRequested;
 		
 		_startScreen = GetNode<CenterContainer>("Start");
 		_characterSelectScreen = GetNode<Control>("CharacterSelect");
@@ -24,7 +28,15 @@ public partial class MainMenu : CanvasLayer
 	public void StartGame(string character)
 	{
 		this.Visible = false;
+		GetTree().Paused = false;
 		GameManager.Instance.StartNewGame(character);
+	}
+	
+	public void Reset()
+	{
+		_characterSelectScreen.Visible = false;
+		_startScreen.Visible = true;
+		this.Visible = true;
 	}
 
 	// go to character selection
@@ -45,8 +57,8 @@ public partial class MainMenu : CanvasLayer
 	
 	private void OnMainMenuRequested()
 	{
-		this.Visible = true;
 		_characterSelectScreen.Visible = false;
 		_startScreen.Visible = true;
+		this.Visible = true;
 	}
 }

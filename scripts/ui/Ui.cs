@@ -3,6 +3,8 @@ using System;
 
 public partial class Ui : CanvasLayer
 {
+	[Signal]
+	public delegate void MainMenuRequestedUiEventHandler();
 	private MainMenu _mainMenu;
 	
 	// required internal children
@@ -77,8 +79,8 @@ public partial class Ui : CanvasLayer
 	
 	public void OnMainMenuRequested()
 	{
-;		this.Visible = false;
-		_mainMenu.Visible = true;
+		this.Visible = false;
+		EmitSignal(SignalName.MainMenuRequestedUi);
 	}
 
 	public override void _Process(double delta)
