@@ -1,8 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://dq2mhqcvxoppe"]
+[gd_scene load_steps=35 format=3 uid="uid://dq2mhqcvxoppe"]
 
 [ext_resource type="Texture2D" uid="uid://r8e85o7y176c" path="res://assets/ui/Background3.png" id="1_xr86y"]
 [ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xr86y"]
+[ext_resource type="Script" uid="uid://ckfb73b4uvpu3" path="res://scripts/menu/CharacterSelect.cs" id="4_arvcj"]
+[ext_resource type="Texture2D" uid="uid://ciit1agds6ihw" path="res://assets/characters/fox/fox_idle.png" id="4_f1mbi"]
 [ext_resource type="Shader" uid="uid://d0ye3o780v4h2" path="res://scenes/main_menu/MainMenuTitleText.gdshader" id="4_qmweu"]
+[ext_resource type="Texture2D" uid="uid://doqnd2cc7u00i" path="res://assets/characters/fox/frog_idle.png" id="5_wckin"]
+[ext_resource type="Texture2D" uid="uid://deku5ueeeta1i" path="res://assets/characters/fox/rabbit_idle.png" id="6_arvcj"]
+[ext_resource type="Texture2D" uid="uid://ejmw7e4wtwc7" path="res://assets/characters/fox/racoon_idle.png" id="7_6k0m2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xr86y"]
 bg_color = Color(0, 0, 0, 0.40392157)
@@ -25,7 +30,166 @@ shader_parameter/wobble_freq = 20.0
 shader_parameter/shake_strength = 1.0
 shader_parameter/shake_speed = 25.0
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_xr86y"]
+[sub_resource type="Theme" id="Theme_arvcj"]
+HBoxContainer/constants/separation = 136
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6gdku"]
+atlas = ExtResource("6_arvcj")
+region = Rect2(0, 0, 71, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tdscb"]
+atlas = ExtResource("6_arvcj")
+region = Rect2(71, 0, 71, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1enlb"]
+atlas = ExtResource("6_arvcj")
+region = Rect2(142, 0, 71, 111)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2c0k1"]
+atlas = ExtResource("6_arvcj")
+region = Rect2(213, 0, 71, 111)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ifx2v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6gdku")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tdscb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1enlb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2c0k1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1mbi"]
+atlas = ExtResource("4_f1mbi")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oitky"]
+atlas = ExtResource("4_f1mbi")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wckin"]
+atlas = ExtResource("4_f1mbi")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arvcj"]
+atlas = ExtResource("4_f1mbi")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6k0m2"]
+atlas = ExtResource("4_f1mbi")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qq55g"]
+atlas = ExtResource("4_f1mbi")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pkvjm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1mbi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oitky")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wckin")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arvcj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6k0m2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qq55g")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pkvjm"]
+atlas = ExtResource("7_6k0m2")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ifx2v"]
+atlas = ExtResource("7_6k0m2")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ei73"]
+atlas = ExtResource("7_6k0m2")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bo2hs"]
+atlas = ExtResource("7_6k0m2")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ebnwy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pkvjm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ifx2v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ei73")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bo2hs")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d7vcc"]
+atlas = ExtResource("5_wckin")
+region = Rect2(0, 0, 68, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hpv8s"]
+atlas = ExtResource("5_wckin")
+region = Rect2(68, 0, 68, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nsjqy"]
+atlas = ExtResource("5_wckin")
+region = Rect2(136, 0, 68, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8ps1"]
+atlas = ExtResource("5_wckin")
+region = Rect2(204, 0, 68, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ooi0t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d7vcc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hpv8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nsjqy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e8ps1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="MainMenu" type="CanvasLayer"]
 
@@ -60,25 +224,70 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "start game"
 
-[node name="CharacterSelect" type="CenterContainer" parent="."]
+[node name="CharacterSelect" type="Control" parent="."]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("4_arvcj")
 
-[node name="GridContainer" type="GridContainer" parent="CharacterSelect"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterSelect"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -148.0
+offset_bottom = 202.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_arvcj")
+alignment = 1
+
+[node name="Button" type="Button" parent="CharacterSelect/HBoxContainer"]
+custom_minimum_size = Vector2(250, 350)
 layout_mode = 2
-columns = 2
 
-[node name="Fox" type="AnimatedSprite2D" parent="CharacterSelect/GridContainer"]
-sprite_frames = SubResource("SpriteFrames_xr86y")
+[node name="Button2" type="Button" parent="CharacterSelect/HBoxContainer"]
+custom_minimum_size = Vector2(250, 300)
+layout_mode = 2
 
-[node name="Bunny" type="AnimatedSprite2D" parent="CharacterSelect/GridContainer"]
-sprite_frames = SubResource("SpriteFrames_xr86y")
+[node name="Button3" type="Button" parent="CharacterSelect/HBoxContainer"]
+custom_minimum_size = Vector2(250, 300)
+layout_mode = 2
 
-[node name="Racoon" type="AnimatedSprite2D" parent="CharacterSelect/GridContainer"]
-sprite_frames = SubResource("SpriteFrames_xr86y")
+[node name="Button4" type="Button" parent="CharacterSelect/HBoxContainer"]
+custom_minimum_size = Vector2(250, 300)
+layout_mode = 2
 
-[node name="Frog" type="AnimatedSprite2D" parent="CharacterSelect/GridContainer"]
-sprite_frames = SubResource("SpriteFrames_xr86y")
+[node name="Rabbit" type="AnimatedSprite2D" parent="CharacterSelect"]
+position = Vector2(1152, 560)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_ifx2v")
+
+[node name="Fox" type="AnimatedSprite2D" parent="CharacterSelect"]
+position = Vector2(344, 568)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_pkvjm")
+
+[node name="Raccoon" type="AnimatedSprite2D" parent="CharacterSelect"]
+position = Vector2(1504, 576)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_ebnwy")
+
+[node name="Frog" type="AnimatedSprite2D" parent="CharacterSelect"]
+position = Vector2(768, 568)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_ooi0t")
+
+[node name="Label" type="Label" parent="CharacterSelect"]
+layout_mode = 1
+offset_left = 80.0
+offset_top = 104.0
+offset_right = 1814.0
+offset_bottom = 305.0
+theme_override_fonts/font = ExtResource("2_xr86y")
+theme_override_font_sizes/font_size = 200
+text = "Choose Your Character"
