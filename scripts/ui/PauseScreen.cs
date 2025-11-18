@@ -1,21 +1,26 @@
 using Godot;
 using System;
 
+
 public partial class PauseScreen : Panel
 {
-	[Signal]
+	[Signal] 
 	public delegate void MainMenuRequestedEventHandler();
-	
-	private bool _paused = false;
+
+	[Signal] 
+	public delegate void UnpauseEventHandler();
 	
 	private VBoxContainer _pauseContainer;
 	private VBoxContainer _settingsContainer;
-		
-	public void Toggle()
+
+	public void Open()
 	{
-		_paused = !_paused;
-		GetTree().Paused = _paused;
-		this.Visible = _paused;
+		Visible = true;
+	}
+
+	public void Close()
+	{
+		Visible = false;
 	}
 		
 	// Called when the node enters the scene tree for the first time.
@@ -27,7 +32,7 @@ public partial class PauseScreen : Panel
 		
 		GetNode<Button>("CenterContainer/VBoxContainer/pause/Settings").Pressed += SettingsPressed;
 		GetNode<Button>("CenterContainer/VBoxContainer/pause/Menu").Pressed += MainMenuPressed;
-		GetNode<Button>("CenterContainer/VBoxContainer/pause/Unpause").Pressed += UnpausePressed;
+		GetNode<Button>("CenterContainer/VBoxContainer/pause/Unpause").Pressed += EmitSignalUnpause;
 
 		string settings = "CenterContainer/VBoxContainer/settings/";
 		GetNode<Button>(settings + "LeaveSettings").Pressed += LeaveSettingsPressed;
@@ -39,20 +44,7 @@ public partial class PauseScreen : Panel
 		GetNode<HSlider>(settings + "music/HBoxContainer/MusicSlider").Value = musicCurrent;
 
 		ProcessMode = Node.ProcessModeEnum.Always;
-		this.Visible = false;
-	}
-
-	public override void _Input(InputEvent @event)
-	{
-		if (Input.IsActionJustPressed("pause"))
-		{
-			Toggle();
-		}
-	}
-		
-	private void UnpausePressed()
-	{
-		Toggle();
+		Visible = false;
 	}
 	
 	private void SettingsPressed() 
@@ -63,7 +55,7 @@ public partial class PauseScreen : Panel
 	
 	private void MainMenuPressed()
 	{
-		EmitSignal(SignalName.MainMenuRequested);
+		EmitSignalMainMenuRequested();
 	}
 	
 	//////////// SETTINGS
@@ -87,3 +79,4 @@ public partial class PauseScreen : Panel
 		AudioServer.SetBusVolumeDb(bus, (float)value);
 	}
 }
+

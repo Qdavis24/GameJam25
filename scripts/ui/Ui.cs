@@ -5,7 +5,6 @@ public partial class Ui : CanvasLayer
 {
 	[Signal]
 	public delegate void MainMenuRequestedUiEventHandler();
-	private MainMenu _mainMenu;
 	
 	// required internal children
 	private ProgressBar _xpBar;
@@ -23,8 +22,6 @@ public partial class Ui : CanvasLayer
 		_upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
 		_pauseScreen = GetNode<PauseScreen>("PauseScreen");
 		_deathScreen = GetNode<DeathScreen>("DeathScreen");
-		
-		_mainMenu = GetNode<MainMenu>("MainMenu");
 		_pauseScreen.MainMenuRequested += OnMainMenuRequested;
 	}
 
@@ -65,8 +62,7 @@ public partial class Ui : CanvasLayer
 		_xpBar.MaxValue = Player.MaxXp;
 		_xpBar.Value = xp;
 	}
-
-
+	
 	public void PlayerLevelUp(int level)
 	{
 		_upgradeScreen.Show();
@@ -74,20 +70,13 @@ public partial class Ui : CanvasLayer
 	
 	public void ShowDeathScreen()
 	{
-		_deathScreen.Show();
+		_deathScreen.Open();
 	}
 	
 	public void OnMainMenuRequested()
 	{
 		this.Visible = false;
-		EmitSignal(SignalName.MainMenuRequestedUi);
+		EmitSignalMainMenuRequestedUi();
 	}
-
-	public override void _Process(double delta)
-	{
-		if (Input.IsActionJustPressed("DEBUG-trigger-upgrade"))
-		{
-			_upgradeScreen.Show();
-		}
-	}
+	
 }

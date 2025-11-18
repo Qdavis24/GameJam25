@@ -41,4 +41,12 @@ public class XpPool
         xp.Disable();
         _orbPool.Enqueue(xp);
     }
+
+    public void Cleanup()
+    {
+        while (_orbPool.Count > 0)
+        {
+            _orbPool.Dequeue().QueueFree();
+        }
+    }
 }

@@ -28,8 +28,14 @@ public partial class GameManager : Node
     
     [ExportCategory("Node References")]
     [Export] public Camera Cam;
-    [Export] private CanvasModulate _canvasModulate;
+    [Export] private ScreenFade _screenFade;
+    // ui below
     [Export] private Ui _ui;
+    [Export] private MainMenu _mainMenu;
+    [Export] private PauseScreen _pauseScreen;
+    [Export] private DeathScreen _deathScreen;
+    
+    
     
     // Game state
     public XpPool XpPool;
@@ -39,14 +45,16 @@ public partial class GameManager : Node
     
     // Game Manager Logic State
     enum GameState {
-        StartMenu,
+        MainMenu,
         LoadingGame,
         PlayingGame,
         DeathScreen
     }
-    private bool _isPaused = false;
     
-    private GameState _gameState;
+    
+    private GameState _gameState = GameState.MainMenu;
+    private bool _isPaused;
+    
     private Vector2I _lastPlayerCoord;
     private int _numSpawners;
     
@@ -54,8 +62,21 @@ public partial class GameManager : Node
 
     public override void _Ready()
     {
+        ProcessMode = ProcessModeEnum.Always;
         Instance = this;
-        XpPool = new XpPool(_xpOrbScene, 100, World);
+        
+        _mainMenu.Show();
+        _mainMenu.InitGame += InitGame;
+        _pauseScreen.MainMenuRequested += EndGame;
+        _pauseScreen.Unpause += () =>
+        {
+            _pauseScreen.Close();
+            GetTree().Paused = false;
+            _isPaused = false;
+        };
+        _deathScreen.MainMenuRequested += EndGame;
+        
+
     }
 
 
@@ -63,7 +84,7 @@ public partial class GameManager : Node
     {
         switch (_gameState)
         {
-            case GameState.StartMenu:
+            case GameState.MainMenu:
                 break;
             case GameState.LoadingGame:
                 break;
@@ -76,19 +97,66 @@ public partial class GameManager : Node
         }
     }
 
-    private void InitGame()
+    public override void _Input(InputEvent @event)
     {
-        Player = _playerScene.Instantiate<Player>();
-        _ui.InitializeUiFromPlayer(Player);
-        World = _worldScene.Instantiate<World>();
-        FlowField = new FlowField(World.LogicalData.Matrix, World.LogicalData.NonWalkableState);
+        if (_gameState == GameState.PlayingGame && Input.IsActionJustPressed("pause"))
+        {
+            if (_isPaused)
+            {
+                _pauseScreen.Close();
+                GetTree().Paused = false;
+            }
+            else
+            {
+                GD.Print("pause");
+                _pauseScreen.Open();
+                GetTree().Paused = true;
+            }
+            _isPaused = !_isPaused;
+        }
     }
 
-    public async void InitWorldLevel()
+    private async void InitGame(string character)
     {
-        _canvasModulate.LevelTransition();
+        await _screenFade.FadeToBlack();
+        _mainMenu.Close();
+        
+        Player = _playerScene.Instantiate<Player>();
+        _ui.InitializeUiFromPlayer(Player); // connects players signals related to stats and upgrade to ui
+        
+        InitWorldLevel();
+
+        await _screenFade.FadeToNormal();
+        _gameState = GameState.PlayingGame;
+
+    }
+
+    private async void EndGame()
+    {
+        await _screenFade.FadeToBlack();
+        // cleanup all game components
+        Cam.Target = null;
+        Player.QueueFree();
+        Player = null;
+        World.QueueFree();
+        World = null;
+        XpPool.Cleanup();
+        XpPool = null;
+        FlowField = null;
+        _pauseScreen.Close();
+        _deathScreen.Close();
+        _mainMenu.Open();
+        _gameState = GameState.MainMenu;
+        await _screenFade.FadeToNormal();
+    }
+
+    public void InitWorldLevel()
+    {
         Player.InitForWorldLevel();
-        SpawnWorld();
+        GetTree().Root.AddChild(Player);
+        World = SpawnWorld();
+        GetTree().Root.AddChild(World);
+        XpPool = new XpPool(_xpOrbScene, 100, World);
         SpawnEnemySpawners();
         var enterPortal = SpawnEnterPortal();
         Cam.Target = enterPortal;
@@ -100,8 +168,6 @@ public partial class GameManager : Node
         };
         FlowField = new FlowField(World.LogicalData.Matrix,
             World.LogicalData.NonWalkableState);
-        
-        
         ScaleDifficulty();
     }
 
@@ -129,11 +195,10 @@ public partial class GameManager : Node
         }
     }
 
-    private void SpawnWorld()
+    private World SpawnWorld()
     {
         if (World != null) World.QueueFree();
-        World = _worldScene.Instantiate<World>();
-        AddChild(World);
+        return _worldScene.Instantiate<World>();
     }
 
     private EnterPortal SpawnEnterPortal()

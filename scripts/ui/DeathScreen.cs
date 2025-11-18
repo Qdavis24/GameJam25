@@ -3,23 +3,25 @@ using System;
 
 public partial class DeathScreen : Panel
 {
+	[Signal]
+	public delegate void MainMenuRequestedEventHandler();
 	public override void _Ready()
 	{
 		ProcessMode = Node.ProcessModeEnum.Always;
-		this.Visible = false;
-		GetNode<Button>("CenterContainer/VBoxContainer/Menu").Pressed += MenuPressed;
+		Visible = false;
+		GetNode<Button>("CenterContainer/VBoxContainer/Menu").Pressed += EmitSignalMainMenuRequested;
 	}
 	
-	public void Show() {
-		GetTree().Paused = true;
+	public void Open() {
 		this.Visible = true;
 		Modulate = new Color(Modulate, 1); // ensure alpha is 1 (visible)
 		var tween = CreateTween();
 		tween.TweenProperty(this, "modulate:a", 1f, 1.0).From(0f);
 	}
 
-	private void MenuPressed()
+	public void Close()
 	{
-		GetTree().Quit(); // TODO: open main menu instead of quit
+		this.Visible = false;
 	}
+	
 }

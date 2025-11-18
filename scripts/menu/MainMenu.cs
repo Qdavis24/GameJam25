@@ -2,18 +2,15 @@ using Godot;
 using System;
 
 public partial class MainMenu : CanvasLayer
-{	
-	private Ui _ui;
+{
+	[Signal] public delegate void InitGameEventHandler(string character);
+	
 	private CenterContainer _startScreen;
 	private Control _characterSelectScreen;
 
 	public override void _Ready()
 	{
 		ProcessMode = Node.ProcessModeEnum.Always;
-		GetTree().Paused = true;
-
-		_ui = GetNode<Ui>("../Ui");
-		_ui.MainMenuRequestedUi += OnMainMenuRequested;
 		
 		_startScreen = GetNode<CenterContainer>("Start");
 		_characterSelectScreen = GetNode<Control>("CharacterSelect");
@@ -22,21 +19,24 @@ public partial class MainMenu : CanvasLayer
 		
 		GetNode<Button>("Start/VBoxContainer/Button").Pressed += StartPressed;
 	}
-
 	
-	// start the game
-	public void StartGame(string character)
+	public void StartGame(string character) // start the game, should be called only by character select
 	{
-		this.Visible = false;
-		GetTree().Paused = false;
-		GameManager.Instance.StartNewGame(character);
+		EmitSignalInitGame(character);
 	}
 	
-	public void Reset()
+	public void Open()
 	{
 		_characterSelectScreen.Visible = false;
 		_startScreen.Visible = true;
 		this.Visible = true;
+	}
+
+	public void Close()
+	{
+		_characterSelectScreen.Visible = false;
+		_startScreen.Visible = false;
+		this.Visible = false;
 	}
 
 	// go to character selection
@@ -55,10 +55,4 @@ public partial class MainMenu : CanvasLayer
 		tween.TweenProperty(_characterSelectScreen, "modulate:a", 1f, 1.0f);
 	}
 	
-	private void OnMainMenuRequested()
-	{
-		_characterSelectScreen.Visible = false;
-		_startScreen.Visible = true;
-		this.Visible = true;
-	}
 }

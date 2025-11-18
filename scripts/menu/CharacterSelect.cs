@@ -44,8 +44,5 @@ public partial class CharacterSelect : Control
 	{
 		_menu.StartGame("raccoon");
 	}
-
-	public override void _Process(double delta)
-	{
-	}
+	
 }

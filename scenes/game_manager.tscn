@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=14 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
 [ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/xp_system/xp.tscn" id="2_jdad8"]
@@ -8,22 +8,30 @@
 [ext_resource type="Script" uid="uid://c4jyj40wk318s" path="res://scripts/Camera.cs" id="5_eaq8r"]
 [ext_resource type="PackedScene" uid="uid://dyrdk24okgbja" path="res://scenes/enemies/wraith_spawner.tscn" id="5_jdad8"]
 [ext_resource type="PackedScene" uid="uid://0p8w5ski1dbo" path="res://scenes/portals/player_exit_portal.tscn" id="6_k4jhu"]
+[ext_resource type="PackedScene" uid="uid://dhg5dra5mmuyc" path="res://scenes/ui/PauseScreen.tscn" id="8_lcbjr"]
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
-[ext_resource type="Script" uid="uid://8bsqbqurms5g" path="res://scripts/CanvasModulate.cs" id="10_frtjd"]
+[ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="12_30v7y"]
+[ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="13_5xtl8"]
+[ext_resource type="Script" uid="uid://cag2c5l6em61o" path="res://scripts/ScreenFade.cs" id="13_lcbjr"]
 
-[node name="GameManager" type="Node2D" node_paths=PackedStringArray("_canvasModulate")]
+[node name="GameManager" type="Node2D" node_paths=PackedStringArray("Cam", "_screenFade", "_ui", "_mainMenu", "_pauseScreen", "_deathScreen")]
 y_sort_enabled = true
 script = ExtResource("1_udu3i")
 _enemySpawnerNumEnemiesPerWave = 10.0
 _enemySpawnerWaveInterval = 30.0
 _enemySpawnerNumWaves = 5.0
-_canvasModulate = NodePath("CanvasModulate")
-_xpOrbPckdScene = ExtResource("2_jdad8")
-_worldPckdScene = ExtResource("2_oo155")
-_playerPckdScene = ExtResource("3_udu3i")
-_playerEnterPortal = ExtResource("4_oo155")
-_playerExitPortal = ExtResource("6_k4jhu")
-_enemySpawnerPckdScene = ExtResource("5_jdad8")
+_xpOrbScene = ExtResource("2_jdad8")
+_worldScene = ExtResource("2_oo155")
+_playerScene = ExtResource("3_udu3i")
+_enterPortalScene = ExtResource("4_oo155")
+_exitPortalScene = ExtResource("6_k4jhu")
+_enemySpawnerScene = ExtResource("5_jdad8")
+Cam = NodePath("Camera2D")
+_screenFade = NodePath("ScreenFade")
+_ui = NodePath("Ui")
+_mainMenu = NodePath("MainMenu")
+_pauseScreen = NodePath("Ui/PauseScreen2")
+_deathScreen = NodePath("Ui/DeathScreen2")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.8, 0.8)
@@ -32,6 +40,31 @@ _speed = 0.2
 
 [node name="Ui" parent="." instance=ExtResource("9_k4jhu")]
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.41598046, 0.41598043, 0.4159804, 1)
-script = ExtResource("10_frtjd")
+[node name="DeathScreen2" parent="Ui" instance=ExtResource("13_5xtl8")]
+offset_left = 12.0
+offset_top = 5.0
+offset_right = 12.0
+offset_bottom = 5.0
+
+[node name="PauseScreen2" parent="Ui" instance=ExtResource("8_lcbjr")]
+offset_left = -6.0
+offset_top = -5.0
+offset_right = -6.0
+offset_bottom = -5.0
+
+[node name="MainMenu" parent="." instance=ExtResource("12_30v7y")]
+
+[node name="ScreenFade" type="CanvasLayer" parent="." node_paths=PackedStringArray("_overlay")]
+script = ExtResource("13_lcbjr")
+_overlay = NodePath("ColorRect")
+
+[node name="ColorRect" type="ColorRect" parent="ScreenFade"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorTone" type="CanvasModulate" parent="."]
+color = Color(0.2520276, 0.25202766, 0.25202763, 1)
