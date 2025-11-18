@@ -236,13 +236,8 @@ public partial class Player : CharacterBody2D
 		GameManager.Instance.Cam.Shake(amount);
 		_health = Mathf.Clamp(_health - amount, 0, _maxHealth);
 
-		if (_health == 0)
-		{
-			EmitSignalDied(); // send stats here?
-			return;
-		}
-
 		EmitSignalHealthChanged(_health);
+		if (_health == 0) EmitSignalDied(); // send stats here?
 	}
 
 	private void IncreaseXp(int amount)
