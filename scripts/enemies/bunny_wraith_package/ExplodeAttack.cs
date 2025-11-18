@@ -3,6 +3,9 @@ using System;
 
 public partial class ExplodeAttack : Node2D
 {
+	// [Signal]
+	// public delegate void AttackFinishedEventHandler();
+	
 	[Export] private AudioStreamRandomizer _audioStreams;
 	[Export] private GpuParticles2D _explodeEffect;
 	[Export] private PointLight2D _explodeLight;
