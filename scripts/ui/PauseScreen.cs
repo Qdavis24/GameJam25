@@ -3,6 +3,9 @@ using System;
 
 public partial class PauseScreen : Panel
 {
+	[Signal]
+	public delegate void MainMenuRequestedEventHandler();
+	
 	private bool _paused = false;
 	
 	private VBoxContainer _pauseContainer;
@@ -60,7 +63,7 @@ public partial class PauseScreen : Panel
 	
 	private void MainMenuPressed()
 	{
-		GetTree().Quit(); // TODO: open main menu instead of quit
+		EmitSignal(SignalName.MainMenuRequested);
 	}
 	
 	//////////// SETTINGS
