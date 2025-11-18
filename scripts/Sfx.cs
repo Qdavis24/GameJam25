@@ -95,11 +95,6 @@ public partial class Sfx : Node
 		p.Play();
 	}
 	
-	public void PlayMusic()
-	{
-		
-	}
-	
 	public override void _Ready()
 	{
 		ProcessMode = Node.ProcessModeEnum.Always;
