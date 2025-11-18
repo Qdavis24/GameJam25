@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=12 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
 [ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/xp_system/xp.tscn" id="2_jdad8"]
@@ -7,8 +7,10 @@
 [ext_resource type="Script" uid="uid://c4jyj40wk318s" path="res://scripts/Camera.cs" id="5_eaq8r"]
 [ext_resource type="PackedScene" uid="uid://dyrdk24okgbja" path="res://scenes/enemies/wraith_spawner.tscn" id="5_jdad8"]
 [ext_resource type="PackedScene" uid="uid://qevbfpqv6q20" path="res://scenes/world_generation/player_spawn.tscn" id="5_k4jhu"]
+[ext_resource type="Script" uid="uid://cjiiagw4jh1i0" path="res://scripts/Music.cs" id="8_0rse5"]
 [ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="9_frtjd"]
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
+[ext_resource type="AudioStream" uid="uid://bx1fn3t0qw8s6" path="res://assets/sounds/ForestTunes(74bpm-Gmaj-GameJam).mp3" id="10_frtjd"]
 
 [node name="GameManager" type="Node2D"]
 y_sort_enabled = true
@@ -33,3 +35,11 @@ color = Color(0.44291076, 0.44291076, 0.44291073, 1)
 [node name="Ui" parent="." instance=ExtResource("9_k4jhu")]
 
 [node name="MainMenu" parent="." instance=ExtResource("9_frtjd")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_frtjd")
+volume_db = 5.474
+autoplay = true
+bus = &"Music"
+parameters/looping = true
+script = ExtResource("8_0rse5")
