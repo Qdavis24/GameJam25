@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://dq2mhqcvxoppe"]
+[gd_scene load_steps=42 format=3 uid="uid://dq2mhqcvxoppe"]
 
 [ext_resource type="Script" uid="uid://bdase20j5pa4" path="res://scripts/menu/MainMenu.cs" id="1_6k0m2"]
 [ext_resource type="Texture2D" uid="uid://r8e85o7y176c" path="res://assets/ui/Background3.png" id="1_xr86y"]
@@ -8,7 +8,11 @@
 [ext_resource type="Shader" uid="uid://d0ye3o780v4h2" path="res://scenes/main_menu/MainMenuTitleText.gdshader" id="4_qmweu"]
 [ext_resource type="Texture2D" uid="uid://doqnd2cc7u00i" path="res://assets/characters/fox/frog_idle.png" id="5_wckin"]
 [ext_resource type="Texture2D" uid="uid://deku5ueeeta1i" path="res://assets/characters/fox/rabbit_idle.png" id="6_arvcj"]
+[ext_resource type="AudioStream" uid="uid://c7fc8rgxtdvj5" path="res://assets/sounds/ui/fox.wav" id="6_tdscb"]
+[ext_resource type="AudioStream" uid="uid://cvh1py8t733gr" path="res://assets/sounds/ui/frog.wav" id="7_1enlb"]
 [ext_resource type="Texture2D" uid="uid://ejmw7e4wtwc7" path="res://assets/characters/fox/racoon_idle.png" id="7_6k0m2"]
+[ext_resource type="AudioStream" uid="uid://cfn4x8hn7h707" path="res://assets/sounds/ui/rabbit.wav" id="8_2c0k1"]
+[ext_resource type="AudioStream" uid="uid://bjpcqkb0u8gef" path="res://assets/sounds/ui/raccoon.wav" id="9_ifx2v"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xr86y"]
 bg_color = Color(0, 0, 0, 0.40392157)
@@ -249,6 +253,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_arvcj")
+FoxSound = ExtResource("6_tdscb")
+FrogSound = ExtResource("7_1enlb")
+RabbitSound = ExtResource("8_2c0k1")
+RaccoonSound = ExtResource("9_ifx2v")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CharacterSelect"]
 layout_mode = 1

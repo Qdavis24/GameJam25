@@ -42,7 +42,7 @@ public partial class UpgradeScreen : Panel
     {
         GetTree().Paused = true;
         Visible = true;
-        Sfx.I.PlayUi(SlotSound, 1f);
+        Sfx.I.PlayUi(SlotSound);
         _button1.SpinAsync(_unlocked);
         _button2.SpinAsync(_unlocked);
         _button3.SpinAsync(_unlocked);

@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using GameJam25.scripts;
 using GameJam25.scripts.world_generation;
 
@@ -35,6 +34,9 @@ public partial class GameManager : Node
     [Export] private MainMenu _mainMenu;
     [Export] private PauseScreen _pauseScreen;
     [Export] private DeathScreen _deathScreen;
+
+    public List<string> Allies;
+
     
     // Game state
     public Camera Cam;
@@ -45,10 +47,10 @@ public partial class GameManager : Node
     
     // Game Manager Logic State
     enum GameState {
-        MainMenu,
-        LoadingGame,
-        PlayingGame,
-        DeathScreen
+	    MainMenu,
+	    LoadingGame,
+	    PlayingGame,
+	    DeathScreen
     }
     
     
@@ -59,29 +61,29 @@ public partial class GameManager : Node
     private int _numSpawners;
     
     public static GameManager Instance;
-
+	
     public override void _Ready()
     {
-        ProcessMode = ProcessModeEnum.Always;
-        Instance = this;
+	    ProcessMode = ProcessModeEnum.Always;
+	    Instance = this;
         
-        XpPool = new XpPool(_xpOrbScene, 100, GetTree().Root);
+	    XpPool = new XpPool(_xpOrbScene, 100, GetTree().Root);
         
-        _mainMenu.Show();
+	    _mainMenu.Show();
         
-        _mainMenu.InitGame += InitGame;
-        _pauseScreen.MainMenuRequested += EndGame;
-        _pauseScreen.Unpause += () =>
-        {
-            _pauseScreen.Close();
-            GetTree().Paused = false;
-            _isPaused = false;
-        };
-        _deathScreen.MainMenuRequested += EndGame;
+	    _mainMenu.InitGame += InitGame;
+	    _pauseScreen.MainMenuRequested += EndGame;
+	    _pauseScreen.Unpause += () =>
+	    {
+		    _pauseScreen.Close();
+		    GetTree().Paused = false;
+		    _isPaused = false;
+	    };
+	    _deathScreen.MainMenuRequested += EndGame;
         
     }
-    
-    public override void _PhysicsProcess(double delta)
+
+	public override void _PhysicsProcess(double delta)
     {
         switch (_gameState)
         {
@@ -122,6 +124,8 @@ public partial class GameManager : Node
 
     private async void InitGame(string character)
     {
+        Allies = new() { "fox", "frog", "raccoon", "rabbit" };
+        Allies.Remove(character); // take out player character from ally list
         GetTree().Paused = false;
         _isPaused = false;
         Cam = _camScene.Instantiate<Camera>();
@@ -264,5 +268,5 @@ public partial class GameManager : Node
         _deathScreen.Open();
         _gameState = GameState.DeathScreen;
     }
-    
+
 }

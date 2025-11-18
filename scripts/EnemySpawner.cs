@@ -26,6 +26,10 @@ public partial class EnemySpawner : Node2D
     [Export] private Vector2 _spawnRadius;
     [Export] private int _numEnemiesPerWave = 1;
     [Export] private int _numWaves;
+    
+    [ExportCategory("Ally")] 
+    [Export] private PackedScene _allyPackedScene;
+    private Ally _ally;
 
     private float _crystalHealth;
     private double _currTime;
@@ -41,6 +45,7 @@ public partial class EnemySpawner : Node2D
     }
     public override void _Ready()
     {
+        SpawnAlly();
         OnTimeout();
         _currWave = 0;
         _light.Energy = 0;
@@ -101,9 +106,29 @@ public partial class EnemySpawner : Node2D
             if (_crystalHealth <= 0)
             {
                 EmitSignal(SignalName.SpawnerDestroyed, GlobalPosition);
+                _ally.FreeFromCage();
                 QueueFree();
             }
         }
        
     }
+    
+    private void SpawnAlly()
+    {
+        var speciesList = GameManager.Instance.Allies;
+        if (speciesList.Count == 0) return; // Don't spawn ally if empty
+        string species = speciesList[0];
+        speciesList.RemoveAt(0);
+		
+        _ally = _allyPackedScene.Instantiate<Ally>();
+        _ally.Species = species;
+		
+        var center = GlobalPosition;
+        float distanceMultiplier = 2.0f;
+        var offset = new Vector2(_spawnRadius.X, _spawnRadius.Y);
+        offset *= distanceMultiplier;
+        _ally.GlobalPosition = center + offset;
+        GameManager.Instance.AddChild(_ally);
+    }
+ 
 }

@@ -2,8 +2,10 @@ using Godot;
 using System;
 
 public partial class MainMenu : CanvasLayer
-{
+{	
 	[Signal] public delegate void InitGameEventHandler(string character);
+
+	[Export] private AudioStream _clickSound;
 	
 	private CenterContainer _startScreen;
 	private Control _characterSelectScreen;
@@ -42,6 +44,7 @@ public partial class MainMenu : CanvasLayer
 	// go to character selection
 	private void StartPressed()
 	{
+		Sfx.I.PlayUi(_clickSound);
 		_startScreen.Visible = false;
 		_characterSelectScreen.Visible = true;
 

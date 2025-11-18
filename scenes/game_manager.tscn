@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=17 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
 [ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/xp_system/xp.tscn" id="2_jdad8"]
@@ -10,9 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://bssqllrsjeor5" path="res://scenes/Camera.tscn" id="8_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dhg5dra5mmuyc" path="res://scenes/ui/PauseScreen.tscn" id="8_lcbjr"]
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
+[ext_resource type="AudioStream" uid="uid://c7sxtsvb57f32" path="res://assets/sounds/ui/death.wav" id="11_5xtl8"]
 [ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="12_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="13_5xtl8"]
+[ext_resource type="AudioStream" uid="uid://hmqhwgil6rft" path="res://assets/sounds/ui/start.wav" id="13_30v7y"]
 [ext_resource type="Script" uid="uid://cag2c5l6em61o" path="res://scripts/ScreenFade.cs" id="13_lcbjr"]
+[ext_resource type="AudioStream" uid="uid://bx1fn3t0qw8s6" path="res://assets/sounds/ForestTunes(74bpm-Gmaj-GameJam).mp3" id="16_cjvif"]
 
 [node name="GameManager" type="Node2D" node_paths=PackedStringArray("_screenFade", "_ui", "_mainMenu", "_pauseScreen", "_deathScreen")]
 y_sort_enabled = true
@@ -41,6 +44,7 @@ offset_left = 12.0
 offset_top = 5.0
 offset_right = 12.0
 offset_bottom = 5.0
+_deathSound = ExtResource("11_5xtl8")
 
 [node name="PauseScreen2" parent="Ui" instance=ExtResource("8_lcbjr")]
 offset_left = -6.0
@@ -49,6 +53,7 @@ offset_right = -6.0
 offset_bottom = -5.0
 
 [node name="MainMenu" parent="." instance=ExtResource("12_30v7y")]
+_clickSound = ExtResource("13_30v7y")
 
 [node name="ScreenFade" type="CanvasLayer" parent="." node_paths=PackedStringArray("_overlay")]
 script = ExtResource("13_lcbjr")
@@ -64,3 +69,8 @@ color = Color(0, 0, 0, 1)
 
 [node name="ColorTone" type="CanvasModulate" parent="."]
 color = Color(0.2520276, 0.25202766, 0.25202763, 1)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_cjvif")
+volume_db = 8.0
+autoplay = true
