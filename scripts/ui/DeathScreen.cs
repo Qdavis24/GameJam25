@@ -3,6 +3,9 @@ using System;
 
 public partial class DeathScreen : Panel
 {
+	[Signal]
+	public delegate void MainMenuRequestedEventHandler();
+	
 	public override void _Ready()
 	{
 		ProcessMode = Node.ProcessModeEnum.Always;
@@ -20,6 +23,6 @@ public partial class DeathScreen : Panel
 
 	private void MenuPressed()
 	{
-		GetTree().Quit(); // TODO: open main menu instead of quit
+		EmitSignal(SignalName.MainMenuRequested);
 	}
 }

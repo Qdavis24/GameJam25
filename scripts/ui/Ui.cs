@@ -26,6 +26,7 @@ public partial class Ui : CanvasLayer
 		
 		_mainMenu = GetNode<MainMenu>("MainMenu");
 		_pauseScreen.MainMenuRequested += OnMainMenuRequested;
+		_deathScreen.MainMenuRequested += OnMainMenuRequested;
 	}
 
 	public void InitializeUiFromPlayer(Player player)
