@@ -56,7 +56,7 @@ public partial class ExitPortal : Node2D
             // Intense pulsing effect
             float pulse = (Mathf.Sin((float)_currTime * _pulseSpeed + Mathf.Pi) + 1) / 2; // 0 to 1
             float intensity = Mathf.Lerp(_pulseMinIntensity, _pulseMaxIntensity, pulse);
-            GD.Print(intensity);
+            
             _light.Energy = intensity;
         }
         _currTime += delta;

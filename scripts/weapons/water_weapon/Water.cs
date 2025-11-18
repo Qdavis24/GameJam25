@@ -74,7 +74,7 @@ public partial class Water : Node2D
     {
         Sfx.I.Play2D(_wooshStream, GlobalPosition, -25);
         _trailParticles.Amount *= 2;
-        Reparent(GetTree().Root);
+        Reparent(GameManager.Instance.World);
         _active = true;
         _hitbox.Monitorable = true;
         _hitbox.Monitoring = true;

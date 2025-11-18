@@ -20,6 +20,14 @@ public partial class Ui : CanvasLayer
 		_upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
 	}
 
+	public override void _PhysicsProcess(double delta)
+	{
+		if (Input.IsActionJustPressed("DEBUG-trigger-upgrade"))
+		{
+			_upgradeScreen.Show();
+		}
+	}
+
 	public void InitializeUiFromPlayer(Player player)
 	{
 		Player = player;

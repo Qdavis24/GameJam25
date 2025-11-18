@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bssqllrsjeor5"]
+
+[ext_resource type="Script" uid="uid://c4jyj40wk318s" path="res://scripts/Camera.cs" id="1_a3ute"]
+
+[node name="Camera2D" type="Camera2D"]
+ignore_rotation = false
+zoom = Vector2(0.8, 0.8)
+script = ExtResource("1_a3ute")
+_speed = 0.2

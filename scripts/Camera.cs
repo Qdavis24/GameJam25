@@ -69,10 +69,5 @@ public partial class Camera : Camera2D
     {
         _deathTimer = _deathAnimDuration;
     }
-
-    public void Reset()
-    {
-        Zoom = _originalZoom;
-        Rotation = 0;
-    }
+    
 }

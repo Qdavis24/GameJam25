@@ -9,13 +9,13 @@ public class XpPool
     private PackedScene _xpOrbPckdScene;
     private Queue<Xp> _orbPool;
 
-    public XpPool(PackedScene xpOrbPckdScene, int poolSize, Node2D parent)
+    public XpPool(PackedScene xpOrbPckdScene, int poolSize, Node parent)
     {
         _orbPool = new Queue<Xp>(poolSize);
         for (int i = 0; i < poolSize; i++)
         {
             var newOrb = xpOrbPckdScene.Instantiate<Xp>();
-            parent.AddChild(newOrb);
+            parent.CallDeferred("add_child", newOrb);
             _orbPool.Enqueue(newOrb);
         }
     }

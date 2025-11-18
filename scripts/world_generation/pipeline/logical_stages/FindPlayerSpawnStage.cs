@@ -27,10 +27,10 @@ public partial class FindPlayerSpawnStage : PipelineStage
     private void FindValidSpawn()
     {
         int count = 0;
-        while (count < 100)
+        while (count < 1000)
         {
             count++;
-            Vector2I potentialSpawn = new Vector2I(GD.RandRange(0, _colLength-10), GD.RandRange(0, _rowLength-10));
+            Vector2I potentialSpawn = new Vector2I(GD.RandRange(15, _colLength-15), GD.RandRange(15, _rowLength-15));
             if (_matrix[potentialSpawn.X, potentialSpawn.Y] == World.LogicalData.WalkableState && MatrixUtils.UniformNeighbors(_matrix, potentialSpawn.X, potentialSpawn.Y, 4, false))
             {
                 _playerSpawn = _baseTileMapLayer.ToGlobal(_baseTileMapLayer.MapToLocal(potentialSpawn));

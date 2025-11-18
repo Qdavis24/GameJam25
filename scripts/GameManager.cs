@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using GameJam25.scripts;
 using GameJam25.scripts.world_generation;
 
@@ -25,9 +26,9 @@ public partial class GameManager : Node
     [Export] private PackedScene _enterPortalScene;
     [Export] private PackedScene _exitPortalScene;
     [Export] private PackedScene _enemySpawnerScene;
+    [Export] private PackedScene _camScene;
     
     [ExportCategory("Node References")]
-    [Export] public Camera Cam;
     [Export] private ScreenFade _screenFade;
     // ui below
     [Export] private Ui _ui;
@@ -36,6 +37,7 @@ public partial class GameManager : Node
     [Export] private DeathScreen _deathScreen;
     
     // Game state
+    public Camera Cam;
     public XpPool XpPool;
     public World World;
     public FlowField FlowField;
@@ -63,7 +65,10 @@ public partial class GameManager : Node
         ProcessMode = ProcessModeEnum.Always;
         Instance = this;
         
+        XpPool = new XpPool(_xpOrbScene, 100, GetTree().Root);
+        
         _mainMenu.Show();
+        
         _mainMenu.InitGame += InitGame;
         _pauseScreen.MainMenuRequested += EndGame;
         _pauseScreen.Unpause += () =>
@@ -75,8 +80,7 @@ public partial class GameManager : Node
         _deathScreen.MainMenuRequested += EndGame;
         
     }
-
-
+    
     public override void _PhysicsProcess(double delta)
     {
         switch (_gameState)
@@ -88,6 +92,10 @@ public partial class GameManager : Node
             case GameState.PlayingGame:
                 if (!_isPaused)
                     UpdateFlowField();
+                if (Input.IsActionJustPressed("respawn"))
+                {
+                    ChangeLevel();
+                }
                 break;
             case GameState.DeathScreen:
                 break;
@@ -114,32 +122,31 @@ public partial class GameManager : Node
 
     private async void InitGame(string character)
     {
+        GetTree().Paused = false;
+        _isPaused = false;
+        Cam = _camScene.Instantiate<Camera>();
+        AddChild(Cam);
         await _screenFade.FadeToBlack();
         _mainMenu.Close();
-        
         Player = _playerScene.Instantiate<Player>();
         Player.AnimationSet = character;
         _ui.InitializeUiFromPlayer(Player); // connects players signals related to stats and upgrade to ui
-        Player.Died += OnPlayerDeath; 
+        GetTree().Root.AddChild(Player);
+        Player.Died += OnPlayerDeath;
         InitWorldLevel();
-
         await _screenFade.FadeToNormal();
-        _gameState = GameState.PlayingGame;
-
     }
 
     private async void EndGame()
     {
         await _screenFade.FadeToBlack();
         // cleanup all game components
-        Cam.Target = null;
-        Cam.Reset();
+        Cam.QueueFree();
+        Cam = null;
         Player.QueueFree();
         Player = null;
         World.QueueFree();
         World = null;
-        XpPool.Cleanup();
-        XpPool = null;
         FlowField = null;
         // cleanup ui components
         _pauseScreen.Close();
@@ -151,22 +158,23 @@ public partial class GameManager : Node
 
     public void InitWorldLevel()
     {
+        Player.Visible = false;
+        _gameState = GameState.LoadingGame;
         Player.InitForWorldLevel();
-        GetTree().Root.AddChild(Player);
-        World = SpawnWorld();
-        GetTree().Root.AddChild(World);
-        XpPool = new XpPool(_xpOrbScene, 100, World);
+        SpawnWorld();
+        FlowField = new FlowField(World.LogicalData.Matrix,
+            World.LogicalData.NonWalkableState);
         SpawnEnemySpawners();
         var enterPortal = SpawnEnterPortal();
         Cam.Target = enterPortal;
         enterPortal.PortalOpen += () =>
         {
+            Player.Visible = true;
             Player.GlobalPosition = enterPortal.GlobalPosition;
-            Player.Velocity = new Vector2(100, 20);
             Cam.Target = Player;
+            _gameState = GameState.PlayingGame;
+            _lastPlayerCoord = GetPlayerCoord();
         };
-        FlowField = new FlowField(World.LogicalData.Matrix,
-            World.LogicalData.NonWalkableState);
         ScaleDifficulty();
     }
 
@@ -193,10 +201,15 @@ public partial class GameManager : Node
         }
     }
 
-    private World SpawnWorld()
+    private void SpawnWorld()
     {
-        if (World != null) World.QueueFree();
-        return _worldScene.Instantiate<World>();
+        if (World != null)
+        {
+            World.QueueFree();
+        }
+        World = _worldScene.Instantiate<World>();
+        
+        GetTree().Root.AddChild(World);
     }
 
     private EnterPortal SpawnEnterPortal()
@@ -208,6 +221,12 @@ public partial class GameManager : Node
     }
 
     // Helper Methods
+    private async void ChangeLevel()
+    {
+        await _screenFade.FadeToBlack();
+        InitWorldLevel();
+        await _screenFade.FadeToNormal();
+    }
     private void UpdateFlowField()
     {
         var currPlayerCoord = GetPlayerCoord();
@@ -227,13 +246,12 @@ public partial class GameManager : Node
     // Signal Callbacks
     private void OnSpawnerDestroyed(Vector2 pos)
     {
-        GD.Print("spawner destroyed");
         _numSpawners--;
         if (_numSpawners <= 0)
         {
             var exitPortal = _exitPortalScene.Instantiate<ExitPortal>();
             exitPortal.GlobalPosition = pos;
-            exitPortal.PlayerEnteredPortal += InitWorldLevel;
+            exitPortal.PlayerEnteredPortal += ChangeLevel;
             World.CallDeferred("add_child", exitPortal);
         }
     }

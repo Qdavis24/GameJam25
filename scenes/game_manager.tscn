@@ -5,39 +5,34 @@
 [ext_resource type="PackedScene" uid="uid://s3w1eg52kr8u" path="res://scenes/world_generation/world.tscn" id="2_oo155"]
 [ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player.tscn" id="3_udu3i"]
 [ext_resource type="PackedScene" uid="uid://qevbfpqv6q20" path="res://scenes/portals/player_enter_portal.tscn" id="4_oo155"]
-[ext_resource type="Script" uid="uid://c4jyj40wk318s" path="res://scripts/Camera.cs" id="5_eaq8r"]
 [ext_resource type="PackedScene" uid="uid://dyrdk24okgbja" path="res://scenes/enemies/wraith_spawner.tscn" id="5_jdad8"]
 [ext_resource type="PackedScene" uid="uid://0p8w5ski1dbo" path="res://scenes/portals/player_exit_portal.tscn" id="6_k4jhu"]
+[ext_resource type="PackedScene" uid="uid://bssqllrsjeor5" path="res://scenes/Camera.tscn" id="8_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dhg5dra5mmuyc" path="res://scenes/ui/PauseScreen.tscn" id="8_lcbjr"]
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
 [ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="12_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="13_5xtl8"]
 [ext_resource type="Script" uid="uid://cag2c5l6em61o" path="res://scripts/ScreenFade.cs" id="13_lcbjr"]
 
-[node name="GameManager" type="Node2D" node_paths=PackedStringArray("Cam", "_screenFade", "_ui", "_mainMenu", "_pauseScreen", "_deathScreen")]
+[node name="GameManager" type="Node2D" node_paths=PackedStringArray("_screenFade", "_ui", "_mainMenu", "_pauseScreen", "_deathScreen")]
 y_sort_enabled = true
 script = ExtResource("1_udu3i")
 _enemySpawnerNumEnemiesPerWave = 10.0
 _enemySpawnerWaveInterval = 30.0
 _enemySpawnerNumWaves = 5.0
+_enemySpawnerNumWavesScalr = 2.0
 _xpOrbScene = ExtResource("2_jdad8")
 _worldScene = ExtResource("2_oo155")
 _playerScene = ExtResource("3_udu3i")
 _enterPortalScene = ExtResource("4_oo155")
 _exitPortalScene = ExtResource("6_k4jhu")
 _enemySpawnerScene = ExtResource("5_jdad8")
-Cam = NodePath("Camera2D")
+_camScene = ExtResource("8_30v7y")
 _screenFade = NodePath("ScreenFade")
 _ui = NodePath("Ui")
 _mainMenu = NodePath("MainMenu")
 _pauseScreen = NodePath("Ui/PauseScreen2")
 _deathScreen = NodePath("Ui/DeathScreen2")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-ignore_rotation = false
-zoom = Vector2(0.8, 0.8)
-script = ExtResource("5_eaq8r")
-_speed = 0.2
 
 [node name="Ui" parent="." instance=ExtResource("9_k4jhu")]
 

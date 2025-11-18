@@ -91,6 +91,7 @@ public partial class Player : CharacterBody2D
 
         _hurtbox.AreaEntered += OnHurtboxEntered;
         _pickupRange.AreaEntered += OnPickupRangeEntered;
+        _pickupRange.AreaExited += OnPickupRangeExited;
 
 
         _health = _maxHealth;
