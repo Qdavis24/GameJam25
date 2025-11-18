@@ -88,7 +88,7 @@ public partial class EnemySpawner : Node2D
         randSign = GD.Randf() < .5 ? -1 : 1;
         var yOffset = _spawnRadius.Y * GD.Randf() * randSign;
         enemy.Position += new Vector2(xOffset, yOffset);
-        AddChild(enemy);
+        CallDeferred("add_child", enemy);
     }
 
     private void OnCrystalHurtboxEntered(Area2D area)

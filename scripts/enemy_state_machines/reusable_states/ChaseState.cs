@@ -67,7 +67,7 @@ public partial class ChaseState : EState
     public override void PhysicsUpdate(double delta)
     {
         if (GameManager.Instance.Player == null) return;
-        if (GameManager.Instance.CurrFlowField.Directions == null) return;
+        if (GameManager.Instance.FlowField.Directions == null) return;
 
         if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(GameManager.Instance.Player.GlobalPosition) <
             _stateMachine.Owner.AttackRange * _stateMachine.Owner.AttackRange) // transition to attack
@@ -121,11 +121,11 @@ public partial class ChaseState : EState
 
     private Vector2 GetFlowFieldDir()
     {
-        var enemyCoord = GameManager.Instance.CurrWorld.PhysicalData.BaseTileMapLayer.LocalToMap(
-            GameManager.Instance.CurrWorld.PhysicalData.BaseTileMapLayer.ToLocal(_stateMachine.Owner.GlobalPosition));
+        var enemyCoord = GameManager.Instance.World.PhysicalData.BaseTileMapLayer.LocalToMap(
+            GameManager.Instance.World.PhysicalData.BaseTileMapLayer.ToLocal(_stateMachine.Owner.GlobalPosition));
         var dir = Vector2.Zero;
-        var flowFieldCols = GameManager.Instance.CurrFlowField.Directions.GetLength(0);
-        var flowFieldRows = GameManager.Instance.CurrFlowField.Directions.GetLength(1);
+        var flowFieldCols = GameManager.Instance.FlowField.Directions.GetLength(0);
+        var flowFieldRows = GameManager.Instance.FlowField.Directions.GetLength(1);
         var numSampleDirs = 0;
         for (int colShift = -1; colShift <= 1; colShift++)
         for (int rowShift = -1; rowShift <= 1; rowShift++)
@@ -133,7 +133,7 @@ public partial class ChaseState : EState
             var currCol = enemyCoord.X + colShift;
             var currRow = enemyCoord.Y + rowShift;
             if (currCol < 0 || currCol >= flowFieldCols || currRow < 0 || currRow >= flowFieldRows) continue;
-            var currDir = GameManager.Instance.CurrFlowField.Directions[currCol, currRow];
+            var currDir = GameManager.Instance.FlowField.Directions[currCol, currRow];
             if (currDir == Vector2.Zero) continue;
             dir += currDir;
             numSampleDirs++;

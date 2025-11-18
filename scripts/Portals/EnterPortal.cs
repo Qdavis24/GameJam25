@@ -8,14 +8,16 @@ public partial class EnterPortal : Node2D
     [Export] private AudioStreamPlayer2D _portalSoundPlayer;
     [Export] private GpuParticles2D _particles;
     [Export] private PointLight2D _light;
+    [Export] private GpuParticles2D _poofEffect;
     
     [ExportGroup("Light Animation")]
-    [Export] private float _maxLightEnergy = 2.0f;
+    [Export] private float _maxTextureScale = 9f;
     [Export] private float _growDuration = 3.0f;
     [Export] private float _portalOpenDelay = 1.0f;
     [Export] private float _lightFadeOutDuration = 1.5f;  // How long light fades
-    
-    [ExportGroup("Audio")]
+
+    [ExportGroup("Audio")] 
+    [Export] private AudioStream _spawnNoise;
     [Export] private float _audioFadeOutDuration = 1.0f;
     
     private double _currTime;
@@ -28,7 +30,6 @@ public partial class EnterPortal : Node2D
     {
         _portalSoundPlayer.Play();
         _initialVolume = _portalSoundPlayer.VolumeDb;
-        _light.Energy = 0;
         _particles.Emitting = true;
         _particles.Finished += OnParticlesFinished;
     }
@@ -41,13 +42,16 @@ public partial class EnterPortal : Node2D
         {
             // Grow light effect
             float progress = Mathf.Clamp((float)_currTime / _growDuration, 0f, 1f);
-            float easedProgress = Mathf.Pow(progress, 2);
-            _light.Energy = easedProgress * _maxLightEnergy;
+            _light.TextureScale = _maxTextureScale * progress;
             
             // Emit signal after particles fully open + delay
             if (!_hasEmittedSignal && progress >= 1.0f && _currTime >= _growDuration + _portalOpenDelay)
             {
                 _hasEmittedSignal = true;
+                _poofEffect.Emitting = true;
+                _light.Energy *= 2;
+                _particles.Visible = false;
+                Sfx.I.Play2D(_spawnNoise, GlobalPosition,-15);
                 EmitSignal(SignalName.PortalOpen);
                 StartFadeOut();
             }
@@ -59,7 +63,7 @@ public partial class EnterPortal : Node2D
             float fadeProgress = Mathf.Clamp(_fadeOutTimer / _lightFadeOutDuration, 0f, 1f);
             
             // Fade light
-            _light.Energy = Mathf.Lerp(_maxLightEnergy, 0f, fadeProgress);
+            _light.Energy = Mathf.Lerp(_light.Energy, 0f, fadeProgress);
             
             // Fade audio (faster if audio fade is shorter)
             float audioFadeProgress = Mathf.Clamp(_fadeOutTimer / _audioFadeOutDuration, 0f, 1f);

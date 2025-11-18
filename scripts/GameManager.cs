@@ -6,179 +6,173 @@ using GameJam25.scripts.world_generation;
 
 public partial class GameManager : Node
 {
-	[ExportCategory("Starting Difficulty")] 
-	[Export] private float _enemySpawnerHealth = 100.0f;
-	[Export] private float _enemySpawnerNumEnemiesPerWave = 5.0f;
-	[Export] private float _enemySpawnerWaveInterval = 45.0f;
-	[Export] private float _enemySpawnerNumWaves = 3.0f;
-	
-	[ExportCategory("Difficulty Ramps")]
-	[Export] private float _enemySpawnerHealthScalr = 1.1f;
-	[Export] private float _enemySpawnerNumEnemiesPerWaveScalr = 1.1f;
-	[Export] private float _enemySpawnerWaveIntervalScalr = .9f;
-	[Export] private float _enemySpawnerNumWavesScalr = 1.1f;
+    [ExportCategory("Starting Difficulty")] 
+    [Export] private float _enemySpawnerHealth = 100.0f;
+    [Export] private float _enemySpawnerNumEnemiesPerWave = 5.0f;
+    [Export] private float _enemySpawnerWaveInterval = 45.0f;
+    [Export] private float _enemySpawnerNumWaves = 3.0f;
 
-	[ExportCategory("External Required Resources")] 
-	[Export] private PackedScene _xpOrbPckdScene;
-	[Export] private PackedScene _worldPckdScene;
-	[Export] private PackedScene _playerPckdScene;
-	[Export] private PackedScene _playerEnterPortal;
-	[Export] private PackedScene _playerExitPortal;
-	[Export] private PackedScene _enemySpawnerPckdScene;
-	[Export] private PackedScene _arrowPckdScene;
-	[Export] private PackedScene _labelPckdScene;
-	
-	// Internal Required Resources
-	private Ui _ui;
-	public Camera Cam;
+    [ExportCategory("Difficulty Ramps")] 
+    [Export] private float _enemySpawnerHealthScalr = 1.1f;
+    [Export] private float _enemySpawnerNumEnemiesPerWaveScalr = 1.1f;
+    [Export] private float _enemySpawnerWaveIntervalScalr = .9f;
+    [Export] private float _enemySpawnerNumWavesScalr = 1.1f;
 
+    [ExportCategory("Scene References")] 
+    [Export] private PackedScene _xpOrbScene;
+    [Export] private PackedScene _worldScene;
+    [Export] private PackedScene _playerScene;
+    [Export] private PackedScene _enterPortalScene;
+    [Export] private PackedScene _exitPortalScene;
+    [Export] private PackedScene _enemySpawnerScene;
+    
+    [ExportCategory("Node References")]
+    [Export] public Camera Cam;
+    [Export] private CanvasModulate _canvasModulate;
+    [Export] private Ui _ui;
+    
+    // Game state
+    public XpPool XpPool;
+    public World World;
+    public FlowField FlowField;
+    public Player Player;
+    
+    // Game Manager Logic State
+    enum GameState {
+        StartMenu,
+        LoadingGame,
+        PlayingGame,
+        DeathScreen
+    }
+    private bool _isPaused = false;
+    
+    private GameState _gameState;
+    private Vector2I _lastPlayerCoord;
+    private int _numSpawners;
+    
+    public static GameManager Instance;
 
-	// State Instances
-	public XpPool XpPool;
-	public World CurrWorld;
-	public FlowField CurrFlowField;
-	public Player Player;
-	private Vector2I _lastPlayerCoord;
-	private int _numSpawners;
-	private List<Node2D> _arrows = new();
-	
-
-	public static GameManager Instance;
-	
-	public override void _Ready()
-	{
-		_ui = GetNode<Ui>("Ui");
-		Cam = GetNode<Camera>("Camera2D");
-		
-		Instance = this;
-		
-		Player = _playerPckdScene.Instantiate<Player>();
-		_ui.InitializeUiFromPlayer(Player);
-		AddChild(Player);
-		InitLevel();
-		XpPool = new XpPool(_xpOrbPckdScene, 100, CurrWorld);
-	}
-
-
-	public override void _PhysicsProcess(double delta)
-	{
-		UpdateFlowField(false);
-	}
-	
-	private void UpdateFlowField(bool debug)
-	{
-		var currPlayerCoord =
-			CurrWorld.PhysicalData.BaseTileMapLayer.LocalToMap(
-				CurrWorld.PhysicalData.BaseTileMapLayer
-					.ToLocal(Player.GlobalPosition)); // big mess but just getting the players tile coord
-		if ((_lastPlayerCoord - currPlayerCoord).LengthSquared() > 5 * 5)
-		{
-			CurrFlowField.GenerateFlowFieldFrom(currPlayerCoord);
-			_lastPlayerCoord = currPlayerCoord;
-			if (debug)
-			{
-				if (_arrows.Count > 0)
-					foreach (var ar in _arrows)
-						ar.QueueFree();
-				for (int col = 0; col < CurrFlowField.Directions.GetLength(0); col++)
-				for (int row = 0; row < CurrFlowField.Directions.GetLength(1); row++)
-				{
-					CreateLabel(col, row, $"{CurrFlowField.Costs[col, row]}");
-					CreateArrow(col, row, CurrFlowField.Directions[col, row]);
-				}
-				
-			}
-		}
-	}
-
-	public void InitLevel()
-	{
-		SpawnNewWorld();
-		SpawnPlayer();
-		CurrFlowField = new FlowField(CurrWorld.LogicalData.Matrix,
-			CurrWorld.LogicalData.NonWalkableState);
-		SpawnEnemySpawners();
-		ScaleDifficulty();
-	}
-
-	private void ScaleDifficulty()
-	{
-		_enemySpawnerHealth *= _enemySpawnerHealthScalr;
-		_enemySpawnerWaveInterval *= _enemySpawnerWaveIntervalScalr;
-		_enemySpawnerNumEnemiesPerWave *= _enemySpawnerNumEnemiesPerWaveScalr;
-		_enemySpawnerNumWaves *= _enemySpawnerNumWavesScalr;
-	}
+    public override void _Ready()
+    {
+        Instance = this;
+        XpPool = new XpPool(_xpOrbScene, 100, World);
+    }
 
 
-	private void SpawnEnemySpawners()
-	{
-		_numSpawners = 0;
-		foreach (Shrine shrine in CurrWorld.LogicalData.Shrines)
-		{
-			_numSpawners++;
-			var newSpawner = _enemySpawnerPckdScene.Instantiate<EnemySpawner>();
-			newSpawner.Init(_enemySpawnerHealth, _enemySpawnerWaveInterval, _enemySpawnerNumEnemiesPerWave,
-				_enemySpawnerNumWaves);
-			newSpawner.GlobalPosition = CurrWorld.PhysicalData.BaseTileMapLayer.MapToLocal(shrine.CenterTile);
-			newSpawner.SpawnerDestroyed += OnSpawnerDestroyed;
-			CurrWorld.AddChild(newSpawner);
-		}
-	}
+    public override void _PhysicsProcess(double delta)
+    {
+        switch (_gameState)
+        {
+            case GameState.StartMenu:
+                break;
+            case GameState.LoadingGame:
+                break;
+            case GameState.PlayingGame:
+                if (!_isPaused)
+                    UpdateFlowField();
+                break;
+            case GameState.DeathScreen:
+                break;
+        }
+    }
 
-	private void SpawnNewWorld()
-	{
-		if (CurrWorld != null) CurrWorld.QueueFree();
-		CurrWorld = _worldPckdScene.Instantiate<World>();
-		AddChild(CurrWorld);
-	}
+    private void InitGame()
+    {
+        Player = _playerScene.Instantiate<Player>();
+        _ui.InitializeUiFromPlayer(Player);
+        World = _worldScene.Instantiate<World>();
+        FlowField = new FlowField(World.LogicalData.Matrix, World.LogicalData.NonWalkableState);
+    }
 
-	private void SpawnPlayer()
-	{
-		var spawnPortal = _playerEnterPortal.Instantiate<EnterPortal>();
-		spawnPortal.GlobalPosition = CurrWorld.LogicalData.PlayerSpawn;
-		AddChild(spawnPortal);
-		Cam.Target = spawnPortal;
-		spawnPortal.PortalOpen += () =>
-		{
-			Player.GlobalPosition = spawnPortal.GlobalPosition;
-			Cam.Target = Player;
-		};
-	}
-	
-	private void OnSpawnerDestroyed(Vector2 pos)
-	{
-		GD.Print("spawner destroyed");
-		_numSpawners--;
-		if (_numSpawners <= 0)
-		{
-			var exitPortal = _playerExitPortal.Instantiate<ExitPortal>();
-			exitPortal.GlobalPosition = pos;
-			exitPortal.PlayerEnteredPortal += InitLevel;
-			CurrWorld.CallDeferred("add_child", exitPortal);
-		}
-	}
-	// DEBUG STUFF BELOW
-	private void CreateArrow(int col, int row, Vector2 direction)
-	{
-		var arrow = _arrowPckdScene.Instantiate<Polygon2D>();
-		var tilePos =
-			CurrWorld.PhysicalData.BaseTileMapLayer.ToGlobal(
-				CurrWorld.PhysicalData.BaseTileMapLayer.MapToLocal(new Vector2I(col, row)));
-		var nextTilePos =
-			CurrWorld.PhysicalData.BaseTileMapLayer.ToGlobal(
-				CurrWorld.PhysicalData.BaseTileMapLayer.MapToLocal(new Vector2I(col + (int)direction.X, row + (int)direction.Y)));
-		arrow.GlobalPosition = tilePos;
-		AddChild(arrow);
-		arrow.Rotation = (direction).Angle();
-		_arrows.Add(arrow);
-	}
+    public async void InitWorldLevel()
+    {
+        _canvasModulate.LevelTransition();
+        Player.InitForWorldLevel();
+        SpawnWorld();
+        SpawnEnemySpawners();
+        var enterPortal = SpawnEnterPortal();
+        Cam.Target = enterPortal;
+        enterPortal.PortalOpen += () =>
+        {
+            Player.GlobalPosition = enterPortal.GlobalPosition;
+            Player.Velocity = new Vector2(100, 20);
+            Cam.Target = Player;
+        };
+        FlowField = new FlowField(World.LogicalData.Matrix,
+            World.LogicalData.NonWalkableState);
+        
+        
+        ScaleDifficulty();
+    }
 
-	private void CreateLabel(int col, int row, string cost)
-	{
-		var l = _labelPckdScene.Instantiate<Label>();
-		l.Text = cost;
-		l.Position = CurrWorld.PhysicalData.BaseTileMapLayer.MapToLocal(new Vector2I(col, row));
-		AddChild(l);
-	}
+    private void ScaleDifficulty()
+    {
+        _enemySpawnerHealth *= _enemySpawnerHealthScalr;
+        _enemySpawnerWaveInterval *= _enemySpawnerWaveIntervalScalr;
+        _enemySpawnerNumEnemiesPerWave *= _enemySpawnerNumEnemiesPerWaveScalr;
+        _enemySpawnerNumWaves *= _enemySpawnerNumWavesScalr;
+    }
 
+
+    private void SpawnEnemySpawners()
+    {
+        _numSpawners = 0;
+        foreach (Shrine shrine in World.LogicalData.Shrines)
+        {
+            _numSpawners++;
+            var newSpawner = _enemySpawnerScene.Instantiate<EnemySpawner>();
+            newSpawner.Init(_enemySpawnerHealth, _enemySpawnerWaveInterval, _enemySpawnerNumEnemiesPerWave,
+                _enemySpawnerNumWaves);
+            newSpawner.GlobalPosition = World.PhysicalData.BaseTileMapLayer.MapToLocal(shrine.CenterTile);
+            newSpawner.SpawnerDestroyed += OnSpawnerDestroyed;
+            World.CallDeferred("add_child", newSpawner);
+        }
+    }
+
+    private void SpawnWorld()
+    {
+        if (World != null) World.QueueFree();
+        World = _worldScene.Instantiate<World>();
+        AddChild(World);
+    }
+
+    private EnterPortal SpawnEnterPortal()
+    {
+        var spawnPortal = _enterPortalScene.Instantiate<EnterPortal>();
+        spawnPortal.GlobalPosition = World.LogicalData.PlayerSpawn;
+        AddChild(spawnPortal);
+        return spawnPortal;
+    }
+
+    // Helper Methods
+    private void UpdateFlowField()
+    {
+        var currPlayerCoord = GetPlayerCoord();
+        if ((_lastPlayerCoord - currPlayerCoord).LengthSquared() > 5 * 5)
+        {
+            FlowField.GenerateFlowFieldFrom(currPlayerCoord);
+            _lastPlayerCoord = currPlayerCoord;
+        }
+    }
+    private Vector2I GetPlayerCoord()
+    {
+        return World.PhysicalData.BaseTileMapLayer.LocalToMap(
+            World.PhysicalData.BaseTileMapLayer
+                .ToLocal(Player.GlobalPosition)); // big mess but just getting the players tile coord
+    }
+    
+    // Signal Callbacks
+    private void OnSpawnerDestroyed(Vector2 pos)
+    {
+        GD.Print("spawner destroyed");
+        _numSpawners--;
+        if (_numSpawners <= 0)
+        {
+            var exitPortal = _exitPortalScene.Instantiate<ExitPortal>();
+            exitPortal.GlobalPosition = pos;
+            exitPortal.PlayerEnteredPortal += InitWorldLevel;
+            World.CallDeferred("add_child", exitPortal);
+        }
+    }
+    
 }

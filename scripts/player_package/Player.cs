@@ -64,6 +64,16 @@ public partial class Player : CharacterBody2D
     private float lungeTime = 0f;
     private Vector2 lungeDir = Vector2.Right;
 
+    public void InitForWorldLevel()
+    {
+        foreach (var xp in _xpInRange)
+        {
+            GameManager.Instance.XpPool.ReturnXp(xp);
+        }
+
+        _xpInRange.Clear();
+    }
+
     public override void _Ready()
     {
         // wire up internal refs
@@ -235,6 +245,7 @@ public partial class Player : CharacterBody2D
     {
         GameManager.Instance.Cam.Shake(amount);
         _health = Mathf.Clamp(_health - amount, 0, _maxHealth);
+        EmitSignalHealthChanged(_health);
 
         if (_health == 0)
         {
@@ -242,7 +253,7 @@ public partial class Player : CharacterBody2D
             return;
         }
 
-        EmitSignalHealthChanged(_health);
+        
     }
 
     private void IncreaseXp(int amount)

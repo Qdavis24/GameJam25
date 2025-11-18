@@ -79,29 +79,6 @@ public class FlowField
             Vector2 finalDir =  new Vector2(xDir, yDir).Normalized();
 
             Directions[col, row] = finalDir;
-            
-            
-            // int currMin = int.MaxValue;
-            // var currDir = Vector2I.Zero;
-            // for (int colShift = -1; colShift <= 1; colShift++)
-            // for (int rowShift = -1; rowShift <= 1; rowShift++)
-            // {
-            //     if (colShift == 0 && rowShift == 0) continue;
-            //     
-            //     int currCol = colShift + col;
-            //     int currRow = rowShift + row;
-            //     
-            //     if (currRow < 0 || currRow >= _terrainRowLength || currCol < 0 ||
-            //         currCol >= _terrainColumnLength) continue;
-            //     
-            //     if (Costs[currCol, currRow] < currMin)
-            //     {
-            //         currDir = new Vector2I(colShift, rowShift);
-            //         currMin = Costs[currCol, currRow];
-            //     }
-            // }
-            //
-            // Directions[col, row] = currDir;
         }
     }
 }

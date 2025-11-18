@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://qevbfpqv6q20"]
+[gd_scene load_steps=12 format=3 uid="uid://qevbfpqv6q20"]
 
 [ext_resource type="Script" uid="uid://bjdvo6aab61xk" path="res://scripts/Portals/EnterPortal.cs" id="1_ap7dn"]
+[ext_resource type="AudioStream" uid="uid://dqmb5c3g07k6g" path="res://assets/sounds/portal/spawn.wav" id="2_cjie2"]
 [ext_resource type="AudioStream" uid="uid://b7hfuc3ynks7n" path="res://assets/sounds/portal/portal_idle-34022.mp3" id="2_emtbt"]
 
 [sub_resource type="Gradient" id="Gradient_ap7dn"]
@@ -13,15 +14,15 @@ fill = 1
 fill_from = Vector2(0.50934577, 0.47663552)
 fill_to = Vector2(0.8271028, 0.20560747)
 
-[sub_resource type="Curve" id="Curve_mb4jx"]
+[sub_resource type="Curve" id="Curve_emtbt"]
 _limits = [-0.112359524, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 1.8813281), 0.0, 0.0, 0, 0, Vector2(1, 0.7183436), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_aem1f"]
-curve = SubResource("Curve_mb4jx")
+curve = SubResource("Curve_emtbt")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mb4jx"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cjie2"]
 particle_flag_disable_z = true
 spread = 15.65
 initial_velocity_min = 50.0
@@ -36,12 +37,37 @@ scale_min = 2.0
 scale_max = 2.0
 color = Color(0.28560802, 0.0009629519, 0.51313466, 1)
 
-[node name="PlayerEnterPortal" type="Node2D" node_paths=PackedStringArray("_portalSoundPlayer", "_particles", "_light")]
+[sub_resource type="Gradient" id="Gradient_yx1mt"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pd7c4"]
+gradient = SubResource("Gradient_yx1mt")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qweo1"]
+lifetime_randomness = 1.0
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 40.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 10, 0)
+damping_min = 90.00001
+damping_max = 100.00001
+scale_min = 0.0
+scale_max = 5.0
+color = Color(0.1908128, 0.00027911022, 0.51558, 1)
+color_ramp = SubResource("GradientTexture1D_pd7c4")
+
+[node name="PlayerEnterPortal" type="Node2D" node_paths=PackedStringArray("_portalSoundPlayer", "_particles", "_light", "_poofEffect")]
 script = ExtResource("1_ap7dn")
 _portalSoundPlayer = NodePath("AudioStreamPlayer2D")
 _particles = NodePath("Portal")
 _light = NodePath("PointLight2D")
-_maxLightEnergy = 3.0
+_poofEffect = NodePath("ExplodeEffect")
+_spawnNoise = ExtResource("2_cjie2")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(-27, -7)
+stream = ExtResource("2_emtbt")
+volume_db = -15.0
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(1, -4)
@@ -52,14 +78,20 @@ texture = SubResource("GradientTexture2D_y64p0")
 texture_scale = 9.26
 
 [node name="Portal" type="GPUParticles2D" parent="."]
-y_sort_enabled = true
 emitting = false
 amount = 400
 lifetime = 5.0
 one_shot = true
 trail_enabled = true
-process_material = SubResource("ParticleProcessMaterial_mb4jx")
+process_material = SubResource("ParticleProcessMaterial_cjie2")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("2_emtbt")
-volume_db = -5.0
+[node name="ExplodeEffect" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 1000
+lifetime = 0.7
+one_shot = true
+preprocess = 0.26
+explosiveness = 1.0
+trail_lifetime = 0.2
+trail_sections = 3
+process_material = SubResource("ParticleProcessMaterial_qweo1")

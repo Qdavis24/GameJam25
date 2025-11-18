@@ -206,6 +206,7 @@ _flashShader = ExtResource("2_hiihx")
 _damageIntervalTimer = NodePath("DamageInterval")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_q5y88")
 
 [node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("_initialState")]
@@ -264,6 +265,7 @@ sprite_frames = SubResource("SpriteFrames_p20hp")
 autoplay = "default"
 
 [node name="SteeringRange" type="Area2D" parent="."]
+visible = false
 collision_layer = 4
 collision_mask = 4
 
@@ -271,6 +273,7 @@ collision_mask = 4
 shape = SubResource("CircleShape2D_voie1")
 
 [node name="Hurtbox" type="Area2D" parent="." groups=["EnemyHurtbox"]]
+visible = false
 collision_layer = 2
 collision_mask = 2
 
