@@ -1,10 +1,11 @@
-[gd_scene load_steps=38 format=3 uid="uid://dyrdk24okgbja"]
+[gd_scene load_steps=40 format=3 uid="uid://dyrdk24okgbja"]
 
 [ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/EnemySpawner.cs" id="1_7lb27"]
 [ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_dva5f"]
 [ext_resource type="PackedScene" uid="uid://dtgtqkim67d2o" path="res://scenes/enemies/owl_wraith/owl_wraith.tscn" id="2_rua06"]
 [ext_resource type="Texture2D" uid="uid://bsii8213thyr1" path="res://assets/characters/fox/shadow.png" id="3_abhiv"]
 [ext_resource type="PackedScene" uid="uid://dywc23eylfitj" path="res://scenes/enemies/bunny_wraith/bunny_wraith.tscn" id="4_dva5f"]
+[ext_resource type="PackedScene" uid="uid://dnsjmjr2bh647" path="res://scenes/enemies/deer_wraith/deer_wraith.tscn" id="5_dva5f"]
 [ext_resource type="Texture2D" uid="uid://bpvbh1aknnc7s" path="res://assets/crystals/crystal_dark_64x64_24f_20d_no_border.png" id="5_rua06"]
 
 [sub_resource type="Curve" id="Curve_abhiv"]
@@ -19,6 +20,9 @@ colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 gradient = SubResource("Gradient_abhiv")
 fill = 1
 fill_from = Vector2(0.4957265, 0.47435898)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_abhiv"]
+radius = 8000.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_abhiv"]
 particle_flag_disable_z = true
@@ -228,9 +232,9 @@ _flashTimer = NodePath("SpawnerCrystal/Hurtbox/FlashTimer")
 _light = NodePath("PointLight2D")
 _lightRamp = SubResource("Curve_abhiv")
 _maxEnergy = 1.0
-_toggleRange = NodePath("")
-_enemyTypes = Array[PackedScene]([ExtResource("4_dva5f"), ExtResource("2_rua06")])
-_enemyTypeSpawnChance = PackedFloat32Array(0.7, 0.3)
+_toggleRange = NodePath("toggleRange")
+_enemyTypes = Array[PackedScene]([ExtResource("4_dva5f"), ExtResource("2_rua06"), ExtResource("5_dva5f")])
+_enemyTypeSpawnChance = PackedFloat32Array(0.4, 0.2, 0.4)
 _timer = NodePath("SpawnTimer")
 _spawnRadius = Vector2(100, 100)
 
@@ -245,6 +249,12 @@ texture = ExtResource("3_abhiv")
 color = Color(1, 0, 1, 1)
 texture = SubResource("GradientTexture2D_twont")
 texture_scale = 20.0
+
+[node name="toggleRange" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="toggleRange"]
+shape = SubResource("CircleShape2D_abhiv")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 z_index = -1

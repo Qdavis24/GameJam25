@@ -1,0 +1,103 @@
+[gd_scene load_steps=17 format=3 uid="uid://binbhlfd5jls4"]
+
+[ext_resource type="Texture2D" uid="uid://dfld7ph1o0owb" path="res://assets/enemies/attacks/meele_attack.png" id="1_5ees4"]
+[ext_resource type="Script" uid="uid://cgbyt5takbpq4" path="res://scripts/enemies/deer_wraith/MeeleAttack.cs" id="1_vcpfi"]
+[ext_resource type="AudioStream" uid="uid://clka5g51el0d0" path="res://assets/sounds/slash_2.wav" id="2_covjn"]
+[ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="3_xg5w2"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xg5w2"]
+random_pitch = 1.71
+streams_count = 1
+stream_0/stream = ExtResource("2_covjn")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vcpfi"]
+radius = 38.052597
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_covjn"]
+atlas = ExtResource("1_5ees4")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xg5w2"]
+atlas = ExtResource("1_5ees4")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_146m6"]
+atlas = ExtResource("1_5ees4")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2po56"]
+atlas = ExtResource("1_5ees4")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_773gc"]
+atlas = ExtResource("1_5ees4")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eigq1"]
+atlas = ExtResource("1_5ees4")
+region = Rect2(0, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c1n63"]
+atlas = ExtResource("1_5ees4")
+region = Rect2(100, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8i2ea"]
+atlas = ExtResource("1_5ees4")
+region = Rect2(200, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mtykm"]
+atlas = ExtResource("1_5ees4")
+region = Rect2(300, 100, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l4dgd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_covjn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xg5w2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_146m6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2po56")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_773gc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eigq1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c1n63")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8i2ea")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtykm")
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[node name="MeeleAttack" type="Node2D" node_paths=PackedStringArray("_animSprite")]
+script = ExtResource("1_vcpfi")
+_audioStreams = SubResource("AudioStreamRandomizer_xg5w2")
+_animSprite = NodePath("AnimatedSprite2D")
+
+[node name="Area2D" type="Area2D" parent="." groups=["EnemyHitbox"]]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("3_xg5w2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_vcpfi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_l4dgd")
+frame = 8
+frame_progress = 1.0

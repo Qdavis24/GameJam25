@@ -20,7 +20,7 @@
 ### 💡 Core Idea
 
 For the Western Colorado University's CS Club's 2nd Game Jam, me and my team decided to work on creating an action game
-inspired by the genre established by Vampire Survivors, Potato Bro, and similar games. The core idea behind the game is
+inspired by the genre established by Vampire Survivors, Brotato, and similar games. The core idea behind the game is
 to have a main character which explores a map and fights hordes of enemies with passive weapons. The combat system is
 almost entirely passive, meaning the weapons are activated on a timed cycle. The goal of the game is to power up your
 passive weapons and make your character overpowered.
