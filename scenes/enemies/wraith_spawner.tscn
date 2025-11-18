@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://dyrdk24okgbja"]
+[gd_scene load_steps=41 format=3 uid="uid://dyrdk24okgbja"]
 
 [ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/EnemySpawner.cs" id="1_7lb27"]
 [ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_dva5f"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dywc23eylfitj" path="res://scenes/enemies/bunny_wraith/bunny_wraith.tscn" id="4_dva5f"]
 [ext_resource type="PackedScene" uid="uid://dnsjmjr2bh647" path="res://scenes/enemies/deer_wraith/deer_wraith.tscn" id="5_dva5f"]
 [ext_resource type="Texture2D" uid="uid://bpvbh1aknnc7s" path="res://assets/crystals/crystal_dark_64x64_24f_20d_no_border.png" id="5_rua06"]
+[ext_resource type="PackedScene" uid="uid://bv8hp68jt8i2u" path="res://scenes/allies/Ally.tscn" id="6_2ylut"]
 
 [sub_resource type="Curve" id="Curve_abhiv"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5132275, 0.1048305), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.5327357, 0.5327357, 0, 0]
@@ -237,6 +238,7 @@ _enemyTypes = Array[PackedScene]([ExtResource("4_dva5f"), ExtResource("2_rua06")
 _enemyTypeSpawnChance = PackedFloat32Array(0.4, 0.2, 0.4)
 _timer = NodePath("SpawnTimer")
 _spawnRadius = Vector2(100, 100)
+_allyPackedScene = ExtResource("6_2ylut")
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 10.0

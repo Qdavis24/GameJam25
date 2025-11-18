@@ -41,6 +41,7 @@ public partial class GameManager : Node
 	private int _numSpawners;
 	private List<Node2D> _arrows = new();
 	
+	public List<string> Allies = new() { "fox", "frog", "raccoon", "rabbit" };
 
 	public static GameManager Instance;
 	
@@ -54,6 +55,7 @@ public partial class GameManager : Node
 	
 	public void StartNewGame(string character)
 	{
+		Allies.Remove(character); // take out player character from ally list
 		Player = _playerPckdScene.Instantiate<Player>();
 		Player.AnimationSet = character;
 		_ui.InitializeUiFromPlayer(Player);
