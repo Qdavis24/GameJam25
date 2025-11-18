@@ -1,5 +1,6 @@
-[gd_scene load_steps=35 format=3 uid="uid://dq2mhqcvxoppe"]
+[gd_scene load_steps=38 format=3 uid="uid://dq2mhqcvxoppe"]
 
+[ext_resource type="Script" uid="uid://bdase20j5pa4" path="res://scripts/menu/MainMenu.cs" id="1_6k0m2"]
 [ext_resource type="Texture2D" uid="uid://r8e85o7y176c" path="res://assets/ui/Background3.png" id="1_xr86y"]
 [ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xr86y"]
 [ext_resource type="Script" uid="uid://ckfb73b4uvpu3" path="res://scripts/menu/CharacterSelect.cs" id="4_arvcj"]
@@ -30,7 +31,23 @@ shader_parameter/wobble_freq = 20.0
 shader_parameter/shake_strength = 1.0
 shader_parameter/shake_speed = 25.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6k0m2"]
+bg_color = Color(0, 0, 0, 0.53333336)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_arvcj"]
+bg_color = Color(0.18039216, 0.18039216, 0.18039216, 0.41568628)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
 [sub_resource type="Theme" id="Theme_arvcj"]
+Button/styles/hover = SubResource("StyleBoxFlat_6k0m2")
+Button/styles/normal = SubResource("StyleBoxFlat_arvcj")
 HBoxContainer/constants/separation = 136
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6gdku"]
@@ -192,6 +209,7 @@ animations = [{
 }]
 
 [node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_6k0m2")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 anchors_preset = 15
@@ -202,7 +220,6 @@ grow_vertical = 2
 texture = ExtResource("1_xr86y")
 
 [node name="Start" type="CenterContainer" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -246,19 +263,19 @@ grow_vertical = 2
 theme = SubResource("Theme_arvcj")
 alignment = 1
 
-[node name="Button" type="Button" parent="CharacterSelect/HBoxContainer"]
+[node name="FoxButton" type="Button" parent="CharacterSelect/HBoxContainer"]
 custom_minimum_size = Vector2(250, 350)
 layout_mode = 2
 
-[node name="Button2" type="Button" parent="CharacterSelect/HBoxContainer"]
+[node name="FrogButton" type="Button" parent="CharacterSelect/HBoxContainer"]
 custom_minimum_size = Vector2(250, 300)
 layout_mode = 2
 
-[node name="Button3" type="Button" parent="CharacterSelect/HBoxContainer"]
+[node name="RabbitButton" type="Button" parent="CharacterSelect/HBoxContainer"]
 custom_minimum_size = Vector2(250, 300)
 layout_mode = 2
 
-[node name="Button4" type="Button" parent="CharacterSelect/HBoxContainer"]
+[node name="RaccoonButton" type="Button" parent="CharacterSelect/HBoxContainer"]
 custom_minimum_size = Vector2(250, 300)
 layout_mode = 2
 

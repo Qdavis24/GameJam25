@@ -3,6 +3,8 @@ using System;
 
 public partial class Ui : CanvasLayer
 {
+	private MainMenu _mainMenu;
+	
 	// required internal children
 	private ProgressBar _xpBar;
 	private ProgressBar _healthBar;
@@ -13,13 +15,15 @@ public partial class Ui : CanvasLayer
 	public Player Player {get; private set;}
 
 	public override void _Ready()
-	{
-		
+	{		
 		_xpBar = GetNode<ProgressBar>("XpBar");
 		_healthBar = GetNode<ProgressBar>("HealthBar");
 		_upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
 		_pauseScreen = GetNode<PauseScreen>("PauseScreen");
 		_deathScreen = GetNode<DeathScreen>("DeathScreen");
+		
+		_mainMenu = GetNode<MainMenu>("MainMenu");
+		_pauseScreen.MainMenuRequested += OnMainMenuRequested;
 	}
 
 	public void InitializeUiFromPlayer(Player player)
@@ -69,6 +73,12 @@ public partial class Ui : CanvasLayer
 	public void ShowDeathScreen()
 	{
 		_deathScreen.Show();
+	}
+	
+	public void OnMainMenuRequested()
+	{
+;		this.Visible = false;
+		_mainMenu.Visible = true;
 	}
 
 	public override void _Process(double delta)

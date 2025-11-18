@@ -50,8 +50,12 @@ public partial class GameManager : Node
 		Cam = GetNode<Camera>("Camera2D");
 		
 		Instance = this;
-		
+	}
+	
+	public void StartNewGame(string character)
+	{
 		Player = _playerPckdScene.Instantiate<Player>();
+		Player.AnimationSet = character;
 		_ui.InitializeUiFromPlayer(Player);
 		AddChild(Player);
 		InitLevel();

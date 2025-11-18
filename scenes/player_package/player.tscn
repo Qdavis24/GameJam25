@@ -692,7 +692,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_fl7s8")
 }],
 "loop": true,
-"name": &"racoon_idle",
+"name": &"raccoon_idle",
 "speed": 5.0
 }, {
 "frames": [{
@@ -730,7 +730,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_ocrxf")
 }],
 "loop": true,
-"name": &"racoon_walk",
+"name": &"raccoon_walk",
 "speed": 19.0
 }]
 
@@ -768,7 +768,7 @@ SlashAttack = ExtResource("2_fiwjr")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.87, 0.87)
 sprite_frames = SubResource("SpriteFrames_8pk6h")
-animation = &"frog_walk"
+animation = &"raccoon_walk"
 
 [node name="Shadow" type="Sprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.2627451)

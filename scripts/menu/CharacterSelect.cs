@@ -2,9 +2,18 @@ using Godot;
 using System;
 
 public partial class CharacterSelect : Control
-{
+{	
+	private MainMenu _menu;
+	
 	public override void _Ready()
 	{
+		_menu = GetParent() as MainMenu;
+		
+		GetNode<Button>("HBoxContainer/FoxButton").Pressed += FoxButtonPressed;
+		GetNode<Button>("HBoxContainer/FrogButton").Pressed += FrogButtonPressed;
+		GetNode<Button>("HBoxContainer/RabbitButton").Pressed += RabbitButtonPressed;
+		GetNode<Button>("HBoxContainer/RaccoonButton").Pressed += RaccoonButtonPressed;
+		
 		var rabbit = GetNode<AnimatedSprite2D>("Rabbit");
 		var frog = GetNode<AnimatedSprite2D>("Frog");
 		var raccoon = GetNode<AnimatedSprite2D>("Raccoon");
@@ -17,6 +26,23 @@ public partial class CharacterSelect : Control
 		raccoon.Play("default");
 		raccoon.Frame = 4;
 		fox.Play("default");
+	}
+	
+	private void FoxButtonPressed()
+	{
+		_menu.StartGame("fox");
+	}
+	private void FrogButtonPressed()
+	{
+		_menu.StartGame("frog");
+	}
+	private void RabbitButtonPressed()
+	{
+		_menu.StartGame("rabbit");
+	}
+	private void RaccoonButtonPressed()
+	{
+		_menu.StartGame("raccoon");
 	}
 
 	public override void _Process(double delta)
