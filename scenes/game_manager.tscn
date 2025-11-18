@@ -16,7 +16,7 @@
 [node name="GameManager" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_udu3i")
-_enemySpawnerHealth = 10.0
+_enemySpawnerHealth = 50.0
 _enemySpawnerNumEnemiesPerWave = 20.0
 _enemySpawnerWaveInterval = 30.0
 _enemySpawnerNumWaves = 5.0

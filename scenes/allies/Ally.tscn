@@ -1,4 +1,4 @@
-[gd_scene load_steps=111 format=3 uid="uid://bv8hp68jt8i2u"]
+[gd_scene load_steps=112 format=3 uid="uid://bv8hp68jt8i2u"]
 
 [ext_resource type="Script" uid="uid://dyo73c6ennnij" path="res://scripts/allies/Ally.cs" id="1_mjsac"]
 [ext_resource type="Texture2D" uid="uid://ciit1agds6ihw" path="res://assets/characters/fox/fox_idle.png" id="2_21i2r"]
@@ -728,8 +728,12 @@ animations = [{
 "speed": 19.0
 }]
 
-[node name="Ally" type="Node2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hvgic"]
+height = 48.0
+
+[node name="Ally" type="CharacterBody2D"]
 script = ExtResource("1_mjsac")
+Speed = 300.0
 FoxWeaponScene = ExtResource("2_hvgic")
 FrogWeaponScene = ExtResource("3_ebkiu")
 RaccoonWeaponScene = ExtResource("4_474x8")
@@ -743,3 +747,7 @@ animation = &"frog_blink"
 position = Vector2(0, -24)
 scale = Vector2(0.34056604, 0.266)
 texture = ExtResource("11_21i2r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 8)
+shape = SubResource("CapsuleShape2D_hvgic")
