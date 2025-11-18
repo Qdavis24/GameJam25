@@ -6,34 +6,42 @@ using GameJam25.scripts.weapons.base_classes;
 public partial class Ally : CharacterBody2D
 {
 	[Export] public float Speed = 60f;
-	
-	[Export] public float SeparationRadius = 200f;      // how far they care about others
-	[Export] public float SeparationStrength = 300f;   // how strongly they push away
 
-	
+	// Boids settings
+	[Export] public float BoidsRadius = 120f;          // how far they "see" other allies
+	[Export] public float SeparationWeight = 1.5f;     // push apart
+	[Export] public float AlignmentWeight = 0.4f;      // match velocity
+	[Export] public float CohesionWeight = 0.3f;       // move toward group center
+	[Export] public float BoidsInfluence = 0.7f;       // how much boids affect flow direction
+
+	// Stopping / jitter control
+	[Export] public float StopVelocityEpsilon = 5f;    // if slower than this -> treat as stopped
+	[Export] public float SteeringDeadzone = 0.01f;    // ignore tiny steering
+	[Export] public float DampingFactor = 8f;          // how quickly they slow when no steering
+
 	[Export] public PackedScene FoxWeaponScene;
 	[Export] public PackedScene FrogWeaponScene;
 	[Export] public PackedScene RaccoonWeaponScene;
-	//[Export] public PackedScene RabbitWeaponScene;
+	// [Export] public PackedScene RabbitWeaponScene;
 	private Dictionary<string, PackedScene> _weapons;
 
 	public string Species; // set in EnemySpawner scene
-	
+
 	private AnimatedSprite2D _anim;
 	private Sprite2D _cage;
-	
+
 	private bool _isFree;
-	
+
 	public override void _Ready()
 	{
 		AddToGroup("allies");
 		_isFree = false;
-		
+
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_cage = GetNode<Sprite2D>("Cage");
-		
+
 		_anim.Play(Species + "_idle");
-		
+
 		_weapons = new Dictionary<string, PackedScene>()
 		{
 			{ "fox", FoxWeaponScene },
@@ -44,23 +52,56 @@ public partial class Ally : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!_isFree) return; // your existing flag
+		if (!_isFree)
+			return;
 
-		var dir = GetFlowFieldDir();          // existing function (don’t change it)
-		var separation = GetSeparation();     // new
+		// 1) Base direction from flow field
+		Vector2 flowDir = GetFlowFieldDir();
 
-		// Combine: flow direction + separation steering
-		Vector2 finalDir = dir + separation * (SeparationStrength / Speed);
-		if (finalDir.LengthSquared() > 0.001f)
-			finalDir = finalDir.Normalized();
+		// 2) Steering direction we’ll build
+		Vector2 steering = Vector2.Zero;
 
-		Velocity = finalDir * Speed;
+		if (flowDir.LengthSquared() > 0.0001f)
+		{
+			// Only do boids if we actually have somewhere to go
+			Vector2 boidsDir = GetBoidsDir();
+
+			if (boidsDir != Vector2.Zero)
+			{
+				// Blend flow + boids
+				steering = (flowDir + boidsDir * BoidsInfluence).Normalized();
+			}
+			else
+			{
+				steering = flowDir;
+			}
+		}
+		else
+		{
+			// Flow field wants us to stop; no separation at rest.
+			steering = Vector2.Zero;
+		}
+
+		// 3) Apply steering with deadzone + damping to kill jitter
+		if (steering.LengthSquared() > SteeringDeadzone)
+		{
+			Velocity = steering * Speed;
+		}
+		else
+		{
+			// Gradually slow down instead of instant flip/flop
+			Velocity = Velocity.MoveToward(Vector2.Zero, (float)(DampingFactor * delta * Speed));
+
+			if (Velocity.LengthSquared() < StopVelocityEpsilon * StopVelocityEpsilon)
+				Velocity = Vector2.Zero;
+		}
+
 		MoveAndSlide();
 
-		// Flip + idle when basically not moving
-		if (Velocity.LengthSquared() > 2f)
+		// 4) Animations + flipping
+		if (Velocity.LengthSquared() > StopVelocityEpsilon * StopVelocityEpsilon)
 		{
-			if (Velocity.X != 0)
+			if (Mathf.Abs(Velocity.X) > 1f)
 				_anim.FlipH = Velocity.X < 0;
 
 			_anim.Play(Species + "_walk");
@@ -75,20 +116,21 @@ public partial class Ally : CharacterBody2D
 	{
 		_isFree = true;
 		_cage.QueueFree();
-		// hook up to flow state
+
 		_anim.Play(Species + "_walk");
-		
+
 		var weapon = _weapons[Species].Instantiate<WeaponBase>();
 		AddChild(weapon);
 		weapon.InitWeapon();
-		
 	}
-	
+
+	// ---------- FLOW FIELD ----------
+
 	private Vector2 GetFlowFieldDir()
 	{
 		var tilemap = GameManager.Instance.CurrWorld.PhysicalData.BaseTileMapLayer;
 		var allyCoord = tilemap.LocalToMap(tilemap.ToLocal(GlobalPosition));
-		
+
 		var dir = Vector2.Zero;
 		int flowFieldCols = GameManager.Instance.CurrFlowField.Directions.GetLength(0);
 		int flowFieldRows = GameManager.Instance.CurrFlowField.Directions.GetLength(1);
@@ -115,38 +157,77 @@ public partial class Ally : CharacterBody2D
 
 		dir /= numSampleDirs;
 
-		// If direction is super small, treat it as “no movement”
 		if (dir.LengthSquared() < 0.0001f)
 			return Vector2.Zero;
 
 		return dir.Normalized();
 	}
-	
-	private Vector2 GetSeparation()
+
+	// ---------- BOIDS STEERING ----------
+
+	private Vector2 GetBoidsDir()
 	{
-		var separation = Vector2.Zero;
+		var separationVec = Vector2.Zero;
+		var alignmentVec = Vector2.Zero;
+		var cohesionPos = Vector2.Zero;
+
 		int count = 0;
 
 		foreach (Node node in GetTree().GetNodesInGroup("allies"))
 		{
-			if (node == this) continue;
+			if (node == this)
+				continue;
 
-			var other = node as Ally;
-			if (other == null) continue;
+			if (node is not Ally other)
+				continue;
 
-			Vector2 toMe = GlobalPosition - other.GlobalPosition;
-			float dist = toMe.Length();
-			if (dist <= 0f || dist > SeparationRadius) continue;
+			Vector2 toOther = other.GlobalPosition - GlobalPosition;
+			float dist = toOther.Length();
+			if (dist <= 0f || dist > BoidsRadius)
+				continue;
 
-			// Stronger push when closer
-			float weight = (SeparationRadius - dist) / SeparationRadius;
-			separation += toMe.Normalized() * weight;
 			count++;
+
+			// Separation: push away from neighbors
+			separationVec -= toOther.Normalized(); // from other to me
+
+			// Alignment: match velocity
+			alignmentVec += other.Velocity;
+
+			// Cohesion: move toward center of mass
+			cohesionPos += other.GlobalPosition;
 		}
 
-		if (count > 0)
-			separation /= count;
+		if (count == 0)
+			return Vector2.Zero;
 
-		return separation;
+		alignmentVec /= count;
+		cohesionPos /= count;
+
+		Vector2 cohesionVec = (cohesionPos - GlobalPosition);
+		if (cohesionVec.LengthSquared() > 0.0001f)
+			cohesionVec = cohesionVec.Normalized();
+		else
+			cohesionVec = Vector2.Zero;
+
+		if (alignmentVec.LengthSquared() > 0.0001f)
+			alignmentVec = alignmentVec.Normalized();
+		else
+			alignmentVec = Vector2.Zero;
+
+		if (separationVec.LengthSquared() > 0.0001f)
+			separationVec = separationVec.Normalized();
+		else
+			separationVec = Vector2.Zero;
+
+		Vector2 boids =
+			separationVec * SeparationWeight +
+			alignmentVec * AlignmentWeight +
+			cohesionVec * CohesionWeight;
+
+		if (boids.LengthSquared() < 0.0001f)
+			return Vector2.Zero;
+
+		return boids.Normalized();
 	}
 }
