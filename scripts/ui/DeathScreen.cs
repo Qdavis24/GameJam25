@@ -18,7 +18,7 @@ public partial class DeathScreen : Panel
 	public void Show() {
 		GetTree().Paused = true;
 		this.Visible = true;
-		Sfx.I.PlayUi(_deathSound, -30f);
+		Sfx.I.PlayUi(_deathSound);
 		Modulate = new Color(Modulate, 1); // ensure alpha is 1 (visible)
 		var tween = CreateTween();
 		tween.TweenProperty(this, "modulate:a", 1f, 1.0).From(0f);
