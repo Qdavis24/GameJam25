@@ -5,6 +5,11 @@ public partial class CharacterSelect : Control
 {	
 	private MainMenu _menu;
 	
+	[Export] public AudioStream FoxSound;
+	[Export] public AudioStream FrogSound;
+	[Export] public AudioStream RabbitSound;
+	[Export] public AudioStream RaccoonSound;
+	
 	public override void _Ready()
 	{
 		_menu = GetParent() as MainMenu;
@@ -30,18 +35,22 @@ public partial class CharacterSelect : Control
 	
 	private void FoxButtonPressed()
 	{
+		Sfx.I.PlayUi(FoxSound, -20f);
 		_menu.StartGame("fox");
 	}
 	private void FrogButtonPressed()
 	{
+		Sfx.I.PlayUi(FrogSound, -20f);
 		_menu.StartGame("frog");
 	}
 	private void RabbitButtonPressed()
 	{
+		Sfx.I.PlayUi(RabbitSound, -20f);
 		_menu.StartGame("rabbit");
 	}
 	private void RaccoonButtonPressed()
 	{
+		Sfx.I.PlayUi(RaccoonSound, -10f);
 		_menu.StartGame("raccoon");
 	}
 

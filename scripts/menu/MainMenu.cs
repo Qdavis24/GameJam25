@@ -3,6 +3,9 @@ using System;
 
 public partial class MainMenu : CanvasLayer
 {	
+	[Export] private AudioStream _clickSound;
+
+	
 	private Ui _ui;
 	private CenterContainer _startScreen;
 	private Control _characterSelectScreen;
@@ -44,6 +47,8 @@ public partial class MainMenu : CanvasLayer
 	{
 		_startScreen.Visible = false;
 		_characterSelectScreen.Visible = true;
+		
+		Sfx.I.PlayUi(_clickSound);
 
 		// Start fully transparent
 		var color = _characterSelectScreen.Modulate;
