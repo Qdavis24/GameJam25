@@ -247,10 +247,9 @@ public partial class Player : CharacterBody2D
         _health = Mathf.Clamp(_health - amount, 0, _maxHealth);
         EmitSignalHealthChanged(_health);
 
-        if (_health == 0)
+        if (_health <= 0)
         {
             EmitSignalDied(); // send stats here?
-            return;
         }
 
         

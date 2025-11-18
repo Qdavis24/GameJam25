@@ -35,8 +35,6 @@ public partial class GameManager : Node
     [Export] private PauseScreen _pauseScreen;
     [Export] private DeathScreen _deathScreen;
     
-    
-    
     // Game state
     public XpPool XpPool;
     public World World;
@@ -76,7 +74,6 @@ public partial class GameManager : Node
         };
         _deathScreen.MainMenuRequested += EndGame;
         
-
     }
 
 
@@ -108,7 +105,6 @@ public partial class GameManager : Node
             }
             else
             {
-                GD.Print("pause");
                 _pauseScreen.Open();
                 GetTree().Paused = true;
             }
@@ -122,8 +118,9 @@ public partial class GameManager : Node
         _mainMenu.Close();
         
         Player = _playerScene.Instantiate<Player>();
+        Player.AnimationSet = character;
         _ui.InitializeUiFromPlayer(Player); // connects players signals related to stats and upgrade to ui
-        
+        Player.Died += OnPlayerDeath; 
         InitWorldLevel();
 
         await _screenFade.FadeToNormal();
@@ -136,6 +133,7 @@ public partial class GameManager : Node
         await _screenFade.FadeToBlack();
         // cleanup all game components
         Cam.Target = null;
+        Cam.Reset();
         Player.QueueFree();
         Player = null;
         World.QueueFree();
@@ -143,6 +141,7 @@ public partial class GameManager : Node
         XpPool.Cleanup();
         XpPool = null;
         FlowField = null;
+        // cleanup ui components
         _pauseScreen.Close();
         _deathScreen.Close();
         _mainMenu.Open();
@@ -178,8 +177,7 @@ public partial class GameManager : Node
         _enemySpawnerNumEnemiesPerWave *= _enemySpawnerNumEnemiesPerWaveScalr;
         _enemySpawnerNumWaves *= _enemySpawnerNumWavesScalr;
     }
-
-
+    
     private void SpawnEnemySpawners()
     {
         _numSpawners = 0;
@@ -238,6 +236,15 @@ public partial class GameManager : Node
             exitPortal.PlayerEnteredPortal += InitWorldLevel;
             World.CallDeferred("add_child", exitPortal);
         }
+    }
+
+    private void OnPlayerDeath()
+    {
+        GetTree().Paused = true;
+        _isPaused = true;
+        Cam.DeathAnim();
+        _deathScreen.Open();
+        _gameState = GameState.DeathScreen;
     }
     
 }

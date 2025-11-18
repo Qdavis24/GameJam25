@@ -13,7 +13,7 @@ public partial class DeathScreen : Panel
 	}
 	
 	public void Open() {
-		this.Visible = true;
+		Visible = true;
 		Modulate = new Color(Modulate, 1); // ensure alpha is 1 (visible)
 		var tween = CreateTween();
 		tween.TweenProperty(this, "modulate:a", 1f, 1.0).From(0f);
@@ -21,7 +21,7 @@ public partial class DeathScreen : Panel
 
 	public void Close()
 	{
-		this.Visible = false;
+		Visible = false;
 	}
 	
 }

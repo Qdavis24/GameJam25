@@ -34,6 +34,7 @@ _pauseScreen = NodePath("Ui/PauseScreen2")
 _deathScreen = NodePath("Ui/DeathScreen2")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+ignore_rotation = false
 zoom = Vector2(0.8, 0.8)
 script = ExtResource("5_eaq8r")
 _speed = 0.2
