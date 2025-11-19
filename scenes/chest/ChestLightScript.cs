@@ -1,10 +1,10 @@
 using Godot;
 
-public partial class ChestShimmerLight : PointLight2D
+public partial class ChestLightScript : PointLight2D
 {
-	[Export] public float BaseEnergy = 3.0f;     // starting brightness
-	[Export] public float PulseStrength = 0.4f;  // how big the shimmer swings
-	[Export] public float PulseSpeed = 2.0f;     // speed of shimmer
+	[Export] public float BaseEnergy = 0.5f;
+	[Export] public float PulseStrength = 0.15f;
+	[Export] public float PulseSpeed = 1.2f;
 
 	private float _timeOffset;
 
