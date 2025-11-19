@@ -15,7 +15,7 @@ public partial class FireballExplode : Node2D
 
     public override void _Ready()
     {
-        Sfx.I.Play2D(_audioStreams, GlobalPosition, -30);
+        Sfx.I.Play2D(_audioStreams, GlobalPosition, -15);
         _explodeLight.Energy = 0;
         _explodeEffect.Emitting = true;
         _explodeEffect.Finished += QueueFree;

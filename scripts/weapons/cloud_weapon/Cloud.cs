@@ -5,12 +5,15 @@ namespace GameJam25.scripts.weapons.cloud_weapon;
 
 public partial class Cloud : Node2D
 {
+    [Export] private AudioStreamRandomizer _lightningSound;
+    [Export] private PointLight2D _light;
+    [Export] private float _maxLightEnergy = 2f;
     [Export] private Vector2 _verticalOffset = new Vector2(0, -200);
     [Export] private Timer _attackInterval;
     [Export] private float _attackRange;
     [Export] private int _lightningSegments = 5;
     [Export] private float _lightningJaggedness = 30f;
-    [Export] private float _lightningWidth = 3f;
+    [Export] private float _lightningWidth = 4f;
     [Export] private float _lightningDuration = 0.2f;
     [Export] private PackedScene _lightningExplodeScene;
     [Export] private float _oscillationDistance = 25f;
@@ -22,16 +25,24 @@ public partial class Cloud : Node2D
 
     private float _distanceTraveled;
     private bool _canAttack;
+    private bool _active = true;
     public override void _Ready()
     {
         _distanceTraveled = GD.Randf() * _oscillationDistance;
         _attackInterval.Timeout += OnTimeout;
+        Modulate = new Color(Modulate, 0f);  // Set alpha to 0, keep RGB
+        var tween = CreateTween();
+        tween.TweenProperty(this, "modulate:a", 1f, 1f);
     }
     public override void _PhysicsProcess(double delta)
     {
+        if(!_active) return;
         if (!IsInstanceValid(Target))
         {
-            QueueFree();
+            var tween = CreateTween();
+            tween.TweenProperty(this, "modulate:a", 0f, 1f);
+            tween.TweenCallback(Callable.From(() => QueueFree()));
+            _active = false;
             return;
         }
 
@@ -54,11 +65,13 @@ public partial class Cloud : Node2D
 
     private void SpawnLightning()
     {
+        Sfx.I.Play2D(_lightningSound, GlobalPosition, -20);
+        
         var lightning = new Line2D();
         lightning.Width = _lightningWidth;
         lightning.DefaultColor = Colors.White;
-        lightning.ZIndex = 100; // Render on top
-
+        lightning.ZIndex = 1; // Render on top
+        
         // Start at cloud
         lightning.AddPoint(new Vector2(0, 0));
 
@@ -84,6 +97,9 @@ public partial class Cloud : Node2D
         var tween = CreateTween();
         tween.TweenProperty(lightning, "modulate:a", 0f, _lightningDuration);
         tween.TweenCallback(Callable.From(() => lightning.QueueFree()));
+        _light.Energy = _maxLightEnergy;
+        
+        tween.Parallel().TweenProperty(_light, "energy", 0f, _lightningDuration);
 
         var explode = _lightningExplodeScene.Instantiate<LightningExplode>();
         explode.Damage = Damage;
@@ -93,7 +109,7 @@ public partial class Cloud : Node2D
 
     public void OnTimeout()
     {
-        if (!_canAttack) return;
+        if (!_active || !_canAttack) return;
         SpawnLightning();
         
     }

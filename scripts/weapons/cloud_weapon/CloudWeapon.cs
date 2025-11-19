@@ -9,7 +9,7 @@ public partial class CloudWeapon : WeaponBase
     [Export] private Area2D _targetingRange;
     [Export] private PackedScene _cloudPackedScene;
     [Export] private Timer _timer;
-    [Export] private float _offset = 60.0f;
+    [Export] private float _offset = 200.0f;
 
     private List<Node2D> _targets;
 
@@ -37,8 +37,11 @@ public partial class CloudWeapon : WeaponBase
         cloud.Damage = _projDamage;
         cloud.Speed = _projSpeed;
         cloud.Target = target;
-        cloud.GlobalPosition = GlobalPosition + new Vector2(GD.Randf()*_offset, GD.Randf() * _offset);
-        GetTree().Root.AddChild(cloud);
+        cloud.GlobalPosition = GlobalPosition + new Vector2(
+            _offset * (GD.Randf() * 2 - 1), 
+            _offset * (GD.Randf() * 2 - 1)
+        );
+        GameManager.Instance.World.AddChild(cloud);
     }
 
     public void OnTimeout()

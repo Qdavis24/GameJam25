@@ -70,7 +70,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="ColorTone" type="CanvasModulate" parent="."]
-color = Color(0.2520276, 0.25202766, 0.25202763, 1)
+color = Color(0.38928655, 0.38928664, 0.3892865, 1)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("16_cjvif")
