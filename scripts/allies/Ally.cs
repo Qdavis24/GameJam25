@@ -22,7 +22,8 @@ public partial class Ally : CharacterBody2D
 	[Export] public PackedScene FoxWeaponScene;
 	[Export] public PackedScene FrogWeaponScene;
 	[Export] public PackedScene RaccoonWeaponScene;
-	// [Export] public PackedScene RabbitWeaponScene;
+	[Export] public PackedScene RabbitWeaponScene;
+
 	private Dictionary<string, PackedScene> _weapons;
 
 	public string Species; // set in EnemySpawner scene
@@ -31,6 +32,8 @@ public partial class Ally : CharacterBody2D
 	private Sprite2D _cage;
 
 	private bool _isFree;
+
+	private WeaponBase _weapon;
 
 	public override void _Ready()
 	{
@@ -46,8 +49,12 @@ public partial class Ally : CharacterBody2D
 		{
 			{ "fox", FoxWeaponScene },
 			{ "frog", FrogWeaponScene },
-			{ "raccoon", RaccoonWeaponScene }
+			{ "raccoon", RaccoonWeaponScene },
+			{"rabbit", RabbitWeaponScene}
 		};
+		
+		_weapon = _weapons[Species].Instantiate<WeaponBase>();
+		AddChild(_weapon);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -118,10 +125,8 @@ public partial class Ally : CharacterBody2D
 		_cage.QueueFree();
 
 		_anim.Play(Species + "_walk");
-
-		var weapon = _weapons[Species].Instantiate<WeaponBase>();
-		AddChild(weapon);
-		weapon.InitWeapon();
+		
+		_weapon.InitWeapon();
 	}
 
 	// ---------- FLOW FIELD ----------

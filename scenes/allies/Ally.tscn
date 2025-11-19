@@ -1,4 +1,4 @@
-[gd_scene load_steps=112 format=3 uid="uid://bv8hp68jt8i2u"]
+[gd_scene load_steps=113 format=3 uid="uid://bv8hp68jt8i2u"]
 
 [ext_resource type="Script" uid="uid://dyo73c6ennnij" path="res://scripts/allies/Ally.cs" id="1_mjsac"]
 [ext_resource type="Texture2D" uid="uid://ciit1agds6ihw" path="res://assets/characters/fox/fox_idle.png" id="2_21i2r"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d0iwaudfkk3uw" path="res://assets/characters/fox/fox_walk.png" id="3_vejgp"]
 [ext_resource type="PackedScene" uid="uid://tknrqdiu3tio" path="res://scenes/weapons/stone/stone_weapon.tscn" id="4_474x8"]
 [ext_resource type="Texture2D" uid="uid://cn8ar0vmd2aid" path="res://assets/characters/fox/frog_blink.png" id="4_gxvmh"]
+[ext_resource type="PackedScene" uid="uid://dai3cd2y2x4sy" path="res://scenes/weapons/cloud/cloud_weapon.tscn" id="5_ebkiu"]
 [ext_resource type="Texture2D" uid="uid://doqnd2cc7u00i" path="res://assets/characters/fox/frog_idle.png" id="5_hvgic"]
 [ext_resource type="Texture2D" uid="uid://gcqmlr3e0g0o" path="res://assets/characters/fox/frog_walk.png" id="6_ebkiu"]
 [ext_resource type="Texture2D" uid="uid://deku5ueeeta1i" path="res://assets/characters/fox/rabbit_idle.png" id="7_474x8"]
@@ -737,6 +738,7 @@ Speed = 300.0
 FoxWeaponScene = ExtResource("2_hvgic")
 FrogWeaponScene = ExtResource("3_ebkiu")
 RaccoonWeaponScene = ExtResource("4_474x8")
+RabbitWeaponScene = ExtResource("5_ebkiu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.87, 0.87)

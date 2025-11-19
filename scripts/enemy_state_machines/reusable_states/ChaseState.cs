@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Godot;
 using System.Collections.Generic;
 using GameJam25.scripts.enemy_state_machines.base_classes;
@@ -64,11 +64,10 @@ public partial class ChaseState : EState
     {
     }
 
-    public override void PhysicsUpdate(double delta)
-    {
-        if (GameManager.Instance == null) return;
-        if (GameManager.Instance.Player == null) return;
-        if (GameManager.Instance.FlowField.Directions == null) return;
+	public override void PhysicsUpdate(double delta)
+	{
+		if (GameManager.Instance.Player == null) return;
+		if (GameManager.Instance.FlowField.Directions == null) return;
 
         if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(GameManager.Instance.Player.GlobalPosition) <
             _stateMachine.Owner.AttackRange * _stateMachine.Owner.AttackRange) // transition to attack

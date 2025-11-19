@@ -24,10 +24,11 @@ color = Color(1, 1, 0, 1)
 hue_variation_min = -0.100000024
 hue_variation_max = 0.09999997
 
-[node name="XpOrb" type="Area2D" node_paths=PackedStringArray("_colorRect", "_particles") groups=["Xp"]]
+[node name="XpOrb" type="Area2D" node_paths=PackedStringArray("_lifetime", "_colorRect", "_particles") groups=["Xp"]]
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("1_3akfm")
+_lifetime = NodePath("Lifetime")
 _colorRect = NodePath("ColorRect")
 _particles = NodePath("Xp")
 
@@ -47,3 +48,8 @@ material = SubResource("CanvasItemMaterial_elyt5")
 amount = 10
 lifetime = 3.0
 process_material = SubResource("ParticleProcessMaterial_3akfm")
+
+[node name="Lifetime" type="Timer" parent="."]
+wait_time = 40.0
+one_shot = true
+autostart = true

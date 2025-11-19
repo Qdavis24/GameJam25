@@ -1,4 +1,4 @@
-[gd_scene load_steps=119 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=120 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://ddcdwo58b52pg" path="res://assets/characters/fox/rabbit_walk.png" id="9_gsthy"]
 [ext_resource type="Texture2D" uid="uid://ejmw7e4wtwc7" path="res://assets/characters/fox/racoon_idle.png" id="12_3y6wl"]
 [ext_resource type="Texture2D" uid="uid://32x8486t4ucv" path="res://assets/characters/fox/racoon_walk.png" id="13_huy1x"]
+[ext_resource type="Script" uid="uid://d4hnm4svoo1uq" path="res://scripts/damage_system/Hurtbox.cs" id="18_huy1x"]
 
 [sub_resource type="Curve" id="Curve_fiwjr"]
 _data = [Vector2(0, 0.15730345), 0.0, -0.38083962, 0, 0, Vector2(1, 1), 0.6891386, 0.0, 0, 0]
@@ -748,7 +749,7 @@ height = 38.0
 radius = 22.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fiwjr"]
-radius = 503.00894
+radius = 273.04578
 
 [node name="Player" type="CharacterBody2D" groups=["Players"]]
 z_index = 1
@@ -791,6 +792,7 @@ shape = SubResource("CapsuleShape2D_s5buh")
 [node name="Hurtbox" type="Area2D" parent="." groups=["PlayerHurtbox"]]
 collision_layer = 2
 collision_mask = 2
+script = ExtResource("18_huy1x")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(-1, 0)

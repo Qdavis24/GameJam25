@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 namespace GameJam25.scripts.weapons.base_classes;

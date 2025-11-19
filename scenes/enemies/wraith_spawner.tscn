@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dnsjmjr2bh647" path="res://scenes/enemies/deer_wraith/deer_wraith.tscn" id="5_dva5f"]
 [ext_resource type="Texture2D" uid="uid://bpvbh1aknnc7s" path="res://assets/crystals/crystal_dark_64x64_24f_20d_no_border.png" id="5_rua06"]
 [ext_resource type="PackedScene" uid="uid://bv8hp68jt8i2u" path="res://scenes/allies/Ally.tscn" id="6_2ylut"]
+[ext_resource type="Script" uid="uid://d4hnm4svoo1uq" path="res://scripts/damage_system/Hurtbox.cs" id="8_k8p7h"]
 
 [sub_resource type="Curve" id="Curve_abhiv"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5132275, 0.1048305), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.5327357, 0.5327357, 0, 0]
@@ -21,9 +22,6 @@ colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 gradient = SubResource("Gradient_abhiv")
 fill = 1
 fill_from = Vector2(0.4957265, 0.47435898)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_abhiv"]
-radius = 8000.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_abhiv"]
 particle_flag_disable_z = true
@@ -39,9 +37,8 @@ scale_min = 0.34
 scale_max = 15.309999
 color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dva5f"]
-radius = 71.0
-height = 142.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_k8p7h"]
+radius = 29.068884
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mr0n6"]
 radius = 28.0
@@ -226,6 +223,7 @@ animations = [{
 [node name="WraithSpawner" type="Node2D" node_paths=PackedStringArray("_crystalHurtbox", "_crystalSprite", "_flashTimer", "_light", "_timer")]
 y_sort_enabled = true
 script = ExtResource("1_7lb27")
+_maxCrystalHealth = 100.0
 _crystalHurtbox = NodePath("SpawnerCrystal/Hurtbox")
 _crystalSprite = NodePath("SpawnerCrystal/AnimatedSprite2D")
 _flashShaderMaterial = ExtResource("2_dva5f")
@@ -251,12 +249,6 @@ color = Color(1, 0, 1, 1)
 texture = SubResource("GradientTexture2D_twont")
 texture_scale = 20.0
 
-[node name="toggleRange" type="Area2D" parent="."]
-collision_layer = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="toggleRange"]
-shape = SubResource("CircleShape2D_abhiv")
-
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 z_index = -1
 amount = 40
@@ -264,14 +256,19 @@ lifetime = 5.0
 process_material = SubResource("ParticleProcessMaterial_abhiv")
 
 [node name="SpawnerCrystal" type="StaticBody2D" parent="."]
+z_index = 1
+y_sort_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnerCrystal"]
-position = Vector2(-1, -64)
-shape = SubResource("CapsuleShape2D_dva5f")
+position = Vector2(-1, -18)
+shape = SubResource("CircleShape2D_k8p7h")
 
 [node name="Hurtbox" type="Area2D" parent="SpawnerCrystal" groups=["EnemyHurtbox"]]
 collision_layer = 2
 collision_mask = 2
+monitorable = false
+script = ExtResource("8_k8p7h")
+_iframeTime = 0.4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SpawnerCrystal/Hurtbox"]
 position = Vector2(-4, -73)

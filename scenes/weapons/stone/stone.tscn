@@ -13,9 +13,11 @@ height = 76.0
 particle_flag_disable_z = true
 gravity = Vector3(0, 98, 0)
 
-[node name="Stone" type="Node2D"]
+[node name="Stone" type="Node2D" node_paths=PackedStringArray("_hitbox", "Timer")]
 script = ExtResource("1_adcde")
 _crumbleSound = ExtResource("2_evfcf")
+_hitbox = NodePath("Hitbox")
+Timer = NodePath("Timer")
 
 [node name="Hitbox" type="Area2D" parent="." groups=["PlayerHitbox"]]
 collision_layer = 2

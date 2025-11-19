@@ -13,8 +13,11 @@ public partial class DeathState : EState
 	// Super's abstract methods below
 	public override void Enter()
 	{
-		_stateMachine.Owner.Hurtbox.SetDeferred(Area2D.PropertyName.Monitorable, false);
-		_stateMachine.Owner.Hurtbox.SetDeferred(Area2D.PropertyName.Monitoring, false);
+		_stateMachine.Owner.Animations.Play("death");
+		var collision = _stateMachine.Owner.GetNode<CollisionShape2D>("CollisionShape2D");
+		collision.QueueFree();
+
+		_stateMachine.Owner.Hurtbox.IsActive = false;
 		_deathEffectMaterial = (ParticleProcessMaterial)_deathEffect.ProcessMaterial;
 		Vector2 dir = (_stateMachine.InstanceContext.KnockbackDir).Normalized();
 		Vector3 materialDir = new Vector3(dir.X, dir.Y, 0);

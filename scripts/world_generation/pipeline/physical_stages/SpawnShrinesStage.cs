@@ -31,8 +31,8 @@ public partial class SpawnShrinesStage : PipelineStage
             Node2D currShrine = _allShrinePackedScenes[i].Instantiate<Node2D>();
             
             currShrine.Position = _baseTileMapLayer.MapToLocal(_shrines[i].CenterTile);
-            Callable.From(() => _baseTileMapLayer.AddSibling(currShrine)).CallDeferred();
-            
+            _baseTileMapLayer.AddSibling(currShrine);
+
         }
     }
 }

@@ -16,26 +16,14 @@ public partial class StoneWeapon : WeaponBase
     public override void InitWeapon()
     {
         if (_stones != null)
-            foreach (Stone stone in _stones)
-            {
-                stone.QueueFree();
-            }
-
+            for (int i = 0; i < _stones.Length; i++)
+                _stones[i].QueueFree();
+        
         _stones = new Stone[(int)_projCount];
         _stoneAngles = new float[(int)_projCount];
         GetStartingAngles();
-        for (int i = 0; i < (int)_projCount; i++)
-        {
-            var newStone = _stonePackedScene.Instantiate<Stone>();
-            newStone.Position += Vector2.FromAngle(_stoneAngles[i]) * _offset;
-            CallDeferred("add_child", newStone);
 
-            newStone.Damage = _projDamage;
-            newStone.Scale *= _projSize;
-            newStone.Timer.WaitTime = _projCooldown;
-            
-            _stones[i] = newStone;
-        }
+        CallDeferred(MethodName.SpawnStones);
         _active = true;
     }
 
@@ -52,8 +40,8 @@ public partial class StoneWeapon : WeaponBase
 
     public override void _PhysicsProcess(double delta)
     {
-        if(!_active) return;
-        
+        if (!_active) return;
+
         var currRadIncrease = (_projSpeed / _offset) * (float)delta;
 
         for (int i = 0; i < (int)_projCount; i++)
@@ -61,6 +49,22 @@ public partial class StoneWeapon : WeaponBase
             var newPos = _stones[i].Position.Rotated(currRadIncrease);
             _stones[i].Rotation = newPos.Angle();
             _stones[i].Position = newPos;
+        }
+    }
+
+    private void SpawnStones()
+    {
+        for (int i = 0; i < (int)_projCount; i++)
+        {
+            var newStone = _stonePackedScene.Instantiate<Stone>();
+            newStone.Position += Vector2.FromAngle(_stoneAngles[i]) * _offset;
+            AddChild(newStone);
+
+            newStone.Damage = _projDamage;
+            newStone.Scale *= _projSize;
+            newStone.Timer.WaitTime = _projCooldown;
+
+            _stones[i] = newStone;
         }
     }
 }

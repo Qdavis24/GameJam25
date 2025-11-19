@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using GameJam25.scripts.weapons.base_classes;
 using GameJam25.scripts.weapons.water_weapon;
@@ -10,7 +11,8 @@ public partial class WaterWeapon : WeaponBase
 	[Export] private PackedScene _waterPackedScene;
 
 	private Timer _timer;
-	
+
+	private List<Water> _waters;
 	private float[] _dropAngles;
 	private float _offset = 80.0f;
 
@@ -19,17 +21,19 @@ public partial class WaterWeapon : WeaponBase
 	{
 		_timer = GetNode<Timer>("Timer");
 		_timer.Timeout += OnTimeout;
+		_waters = new();
 	}
 
 
 	public override void InitWeapon()
 	{
-		_timer.Stop();
+		foreach (Water water in _waters) water.QueueFree();
+		_waters = new ();
 		_dropAngles = new float[(int)_projCount];
 		GetStartingAngles();
 		_timer.WaitTime = _projCooldown;
 		_timer.Start();
-		OnTimeout();
+		CallDeferred(MethodName.OnTimeout);
 	}
 
 	private void GetStartingAngles()
@@ -49,7 +53,6 @@ public partial class WaterWeapon : WeaponBase
 		for (int i = 0; i < (int)_projCount; i++)
 		{
 			var spawnDir = Vector2.FromAngle(_dropAngles[i]);
-
 			var newDrop = _waterPackedScene.Instantiate<Water>();
 			newDrop.Position += spawnDir * _offset;
 			AddChild(newDrop);
@@ -59,6 +62,8 @@ public partial class WaterWeapon : WeaponBase
 			newDrop.Damage = _projDamage;
 			newDrop.Scale *= _projSize;
 			newDrop.Speed = _projSpeed;
+			newDrop.TreeExited += () => _waters.Remove(newDrop);
+			_waters.Add(newDrop);
 		}
 	}
 }

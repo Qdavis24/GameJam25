@@ -7,14 +7,15 @@ public partial class Stone : Node2D
 	[ExportCategory("Sound Fx")] 
 	[Export] private AudioStream _crumbleSound;
 	
-	public Timer Timer;
+	[Export] private Hitbox _hitbox;
+	
+	[Export] public Timer Timer;
 	private Sprite2D _sprite;
 	private GpuParticles2D _explosionParticles;
-	private Hitbox _hitbox;
+	
 
 	public float Damage
 	{
-		get { return _hitbox.Damage; }
 		set { _hitbox.Damage = value; }
 	}
 
@@ -22,8 +23,6 @@ public partial class Stone : Node2D
 	{
 		_sprite = GetNode<Sprite2D>("Sprite2D");
 		_explosionParticles = GetNode<GpuParticles2D>("GPUParticles2D");
-		_hitbox = GetNode<Hitbox>("Hitbox");
-		Timer = GetNode<Timer>("Timer");
 
 		Timer.Timeout += () =>
 		{
