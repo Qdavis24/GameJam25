@@ -117,18 +117,18 @@ public partial class EnemySpawner : Node2D
 	{
 		var speciesList = GameManager.Instance.Allies;
 		if (speciesList.Count == 0) return; // Don't spawn ally if empty
-        string species = speciesList[0];
-        speciesList.RemoveAt(0);
+		string species = speciesList[0];
+		speciesList.RemoveAt(0);
 		
-        _ally = _allyPackedScene.Instantiate<Ally>();
-        _ally.Species = species;
+		_ally = _allyPackedScene.Instantiate<Ally>();
+		_ally.Species = species;
 		
-        var center = GlobalPosition;
-        float distanceMultiplier = 2.0f;
-        var offset = new Vector2(_spawnRadius.X, _spawnRadius.Y);
-        offset *= distanceMultiplier;
-        _ally.GlobalPosition = center + offset;
-        GameManager.Instance.AddChild(_ally);
-    }
+		var center = GlobalPosition;
+		float distanceMultiplier = 2.0f;
+		var offset = new Vector2(_spawnRadius.X, _spawnRadius.Y);
+		offset *= distanceMultiplier;
+		_ally.GlobalPosition = center + offset;
+		GameManager.Instance.AddChild(_ally);
+	}
  
 }
