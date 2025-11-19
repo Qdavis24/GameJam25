@@ -24,6 +24,7 @@ public partial class Water : Node2D
 	[Export] private GpuParticles2D _trailParticles;
 	[Export] private Hitbox _hitbox;
 	[Export] private Area2D _lockOnRange;
+	[Export] private PointLight2D _light;
 
 	
 	public float Speed;
@@ -89,6 +90,7 @@ public partial class Water : Node2D
 		
 		_explosionParticles.Emitting = true;
 		Sprite.Visible = false;
+		_light.QueueFree();
 		_explosionParticles.Finished += QueueFree;
 		_active = false;
 	}
