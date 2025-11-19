@@ -3,25 +3,30 @@ using System;
 
 public partial class Area2d : Area2D
 {
-	private bool _opened = false;
+	[Export] public Texture2D[] Pictures;
+	
+	private Sprite2D _sprite;
 
 	public override void _Ready()
-	{
-		// Optional: connect via code, but signals in inspector also work
+	{	
 		BodyEntered += OnBodyEntered;
+		
+		_sprite = GetNode<Sprite2D>("Sprite2D");
+
+		// Pick random picture
+		if (Pictures != null && Pictures.Length > 0)
+		{
+			var tex = Pictures[GD.Randi() % Pictures.Length];
+			_sprite.Texture = tex;
+		}
+
+		bool flip = GD.Randi() % 2 == 0;
+		_sprite.FlipH = flip;
 	}
 
 	private void OnBodyEntered(Node2D body)
 	{
-		if (_opened)
-			return;
-
-		// Only react to player
-		if (!body.IsInGroup("Players"))
-			return;
-
-		_opened = true;
-		OpenChest();
+		if (body.IsInGroup("Players")) OpenChest();
 	}
 
 	private void OpenChest()
