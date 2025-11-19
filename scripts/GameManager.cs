@@ -34,9 +34,6 @@ public partial class GameManager : Node
 	[Export] private MainMenu _mainMenu;
 	[Export] private PauseScreen _pauseScreen;
 	[Export] private DeathScreen _deathScreen;
-	
-	[Export] private PackedScene _chestScene;
-	
 
 	public List<string> Bosses;
 	public List<string> Allies;
@@ -190,23 +187,39 @@ public partial class GameManager : Node
 		ScaleDifficulty();
 	}
 	
-	private void PauseAllies()
+	public void PauseAllies()
 	{
-		foreach (var ally in AllyInstances)
+		foreach (var ally in AllyInstances.ToArray())
 		{
-			if (!GodotObject.IsInstanceValid(ally)) continue;
+			if (!GodotObject.IsInstanceValid(ally)) 
+				continue;
 
+			// Mark as travelling so their own logic can behave differently
 			ally.TravellingThroughPortal = true;
+
+			// Move ally out of the world that will be destroyed
+			var parent = ally.GetParent();
+			if (parent != null)
+				parent.RemoveChild(ally);
+
+			// Reparent under GameManager so they survive scene change
+			AddChild(ally);
 		}
 	}
 	
-	private void ResetAllies()
+	public void ResetAllies()
 	{
-		foreach (var ally in AllyInstances)
+		foreach (var ally in AllyInstances.ToArray())
 		{
-			if (!GodotObject.IsInstanceValid(ally)) continue;
+			if (!GodotObject.IsInstanceValid(ally)) 
+				continue;
 
-			ally.Position = Player.GlobalPosition;
+			// Move ally under the new world's allies container
+			ally.GetParent()?.RemoveChild(ally);
+			World.AddChild(ally);
+
+			// Reposition near the player
+			ally.GlobalPosition = Player.GlobalPosition;
 			ally.TravellingThroughPortal = false;
 		}
 	}
