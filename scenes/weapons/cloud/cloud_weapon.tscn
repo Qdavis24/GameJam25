@@ -11,6 +11,8 @@ script = ExtResource("1_8tkby")
 _targetingRange = NodePath("Area2D")
 _cloudPackedScene = ExtResource("2_c0x2k")
 _timer = NodePath("Timer")
+_projCooldown = 10.0
+_projCount = 1.0
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 3.0

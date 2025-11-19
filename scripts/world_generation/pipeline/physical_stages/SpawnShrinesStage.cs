@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Godot;
 
 namespace GameJam25.scripts.world_generation.pipeline.physical_stages;

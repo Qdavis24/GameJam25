@@ -42,17 +42,9 @@ _deathScreen = NodePath("Ui/DeathScreen2")
 [node name="Ui" parent="." instance=ExtResource("9_k4jhu")]
 
 [node name="DeathScreen2" parent="Ui" instance=ExtResource("13_5xtl8")]
-offset_left = 12.0
-offset_top = 5.0
-offset_right = 12.0
-offset_bottom = 5.0
 _deathSound = ExtResource("11_5xtl8")
 
 [node name="PauseScreen2" parent="Ui" instance=ExtResource("8_lcbjr")]
-offset_left = -6.0
-offset_top = -5.0
-offset_right = -6.0
-offset_bottom = -5.0
 
 [node name="MainMenu" parent="." instance=ExtResource("12_30v7y")]
 _clickSound = ExtResource("13_30v7y")

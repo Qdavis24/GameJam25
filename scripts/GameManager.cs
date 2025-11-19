@@ -36,8 +36,9 @@ public partial class GameManager : Node
 	[Export] private PauseScreen _pauseScreen;
 	[Export] private DeathScreen _deathScreen;
 
+	public List<string> Bosses;
 	public List<string> Allies;
-
+	public List<Ally> AllyInstances = new();
 	
 	// Game state
 	public Camera Cam;
@@ -162,6 +163,9 @@ public partial class GameManager : Node
 
 	public void InitWorldLevel()
 	{
+		Bosses = new() { "rat", "raccoon", "bunny"};
+		PauseAllies();
+		
 		Player.Visible = false;
 		_gameState = GameState.LoadingGame;
 		Player.InitForWorldLevel();
@@ -178,8 +182,32 @@ public partial class GameManager : Node
 			Cam.Target = Player;
 			_gameState = GameState.PlayingGame;
 			_lastPlayerCoord = GetPlayerCoord();
+			ResetAllies();
 		};
 		ScaleDifficulty();
+	}
+	
+	public void PauseAllies()
+	{
+		foreach (var ally in AllyInstances.ToArray())
+		{
+			if (!IsInstanceValid(ally)) 
+				continue;
+			// Mark as travelling so their own logic can behave differently
+			ally.TravellingThroughPortal = true;
+		}
+	}
+	
+	public void ResetAllies()
+	{
+		foreach (var ally in AllyInstances.ToArray())
+		{
+			if (!IsInstanceValid(ally)) 
+				continue;
+			
+			ally.GlobalPosition = Player.GlobalPosition;
+			ally.TravellingThroughPortal = false;
+		}
 	}
 
 	private void ScaleDifficulty()
@@ -269,4 +297,9 @@ public partial class GameManager : Node
 		_gameState = GameState.DeathScreen;
 	}
 
+
+	public void OpenChest()
+	{
+		_ui.OpenChest();
+	}
 }

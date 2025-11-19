@@ -23,17 +23,20 @@ public partial class Ally : CharacterBody2D
 	[Export] public PackedScene FrogWeaponScene;
 	[Export] public PackedScene RaccoonWeaponScene;
 	[Export] public PackedScene RabbitWeaponScene;
-
 	private Dictionary<string, PackedScene> _weapons;
 
 	public string Species; // set in EnemySpawner scene
+	public bool TravellingThroughPortal;
 
 	private AnimatedSprite2D _anim;
 	private Sprite2D _cage;
 
 	private bool _isFree;
-
-	private WeaponBase _weapon;
+	
+	// flipH timer stuff to prevent jittering
+	private float _flipCooldown = 0.15f; // seconds between allowed flips
+	private float _flipTimer = 0f;
+	private int _facing = 1; // 1 = right, -1 = left
 
 	public override void _Ready()
 	{
@@ -52,14 +55,11 @@ public partial class Ally : CharacterBody2D
 			{ "raccoon", RaccoonWeaponScene },
 			{"rabbit", RabbitWeaponScene}
 		};
-		
-		_weapon = _weapons[Species].Instantiate<WeaponBase>();
-		AddChild(_weapon);
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!_isFree)
+		if (!_isFree || TravellingThroughPortal || (GameManager.Instance.FlowField.Directions == null))
 			return;
 
 		// 1) Base direction from flow field
@@ -108,8 +108,22 @@ public partial class Ally : CharacterBody2D
 		// 4) Animations + flipping
 		if (Velocity.LengthSquared() > StopVelocityEpsilon * StopVelocityEpsilon)
 		{
+			_flipTimer -= (float)delta;
+
 			if (Mathf.Abs(Velocity.X) > 1f)
-				_anim.FlipH = Velocity.X < 0;
+			{
+				int desiredFacing = Velocity.X < 0 ? -1 : 1;
+
+				// Only try to flip if:
+				// - the desired direction changed, and
+				// - our cooldown has finished
+				if (desiredFacing != _facing && _flipTimer <= 0f)
+				{
+					_facing = desiredFacing;
+					_anim.FlipH = _facing < 0;
+					_flipTimer = _flipCooldown;
+				}
+			}
 
 			_anim.Play(Species + "_walk");
 		}
@@ -121,12 +135,25 @@ public partial class Ally : CharacterBody2D
 
 	public void FreeFromCage()
 	{
-		_isFree = true;
-		_cage.QueueFree();
+		var allyInstances = GameManager.Instance.AllyInstances;
+		allyInstances.Add(this);
 
+		_isFree = true;
 		_anim.Play(Species + "_walk");
-		
-		_weapon.InitWeapon();
+
+		// Free the cage AFTER physics step
+		if (IsInstanceValid(_cage))
+			_cage.CallDeferred(Node.MethodName.QueueFree);
+
+		// Spawn and init the weapon AFTER physics step
+		CallDeferred(MethodName.SpawnWeapon);
+	}
+
+	private void SpawnWeapon()
+	{
+		var weapon = _weapons[Species].Instantiate<WeaponBase>();
+		AddChild(weapon);
+		weapon.InitWeapon();
 	}
 
 	// ---------- FLOW FIELD ----------

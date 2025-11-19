@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=122 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
@@ -22,6 +22,17 @@
 [sub_resource type="Curve" id="Curve_fiwjr"]
 _data = [Vector2(0, 0.15730345), 0.0, -0.38083962, 0, 0, Vector2(1, 1), 0.6891386, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_31e3c"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_huy1x"]
+gradient = SubResource("Gradient_31e3c")
+width = 300
+height = 300
+fill = 1
+fill_from = Vector2(0.4871795, 0.491453)
+fill_to = Vector2(0.8457944, 0.14018692)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6qmwb"]
 atlas = ExtResource("4_p7c74")
@@ -749,7 +760,7 @@ height = 38.0
 radius = 22.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fiwjr"]
-radius = 273.04578
+radius = 503.00894
 
 [node name="Player" type="CharacterBody2D" groups=["Players"]]
 z_index = 1
@@ -763,6 +774,11 @@ _xpAcquireRange = 50.0
 SlashAttack = ExtResource("2_fiwjr")
 
 [node name="CloudWeapon" parent="." instance=ExtResource("3_3y6wl")]
+
+[node name="PointLight2D2" type="PointLight2D" parent="."]
+color = Color(1, 0.77254903, 0.49803922, 1)
+energy = 0.12
+texture = SubResource("GradientTexture2D_huy1x")
 
 [node name="WaterWeapon" parent="." instance=ExtResource("3_fiwjr")]
 
@@ -793,6 +809,7 @@ shape = SubResource("CapsuleShape2D_s5buh")
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("18_huy1x")
+_iframeTime = 0.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(-1, 0)

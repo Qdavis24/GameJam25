@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://s3w1eg52kr8u"]
+[gd_scene load_steps=24 format=3 uid="uid://s3w1eg52kr8u"]
 
 [ext_resource type="Script" uid="uid://dq73tw5i6mbrk" path="res://scripts/world_generation/World.cs" id="1_132vp"]
 [ext_resource type="Resource" uid="uid://bfks6ydjmu5gu" path="res://resources/tile_config.tres" id="2_w0i7v"]
@@ -15,6 +15,8 @@
 [ext_resource type="Script" uid="uid://bihhuhy5y2wt8" path="res://scripts/world_generation/pipeline/physical_stages/RenderTilesStage.cs" id="11_fgma2"]
 [ext_resource type="Script" uid="uid://buoasp8jr4q8d" path="res://scripts/world_generation/pipeline/logical_stages/FindPlayerSpawnStage.cs" id="13_n115m"]
 [ext_resource type="Script" uid="uid://du8smpfyvpfos" path="res://scripts/world_generation/pipeline/physical_stages/SpawnShrinesStage.cs" id="14_sqldb"]
+[ext_resource type="Script" uid="uid://cfcxf7vnuqjhj" path="res://scripts/world_generation/pipeline/physical_stages/SpawnChestsStage.cs" id="15_gubng"]
+[ext_resource type="PackedScene" uid="uid://drylev6qbp30i" path="res://scenes/chest/TreasureChest.tscn" id="16_ysaxy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_132vp"]
 texture = ExtResource("4_wyppg")
@@ -173,15 +175,19 @@ _pathCurveMagnitude = 5
 [node name="MarkShrinesStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("10_tmpep")
 _numShrines = 3
-_shrineSizeCols = 19
-_shrineSizeRows = 19
-_minDistance = 40
+_shrineSizeCols = 13
+_shrineSizeRows = 13
+_minDistance = 50
 
 [node name="RenderTilesStage" type="Node" parent="GenerationPipeline" node_paths=PackedStringArray("_baseTileMapLayer", "_obstacleTileMapLayer")]
 script = ExtResource("11_fgma2")
 _baseTileMapLayer = NodePath("../../BaseLayer")
 _obstacleTileMapLayer = NodePath("../../ObstacleLayer")
 _tileConfig = ExtResource("2_w0i7v")
+
+[node name="SpawnChestsStage" type="Node" parent="GenerationPipeline"]
+script = ExtResource("15_gubng")
+_chestPackedScene = ExtResource("16_ysaxy")
 
 [node name="SpawnShrinesStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("14_sqldb")

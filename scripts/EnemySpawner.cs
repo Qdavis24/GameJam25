@@ -47,8 +47,10 @@ public partial class EnemySpawner : Node2D
 	}
 	public override void _Ready()
 	{
-		_crystalHealth = _maxCrystalHealth;
-		//SpawnAlly();
+		string boss = GameManager.Instance.Bosses[0];
+		GameManager.Instance.Bosses.RemoveAt(0);
+		_crystalSprite.Play(boss + "_boss");
+		SpawnAlly();
 		OnTimeout();
 		_currWave = 0;
 		_light.Energy = 0;
@@ -112,6 +114,8 @@ public partial class EnemySpawner : Node2D
 			{
 				_active = false;
 				EmitSignal(SignalName.SpawnerDestroyed, GlobalPosition);
+				if(_ally != null)
+					_ally.FreeFromCage();
 				QueueFree();
 			}
 		}
@@ -122,18 +126,18 @@ public partial class EnemySpawner : Node2D
 	{
 		var speciesList = GameManager.Instance.Allies;
 		if (speciesList.Count == 0) return; // Don't spawn ally if empty
-        string species = speciesList[0];
-        speciesList.RemoveAt(0);
+		string species = speciesList[0];
+		speciesList.RemoveAt(0);
 		
-        _ally = _allyPackedScene.Instantiate<Ally>();
-        _ally.Species = species;
+		_ally = _allyPackedScene.Instantiate<Ally>();
+		_ally.Species = species;
 		
-        var center = GlobalPosition;
-        float distanceMultiplier = 2.0f;
-        var offset = new Vector2(_spawnRadius.X, _spawnRadius.Y);
-        offset *= distanceMultiplier;
-        _ally.GlobalPosition = center + offset;
-        GameManager.Instance.AddChild(_ally);
-    }
+		var center = GlobalPosition;
+		float distanceMultiplier = 2.0f;
+		var offset = new Vector2(_spawnRadius.X, _spawnRadius.Y);
+		offset *= distanceMultiplier;
+		_ally.GlobalPosition = center + offset;
+		GetTree().Root.AddChild(_ally);
+	}
  
 }

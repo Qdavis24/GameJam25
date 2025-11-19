@@ -41,7 +41,8 @@ public partial class Enemy : CharacterBody2D
 	public override void _Ready()
 	{
 		Hurtbox = GetNode<Hurtbox>("Hurtbox");
-		
+		double randomScale = GD.RandRange(0.9, 1.3);
+		Scale = new Vector2((float)randomScale, (float)randomScale);
 		Hurtbox.AreaEntered += OnEnemyHurtBoxEntered;
 		_flashTimer.Timeout += () => Animations.Material = null;
 		

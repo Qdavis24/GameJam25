@@ -6,8 +6,8 @@
 [node name="WaterWeapon" type="Node2D"]
 script = ExtResource("1_xdvk7")
 _waterPackedScene = ExtResource("2_60xuw")
-_projCooldown = 10.0
-_projSpeed = 900.0
+_projCooldown = 3.0
+_projSpeed = 600.0
 _projSize = 0.7
 
 [node name="Timer" type="Timer" parent="."]
