@@ -110,7 +110,7 @@ public partial class EnemySpawner : Node2D
 			if (_crystalHealth <= 0)
 			{
 				EmitSignal(SignalName.SpawnerDestroyed, GlobalPosition);
-				_ally.FreeFromCage();
+				if (_ally != null) _ally.FreeFromCage();
 				QueueFree();
 			}
 		}
