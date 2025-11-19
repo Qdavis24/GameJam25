@@ -69,6 +69,10 @@ public partial class Ui : CanvasLayer
 	{
 		_upgradeScreen.Show();
 	}
+	public void OpenChest()
+	{
+		_upgradeScreen.Show();
+	}
 	
 	public void OnMainMenuRequested()
 	{

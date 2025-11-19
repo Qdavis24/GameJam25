@@ -34,6 +34,9 @@ public partial class GameManager : Node
 	[Export] private MainMenu _mainMenu;
 	[Export] private PauseScreen _pauseScreen;
 	[Export] private DeathScreen _deathScreen;
+	
+	[Export] private PackedScene _chestScene;
+	
 
 	public List<string> Allies;
 	public List<Ally> AllyInstances = new();
@@ -293,4 +296,9 @@ public partial class GameManager : Node
 		_gameState = GameState.DeathScreen;
 	}
 
+
+	public void OpenChest()
+	{
+		_ui.OpenChest();
+	}
 }

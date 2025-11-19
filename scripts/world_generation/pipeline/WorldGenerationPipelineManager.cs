@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using GameJam25.scripts.world_generation.models;
 using GameJam25.scripts.world_generation.pipeline;
 using Godot;
@@ -28,26 +28,28 @@ namespace GameJam25.scripts.world_generation.pipeline
  * 6) mark shrines (handcrafted scenes) into the matrix with a minimum distance apart from eachother
  * 7) render the tiles on the tile map layers
  * 8) spawn the shrine scenes
+ * 9) spawn upgrade chests
+ * 10) find player spawn
  */
 {
-    public partial class WorldGenerationPipelineManager : Node
-    {
-        [Signal]
-        public delegate void PipelineFinishedEventHandler();
-        [Export] public bool Debug;
-        private List<PipelineStage> _pipelineStages;
+	public partial class WorldGenerationPipelineManager : Node
+	{
+		[Signal]
+		public delegate void PipelineFinishedEventHandler();
+		[Export] public bool Debug;
+		private List<PipelineStage> _pipelineStages;
 
-        public void RunPipeline()
-        {
-            _pipelineStages = new List<PipelineStage>();
-            
-            foreach (Node child in GetChildren())
-            {
-                _pipelineStages.Add(child as PipelineStage);
-            }
-            
-            foreach (PipelineStage stage in _pipelineStages) stage.ProcessStage();
-            EmitSignalPipelineFinished();
-        }
-    }
+		public void RunPipeline()
+		{
+			_pipelineStages = new List<PipelineStage>();
+			
+			foreach (Node child in GetChildren())
+			{
+				_pipelineStages.Add(child as PipelineStage);
+			}
+			
+			foreach (PipelineStage stage in _pipelineStages) stage.ProcessStage();
+			EmitSignalPipelineFinished();
+		}
+	}
 }
