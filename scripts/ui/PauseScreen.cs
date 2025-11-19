@@ -79,4 +79,3 @@ public partial class PauseScreen : Panel
 		AudioServer.SetBusVolumeDb(bus, (float)value);
 	}
 }
-
