@@ -768,6 +768,7 @@ y_sort_enabled = true
 script = ExtResource("1_rdh6l")
 LungeSpeed = 500.0
 LungeDuration = 0.3
+MaxXp = 500
 _xpSpeedRamp = SubResource("Curve_fiwjr")
 _xpMagnetSpeed = 15.0
 _xpAcquireRange = 50.0
@@ -787,6 +788,7 @@ texture = SubResource("GradientTexture2D_huy1x")
 [node name="FireballWeapon" parent="." instance=ExtResource("3_vwqlx")]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+y_sort_enabled = true
 scale = Vector2(0.87, 0.87)
 sprite_frames = SubResource("SpriteFrames_8pk6h")
 animation = &"raccoon_walk"

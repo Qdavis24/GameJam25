@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=19 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
 [ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/xp_system/xp.tscn" id="2_jdad8"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dhg5dra5mmuyc" path="res://scenes/ui/PauseScreen.tscn" id="8_lcbjr"]
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
 [ext_resource type="PackedScene" uid="uid://c4dvx6r2y6cel" path="res://scenes/XpPool.tscn" id="9_ry0e6"]
+[ext_resource type="PackedScene" uid="uid://0fwmr8vwok0m" path="res://scenes/PersistentNodes.tscn" id="10_pc0jn"]
 [ext_resource type="AudioStream" uid="uid://c7sxtsvb57f32" path="res://assets/sounds/ui/death.wav" id="11_5xtl8"]
 [ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="12_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="13_5xtl8"]
@@ -33,6 +34,7 @@ _exitPortalScene = ExtResource("6_k4jhu")
 _enemySpawnerScene = ExtResource("5_jdad8")
 _camScene = ExtResource("8_30v7y")
 _xpPoolScene = ExtResource("9_ry0e6")
+_persistentNodes = ExtResource("10_pc0jn")
 _screenFade = NodePath("ScreenFade")
 _ui = NodePath("Ui")
 _mainMenu = NodePath("MainMenu")
