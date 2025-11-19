@@ -128,7 +128,6 @@ public partial class GameManager : Node
 
 	private async void InitGame(string character)
 	{
-		Bosses = new() { "rat", "raccoon", "bunny"};
 		Allies = new() { "fox", "frog", "raccoon", "rabbit" };
 		Allies.Remove(character); // take out player character from ally list
 		GetTree().Paused = false;
@@ -167,6 +166,7 @@ public partial class GameManager : Node
 
 	public void InitWorldLevel()
 	{
+		Bosses = new() { "rat", "raccoon", "bunny"};
 		PauseAllies();
 		
 		Player.Visible = false;
