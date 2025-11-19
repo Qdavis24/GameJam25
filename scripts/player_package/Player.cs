@@ -42,6 +42,8 @@ public partial class Player : CharacterBody2D
 	public string AnimationSet = "fox";
 
 	[Export] public PackedScene SlashAttack;
+	
+	[Export] private AudioStream _xpSounds;
 
 	// internal refs
 	private Hurtbox _hurtbox;
@@ -130,6 +132,7 @@ public partial class Player : CharacterBody2D
 				}
 
 				GameManager.Instance.XpPool.ReturnXp(xp);
+				Sfx.I.Play2D(_xpSounds, GlobalPosition);
 				EmitSignalXpChanged(_xp);
 				_xpInRange.RemoveAt(i);
 			}

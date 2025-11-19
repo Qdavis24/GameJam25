@@ -7,44 +7,44 @@ namespace GameJam25.scripts.enemy_state_machines.reusable_states;
 
 public partial class ChaseState : EState
 {
-    [ExportCategory("Interpolation Behavior")] 
-    [Export] private bool Interpolate;
-    [Export] private double _minDistancePerCycle;
-    [Export] private double _maxDistancePerCycle;
-    [Export] private float _minPathMag;
-    [Export] private float _maxPathMag;
-    [Export] private Curve _path;
+	[ExportCategory("Interpolation Behavior")] 
+	[Export] private bool Interpolate;
+	[Export] private double _minDistancePerCycle;
+	[Export] private double _maxDistancePerCycle;
+	[Export] private float _minPathMag;
+	[Export] private float _maxPathMag;
+	[Export] private Curve _path;
 
-    [ExportCategory("Boids Behavior")] [Export]
-    private float _separationForce = 1.0f;
-    [Export] private float _alignmentForce = .8f;
-    [Export] private float _cohesionForce = .7f;
+	[ExportCategory("Boids Behavior")] [Export]
+	private float _separationForce = 1.0f;
+	[Export] private float _alignmentForce = .8f;
+	[Export] private float _cohesionForce = .7f;
 
-    [ExportCategory("General Behavior")] 
-    [Export] private float _boidsInfluence;
-    [Export] private float _flowFieldInfluence;
-    [Export] private float _minSpeed;
-    [Export] private float _maxSpeed;
-    [Export] private string _attackState;
-    [Export] private float _togglePathfindingRange = 300.0f; // range to stop using FF to pathfind (pxls)
+	[ExportCategory("General Behavior")] 
+	[Export] private float _boidsInfluence;
+	[Export] private float _flowFieldInfluence;
+	[Export] private float _minSpeed;
+	[Export] private float _maxSpeed;
+	[Export] private string _attackState;
+	[Export] private float _togglePathfindingRange = 300.0f; // range to stop using FF to pathfind (pxls)
 
-    private float _speed;
-    private float _pathMagnitude;
-    private double _distancePerCycle;
-    private double _currDistance;
+	private float _speed;
+	private float _pathMagnitude;
+	private double _distancePerCycle;
+	private double _currDistance;
 
-    private List<Enemy> _sameGroupEnemies;
+	private List<Enemy> _sameGroupEnemies;
  
 
-    private enum Pathfinding
-    {
-        FlowField,
-        Traditional
-    }
+	private enum Pathfinding
+	{
+		FlowField,
+		Traditional
+	}
 
-    private Pathfinding _currPathfindingMode = Pathfinding.FlowField;
+	private Pathfinding _currPathfindingMode = Pathfinding.FlowField;
 
-    // Super's abstract methods below
+	// Super's abstract methods below
     public override void Enter()
     {
         _sameGroupEnemies = new List<Enemy>();
