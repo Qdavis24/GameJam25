@@ -69,3 +69,4 @@ stream = ExtResource("16_cjvif")
 volume_db = 6.0
 autoplay = true
 bus = &"Music"
+parameters/looping = true
