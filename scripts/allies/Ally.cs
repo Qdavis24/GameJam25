@@ -32,6 +32,11 @@ public partial class Ally : CharacterBody2D
 	private Sprite2D _cage;
 
 	private bool _isFree;
+	
+	// flipH timer stuff to prevent jittering
+	private float _flipCooldown = 0.15f; // seconds between allowed flips
+	private float _flipTimer = 0f;
+	private int _facing = 1; // 1 = right, -1 = left
 
 	public override void _Ready()
 	{
@@ -102,8 +107,22 @@ public partial class Ally : CharacterBody2D
 		// 4) Animations + flipping
 		if (Velocity.LengthSquared() > StopVelocityEpsilon * StopVelocityEpsilon)
 		{
+			_flipTimer -= (float)delta;
+
 			if (Mathf.Abs(Velocity.X) > 1f)
-				_anim.FlipH = Velocity.X < 0;
+			{
+				int desiredFacing = Velocity.X < 0 ? -1 : 1;
+
+				// Only try to flip if:
+				// - the desired direction changed, and
+				// - our cooldown has finished
+				if (desiredFacing != _facing && _flipTimer <= 0f)
+				{
+					_facing = desiredFacing;
+					_anim.FlipH = _facing < 0;
+					_flipTimer = _flipCooldown;
+				}
+			}
 
 			_anim.Play(Species + "_walk");
 		}
