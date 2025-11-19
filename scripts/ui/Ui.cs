@@ -6,6 +6,10 @@ public partial class Ui : CanvasLayer
 	[Signal]
 	public delegate void MainMenuRequestedUiEventHandler();
 	
+	[Export] private AudioStream _levelUpSounds;
+	[Export] private AudioStream _chestOpenSounds;
+
+	
 	// required internal children
 	private ProgressBar _xpBar;
 	private ProgressBar _healthBar;
@@ -67,10 +71,12 @@ public partial class Ui : CanvasLayer
 	
 	public void PlayerLevelUp(int level)
 	{
+		Sfx.I.PlayUi(_levelUpSounds, 6f);
 		_upgradeScreen.Show();
 	}
 	public void OpenChest()
 	{
+		Sfx.I.PlayUi(_chestOpenSounds, 8f);
 		_upgradeScreen.Show();
 	}
 	

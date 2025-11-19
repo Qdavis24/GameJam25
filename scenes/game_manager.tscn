@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dhg5dra5mmuyc" path="res://scenes/ui/PauseScreen.tscn" id="8_lcbjr"]
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
 [ext_resource type="PackedScene" uid="uid://c4dvx6r2y6cel" path="res://scenes/XpPool.tscn" id="9_ry0e6"]
-[ext_resource type="AudioStream" uid="uid://c7sxtsvb57f32" path="res://assets/sounds/ui/death.wav" id="11_5xtl8"]
+[ext_resource type="AudioStream" uid="uid://cs76hbtwecae3" path="res://assets/sounds/ui/death.wav" id="11_5xtl8"]
 [ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="12_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="13_5xtl8"]
 [ext_resource type="AudioStream" uid="uid://hmqhwgil6rft" path="res://assets/sounds/ui/start.wav" id="13_30v7y"]
