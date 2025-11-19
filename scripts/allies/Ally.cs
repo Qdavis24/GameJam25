@@ -26,6 +26,7 @@ public partial class Ally : CharacterBody2D
 	private Dictionary<string, PackedScene> _weapons;
 
 	public string Species; // set in EnemySpawner scene
+	public bool TravellingThroughPortal;
 
 	private AnimatedSprite2D _anim;
 	private Sprite2D _cage;
@@ -52,7 +53,7 @@ public partial class Ally : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!_isFree)
+		if (!_isFree || TravellingThroughPortal)
 			return;
 
 		// 1) Base direction from flow field
@@ -114,6 +115,9 @@ public partial class Ally : CharacterBody2D
 
 	public void FreeFromCage()
 	{
+		var allyInstances = GameManager.Instance.AllyInstances;
+		allyInstances.Add(this);
+		
 		_isFree = true;
 		_cage.QueueFree();
 

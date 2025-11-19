@@ -36,7 +36,7 @@ public partial class GameManager : Node
 	[Export] private DeathScreen _deathScreen;
 
 	public List<string> Allies;
-
+	public List<Ally> AllyInstances = new();
 	
 	// Game state
 	public Camera Cam;
@@ -162,6 +162,8 @@ public partial class GameManager : Node
 
 	public void InitWorldLevel()
 	{
+		PauseAllies();
+		
 		Player.Visible = false;
 		_gameState = GameState.LoadingGame;
 		Player.InitForWorldLevel();
@@ -178,8 +180,30 @@ public partial class GameManager : Node
 			Cam.Target = Player;
 			_gameState = GameState.PlayingGame;
 			_lastPlayerCoord = GetPlayerCoord();
+			ResetAllies();
 		};
 		ScaleDifficulty();
+	}
+	
+	private void PauseAllies()
+	{
+		foreach (var ally in AllyInstances)
+		{
+			if (!GodotObject.IsInstanceValid(ally)) continue;
+
+			ally.TravellingThroughPortal = true;
+		}
+	}
+	
+	private void ResetAllies()
+	{
+		foreach (var ally in AllyInstances)
+		{
+			if (!GodotObject.IsInstanceValid(ally)) continue;
+
+			ally.Position = Player.GlobalPosition;
+			ally.TravellingThroughPortal = false;
+		}
 	}
 
 	private void ScaleDifficulty()
