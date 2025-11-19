@@ -27,8 +27,8 @@ namespace GameJam25.scripts.world_generation.pipeline
  * 5) connect the islands by writing a path between them of their state into the matrix
  * 6) mark shrines (handcrafted scenes) into the matrix with a minimum distance apart from eachother
  * 7) render the tiles on the tile map layers
- * 8) spawn the shrine scenes
- * 9) spawn upgrade chests
+ * 8) spawn upgrade chests
+ * 9) spawn the shrine scenes
  * 10) find player spawn
  */
 {

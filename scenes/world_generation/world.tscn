@@ -185,13 +185,13 @@ _baseTileMapLayer = NodePath("../../BaseLayer")
 _obstacleTileMapLayer = NodePath("../../ObstacleLayer")
 _tileConfig = ExtResource("2_w0i7v")
 
-[node name="SpawnShrinesStage" type="Node" parent="GenerationPipeline"]
-script = ExtResource("14_sqldb")
-_allShrinePackedScenes = Array[PackedScene]([ExtResource("3_klido"), ExtResource("3_klido"), ExtResource("3_klido")])
-
 [node name="SpawnChestsStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("15_gubng")
 _chestPackedScene = ExtResource("16_ysaxy")
+
+[node name="SpawnShrinesStage" type="Node" parent="GenerationPipeline"]
+script = ExtResource("14_sqldb")
+_allShrinePackedScenes = Array[PackedScene]([ExtResource("3_klido"), ExtResource("3_klido"), ExtResource("3_klido")])
 
 [node name="FindPlayerSpawnStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("13_n115m")
