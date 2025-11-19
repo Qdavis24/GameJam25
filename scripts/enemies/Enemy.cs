@@ -42,6 +42,9 @@ public partial class Enemy : CharacterBody2D
 
 	public override void _Ready()
 	{
+		double randomScale = GD.RandRange(0.9, 1.3);
+		Scale = new Vector2((float)randomScale, (float)randomScale);
+		
 		Hurtbox = GetNode<Area2D>("Hurtbox");
 		
 		Hurtbox.AreaEntered += OnEnemyHurtBoxEntered;
