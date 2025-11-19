@@ -74,3 +74,4 @@ color = Color(0.2520276, 0.25202766, 0.25202763, 1)
 stream = ExtResource("16_cjvif")
 volume_db = 8.0
 autoplay = true
+bus = &"Music"

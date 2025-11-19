@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://b4qx8q8ux5van"]
+
+[ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="1_8kvfj"]
+[ext_resource type="Script" uid="uid://jvce08cbsj4n" path="res://scripts/weapons/cloud_weapon/LightningExplode.cs" id="1_k3jnf"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q4bsd"]
+blend_mode = 1
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bjjur"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 100.0
+initial_velocity_max = 120.0
+gravity = Vector3(0, 0, 0)
+color = Color(0.33333334, 0.8039216, 1, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k3jnf"]
+radius = 35.128338
+
+[node name="LightningExplode" type="Node2D" node_paths=PackedStringArray("_hitbox", "_particles")]
+script = ExtResource("1_k3jnf")
+_hitbox = NodePath("Hitbox")
+_particles = NodePath("Hitbox/GPUParticles2D")
+
+[node name="Hitbox" type="Area2D" parent="." groups=["PlayerHitbox"]]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("1_8kvfj")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Hitbox"]
+material = SubResource("CanvasItemMaterial_q4bsd")
+emitting = false
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_bjjur")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_k3jnf")

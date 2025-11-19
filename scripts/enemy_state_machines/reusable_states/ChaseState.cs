@@ -66,6 +66,7 @@ public partial class ChaseState : EState
 
     public override void PhysicsUpdate(double delta)
     {
+        if (GameManager.Instance == null) return;
         if (GameManager.Instance.Player == null) return;
         if (GameManager.Instance.FlowField.Directions == null) return;
 

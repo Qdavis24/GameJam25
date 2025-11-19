@@ -1,0 +1,80 @@
+[gd_scene load_steps=12 format=3 uid="uid://cmg2ttvhm30tl"]
+
+[ext_resource type="Texture2D" uid="uid://brsok53w6rcl4" path="res://assets/projectiles/cloud.png" id="1_407eh"]
+[ext_resource type="Script" uid="uid://bmy3lh6jsemlm" path="res://scripts/weapons/cloud_weapon/Cloud.cs" id="1_u7243"]
+[ext_resource type="PackedScene" uid="uid://b4qx8q8ux5van" path="res://scenes/weapons/cloud/LightningExplode.tscn" id="2_kj5ux"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kj5ux"]
+atlas = ExtResource("1_407eh")
+region = Rect2(0, 0, 100, 55)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cosvv"]
+atlas = ExtResource("1_407eh")
+region = Rect2(100, 0, 100, 55)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jae20"]
+atlas = ExtResource("1_407eh")
+region = Rect2(200, 0, 100, 55)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8fvxw"]
+atlas = ExtResource("1_407eh")
+region = Rect2(300, 0, 100, 55)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t32gg"]
+atlas = ExtResource("1_407eh")
+region = Rect2(400, 0, 100, 55)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eddxc"]
+atlas = ExtResource("1_407eh")
+region = Rect2(0, 55, 100, 55)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xuenw"]
+atlas = ExtResource("1_407eh")
+region = Rect2(100, 55, 100, 55)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wusqp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kj5ux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cosvv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jae20")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8fvxw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t32gg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eddxc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xuenw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[node name="Cloud" type="Node2D" node_paths=PackedStringArray("_attackInterval")]
+script = ExtResource("1_u7243")
+_verticalOffset = Vector2(0, -50)
+_attackInterval = NodePath("Timer")
+_attackRange = 100.0
+_lightningExplodeScene = ExtResource("2_kj5ux")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-6, 14)
+scale = Vector2(2.2272727, 2.2272727)
+sprite_frames = SubResource("SpriteFrames_wusqp")
+autoplay = "default"
+frame_progress = 0.63096154
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true

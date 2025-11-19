@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dai3cd2y2x4sy"]
+
+[ext_resource type="Script" uid="uid://cp65w18v165md" path="res://scripts/weapons/cloud_weapon/CloudWeapon.cs" id="1_8tkby"]
+[ext_resource type="PackedScene" uid="uid://cmg2ttvhm30tl" path="res://scenes/weapons/cloud/Cloud.tscn" id="2_c0x2k"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c0x2k"]
+radius = 938.67194
+
+[node name="CloudWeapon" type="Node2D" node_paths=PackedStringArray("_targetingRange", "_timer")]
+script = ExtResource("1_8tkby")
+_targetingRange = NodePath("Area2D")
+_cloudPackedScene = ExtResource("2_c0x2k")
+_timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_c0x2k")

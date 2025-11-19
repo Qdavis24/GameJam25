@@ -1,7 +1,8 @@
-[gd_scene load_steps=118 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=119 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
+[ext_resource type="PackedScene" uid="uid://dai3cd2y2x4sy" path="res://scenes/weapons/cloud/cloud_weapon.tscn" id="3_3y6wl"]
 [ext_resource type="PackedScene" uid="uid://rmamf56uxsh1" path="res://scenes/weapons/water/water_weapon.tscn" id="3_fiwjr"]
 [ext_resource type="PackedScene" uid="uid://tknrqdiu3tio" path="res://scenes/weapons/stone/stone_weapon.tscn" id="3_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://7subxsr3gb3o" path="res://scenes/weapons/fireball/fireball_weapon.tscn" id="3_vwqlx"]
@@ -753,12 +754,14 @@ radius = 503.00894
 z_index = 1
 y_sort_enabled = true
 script = ExtResource("1_rdh6l")
-LungeSpeed = 2000.0
+LungeSpeed = 500.0
 LungeDuration = 0.3
 _xpSpeedRamp = SubResource("Curve_fiwjr")
 _xpMagnetSpeed = 15.0
 _xpAcquireRange = 50.0
 SlashAttack = ExtResource("2_fiwjr")
+
+[node name="CloudWeapon" parent="." instance=ExtResource("3_3y6wl")]
 
 [node name="WaterWeapon" parent="." instance=ExtResource("3_fiwjr")]
 

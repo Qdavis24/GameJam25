@@ -28,7 +28,7 @@ public partial class StoneWeapon : WeaponBase
         {
             var newStone = _stonePackedScene.Instantiate<Stone>();
             newStone.Position += Vector2.FromAngle(_stoneAngles[i]) * _offset;
-            AddChild(newStone);
+            CallDeferred("add_child", newStone);
 
             newStone.Damage = _projDamage;
             newStone.Scale *= _projSize;
