@@ -45,6 +45,10 @@ public partial class EnemySpawner : Node2D
 	}
 	public override void _Ready()
 	{
+		string boss = GameManager.Instance.Bosses[0];
+		GameManager.Instance.Bosses.RemoveAt(0);
+		
+		_crystalSprite.Play(boss + "_boss");
 		SpawnAlly();
 		OnTimeout();
 		_currWave = 0;
