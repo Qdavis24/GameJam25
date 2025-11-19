@@ -136,12 +136,20 @@ public partial class Ally : CharacterBody2D
 	{
 		var allyInstances = GameManager.Instance.AllyInstances;
 		allyInstances.Add(this);
-		
-		_isFree = true;
-		_cage.QueueFree();
 
+		_isFree = true;
 		_anim.Play(Species + "_walk");
 
+		// Free the cage AFTER physics step
+		if (GodotObject.IsInstanceValid(_cage))
+			_cage.CallDeferred(Node.MethodName.QueueFree);
+
+		// Spawn and init the weapon AFTER physics step
+		CallDeferred(MethodName.SpawnWeapon);
+	}
+
+	private void SpawnWeapon()
+	{
 		var weapon = _weapons[Species].Instantiate<WeaponBase>();
 		AddChild(weapon);
 		weapon.InitWeapon();

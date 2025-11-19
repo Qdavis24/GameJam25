@@ -128,7 +128,7 @@ public partial class EnemySpawner : Node2D
 		var offset = new Vector2(_spawnRadius.X, _spawnRadius.Y);
 		offset *= distanceMultiplier;
 		_ally.GlobalPosition = center + offset;
-		GameManager.Instance.AddChild(_ally);
+		GameManager.Instance.World.AddChild(_ally);
 	}
  
 }
