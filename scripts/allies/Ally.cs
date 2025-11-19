@@ -58,7 +58,7 @@ public partial class Ally : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!_isFree || TravellingThroughPortal)
+		if (!_isFree || TravellingThroughPortal || (GameManager.Instance.FlowField.Directions == null))
 			return;
 
 		// 1) Base direction from flow field
