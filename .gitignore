@@ -26,4 +26,4 @@ mono_crash.*.json
 .idea
 *.import 
 
-export_presents.cfg
+export_presets.cfg
