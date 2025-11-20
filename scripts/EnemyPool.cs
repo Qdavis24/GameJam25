@@ -14,11 +14,13 @@ public partial class EnemyPool : Node2D
     [Export] private PackedScene _deerWraithScene;
 
     private Dictionary<EnemyType, PackedScene> _enemyScenes;
+    private List<Enemy> _allEnemies;
 
     private Dictionary<EnemyType, Queue<Enemy>> _pool;
 
     public override void _Ready()
     {
+        _allEnemies = new List<Enemy>();
         _enemyScenes = new()
         {
             { EnemyType.BunnyWraith, _bunnyWraithScene },
@@ -34,7 +36,12 @@ public partial class EnemyPool : Node2D
 
         foreach (EnemyType type in _types)
         {
-            for (int i = 0; i < _poolSize; i++) _pool[type].Enqueue(CreateEnemyForPool(_enemyScenes[type]));
+            for (int i = 0; i < _poolSize; i++)
+            {
+                var currEnemy = CreateEnemyForPool(_enemyScenes[type]);
+                _pool[type].Enqueue(currEnemy);
+                _allEnemies.Add(currEnemy);
+            }
         }
     }
 
@@ -53,19 +60,35 @@ public partial class EnemyPool : Node2D
         if (_pool[type].Count == 0)
         {
             newEnemy = _enemyScenes[type].Instantiate<Enemy>();
+            _allEnemies.Add(newEnemy);
             AddChild(newEnemy);
         }
         else
             newEnemy = _pool[type].Dequeue();
-        
+
         newEnemy.Enable(globalPosition);
     }
 
-    public void ReturnEnemy(Enemy enemy)
+    public bool ReturnEnemy(Enemy enemy)
     {
+        if (!IsInstanceValid(enemy)) return false;
         var type = enemy.Type;
         if (!_pool.ContainsKey(type)) GD.PrintErr("EnemyPool.ReturnEnemy : type doesn't exist");
         enemy.Disable();
         _pool[type].Enqueue(enemy);
+        return true;
+    }
+
+    public void ReturnAllEnemies()
+    {
+        for (int i = _allEnemies.Count - 1; i >= 0; i--)
+        {
+            var currEnemy = _allEnemies[i];
+            if (!currEnemy.InPool)
+                if (!ReturnEnemy(currEnemy))
+                {
+                    _allEnemies.RemoveAt(i);
+                }
+        }
     }
 }

@@ -1,7 +1,8 @@
-[gd_scene load_steps=135 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=136 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
+[ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_oa6mu"]
 [ext_resource type="AudioStream" uid="uid://cfbtmwhhyafbm" path="res://assets/sounds/chest-xp-levelup/xp_1.wav" id="3_2rq5i"]
 [ext_resource type="PackedScene" uid="uid://dai3cd2y2x4sy" path="res://scenes/weapons/cloud/cloud_weapon.tscn" id="3_3y6wl"]
 [ext_resource type="PackedScene" uid="uid://rmamf56uxsh1" path="res://scenes/weapons/water/water_weapon.tscn" id="3_fiwjr"]
@@ -806,7 +807,7 @@ animations = [{
 "speed": 2.0
 }]
 
-[node name="Player" type="CharacterBody2D" groups=["Players"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("_damageIntervalTimer") groups=["Players"]]
 z_index = 1
 z_as_relative = false
 script = ExtResource("1_rdh6l")
@@ -816,6 +817,8 @@ MaxXp = 500
 _xpSpeedRamp = SubResource("Curve_fiwjr")
 _xpMagnetSpeed = 15.0
 _xpAcquireRange = 50.0
+_flashShader = ExtResource("2_oa6mu")
+_damageIntervalTimer = NodePath("FlashIntervalTimer")
 SlashAttack = ExtResource("2_fiwjr")
 _xpSounds = SubResource("AudioStreamRandomizer_2rq5i")
 
@@ -908,5 +911,9 @@ scale = Vector2(0.505, 0.56)
 sprite_frames = SubResource("SpriteFrames_oa6mu")
 autoplay = "default"
 frame_progress = 0.46541882
+
+[node name="FlashIntervalTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
 
 [connection signal="area_entered" from="Hurtbox" to="." method="OnPlayerHurtBoxEntered"]

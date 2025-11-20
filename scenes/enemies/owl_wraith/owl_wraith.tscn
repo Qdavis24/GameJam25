@@ -146,7 +146,7 @@ _deathEffect = NodePath("DeathEffect")
 [node name="KnockbackState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_hitEffect")]
 script = ExtResource("4_oto54")
 KnockbackCurve = SubResource("Curve_oto54")
-_knockBackDuration = 1.0
+_knockBackDuration = 1.2
 _hitEffect = NodePath("../../TrailParticles")
 
 [node name="KnockBackEffect" type="GPUParticles2D" parent="WraithStateMachine/KnockbackState"]

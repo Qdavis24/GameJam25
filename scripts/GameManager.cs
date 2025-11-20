@@ -153,7 +153,7 @@ public partial class GameManager : Node
     private async void EndGame()
     {
         await _screenFade.FadeToBlack();
-        
+        EnemyPool.ReturnAllEnemies();
         // cleanup all game components
         Cam.QueueFree();
         Cam = null;
@@ -189,7 +189,7 @@ public partial class GameManager : Node
     public void InitWorldLevel()
     {
         _gameState = GameState.LoadingGame;
-        
+        EnemyPool.ReturnAllEnemies();
         Bosses = new() { "rat", "raccoon", "bunny" };
         PauseAllies();
         
