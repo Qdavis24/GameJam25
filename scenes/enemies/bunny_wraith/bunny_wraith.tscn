@@ -679,7 +679,7 @@ collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_cqb61")
 _hitSounds = SubResource("AudioStreamRandomizer_qknn0")
-_maxHealth = 20.0
+_maxHealth = 40.0
 SteeringRange = NodePath("SteeringRange")
 AttackRange = 50
 Animations = NodePath("WraithAnimations")
@@ -720,7 +720,7 @@ _explosionAttackScene = ExtResource("6_ns0ja")
 [node name="KnockbackState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_hitEffect")]
 script = ExtResource("4_uyoe8")
 KnockbackCurve = SubResource("Curve_oto54")
-_knockBackDuration = 1.0
+_knockBackDuration = 0.4
 _hitEffect = NodePath("KnockBackEffect")
 
 [node name="KnockBackEffect" type="GPUParticles2D" parent="WraithStateMachine/KnockbackState"]
@@ -783,7 +783,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="DamageInterval" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 0.1
 
 [connection signal="body_entered" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeEntered"]
 [connection signal="body_exited" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeExited"]

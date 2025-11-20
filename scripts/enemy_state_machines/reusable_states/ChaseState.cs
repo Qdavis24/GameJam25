@@ -45,154 +45,154 @@ public partial class ChaseState : EState
 	private Pathfinding _currPathfindingMode = Pathfinding.FlowField;
 
 	// Super's abstract methods below
-    public override void Enter()
-    {
-        _sameGroupEnemies = new List<Enemy>();
-        _speed = _minSpeed + (_maxSpeed - _minSpeed) * GD.Randf();
-        _pathMagnitude = _minPathMag + (_maxPathMag - _minPathMag) * GD.Randf();
-        _distancePerCycle = (_minDistancePerCycle + (_maxDistancePerCycle - _minDistancePerCycle) * GD.Randf()) *
-                            190.0f; // try to account for tile size
-        _currDistance = 0.0f;
-    }
+	public override void Enter()
+	{
+		_sameGroupEnemies = new List<Enemy>();
+		_speed = _minSpeed + (_maxSpeed - _minSpeed) * GD.Randf();
+		_pathMagnitude = _minPathMag + (_maxPathMag - _minPathMag) * GD.Randf();
+		_distancePerCycle = (_minDistancePerCycle + (_maxDistancePerCycle - _minDistancePerCycle) * GD.Randf()) *
+							190.0f; // try to account for tile size
+		_currDistance = 0.0f;
+	}
 
-    public override void Exit()
-    {
-        _stateMachine.Owner.Animations.Stop();
-    }
+	public override void Exit()
+	{
+		_stateMachine.Owner.Animations.Stop();
+	}
 
-    public override void Update(double delta)
-    {
-    }
+	public override void Update(double delta)
+	{
+	}
 
 	public override void PhysicsUpdate(double delta)
 	{
 		if (GameManager.Instance.Player == null) return;
 		if (GameManager.Instance.FlowField.Directions == null) return;
 
-        if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(GameManager.Instance.Player.GlobalPosition) <
-            _stateMachine.Owner.AttackRange * _stateMachine.Owner.AttackRange) // transition to attack
-        {
-            _stateMachine.TransitionTo(_attackState);
-        }
+		if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(GameManager.Instance.Player.GlobalPosition) <
+			_stateMachine.Owner.AttackRange * _stateMachine.Owner.AttackRange) // transition to attack
+		{
+			_stateMachine.TransitionTo(_attackState);
+		}
 
 
-        if ((_stateMachine.Owner.GlobalPosition - GameManager.Instance.Player.GlobalPosition).LengthSquared() <
-            _togglePathfindingRange * _togglePathfindingRange) _currPathfindingMode = Pathfinding.Traditional;
-        else _currPathfindingMode = Pathfinding.FlowField; // determine pathfinding mode
+		if ((_stateMachine.Owner.GlobalPosition - GameManager.Instance.Player.GlobalPosition).LengthSquared() <
+			_togglePathfindingRange * _togglePathfindingRange) _currPathfindingMode = Pathfinding.Traditional;
+		else _currPathfindingMode = Pathfinding.FlowField; // determine pathfinding mode
 
-        var baseDir = Vector2.Zero;
+		var baseDir = Vector2.Zero;
 
-        switch (_currPathfindingMode)
-        {
-            case Pathfinding.Traditional:
-                baseDir = GetTradDir();
-                break;
-            case Pathfinding.FlowField:
-                baseDir = GetFlowFieldDir();
-                break;
-        }
+		switch (_currPathfindingMode)
+		{
+			case Pathfinding.Traditional:
+				baseDir = GetTradDir();
+				break;
+			case Pathfinding.FlowField:
+				baseDir = GetFlowFieldDir();
+				break;
+		}
 
-        var boidsDir = GetBoidsDir();
-        baseDir = (baseDir * _flowFieldInfluence + boidsDir * _boidsInfluence).Normalized();
-        if (Interpolate) baseDir = GetInterpDir(baseDir);
-        
-        _stateMachine.Owner.Velocity = baseDir * _speed;
-        _currDistance += _stateMachine.Owner.Velocity.Length();
-        _stateMachine.Owner.Animations.FlipH = baseDir.X < 0;
-        _stateMachine.Owner.MoveAndSlide();
-    }
+		var boidsDir = GetBoidsDir();
+		baseDir = (baseDir * _flowFieldInfluence + boidsDir * _boidsInfluence).Normalized();
+		if (Interpolate) baseDir = GetInterpDir(baseDir);
+		
+		_stateMachine.Owner.Velocity = baseDir * _speed;
+		_currDistance += _stateMachine.Owner.Velocity.Length();
+		_stateMachine.Owner.Animations.FlipH = baseDir.X < 0;
+		_stateMachine.Owner.MoveAndSlide();
+	}
 
 
-    // Helpers below
-    private Vector2 GetInterpDir(Vector2 baseDir)
-    {
-        if (_currDistance >= _distancePerCycle) _currDistance = 0.0f;
-        Vector2 perpDirection = new Vector2(-baseDir.Y, baseDir.X);
-        float sample = _path.Sample((float)(_currDistance / _distancePerCycle));
-        Vector2 interpolatedDir =
-            (baseDir + (perpDirection * sample * _minPathMag)).Normalized();
-        return interpolatedDir;
-    }
+	// Helpers below
+	private Vector2 GetInterpDir(Vector2 baseDir)
+	{
+		if (_currDistance >= _distancePerCycle) _currDistance = 0.0f;
+		Vector2 perpDirection = new Vector2(-baseDir.Y, baseDir.X);
+		float sample = _path.Sample((float)(_currDistance / _distancePerCycle));
+		Vector2 interpolatedDir =
+			(baseDir + (perpDirection * sample * _minPathMag)).Normalized();
+		return interpolatedDir;
+	}
 
-    private Vector2 GetTradDir()
-    {
-        return (GameManager.Instance.Player.GlobalPosition - _stateMachine.Owner.GlobalPosition).Normalized();
-    }
+	private Vector2 GetTradDir()
+	{
+		return (GameManager.Instance.Player.GlobalPosition - _stateMachine.Owner.GlobalPosition).Normalized();
+	}
 
-    private Vector2 GetFlowFieldDir()
-    {
-        var enemyCoord = GameManager.Instance.World.PhysicalData.BaseTileMapLayer.LocalToMap(
-            GameManager.Instance.World.PhysicalData.BaseTileMapLayer.ToLocal(_stateMachine.Owner.GlobalPosition));
-        var dir = Vector2.Zero;
-        var flowFieldCols = GameManager.Instance.FlowField.Directions.GetLength(0);
-        var flowFieldRows = GameManager.Instance.FlowField.Directions.GetLength(1);
-        var numSampleDirs = 0;
-        for (int colShift = -1; colShift <= 1; colShift++)
-        for (int rowShift = -1; rowShift <= 1; rowShift++)
-        {
-            var currCol = enemyCoord.X + colShift;
-            var currRow = enemyCoord.Y + rowShift;
-            if (currCol < 0 || currCol >= flowFieldCols || currRow < 0 || currRow >= flowFieldRows) continue;
-            var currDir = GameManager.Instance.FlowField.Directions[currCol, currRow];
-            if (currDir == Vector2.Zero) continue;
-            dir += currDir;
-            numSampleDirs++;
-        }
+	private Vector2 GetFlowFieldDir()
+	{
+		var enemyCoord = GameManager.Instance.World.PhysicalData.BaseTileMapLayer.LocalToMap(
+			GameManager.Instance.World.PhysicalData.BaseTileMapLayer.ToLocal(_stateMachine.Owner.GlobalPosition));
+		var dir = Vector2.Zero;
+		var flowFieldCols = GameManager.Instance.FlowField.Directions.GetLength(0);
+		var flowFieldRows = GameManager.Instance.FlowField.Directions.GetLength(1);
+		var numSampleDirs = 0;
+		for (int colShift = -1; colShift <= 1; colShift++)
+		for (int rowShift = -1; rowShift <= 1; rowShift++)
+		{
+			var currCol = enemyCoord.X + colShift;
+			var currRow = enemyCoord.Y + rowShift;
+			if (currCol < 0 || currCol >= flowFieldCols || currRow < 0 || currRow >= flowFieldRows) continue;
+			var currDir = GameManager.Instance.FlowField.Directions[currCol, currRow];
+			if (currDir == Vector2.Zero) continue;
+			dir += currDir;
+			numSampleDirs++;
+		}
 
-        dir /= numSampleDirs;
-        return dir.Normalized();
-    }
+		dir /= numSampleDirs;
+		return dir.Normalized();
+	}
 
-    private Vector2 GetBoidsDir()
-    {
-        if (_sameGroupEnemies.Count == 0) return Vector2.Zero;
+	private Vector2 GetBoidsDir()
+	{
+		if (_sameGroupEnemies.Count == 0) return Vector2.Zero;
 
-        var seperationVec = Vector2.Zero;
-        var alignmentVec = Vector2.Zero;
-        var cohesionPos = Vector2.Zero;
+		var seperationVec = Vector2.Zero;
+		var alignmentVec = Vector2.Zero;
+		var cohesionPos = Vector2.Zero;
 
-        foreach (Enemy currEnemy in _sameGroupEnemies)
-        {
-            seperationVec += (_stateMachine.Owner.GlobalPosition - currEnemy.GlobalPosition).Normalized();
-            alignmentVec += currEnemy.Velocity;
-            cohesionPos += currEnemy.GlobalPosition;
-        }
+		foreach (Enemy currEnemy in _sameGroupEnemies)
+		{
+			seperationVec += (_stateMachine.Owner.GlobalPosition - currEnemy.GlobalPosition).Normalized();
+			alignmentVec += currEnemy.Velocity;
+			cohesionPos += currEnemy.GlobalPosition;
+		}
 
-        seperationVec = seperationVec.Normalized();
-        alignmentVec = alignmentVec.Normalized();
-        cohesionPos /= _sameGroupEnemies.Count;
-        var cohesionVec = (cohesionPos - _stateMachine.Owner.GlobalPosition).Normalized();
-        return ((seperationVec * _separationForce) + (alignmentVec * _alignmentForce) + (cohesionVec * _cohesionForce))
-            .Normalized();
-    }
-    
+		seperationVec = seperationVec.Normalized();
+		alignmentVec = alignmentVec.Normalized();
+		cohesionPos /= _sameGroupEnemies.Count;
+		var cohesionVec = (cohesionPos - _stateMachine.Owner.GlobalPosition).Normalized();
+		return ((seperationVec * _separationForce) + (alignmentVec * _alignmentForce) + (cohesionVec * _cohesionForce))
+			.Normalized();
+	}
+	
 
-    private void OnSteeringRangeEntered(Node2D body)
-    {
-        if (body.IsInGroup(_stateMachine.Owner.GetGroups()[0]))
-        {
-            _sameGroupEnemies.Add(body as Enemy);
-        }
-    }
+	private void OnSteeringRangeEntered(Node2D body)
+	{
+		if (body.IsInGroup(_stateMachine.Owner.GetGroups()[0]))
+		{
+			_sameGroupEnemies.Add(body as Enemy);
+		}
+	}
 
-    private void OnSteeringRangeExited(Node2D body)
-    {
-        if (body.IsInGroup(_stateMachine.Owner.GetGroups()[0]))
-        {
-            _sameGroupEnemies.Remove(body as Enemy);
-        }
+	private void OnSteeringRangeExited(Node2D body)
+	{
+		if (body.IsInGroup(_stateMachine.Owner.GetGroups()[0]))
+		{
+			_sameGroupEnemies.Remove(body as Enemy);
+		}
   
-    }
+	}
 
-    private void DebugPrintEnemiesInSteeringRange()
-    {
-        String ls = Owner.Name + " current enemies : [";
-        foreach (Node2D enemy in _sameGroupEnemies)
-        {
-            ls += enemy.Name + ", ";
-        }
+	private void DebugPrintEnemiesInSteeringRange()
+	{
+		String ls = Owner.Name + " current enemies : [";
+		foreach (Node2D enemy in _sameGroupEnemies)
+		{
+			ls += enemy.Name + ", ";
+		}
 
-        ls += "]";
-        GD.Print(ls);
-    }
+		ls += "]";
+		GD.Print(ls);
+	}
 }

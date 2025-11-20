@@ -57,7 +57,7 @@ public partial class Enemy : CharacterBody2D
 		Hitbox hb = (Hitbox)area;
 		Animations.Material = _flashShader;
 		_flashTimer.Start();
-		Sfx.I.Play2D(_hitSounds, GlobalPosition, -40);
+		Sfx.I.Play2D(_hitSounds, GlobalPosition, -30);
 		
 		TakeDamage(hb.Damage, hb.KnockbackWeight, (GlobalPosition - hb.GlobalPosition));
 	}

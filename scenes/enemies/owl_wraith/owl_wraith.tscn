@@ -700,7 +700,7 @@ _attackState = "ShootState"
 [node name="KnockbackState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_hitEffect")]
 script = ExtResource("4_oto54")
 KnockbackCurve = SubResource("Curve_oto54")
-_knockBackDuration = 1.0
+_knockBackDuration = 1.2
 _hitEffect = NodePath("../../GPUParticles2D")
 
 [node name="KnockBackEffect" type="GPUParticles2D" parent="WraithStateMachine/KnockbackState"]

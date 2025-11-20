@@ -44,7 +44,7 @@ public partial class MainMenu : CanvasLayer
 	// go to character selection
 	private void StartPressed()
 	{
-		Sfx.I.PlayUi(_clickSound);
+		Sfx.I.PlayUi(_clickSound, -2);
 		_startScreen.Visible = false;
 		_characterSelectScreen.Visible = true;
 
