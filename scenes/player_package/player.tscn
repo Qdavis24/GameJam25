@@ -876,7 +876,7 @@ grow_vertical = 2
 layout_mode = 2
 theme = SubResource("Theme_xtqb1")
 text = "I need to find
-my friends"
+my friends..."
 
 [node name="TextureRect" type="TextureRect" parent="StartHelp"]
 layout_mode = 0
