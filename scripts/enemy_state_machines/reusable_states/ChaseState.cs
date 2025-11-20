@@ -47,6 +47,7 @@ public partial class ChaseState : EState
 	// Super's abstract methods below
 	public override void Enter()
 	{
+		_stateMachine.Owner.Animations.Play("default");
 		_sameGroupEnemies = new List<Enemy>();
 		_speed = _minSpeed + (_maxSpeed - _minSpeed) * GD.Randf();
 		_pathMagnitude = _minPathMag + (_maxPathMag - _minPathMag) * GD.Randf();
@@ -169,6 +170,8 @@ public partial class ChaseState : EState
 
 	private void OnSteeringRangeEntered(Node2D body)
 	{
+		if (_stateMachine.CurrState != this) return;
+		
 		if (body.IsInGroup(_stateMachine.Owner.GetGroups()[0]))
 		{
 			_sameGroupEnemies.Add(body as Enemy);
@@ -177,11 +180,12 @@ public partial class ChaseState : EState
 
 	private void OnSteeringRangeExited(Node2D body)
 	{
+		if (_stateMachine.CurrState != this) return;
+		
 		if (body.IsInGroup(_stateMachine.Owner.GetGroups()[0]))
 		{
 			_sameGroupEnemies.Remove(body as Enemy);
 		}
-  
 	}
 
 	private void DebugPrintEnemiesInSteeringRange()

@@ -679,7 +679,7 @@ shape = SubResource("CircleShape2D_q5y88")
 
 [node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("_initialState")]
 script = ExtResource("2_eieg8")
-_initialState = NodePath("ChaseState")
+_initialState = NodePath("SpawnState")
 
 [node name="ChaseState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("3_eieg8")
@@ -736,9 +736,7 @@ script = ExtResource("15_fkf4r")
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_p20hp")
 animation = &"spawn"
-autoplay = "default"
-frame = 38
-frame_progress = 1.0
+autoplay = "spawn"
 
 [node name="SteeringRange" type="Area2D" parent="."]
 collision_layer = 4

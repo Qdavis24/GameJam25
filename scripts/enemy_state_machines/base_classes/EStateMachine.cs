@@ -18,7 +18,6 @@ public partial class EStateMachine : Node2D
 	public override void _Ready()
 	{
 		Owner = (Enemy)GetParent();
-		Owner.Animations.Play("spawn");
 		foreach (Node child in GetChildren())
 		{
 			if (child is EState)

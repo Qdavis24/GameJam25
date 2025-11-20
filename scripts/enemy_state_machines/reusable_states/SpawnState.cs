@@ -8,29 +8,16 @@ public partial class SpawnState : EState
 	// Super's abstract methods below
 	public override void Enter()
 	{
-		GD.Print("ENTER SPAWN");
-		_stateMachine.Owner.Animations.Play("spawn");
-		
-		GD.Print(_stateMachine.Owner.Animations);
-		
 		_stateMachine.Owner.Animations.AnimationFinished += Switch; 
-		
-		// _stateMachine.TransitionTo("ChaseState");
-		
-		
-		//_stateMachine.Owner.Animations.AnimationFinished += () => {
-			//_stateMachine.TransitionTo("ChaseState");
-		//};
 	}
 	
 	private void Switch()
 	{
-		GD.Print("HELLLOOOO");
+		_stateMachine.TransitionTo("ChaseState");
 	}
 
 	public override void Exit()
 	{
-		_stateMachine.Owner.Animations.Stop();
 	}
 
 
