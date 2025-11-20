@@ -5,20 +5,20 @@ using GameJam25.scripts.weapons.base_classes;
 
 public partial class Ally : CharacterBody2D
 {
-	[Export] public float Speed = 60f;
+	[Export] public float Speed = 375f;
 
 	// Boids settings
-	[Export] public float BoidsRadius = 120f;          // how far they "see" other allies
-	[Export] public float SeparationWeight = 1.5f;     // push apart
-	[Export] public float AlignmentWeight = 0.4f;      // match velocity
-	[Export] public float CohesionWeight = 0.3f;       // move toward group center
-	[Export] public float BoidsInfluence = 0.7f;       // how much boids affect flow direction
+	[Export] public float BoidsRadius = 210f;      // was 120
+	[Export] public float SeparationWeight = 2.6f; // was 1.5
+	[Export] public float AlignmentWeight = 0.3f;  // was 0.4
+	[Export] public float CohesionWeight = 0.2f;   // was 0.3
+	[Export] public float BoidsInfluence = 0.45f;  // was 0.7
 
 	// Stopping / jitter control
-	[Export] public float StopVelocityEpsilon = 5f;    // if slower than this -> treat as stopped
-	[Export] public float SteeringDeadzone = 0.01f;    // ignore tiny steering
-	[Export] public float DampingFactor = 8f;          // how quickly they slow when no steering
-
+	[Export] public float StopVelocityEpsilon = 16f; // was 5
+	[Export] public float SteeringDeadzone = 0.04f;  // was 0.01
+	[Export] public float DampingFactor = 14f;       // was 8
+	
 	[Export] public PackedScene FoxWeaponScene;
 	[Export] public PackedScene FrogWeaponScene;
 	[Export] public PackedScene RaccoonWeaponScene;
@@ -27,11 +27,10 @@ public partial class Ally : CharacterBody2D
 
 	public string Species; // set in EnemySpawner scene
 	public bool TravellingThroughPortal;
+	public bool IsFreedFromCage; // used by GameManager to not move caged allies
 
 	private AnimatedSprite2D _anim;
 	private Sprite2D _cage;
-
-	private bool _isFree;
 	
 	// flipH timer stuff to prevent jittering
 	private float _flipCooldown = 0.15f; // seconds between allowed flips
@@ -44,7 +43,7 @@ public partial class Ally : CharacterBody2D
 	{
 		_flowField = GameManager.Instance.FlowField;
 		AddToGroup("allies");
-		_isFree = false;
+		IsFreedFromCage = false;
 
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_cage = GetNode<Sprite2D>("Cage");
@@ -62,7 +61,7 @@ public partial class Ally : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!_isFree || TravellingThroughPortal || !GameManager.Instance.FlowField.Valid)
+		if (!IsFreedFromCage || TravellingThroughPortal || _flowField.Valid)
 			return;
 
 		// 1) Base direction from flow field
@@ -138,10 +137,7 @@ public partial class Ally : CharacterBody2D
 
 	public void FreeFromCage()
 	{
-		var allyInstances = GameManager.Instance.AllyInstances;
-		allyInstances.Add(this);
-
-		_isFree = true;
+		IsFreedFromCage = true;
 		_anim.Play(Species + "_walk");
 
 		// Free the cage AFTER physics step

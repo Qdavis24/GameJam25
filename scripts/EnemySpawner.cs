@@ -32,6 +32,11 @@ public partial class EnemySpawner : Node2D
     [Export] private AnimatedSprite2D _raccoonBoss;
     [Export] private AnimatedSprite2D _ratBoss;
     [Export] private AnimatedSprite2D _bunnyBoss;
+    
+    [ExportCategory("Sounds")]
+    [Export] private AudioStream _bossDeathSounds;
+    [Export] private AudioStream _bossHitSounds;
+    [Export] private AudioStream _bossExplosionSounds;
 
     [ExportCategory("Destructor Config")] [Export]
     private Node2D _destructorBody;
@@ -135,7 +140,7 @@ public partial class EnemySpawner : Node2D
             _crystalHealth -= ((Hitbox)area).Damage;
             _currBossSprite.Material = _flashShaderMaterial;
             _flashTimer.Start();
-
+            Sfx.I.Play2D(_bossHitSounds, GlobalPosition, -10);
             if (_crystalHealth <= 0)
             {
                 _active = false;
@@ -148,6 +153,7 @@ public partial class EnemySpawner : Node2D
 
     private void BossStartDie()
     {
+        Sfx.I.Play2D(_bossDeathSounds, GlobalPosition);
         GameManager.Instance.Cam.Shake(20, 2f);
         GetTree().CreateTimer(2f).Timeout += BossEndDie;
         _oozeParticles.Emitting = true;
@@ -155,6 +161,7 @@ public partial class EnemySpawner : Node2D
 
     private void BossEndDie()
     {
+        Sfx.I.Play2D(_bossDeathSounds, GlobalPosition);
         _destructorBody.QueueFree();
         _explosionParticles.Emitting = true;
         _light.Energy = _explosionLightMaxIntensity;
@@ -171,8 +178,11 @@ public partial class EnemySpawner : Node2D
         string species = speciesList[0];
         speciesList.RemoveAt(0);
 
-        _ally = _allyPackedScene.Instantiate<Ally>();
-        _ally.Species = species;
+		_ally = _allyPackedScene.Instantiate<Ally>();
+		_ally.Species = species;
+		
+		var allyInstances = GameManager.Instance.AllyInstances;
+		allyInstances.Add(_ally);
 
         var center = GlobalPosition;
         float distanceMultiplier = 2.0f;

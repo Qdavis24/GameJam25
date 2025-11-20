@@ -12,9 +12,12 @@ public partial class PauseScreen : Panel
 	
 	private VBoxContainer _pauseContainer;
 	private VBoxContainer _settingsContainer;
+	
+	private bool _mainMenuBeenPressed = false;
 
 	public void Open()
 	{
+		_mainMenuBeenPressed = false;
 		Visible = true;
 	}
 
@@ -55,6 +58,8 @@ public partial class PauseScreen : Panel
 	
 	private void MainMenuPressed()
 	{
+		if (_mainMenuBeenPressed) return;
+		_mainMenuBeenPressed = true;
 		EmitSignalMainMenuRequested();
 	}
 	

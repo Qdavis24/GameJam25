@@ -16,13 +16,13 @@ public partial class DeathState : EState
 		_stateMachine.Owner.CollisionLayer = 0;
 		_stateMachine.Owner.Animations.Play("death");
 		_stateMachine.Owner.CanTakeDamage = false;
-		
+		GameManager.Instance.EnemyDeathUpdateKillCounter();
 		_deathEffectMaterial = (ParticleProcessMaterial)_deathEffect.ProcessMaterial;
 		Vector2 dir = (_stateMachine.InstanceContext.KnockbackDir).Normalized();
 		Vector3 materialDir = new Vector3(dir.X, dir.Y, 0);
 		_deathEffectMaterial.Direction = materialDir;
 		_deathEffect.Emitting = true;
-		_deathEffect.Finished += (Exit);
+		_deathEffect.Finished += Exit;
 	}
 
 	public override void Exit()

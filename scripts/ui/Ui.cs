@@ -14,6 +14,8 @@ public partial class Ui : CanvasLayer
 	private ProgressBar _xpBar;
 	private ProgressBar _healthBar;
 	private UpgradeScreen _upgradeScreen;
+	private Label _killCounter;
+	private Label _levelCounter;
 
 	public Player Player {get; private set;}
 
@@ -22,6 +24,9 @@ public partial class Ui : CanvasLayer
 		_xpBar = GetNode<ProgressBar>("XpBar");
 		_healthBar = GetNode<ProgressBar>("HealthBar");
 		_upgradeScreen = GetNode<UpgradeScreen>("UpgradeScreen");
+		_killCounter = GetNode<Label>("Stats/KillCounter");
+		_levelCounter = GetNode<Label>("Stats/LevelCounter");
+
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -79,11 +84,37 @@ public partial class Ui : CanvasLayer
 		Sfx.I.PlayUi(_chestOpenSounds, 8f);
 		_upgradeScreen.Show();
 	}
+	public void HideUpgrade() // called when resetting world
+	{
+		_upgradeScreen.Visible = false;
+	}
 	
 	public void OnMainMenuRequested()
 	{
 		this.Visible = false;
 		EmitSignalMainMenuRequestedUi();
+	}
+	
+	public void IncrementKillCounter()
+	{
+		int current = int.Parse(_killCounter.Text);
+		current += 1;
+		_killCounter.Text = current.ToString();
+	}
+	public void IncrementLevelCounter()
+	{
+		int current = int.Parse(_levelCounter.Text);
+		current += 1;
+		_levelCounter.Text = current.ToString();
+	}
+	public (string kills, string level) GetCounters()
+	{
+		return (_killCounter.Text, _levelCounter.Text);
+	}
+	public void ResetCounters()
+	{
+		_killCounter.Text = "0";
+		_levelCounter.Text = "1";
 	}
 	
 }

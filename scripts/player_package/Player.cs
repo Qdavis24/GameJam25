@@ -49,8 +49,11 @@ public partial class Player : CharacterBody2D
 	private Hurtbox _hurtbox;
 	private Area2D _pickupRange;
 	private AnimatedSprite2D _anim;
+	private Panel _startHelp;
 	private AudioStreamPlayer _audio;
 	private Dictionary<Weapon, WeaponBase> _weapons = new();
+	
+	private bool _showStartHelp = true;
 
 	// Xp state vars
 	private List<Xp> _xpInRange = new();
@@ -87,6 +90,7 @@ public partial class Player : CharacterBody2D
 
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_audio = GetNode<AudioStreamPlayer>("WalkSound");
+		_startHelp = GetNode<Panel>("StartHelp");
 
 		_hurtbox = GetNode<Hurtbox>("Hurtbox");
 		_pickupRange = GetNode<Area2D>("PickupRange");
@@ -148,6 +152,12 @@ public partial class Player : CharacterBody2D
 
 	private void Slash(Vector2 dir)
 	{
+		if (_showStartHelp)
+		{
+			_showStartHelp = false;
+			_startHelp.QueueFree();
+		}
+		
 		lunging = true;
 		lungeTime = LungeDuration;
 		lungeDir = dir;

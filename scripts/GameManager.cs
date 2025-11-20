@@ -67,7 +67,7 @@ public partial class GameManager : Node
     private bool _isPaused;
 
     private Vector2I _lastPlayerCoord;
-    private int _numSpawners;
+    public int NumSpawners;
 
     public static GameManager Instance;
 
@@ -133,6 +133,7 @@ public partial class GameManager : Node
         
         Player = _playerScene.Instantiate<Player>();
         _ui.InitializeUiFromPlayer(Player); // connects players signals related to stats and upgrade to ui
+        _ui.ResetCounters();
         Player.AnimationSet = character;
         Player.Died += OnPlayerDeath;
         PersistentNodes.AddChild(Player);
@@ -154,6 +155,8 @@ public partial class GameManager : Node
         
         Player.QueueFree();
         Player = null;
+        
+        RemoveAllies();
         
         World.QueueFree();
         World = null;
@@ -184,6 +187,8 @@ public partial class GameManager : Node
         
         Bosses = new() { "rat", "raccoon", "bunny" };
         PauseAllies();
+        
+        _ui.HideUpgrade(); // prevent upgrade from remaining
 
         Player.Visible = false;
         Player.InitForWorldLevel();
@@ -229,12 +234,25 @@ public partial class GameManager : Node
         {
             if (!IsInstanceValid(ally))
                 continue;
-
+            if (!ally.IsFreedFromCage)
+                continue;
+            
             ally.GlobalPosition = Player.GlobalPosition;
             ally.TravellingThroughPortal = false;
         }
     }
-
+    public void RemoveAllies()
+    {
+        foreach (var ally in AllyInstances.ToArray())
+        {
+            if (!IsInstanceValid(ally)) 
+                continue;
+			
+            ally.QueueFree();
+        }
+		
+        AllyInstances.Clear();
+    }
     private void ScaleDifficulty()
     {
         _enemySpawnerHealth *= _enemySpawnerHealthScalr;
@@ -245,10 +263,10 @@ public partial class GameManager : Node
 
     private void SpawnEnemySpawners()
     {
-        _numSpawners = 0;
+        NumSpawners = 0;
         foreach (Shrine shrine in World.LogicalData.Shrines)
         {
-            _numSpawners++;
+            NumSpawners++;
             var newSpawner = _enemySpawnerScene.Instantiate<EnemySpawner>();
             newSpawner.Init(_enemySpawnerHealth, _enemySpawnerWaveInterval, _enemySpawnerNumEnemiesPerWave,
                 _enemySpawnerNumWaves);
@@ -282,6 +300,7 @@ public partial class GameManager : Node
     private async void ChangeLevel()
     {
         await _screenFade.FadeToBlack();
+        _ui.IncrementLevelCounter();
         InitWorldLevel();
         await _screenFade.FadeToNormal();
     }
@@ -289,8 +308,8 @@ public partial class GameManager : Node
     // Signal Callbacks
     private void OnSpawnerDestroyed(Vector2 pos)
     {
-        _numSpawners--;
-        if (_numSpawners <= 0)
+        NumSpawners--;
+        if (NumSpawners <= 0)
         {
             var exitPortal = _exitPortalScene.Instantiate<ExitPortal>();
             exitPortal.GlobalPosition = pos;
@@ -304,7 +323,7 @@ public partial class GameManager : Node
         GetTree().Paused = true;
         _isPaused = true;
         Cam.DeathAnim();
-        _deathScreen.Open();
+        _deathScreen.Open(_ui.GetCounters());
         _gameState = GameState.DeathScreen;
     }
 
@@ -312,5 +331,9 @@ public partial class GameManager : Node
     public void OpenChest()
     {
         _ui.OpenChest();
+    }
+    public void EnemyDeathUpdateKillCounter()
+    {
+        _ui.IncrementKillCounter();
     }
 }
