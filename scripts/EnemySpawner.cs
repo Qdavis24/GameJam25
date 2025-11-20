@@ -40,6 +40,11 @@ public partial class EnemySpawner : Node2D
 	[Export] private GpuParticles2D _oozeParticles;
 	[Export] private float _explosionLightMaxIntensity;
 	
+	[ExportCategory("Sounds")]
+	[Export] private AudioStream _bossDeathSounds;
+	[Export] private AudioStream _bossHitSounds;
+	[Export] private AudioStream _bossExplosionSounds;
+	
 	private Dictionary<string, AnimatedSprite2D> _bosses;
 
 	private Ally _ally;
@@ -134,6 +139,7 @@ public partial class EnemySpawner : Node2D
 			_crystalHealth -= ((Hitbox)area).Damage;
 			_currBossSprite.Material = _flashShaderMaterial;
 			_flashTimer.Start();
+			Sfx.I.Play2D(_bossHitSounds, GlobalPosition, -10);
 
 			if (_crystalHealth <= 0)
 			{
@@ -147,6 +153,7 @@ public partial class EnemySpawner : Node2D
 
 	private void BossStartDie()
 	{
+		Sfx.I.Play2D(_bossDeathSounds, GlobalPosition);
 		GameManager.Instance.Cam.Shake(20, 2f);
 		GetTree().CreateTimer(2f).Timeout += BossEndDie;
 		_oozeParticles.Emitting = true;
@@ -154,6 +161,7 @@ public partial class EnemySpawner : Node2D
 
 	private void BossEndDie()
 	{
+		Sfx.I.Play2D(_bossExplosionSounds, GlobalPosition, -15);
 		_destructorBody.QueueFree();
 		_explosionParticles.Emitting = true;
 		_light.Energy = _explosionLightMaxIntensity;
@@ -167,17 +175,17 @@ public partial class EnemySpawner : Node2D
 	{
 		var speciesList = GameManager.Instance.Allies;
 		if (speciesList.Count == 0) return; // Don't spawn ally if empty
-        string species = speciesList[0];
-        speciesList.RemoveAt(0);
+		string species = speciesList[0];
+		speciesList.RemoveAt(0);
 
-        _ally = _allyPackedScene.Instantiate<Ally>();
-        _ally.Species = species;
+		_ally = _allyPackedScene.Instantiate<Ally>();
+		_ally.Species = species;
 
-        var center = GlobalPosition;
-        float distanceMultiplier = 2.0f;
-        var offset = new Vector2(_spawnRadius.X, _spawnRadius.Y);
-        offset *= distanceMultiplier;
-        _ally.GlobalPosition = center + offset;
-        GameManager.Instance.PersistentNodes.AddChild(_ally);
-    }
+		var center = GlobalPosition;
+		float distanceMultiplier = 2.0f;
+		var offset = new Vector2(_spawnRadius.X, _spawnRadius.Y);
+		offset *= distanceMultiplier;
+		_ally.GlobalPosition = center + offset;
+		GameManager.Instance.PersistentNodes.AddChild(_ally);
+	}
 }
