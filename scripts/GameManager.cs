@@ -106,6 +106,11 @@ public partial class GameManager : Node
 
             _isPaused = !_isPaused;
         }
+
+        if (_gameState == GameState.PlayingGame && Input.IsActionJustPressed("respawn"))
+        {
+            InitWorldLevel();
+        }
     }
 
     private async void InitGame(string character)

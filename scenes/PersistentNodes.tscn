@@ -1,3 +1,4 @@
 [gd_scene format=3 uid="uid://0fwmr8vwok0m"]
 
 [node name="PersistentNodes" type="Node2D"]
+z_as_relative = false

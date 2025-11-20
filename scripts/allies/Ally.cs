@@ -31,17 +31,16 @@ public partial class Ally : CharacterBody2D
 
 	private AnimatedSprite2D _anim;
 	private Sprite2D _cage;
+	private float _stopDistance;
 	
 	// flipH timer stuff to prevent jittering
 	private float _flipCooldown = 0.15f; // seconds between allowed flips
 	private float _flipTimer = 0f;
 	private int _facing = 1; // 1 = right, -1 = left
 
-	private FlowField _flowField;
-
 	public override void _Ready()
 	{
-		_flowField = GameManager.Instance.FlowField;
+		_stopDistance = 200f + GD.Randf() * 300f;
 		AddToGroup("allies");
 		IsFreedFromCage = false;
 
@@ -55,17 +54,23 @@ public partial class Ally : CharacterBody2D
 			{ "fox", FoxWeaponScene },
 			{ "frog", FrogWeaponScene },
 			{ "raccoon", RaccoonWeaponScene },
-			{"rabbit", RabbitWeaponScene}
+			{ "rabbit", RabbitWeaponScene}
 		};
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!IsFreedFromCage || TravellingThroughPortal || _flowField.Valid)
+		if (!IsFreedFromCage || TravellingThroughPortal || !GameManager.Instance.FlowField.Valid)
 			return;
 
+		if ((GlobalPosition - GameManager.Instance.Player.GlobalPosition).LengthSquared() < Math.Pow(_stopDistance, 2))
+		{
+			_anim.Play(Species + "_idle");
+			return;
+		}
+		
 		// 1) Base direction from flow field
-		Vector2 flowDir = _flowField.GetDirection(GlobalPosition);
+		Vector2 flowDir = GameManager.Instance.FlowField.GetDirection(GlobalPosition);
 
 		// 2) Steering direction we’ll build
 		Vector2 steering = Vector2.Zero;

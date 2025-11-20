@@ -37,7 +37,7 @@ public partial class Cloud : Node2D
     public override void _PhysicsProcess(double delta)
     {
         if(!_active) return;
-        if (Target.InPool)
+        if (Target.InPool || !IsInstanceValid(Target))
         {
             var tween = CreateTween();
             tween.TweenProperty(this, "modulate:a", 0f, 1f);

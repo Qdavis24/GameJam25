@@ -41,7 +41,6 @@ public partial class ChaseState : EState
 	private List<Enemy> _sameGroupEnemies;
     
     private Player _player;
-    private FlowField _flowField;
     private Vector2 _currBoidsDir = Vector2.Zero;
 
 	private enum Pathfinding
@@ -75,7 +74,6 @@ public partial class ChaseState : EState
         _attackRange = _stateMachine.Owner.AttackRange;
         _attackRange *= _attackRange;
         _player = GameManager.Instance.Player;
-        _flowField = GameManager.Instance.FlowField;
         _boidsTimer.Start();
         _sameGroupEnemies.Clear();
         _currDistance = 0.0f;
@@ -93,7 +91,7 @@ public partial class ChaseState : EState
 
 	public override void PhysicsUpdate(double delta)
     {
-		if (!_flowField.Valid) return;
+		if (!GameManager.Instance.FlowField.Valid) return;
         var currDistanceSquared = (_stateMachine.Owner.GlobalPosition - _player.GlobalPosition).LengthSquared();
         if (currDistanceSquared < _attackRange) // transition to attack
         {
@@ -111,7 +109,7 @@ public partial class ChaseState : EState
                 baseDir = GetTradDir();
                 break;
             case Pathfinding.FlowField:
-                baseDir = _flowField.GetDirection(_stateMachine.Owner.GlobalPosition);
+                baseDir = GameManager.Instance.FlowField.GetDirection(_stateMachine.Owner.GlobalPosition);
                 break;
         }
         

@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=105 format=3 uid="uid://b7dgjctoco1gc"]
+[gd_resource type="SpriteFrames" load_steps=105 format=3 uid="uid://8o5q0scgjh6f"]
 
 [ext_resource type="Texture2D" uid="uid://ciit1agds6ihw" path="res://assets/characters/fox/fox_idle.png" id="1_3mp8x"]
 [ext_resource type="Texture2D" uid="uid://d0iwaudfkk3uw" path="res://assets/characters/fox/fox_walk.png" id="2_gvnqo"]

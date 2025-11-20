@@ -153,7 +153,7 @@ public partial class EnemySpawner : Node2D
 
     private void BossStartDie()
     {
-        Sfx.I.Play2D(_bossDeathSounds, GlobalPosition);
+        Sfx.I.Play2D(_bossDeathSounds, GlobalPosition, -1);
         GameManager.Instance.Cam.Shake(20, 2f);
         GetTree().CreateTimer(2f).Timeout += BossEndDie;
         _oozeParticles.Emitting = true;
@@ -161,7 +161,7 @@ public partial class EnemySpawner : Node2D
 
     private void BossEndDie()
     {
-        Sfx.I.Play2D(_bossDeathSounds, GlobalPosition);
+        Sfx.I.Play2D(_bossExplosionSounds, GlobalPosition);
         _destructorBody.QueueFree();
         _explosionParticles.Emitting = true;
         _light.Energy = _explosionLightMaxIntensity;
