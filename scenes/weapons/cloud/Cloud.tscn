@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cmg2ttvhm30tl"]
+[gd_scene load_steps=17 format=3 uid="uid://cmg2ttvhm30tl"]
 
 [ext_resource type="Texture2D" uid="uid://brsok53w6rcl4" path="res://assets/projectiles/cloud.png" id="1_407eh"]
 [ext_resource type="Script" uid="uid://bmy3lh6jsemlm" path="res://scripts/weapons/cloud_weapon/Cloud.cs" id="1_u7243"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b4qx8q8ux5van" path="res://scenes/weapons/cloud/LightningExplode.tscn" id="2_kj5ux"]
 [ext_resource type="AudioStream" uid="uid://dho6wsyiqh00m" path="res://assets/sounds/lightning/lightningstrike2.mp3" id="3_t32gg"]
 [ext_resource type="AudioStream" uid="uid://c5mfw0jghf4fg" path="res://assets/sounds/lightning/lightningstrike3.mp3" id="4_eddxc"]
+[ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="7_t32gg"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xuenw"]
 streams_count = 3
@@ -70,15 +71,6 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="Gradient" id="Gradient_kj5ux"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_cosvv"]
-gradient = SubResource("Gradient_kj5ux")
-fill = 1
-fill_from = Vector2(0.5186916, 0.49532712)
-fill_to = Vector2(0.85046726, 0.1588785)
-
 [node name="Cloud" type="Node2D" node_paths=PackedStringArray("_light", "_attackInterval")]
 z_index = 1
 script = ExtResource("1_u7243")
@@ -105,4 +97,4 @@ position = Vector2(-2, 48)
 scale = Vector2(2.1875, 2.1875)
 color = Color(0.5411765, 0.63529414, 1, 1)
 energy = 0.2
-texture = SubResource("GradientTexture2D_cosvv")
+texture = ExtResource("7_t32gg")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://cyjhlvykvi3fn"]
+[gd_scene load_steps=32 format=3 uid="uid://cyjhlvykvi3fn"]
 
 [ext_resource type="Script" uid="uid://n41ha5q3hksi" path="res://scripts/weapons/fireball_weapon/Fireball.cs" id="1_4h438"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_4h438"]
@@ -6,19 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://gk17wi7alwc2" path="res://assets/characters/fox/attack/fireball.png" id="4_s0qqh"]
 [ext_resource type="AudioStream" uid="uid://dkn7kpuydgm8k" path="res://assets/sounds/fireball/fire.wav" id="5_xt8ci"]
 [ext_resource type="AudioStream" uid="uid://bsyr1q0oadd0" path="res://assets/sounds/fireball/woosh.wav" id="6_1npbi"]
+[ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="6_u56s2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bvcyv"]
-
-[sub_resource type="Gradient" id="Gradient_31e3c"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_4h438"]
-gradient = SubResource("Gradient_31e3c")
-width = 300
-height = 300
-fill = 1
-fill_from = Vector2(0.4871795, 0.491453)
-fill_to = Vector2(0.8457944, 0.14018692)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_31e3c"]
 lifetime_randomness = 0.6
@@ -212,7 +202,7 @@ shape = SubResource("CircleShape2D_bvcyv")
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(1, 0.7882353, 0.21960784, 1)
 energy = 0.4
-texture = SubResource("GradientTexture2D_4h438")
+texture = ExtResource("6_u56s2")
 
 [node name="trail" type="GPUParticles2D" parent="."]
 amount = 30

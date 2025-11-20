@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ct0g3652cw1dx"]
+[gd_scene load_steps=14 format=3 uid="uid://ct0g3652cw1dx"]
 
 [ext_resource type="Script" uid="uid://bcn7hrl18n30k" path="res://scripts/enemies/bunny_wraith_package/ExplodeAttack.cs" id="1_wgsim"]
 [ext_resource type="AudioStream" uid="uid://16f74yg8jy7e" path="res://assets/sounds/explosions/standard_explosions/explosion1.wav" id="2_eq4f3"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://bp4o0juyr4oq2" path="res://assets/sounds/explosions/standard_explosions/explosion3.wav" id="4_3o2lo"]
 [ext_resource type="AudioStream" uid="uid://d4c16n4jnk61w" path="res://assets/sounds/explosions/standard_explosions/explosion4.wav" id="5_v2ynr"]
 [ext_resource type="AudioStream" uid="uid://cu1fpb8y5wkyv" path="res://assets/sounds/explosions/standard_explosions/explosion5.wav" id="6_2h3wh"]
+[ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="7_h1810"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_eq4f3"]
 streams_count = 5
@@ -35,16 +36,6 @@ scale_max = 16.48
 color = Color(0.6420218, 0.15282935, 0.57431906, 1)
 color_ramp = SubResource("GradientTexture1D_pd7c4")
 
-[sub_resource type="Gradient" id="Gradient_jjf1j"]
-offsets = PackedFloat32Array(0, 0.70642203)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_q87fh"]
-gradient = SubResource("Gradient_jjf1j")
-fill = 1
-fill_from = Vector2(0.491453, 0.508547)
-fill_to = Vector2(0.93162394, 0.115384616)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_jjf1j"]
 radius = 87.02299
 
@@ -71,7 +62,7 @@ process_material = SubResource("ParticleProcessMaterial_wgsim")
 [node name="ExplodeLIght" type="PointLight2D" parent="."]
 color = Color(1, 0, 1, 1)
 energy = 1.5
-texture = SubResource("GradientTexture2D_q87fh")
+texture = ExtResource("7_h1810")
 texture_scale = 3.0
 
 [node name="Hitbox" type="Area2D" parent="." groups=["EnemyHitbox"]]
