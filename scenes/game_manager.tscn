@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=18 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
 [ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/xp_system/xp.tscn" id="2_jdad8"]
@@ -71,3 +71,4 @@ stream = ExtResource("16_cjvif")
 volume_db = 6.0
 autoplay = true
 bus = &"Music"
+parameters/looping = true
