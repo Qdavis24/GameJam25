@@ -23,7 +23,7 @@
 y_sort_enabled = true
 script = ExtResource("1_udu3i")
 _enemySpawnerNumEnemiesPerWave = 10.0
-_enemySpawnerWaveInterval = 30.0
+_enemySpawnerWaveInterval = 20.0
 _enemySpawnerNumWaves = 5.0
 _enemySpawnerNumWavesScalr = 2.0
 _xpOrbScene = ExtResource("2_jdad8")

@@ -97,7 +97,7 @@ public partial class EnemySpawner : Node2D
 	private void OnTimeout()
 	{
 		_currTime = 0;
-		if (_currWave >= _numWaves) return;
+		// if (_currWave >= _numWaves) return;
 		_currWave++;
 		float cumProb = 0;
 		for (int i = 0; i < _enemyTypes.Length; i++)
