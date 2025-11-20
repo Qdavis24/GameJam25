@@ -7,10 +7,10 @@ namespace GameJam25.scripts.enemy_state_machines.reusable_states;
 
 public partial class ChaseState : EState
 {
-    [ExportCategory("References")] 
-    [Export] private Area2D _steeringRange;
-    [Export] private Timer _boidsTimer;
-    
+	[ExportCategory("References")] 
+	[Export] private Area2D _steeringRange;
+	[Export] private Timer _boidsTimer;
+	
 	[ExportCategory("Interpolation Behavior")] 
 	[Export] private bool Interpolate;
 	[Export] private double _minDistancePerCycle;
@@ -24,7 +24,7 @@ public partial class ChaseState : EState
 	[Export] private float _alignmentForce = .8f;
 	[Export] private float _cohesionForce = .7f;
 
-    [ExportCategory("General Behavior")] 
+	[ExportCategory("General Behavior")] 
 	[Export] private float _boidsInfluence;
 	[Export] private float _flowFieldInfluence;
 	[Export] private float _minSpeed;
@@ -36,12 +36,12 @@ public partial class ChaseState : EState
 	private float _pathMagnitude;
 	private double _distancePerCycle;
 	private double _currDistance;
-    private float _attackRange;
+	private float _attackRange;
 
 	private List<Enemy> _sameGroupEnemies;
-    
-    private Player _player;
-    private Vector2 _currBoidsDir = Vector2.Zero;
+	
+	private Player _player;
+	private Vector2 _currBoidsDir = Vector2.Zero;
 
 	private enum Pathfinding
 	{
@@ -51,22 +51,22 @@ public partial class ChaseState : EState
 
 	private Pathfinding _currPathfindingMode = Pathfinding.FlowField;
 
-    public override void _Ready()
-    {
-        base._Ready();
-        _sameGroupEnemies = new List<Enemy>();
-        
-        _speed = _minSpeed + (_maxSpeed - _minSpeed) * GD.Randf();
-        _pathMagnitude = _minPathMag + (_maxPathMag - _minPathMag) * GD.Randf();
-        _distancePerCycle = (_minDistancePerCycle + (_maxDistancePerCycle - _minDistancePerCycle) * GD.Randf()) *
-                            190.0f; // try to account for tile size
-        
-        _togglePathfindingRange *= _togglePathfindingRange;
-        
-        _steeringRange.BodyEntered += OnSteeringRangeEntered;
-        _steeringRange.BodyExited += OnSteeringRangeExited;
-        _boidsTimer.Timeout += UpdateBoidsDir;
-    }
+	public override void _Ready()
+	{
+		base._Ready();
+		_sameGroupEnemies = new List<Enemy>();
+		
+		_speed = _minSpeed + (_maxSpeed - _minSpeed) * GD.Randf();
+		_pathMagnitude = _minPathMag + (_maxPathMag - _minPathMag) * GD.Randf();
+		_distancePerCycle = (_minDistancePerCycle + (_maxDistancePerCycle - _minDistancePerCycle) * GD.Randf()) *
+							190.0f; // try to account for tile size
+		
+		_togglePathfindingRange *= _togglePathfindingRange;
+		
+		_steeringRange.BodyEntered += OnSteeringRangeEntered;
+		_steeringRange.BodyExited += OnSteeringRangeExited;
+		_boidsTimer.Timeout += UpdateBoidsDir;
+	}
 
 	// Super's abstract methods below
     public override void Enter()

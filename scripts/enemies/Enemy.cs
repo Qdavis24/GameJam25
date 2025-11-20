@@ -44,7 +44,7 @@ public partial class Enemy : CharacterBody2D
 		_trailParticles.Emitting = true;
 		GlobalPosition = spawnPosition;
 		Health = _maxHealth;
-    
+	
 		// Collision and monitoring
 		CanTakeDamage = true;
 		CollisionLayer = _originalCollisionLayer;
@@ -53,7 +53,7 @@ public partial class Enemy : CharacterBody2D
 		SteeringRange.Monitoring = true;
 		Hurtbox.Monitorable = true;
 		Hurtbox.Monitoring = true;
-    
+	
 		// Animations and visibility
 		Visible = true;
 		Animations.Play(); // Or "idle"
@@ -75,11 +75,11 @@ public partial class Enemy : CharacterBody2D
 		SteeringRange.Monitoring = false;
 		Hurtbox.Monitorable = false;
 		Hurtbox.Monitoring = false;
-    
+	
 		// Animations and visibility
 		Visible = false;
 		Animations.Stop();
-    
+	
 		// Stop timers
 		_damageIntervalTimer.Stop();
 		Animations.Material = null;
@@ -122,7 +122,7 @@ public partial class Enemy : CharacterBody2D
 		Hitbox hb = (Hitbox)area;
 		Animations.Material = _flashShader;
 		_damageIntervalTimer.Start();
-		Sfx.I.Play2D(_hitSounds, GlobalPosition, -20);
+		Sfx.I.Play2D(_hitSounds, GlobalPosition, -30);
 		TakeDamage(hb.Damage, hb.KnockbackWeight, (GlobalPosition - hb.GlobalPosition));
 	}
 }
