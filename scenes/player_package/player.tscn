@@ -1,4 +1,4 @@
-[gd_scene load_steps=133 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=135 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="23_ditwi"]
 [ext_resource type="Texture2D" uid="uid://ds24bfwijl5at" path="res://assets/ui/mouse_icon.png" id="25_vsn27"]
 [ext_resource type="FontFile" uid="uid://gr65klg0w4k1" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="25_yfvsg"]
+[ext_resource type="Texture2D" uid="uid://dkr6sie0av881" path="res://assets/ui/mouse2.png" id="26_yfvsg"]
 
 [sub_resource type="Curve" id="Curve_fiwjr"]
 _data = [Vector2(0, 0.15730345), 0.0, -0.38083962, 0, 0, Vector2(1, 1), 0.6891386, 0.0, 0, 0]
@@ -791,6 +792,20 @@ Label/colors/font_outline_color = Color(1, 1, 1, 1)
 Label/constants/outline_size = 5
 Label/font_sizes/font_size = 41
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_oa6mu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_vsn27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_yfvsg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
 [node name="Player" type="CharacterBody2D" groups=["Players"]]
 z_index = 1
 y_sort_enabled = true
@@ -878,16 +893,6 @@ theme = SubResource("Theme_xtqb1")
 text = "I need to find
 my friends..."
 
-[node name="TextureRect" type="TextureRect" parent="StartHelp"]
-layout_mode = 0
-offset_left = -201.0
-offset_top = 43.0
-offset_right = -1.0
-offset_bottom = 243.0
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("25_vsn27")
-stretch_mode = 4
-
 [node name="Label" type="Label" parent="StartHelp"]
 layout_mode = 0
 offset_left = -196.0
@@ -896,5 +901,12 @@ offset_right = 15.0
 offset_bottom = 79.0
 theme = SubResource("Theme_vsn27")
 text = "Attack"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StartHelp"]
+position = Vector2(-151, 96)
+scale = Vector2(0.505, 0.56)
+sprite_frames = SubResource("SpriteFrames_oa6mu")
+autoplay = "default"
+frame_progress = 0.46541882
 
 [connection signal="area_entered" from="Hurtbox" to="." method="OnPlayerHurtBoxEntered"]

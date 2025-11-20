@@ -32,7 +32,7 @@ public partial class DeathScreen : Panel
 		_killCount.Text = counters.kills;
 		_levelCount.Text = counters.level;
 		Visible = true;
-		Sfx.I.PlayUi(_deathSound);
+		Sfx.I.PlayUi(_deathSound, -11);
 		Modulate = new Color(Modulate, 1); // ensure alpha is 1 (visible)
 		var tween = CreateTween();
 		tween.TweenProperty(this, "modulate:a", 1f, 1.0).From(0f);

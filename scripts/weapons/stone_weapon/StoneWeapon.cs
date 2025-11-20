@@ -5,66 +5,66 @@ using Godot;
 
 public partial class StoneWeapon : WeaponBase
 {
-    [Export] private PackedScene _stonePackedScene;
-    [Export] private float _offset = 60.0f;
+	[Export] private PackedScene _stonePackedScene;
+	[Export] private float _offset = 60.0f;
 
-    private Stone[] _stones;
-    private float[] _stoneAngles;
-    private float _angleBetweenStones;
+	private Stone[] _stones;
+	private float[] _stoneAngles;
+	private float _angleBetweenStones;
 
 
-    public override void InitWeapon()
-    {
-        if (_stones != null)
-            for (int i = 0; i < _stones.Length; i++)
-                _stones[i].QueueFree();
-        
-        _stones = new Stone[(int)_projCount];
-        _stoneAngles = new float[(int)_projCount];
-        GetStartingAngles();
+	public override void InitWeapon()
+	{
+		if (_stones != null)
+			for (int i = 0; i < _stones.Length; i++)
+				_stones[i].QueueFree();
+		
+		_stones = new Stone[(int)_projCount];
+		_stoneAngles = new float[(int)_projCount];
+		GetStartingAngles();
 
-        CallDeferred(MethodName.SpawnStones);
-        _active = true;
-    }
+		CallDeferred(MethodName.SpawnStones);
+		_active = true;
+	}
 
-    private void GetStartingAngles()
-    {
-        _angleBetweenStones = Mathf.Tau / (int)_projCount;
-        var currRad = 0.0f;
-        for (int i = 0; i < (int)_projCount; i++)
-        {
-            _stoneAngles[i] = currRad;
-            currRad += _angleBetweenStones;
-        }
-    }
+	private void GetStartingAngles()
+	{
+		_angleBetweenStones = Mathf.Tau / (int)_projCount;
+		var currRad = 0.0f;
+		for (int i = 0; i < (int)_projCount; i++)
+		{
+			_stoneAngles[i] = currRad;
+			currRad += _angleBetweenStones;
+		}
+	}
 
-    public override void _PhysicsProcess(double delta)
-    {
-        if (!_active) return;
+	public override void _PhysicsProcess(double delta)
+	{
+		if (!_active) return;
 
-        var currRadIncrease = (_projSpeed / _offset) * (float)delta;
+		var currRadIncrease = (_projSpeed / _offset) * (float)delta;
 
-        for (int i = 0; i < (int)_projCount; i++)
-        {
-            var newPos = _stones[i].Position.Rotated(currRadIncrease);
-            _stones[i].Rotation = newPos.Angle();
-            _stones[i].Position = newPos;
-        }
-    }
+		for (int i = 0; i < (int)_projCount; i++)
+		{
+			var newPos = _stones[i].Position.Rotated(currRadIncrease);
+			_stones[i].Rotation = newPos.Angle();
+			_stones[i].Position = newPos;
+		}
+	}
 
-    private void SpawnStones()
-    {
-        for (int i = 0; i < (int)_projCount; i++)
-        {
-            var newStone = _stonePackedScene.Instantiate<Stone>();
-            newStone.Position += Vector2.FromAngle(_stoneAngles[i]) * _offset;
-            AddChild(newStone);
+	private void SpawnStones()
+	{
+		for (int i = 0; i < (int)_projCount; i++)
+		{
+			var newStone = _stonePackedScene.Instantiate<Stone>();
+			newStone.Position += Vector2.FromAngle(_stoneAngles[i]) * _offset;
+			AddChild(newStone);
 
-            newStone.Damage = _projDamage;
-            newStone.Scale *= _projSize;
-            newStone.Timer.WaitTime = _projCooldown;
+			newStone.Damage = _projDamage;
+			newStone.Scale *= _projSize;
+			newStone.Timer.WaitTime = _projCooldown;
 
-            _stones[i] = newStone;
-        }
-    }
+			_stones[i] = newStone;
+		}
+	}
 }

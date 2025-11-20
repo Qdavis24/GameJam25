@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=18 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
 [ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/xp_system/xp.tscn" id="2_jdad8"]
@@ -15,7 +15,6 @@
 [ext_resource type="AudioStream" uid="uid://cs76hbtwecae3" path="res://assets/sounds/ui/death.wav" id="11_5xtl8"]
 [ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="12_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="13_5xtl8"]
-[ext_resource type="AudioStream" uid="uid://hmqhwgil6rft" path="res://assets/sounds/ui/start.wav" id="13_30v7y"]
 [ext_resource type="Script" uid="uid://cag2c5l6em61o" path="res://scripts/ScreenFade.cs" id="13_lcbjr"]
 [ext_resource type="AudioStream" uid="uid://bx1fn3t0qw8s6" path="res://assets/sounds/ForestTunes(74bpm-Gmaj-GameJam).mp3" id="16_cjvif"]
 
@@ -49,7 +48,6 @@ _deathSound = ExtResource("11_5xtl8")
 [node name="PauseScreen2" parent="Ui" instance=ExtResource("8_lcbjr")]
 
 [node name="MainMenu" parent="." instance=ExtResource("12_30v7y")]
-_clickSound = ExtResource("13_30v7y")
 
 [node name="ScreenFade" type="CanvasLayer" parent="." node_paths=PackedStringArray("_overlay")]
 script = ExtResource("13_lcbjr")
