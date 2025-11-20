@@ -184,6 +184,7 @@ script = ExtResource("11_fgma2")
 _baseTileMapLayer = NodePath("../../BaseLayer")
 _obstacleTileMapLayer = NodePath("../../ObstacleLayer")
 _tileConfig = ExtResource("2_w0i7v")
+_neighborsPerSpawn = 1
 
 [node name="SpawnChestsStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("15_gubng")

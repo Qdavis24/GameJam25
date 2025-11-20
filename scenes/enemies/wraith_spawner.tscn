@@ -498,7 +498,6 @@ position = Vector2(6, 7)
 shape = SubResource("RectangleShape2D_gt7ss")
 
 [node name="Hurtbox" type="Area2D" parent="destructor/SummonerBoss" groups=["EnemyHurtbox"]]
-visible = false
 collision_layer = 2
 collision_mask = 2
 monitorable = false

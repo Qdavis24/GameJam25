@@ -6,28 +6,13 @@
 [ext_resource type="AudioStream" uid="uid://buefvftm6cr73" path="res://assets/sounds/explosions/fire_explosions/fireballexplode2.wav" id="3_t26wx"]
 [ext_resource type="AudioStream" uid="uid://bh3lyhm4yaiks" path="res://assets/sounds/explosions/fire_explosions/fireballexplode3.wav" id="4_tw5ni"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="5_t26wx"]
+[ext_resource type="Material" uid="uid://cmrhsajsd723s" path="res://resources/fireball_explode.tres" id="5_tw5ni"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1it7h"]
 streams_count = 3
 stream_0/stream = ExtResource("2_q4xwo")
 stream_1/stream = ExtResource("3_t26wx")
 stream_2/stream = ExtResource("4_tw5ni")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_31e3c"]
-lifetime_randomness = 1.0
-particle_flag_disable_z = true
-particle_flag_damping_as_friction = true
-emission_shape_scale = Vector3(0, 0, 0)
-direction = Vector3(-1, 1, 0)
-spread = 180.0
-initial_velocity_min = 50.0
-initial_velocity_max = 300.0
-gravity = Vector3(0, 0, 0)
-damping_min = 0.3
-damping_max = 0.6
-scale_min = 0.0
-scale_max = 4.0
-color = Color(1, 0.627451, 0.16078432, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4h438"]
 radius = 96.18
@@ -46,7 +31,7 @@ emitting = false
 amount = 700
 one_shot = true
 explosiveness = 1.0
-process_material = SubResource("ParticleProcessMaterial_31e3c")
+process_material = ExtResource("5_tw5ni")
 
 [node name="ExplodeLight" type="PointLight2D" parent="."]
 position = Vector2(-0.9999962, -1.0000038)

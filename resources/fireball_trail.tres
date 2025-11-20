@@ -1,0 +1,16 @@
+[gd_resource type="ParticleProcessMaterial" format=3 uid="uid://dyen3rvchnsl2"]
+
+[resource]
+lifetime_randomness = 0.6
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+direction = Vector3(-1, 1, 0)
+spread = 180.0
+initial_velocity_min = 337.77
+initial_velocity_max = 372.34
+gravity = Vector3(0, 0, 0)
+damping_min = 0.3
+damping_max = 1.0
+scale_min = 0.0
+scale_max = 4.0
+color = Color(1, 0.7921569, 0.16078432, 1)

@@ -1,184 +1,15 @@
-[gd_scene load_steps=32 format=3 uid="uid://cyjhlvykvi3fn"]
+[gd_scene load_steps=10 format=3 uid="uid://cyjhlvykvi3fn"]
 
 [ext_resource type="Script" uid="uid://n41ha5q3hksi" path="res://scripts/weapons/fireball_weapon/Fireball.cs" id="1_4h438"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_4h438"]
 [ext_resource type="PackedScene" uid="uid://bc8136epjg2t4" path="res://scenes/weapons/fireball/fireball_explode.tscn" id="2_bvcyv"]
-[ext_resource type="Texture2D" uid="uid://gk17wi7alwc2" path="res://assets/characters/fox/attack/fireball.png" id="4_s0qqh"]
 [ext_resource type="AudioStream" uid="uid://dkn7kpuydgm8k" path="res://assets/sounds/fireball/fire.wav" id="5_xt8ci"]
 [ext_resource type="AudioStream" uid="uid://bsyr1q0oadd0" path="res://assets/sounds/fireball/woosh.wav" id="6_1npbi"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="6_u56s2"]
+[ext_resource type="Material" uid="uid://dyen3rvchnsl2" path="res://resources/fireball_trail.tres" id="7_u56s2"]
+[ext_resource type="SpriteFrames" uid="uid://kc62vxngdcxc" path="res://resources/fire_ball_sprite_frames.tres" id="8_u56s2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bvcyv"]
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_31e3c"]
-lifetime_randomness = 0.6
-particle_flag_disable_z = true
-particle_flag_damping_as_friction = true
-direction = Vector3(-1, 1, 0)
-spread = 180.0
-initial_velocity_min = 337.77
-initial_velocity_max = 372.34
-gravity = Vector3(0, 0, 0)
-damping_min = 0.3
-damping_max = 1.0
-scale_min = 0.0
-scale_max = 4.0
-color = Color(1, 0.7921569, 0.16078432, 1)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1hw1j"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(0, 0, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xt8ci"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(35, 0, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1npbi"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(70, 0, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_u56s2"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(105, 0, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c0moq"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(140, 0, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7cunb"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(0, 35, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hgf6k"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(35, 35, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lkmp7"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(70, 35, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bs2ok"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(105, 35, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0q14e"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(140, 35, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tohyt"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(0, 70, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nhxne"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(35, 70, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0lsol"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(70, 70, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_i7tqs"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(105, 70, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hut8n"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(140, 70, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lr3e8"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(0, 105, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xgi5o"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(35, 105, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wca81"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(70, 105, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ky1vd"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(105, 105, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_577gm"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(140, 105, 35, 35)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1i7vf"]
-atlas = ExtResource("4_s0qqh")
-region = Rect2(0, 140, 35, 35)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_k38kp"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1hw1j")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xt8ci")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1npbi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_u56s2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_c0moq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7cunb")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hgf6k")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lkmp7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bs2ok")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0q14e")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tohyt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nhxne")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0lsol")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_i7tqs")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hut8n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lr3e8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xgi5o")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wca81")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ky1vd")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_577gm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1i7vf")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [node name="fireball" type="Node2D" node_paths=PackedStringArray("_hitbox")]
 z_index = 1
@@ -200,17 +31,20 @@ script = ExtResource("2_4h438")
 shape = SubResource("CircleShape2D_bvcyv")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(-4, 1)
+scale = Vector2(3.1718748, 3.1718748)
 color = Color(1, 0.7882353, 0.21960784, 1)
 energy = 0.4
 texture = ExtResource("6_u56s2")
 
 [node name="trail" type="GPUParticles2D" parent="."]
 amount = 30
-process_material = SubResource("ParticleProcessMaterial_31e3c")
+process_material = ExtResource("7_u56s2")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 y_sort_enabled = true
-rotation = -1.5707964
+rotation = -3.1415927
 scale = Vector2(1.2, 1.2)
-sprite_frames = SubResource("SpriteFrames_k38kp")
+sprite_frames = ExtResource("8_u56s2")
 autoplay = "default"
+frame_progress = 0.74675184

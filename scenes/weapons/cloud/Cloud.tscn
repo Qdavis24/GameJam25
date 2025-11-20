@@ -1,11 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://cmg2ttvhm30tl"]
+[gd_scene load_steps=9 format=3 uid="uid://cmg2ttvhm30tl"]
 
-[ext_resource type="Texture2D" uid="uid://brsok53w6rcl4" path="res://assets/projectiles/cloud.png" id="1_407eh"]
 [ext_resource type="Script" uid="uid://bmy3lh6jsemlm" path="res://scripts/weapons/cloud_weapon/Cloud.cs" id="1_u7243"]
 [ext_resource type="AudioStream" uid="uid://0fym3cq7dsw7" path="res://assets/sounds/lightning/lightningstrike1.wav" id="2_8fvxw"]
 [ext_resource type="PackedScene" uid="uid://b4qx8q8ux5van" path="res://scenes/weapons/cloud/LightningExplode.tscn" id="2_kj5ux"]
 [ext_resource type="AudioStream" uid="uid://dho6wsyiqh00m" path="res://assets/sounds/lightning/lightningstrike2.mp3" id="3_t32gg"]
 [ext_resource type="AudioStream" uid="uid://c5mfw0jghf4fg" path="res://assets/sounds/lightning/lightningstrike3.mp3" id="4_eddxc"]
+[ext_resource type="SpriteFrames" uid="uid://dw4hpvml0tj1y" path="res://scenes/weapons/cloud/cloud_sprite_frames.tres" id="6_t32gg"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="7_t32gg"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xuenw"]
@@ -13,63 +13,6 @@ streams_count = 3
 stream_0/stream = ExtResource("2_8fvxw")
 stream_1/stream = ExtResource("3_t32gg")
 stream_2/stream = ExtResource("4_eddxc")
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kj5ux"]
-atlas = ExtResource("1_407eh")
-region = Rect2(0, 0, 100, 55)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cosvv"]
-atlas = ExtResource("1_407eh")
-region = Rect2(100, 0, 100, 55)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jae20"]
-atlas = ExtResource("1_407eh")
-region = Rect2(200, 0, 100, 55)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8fvxw"]
-atlas = ExtResource("1_407eh")
-region = Rect2(300, 0, 100, 55)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_t32gg"]
-atlas = ExtResource("1_407eh")
-region = Rect2(400, 0, 100, 55)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_eddxc"]
-atlas = ExtResource("1_407eh")
-region = Rect2(0, 55, 100, 55)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xuenw"]
-atlas = ExtResource("1_407eh")
-region = Rect2(100, 55, 100, 55)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_wusqp"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kj5ux")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cosvv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jae20")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8fvxw")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_t32gg")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_eddxc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xuenw")
-}],
-"loop": true,
-"name": &"default",
-"speed": 8.0
-}]
 
 [node name="Cloud" type="Node2D" node_paths=PackedStringArray("_light", "_attackInterval")]
 z_index = 1
@@ -84,7 +27,7 @@ _lightningExplodeScene = ExtResource("2_kj5ux")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-12, 16)
 scale = Vector2(2.9840908, 2.984091)
-sprite_frames = SubResource("SpriteFrames_wusqp")
+sprite_frames = ExtResource("6_t32gg")
 autoplay = "default"
 frame_progress = 0.63096154
 

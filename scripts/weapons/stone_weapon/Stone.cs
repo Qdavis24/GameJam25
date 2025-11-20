@@ -11,7 +11,6 @@ public partial class Stone : Node2D
 	
 	[Export] public Timer Timer;
 	private Sprite2D _sprite;
-	private GpuParticles2D _explosionParticles;
 	
 
 	public float Damage
@@ -22,7 +21,6 @@ public partial class Stone : Node2D
 	public override void _Ready()
 	{
 		_sprite = GetNode<Sprite2D>("Sprite2D");
-		_explosionParticles = GetNode<GpuParticles2D>("GPUParticles2D");
 
 		Timer.Timeout += () =>
 		{
@@ -39,7 +37,6 @@ public partial class Stone : Node2D
 	{
 		if (!area.IsInGroup("EnemyHurtbox")) return;
 		Sfx.I.Play2D(_crumbleSound, GlobalPosition, -25, GD.Randf() * 2);
-		_explosionParticles.Emitting = true;
 		_sprite.Visible = false;
 		_hitbox.SetDeferred(Area2D.PropertyName.Monitorable, false);
 		_hitbox.SetDeferred(Area2D.PropertyName.Monitoring, false);

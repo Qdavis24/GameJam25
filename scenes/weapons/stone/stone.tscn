@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ca1wtag2x7dhv"]
+[gd_scene load_steps=6 format=3 uid="uid://ca1wtag2x7dhv"]
 
 [ext_resource type="Script" uid="uid://klt23un5deom" path="res://scripts/weapons/stone_weapon/Stone.cs" id="1_adcde"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_adcde"]
@@ -8,10 +8,6 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6dxeq"]
 radius = 14.0
 height = 76.0
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sxm6i"]
-particle_flag_disable_z = true
-gravity = Vector3(0, 98, 0)
 
 [node name="Stone" type="Node2D" node_paths=PackedStringArray("_hitbox", "Timer")]
 script = ExtResource("1_adcde")
@@ -32,10 +28,6 @@ shape = SubResource("CapsuleShape2D_6dxeq")
 rotation = 3.1415927
 script = ExtResource("4_adcde")
 ImagePaths = PackedStringArray("res://assets/projectiles/stones/stone1.png", "res://assets/projectiles/stones/stone2.png", "res://assets/projectiles/stones/stone3.png", "res://assets/projectiles/stones/stone4.png")
-
-[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
-emitting = false
-process_material = SubResource("ParticleProcessMaterial_sxm6i")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

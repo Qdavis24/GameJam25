@@ -1,0 +1,17 @@
+[gd_resource type="ParticleProcessMaterial" format=3 uid="uid://c0v3g05j01yty"]
+
+[resource]
+lifetime_randomness = 1.0
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+emission_shape_scale = Vector3(0, 0, 0)
+direction = Vector3(-1, 1, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 220.0
+gravity = Vector3(0, 0, 0)
+damping_min = 0.3
+damping_max = 1.0
+scale_min = 0.7
+scale_max = 0.7
+color = Color(0.34901962, 0.9764706, 1, 1)
