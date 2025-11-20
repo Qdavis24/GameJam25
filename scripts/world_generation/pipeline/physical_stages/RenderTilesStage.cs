@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Godot;
 namespace GameJam25.scripts.world_generation.pipeline.physical_stages;
 
@@ -7,6 +7,7 @@ public partial class RenderTilesStage : PipelineStage
 	// Stage parameters
 	[Export] private TileMapLayer _baseTileMapLayer;
 	[Export] private TileMapLayer _obstacleTileMapLayer;
+
 	[Export] private TileConfig _tileConfig;
 	[Export] private float _obstacleSpawnChance = .9f;
 	[Export] private int _borderSize = 20;
@@ -108,11 +109,11 @@ public partial class RenderTilesStage : PipelineStage
 				int worldDataState = _matrix[col, row];
 				if (GD.Randf() > _obstacleSpawnChance) continue;
 				Vector2I[] tileOptions = new Vector2I[] { };
-				if (worldDataState == _walkableState)tileOptions = _tileConfig.ObjectLayerWalkableTilesAtlasCoords;
-				else tileOptions = _tileConfig.ObjectLayerNonWalkableTilesAtlasCoords;
+				if (worldDataState == _walkableState) continue;
+				tileOptions = _tileConfig.ObjectLayerNonWalkableTilesAtlasCoords;
 
 				if (GD.Randf() < _obstacleSpawnChance && worldDataState != _shrineState && MatrixUtils.UniformNeighbors(_matrix, col, row, _neighborsPerSpawn, true))
-					_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 0,
+					_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 1,
 						tileOptions[GD.Randi() % tileOptions.Length]);
 			}
 		}
@@ -127,7 +128,7 @@ public partial class RenderTilesStage : PipelineStage
 			{
 				_baseTileMapLayer.SetCell(new Vector2I(col, row), 0,
 					_tileConfig.BaseLayerNonWalkableTilesAtlasCoords[0]);
-				_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 0,
+				_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 1,
 					_tileConfig.ObjectLayerNonWalkableTilesAtlasCoords[
 						GD.Randi() % _tileConfig.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
 			}
@@ -140,7 +141,7 @@ public partial class RenderTilesStage : PipelineStage
 			{
 				_baseTileMapLayer.SetCell(new Vector2I(col, row), 0,
 					_tileConfig.BaseLayerNonWalkableTilesAtlasCoords[0]);
-				_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 0,
+				_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 1,
 					_tileConfig.ObjectLayerNonWalkableTilesAtlasCoords[
 						GD.Randi() % _tileConfig.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
 			}
@@ -153,7 +154,7 @@ public partial class RenderTilesStage : PipelineStage
 			{
 				_baseTileMapLayer.SetCell(new Vector2I(col, row), 0,
 					_tileConfig.BaseLayerNonWalkableTilesAtlasCoords[0]);
-				_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 0,
+				_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 1,
 					_tileConfig.ObjectLayerNonWalkableTilesAtlasCoords[
 						GD.Randi() % _tileConfig.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
 			}
@@ -166,7 +167,7 @@ public partial class RenderTilesStage : PipelineStage
 			{
 				_baseTileMapLayer.SetCell(new Vector2I(col, row), 0,
 					_tileConfig.BaseLayerNonWalkableTilesAtlasCoords[0]);
-				_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 0,
+				_obstacleTileMapLayer.SetCell(new Vector2I(col, row), 1,
 					_tileConfig.ObjectLayerNonWalkableTilesAtlasCoords[
 						GD.Randi() % _tileConfig.ObjectLayerNonWalkableTilesAtlasCoords.Length]);
 			}

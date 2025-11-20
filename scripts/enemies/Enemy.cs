@@ -39,7 +39,7 @@ public partial class Enemy : CharacterBody2D
 
 	public void Enable(Vector2 spawnPosition)
 	{
-		InPool = true;
+		InPool = false;
 		_trailParticles.ProcessMode = ProcessModeEnum.Inherit; // maybe dont if bad performance
 		_trailParticles.Emitting = true;
 		GlobalPosition = spawnPosition;
@@ -64,7 +64,7 @@ public partial class Enemy : CharacterBody2D
 
 	public void Disable()
 	{
-		InPool = false;
+		InPool = true;
 		_trailParticles.ProcessMode = ProcessModeEnum.Inherit; // maybe dont if bad performance
 		_trailParticles.Emitting = true;
 		// Collision and monitoring

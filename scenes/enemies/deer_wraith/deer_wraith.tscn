@@ -61,7 +61,6 @@ color = Color(0.99381655, 0, 0.20968658, 1)
 
 [node name="DeerWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Hurtbox", "Animations", "_damageIntervalTimer", "_stateMachine", "_trailParticles") groups=["BunnyWraiths", "Enemies"]]
 z_index = 1
-y_sort_enabled = true
 collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_patmq")
@@ -112,7 +111,6 @@ _path = SubResource("Curve_t25d3")
 _separationForce = 1.5
 _alignmentForce = 1.0
 _cohesionForce = 1.0
-_attackRange = 100.0
 _boidsInfluence = 1.0
 _flowFieldInfluence = 1.0
 _minSpeed = 200.0

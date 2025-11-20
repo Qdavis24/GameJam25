@@ -1,10 +1,7 @@
-[gd_scene load_steps=73 format=3 uid="uid://dyrdk24okgbja"]
+[gd_scene load_steps=70 format=3 uid="uid://dyrdk24okgbja"]
 
 [ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/EnemySpawner.cs" id="1_7lb27"]
 [ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_dva5f"]
-[ext_resource type="PackedScene" uid="uid://dtgtqkim67d2o" path="res://scenes/enemies/owl_wraith/owl_wraith.tscn" id="2_rua06"]
-[ext_resource type="PackedScene" uid="uid://dywc23eylfitj" path="res://scenes/enemies/bunny_wraith/bunny_wraith.tscn" id="4_dva5f"]
-[ext_resource type="PackedScene" uid="uid://dnsjmjr2bh647" path="res://scenes/enemies/deer_wraith/deer_wraith.tscn" id="5_dva5f"]
 [ext_resource type="PackedScene" uid="uid://bv8hp68jt8i2u" path="res://scenes/allies/Ally.tscn" id="6_2ylut"]
 [ext_resource type="Texture2D" uid="uid://br3f6mswjjt7g" path="res://assets/bosses/bunny_boss.png" id="7_1p1xw"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="7_gt7ss"]
@@ -48,7 +45,7 @@ scale_max = 8.0
 color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gt7ss"]
-size = Vector2(118, 46)
+size = Vector2(118, 66)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4q0qo"]
 radius = 42.047592
@@ -431,7 +428,7 @@ color = Color(0.3129853, 0.00084353954, 0.48846263, 1)
 blend_mode = 1
 
 [node name="WraithSpawner" type="Node2D" node_paths=PackedStringArray("_bossHurtbox", "_flashTimer", "_light", "_timer", "_raccoonBoss", "_ratBoss", "_bunnyBoss", "_destructorBody", "_explosionParticles", "_oozeParticles")]
-y_sort_enabled = true
+z_index = 1
 script = ExtResource("1_7lb27")
 _bossHurtbox = NodePath("destructor/SummonerBoss/Hurtbox")
 _flashShaderMaterial = ExtResource("2_dva5f")
@@ -439,8 +436,6 @@ _flashTimer = NodePath("destructor/SummonerBoss/Hurtbox/FlashTimer")
 _light = NodePath("PointLight2D")
 _lightRamp = SubResource("Curve_abhiv")
 _maxEnergy = 1.0
-_enemyTypes = Array[PackedScene]([ExtResource("4_dva5f"), ExtResource("2_rua06"), ExtResource("5_dva5f")])
-_enemyTypeSpawnChance = PackedFloat32Array(0.4, 0.2, 0.4)
 _timer = NodePath("SpawnTimer")
 _spawnRadius = Vector2(100, 100)
 _allyPackedScene = ExtResource("6_2ylut")
@@ -472,9 +467,9 @@ explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_q2kbg")
 
 [node name="destructor" type="Node2D" parent="."]
-y_sort_enabled = true
 
 [node name="Ring" type="Sprite2D" parent="destructor"]
+z_index = -1
 position = Vector2(0, -11.000001)
 scale = Vector2(1.3, 1.3)
 texture = ExtResource("7_q2kbg")
@@ -488,12 +483,9 @@ lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_abhiv")
 
 [node name="SummonerBoss" type="StaticBody2D" parent="destructor" groups=["Enemies"]]
-z_index = 1
-z_as_relative = false
-y_sort_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="destructor/SummonerBoss"]
-position = Vector2(6, -10)
+position = Vector2(6, 0)
 shape = SubResource("RectangleShape2D_gt7ss")
 
 [node name="Hurtbox" type="Area2D" parent="destructor/SummonerBoss" groups=["EnemyHurtbox"]]

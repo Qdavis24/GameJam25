@@ -7,7 +7,7 @@
 
 [node name="EnemyPool" type="Node2D"]
 script = ExtResource("1_00iip")
-_poolSize = 100
+_poolSize = 50
 _bunnyWraithScene = ExtResource("2_5wn4s")
 _owlWraithScene = ExtResource("3_kn3g8")
 _deerWraithScene = ExtResource("4_um0m0")

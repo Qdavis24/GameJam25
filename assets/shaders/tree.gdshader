@@ -6,16 +6,22 @@ uniform vec2 player_position = vec2(0.0, 0.0);
 uniform float transparency_radius = 150.0;
 uniform float fade_width = 50.0;
 varying vec2 world_position;
+const vec2 local_uv[] = {vec2(0,0), vec2(0,1), vec2(1,1), vec2(1,0)};
+varying vec2 LOCAL_UV;
 
 void vertex() {
+    // Get proper per-tile UV coordinates
+    LOCAL_UV = local_uv[VERTEX_ID % 4];
+    
     // Sway trees based on their world position and time
     float sway = sin(TIME * wind_speed + VERTEX.x * 0.01) * wind_strength;
     
-    // Only sway the top part of trees (higher UV.y values)
-    float sway_factor = UV.y; // Trees sway more at the top
+    // Only sway top half of each tile (LOCAL_UV.y > 0.5)
+    float sway_factor = max(0.0, (0.5 - LOCAL_UV.y) * 2.0);
     
     VERTEX.x += sway * sway_factor * 10.0;
-	world_position = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;
+    
+    world_position = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;
 }
 
 void fragment() {

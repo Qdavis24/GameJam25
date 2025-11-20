@@ -11,7 +11,7 @@ public partial class CloudWeapon : WeaponBase
     [Export] private Timer _timer;
     [Export] private float _offset = 200.0f;
 
-    private List<Node2D> _targets;
+    private List<Enemy> _targets;
 
     public override void _Ready()
     {
@@ -19,19 +19,19 @@ public partial class CloudWeapon : WeaponBase
         _timer.Timeout += OnTimeout;
         _targetingRange.BodyEntered += OnTargetingRangeEntered;
         _targetingRange.BodyExited += OnTargetingRangeExited;
-        _targets = new List<Node2D>((int)_projCount);
+        _targets = new List<Enemy>((int)_projCount);
     }
     public override void InitWeapon()
     {
         _targetingRange.Monitoring = false;
-        _targets = new List<Node2D>((int)_projCount);
+        _targets.Clear();
         _targetingRange.Monitoring = true;
         _active = true;
         _timer.WaitTime = _projCooldown;
         _timer.Start();
     }
 
-    private void SpawnCloud(Node2D target)
+    private void SpawnCloud(Enemy target)
     {
         var cloud = _cloudPackedScene.Instantiate<Cloud>();
         cloud.Damage = _projDamage;
@@ -57,12 +57,12 @@ public partial class CloudWeapon : WeaponBase
     public void OnTargetingRangeEntered(Node2D body)
     {
         if (!body.IsInGroup("Enemies")) return;
-        _targets.Add(body);
+        _targets.Add(body as Enemy);
     }
     
     public void OnTargetingRangeExited(Node2D body)
     {
         if (!body.IsInGroup("Enemies")) return;
-        _targets.Remove(body);
+        _targets.Remove(body as Enemy);
     }
 }
