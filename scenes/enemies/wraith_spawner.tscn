@@ -1,45 +1,18 @@
-[gd_scene load_steps=73 format=3 uid="uid://dyrdk24okgbja"]
+[gd_scene load_steps=70 format=3 uid="uid://dyrdk24okgbja"]
 
 [ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/EnemySpawner.cs" id="1_7lb27"]
 [ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_dva5f"]
 [ext_resource type="PackedScene" uid="uid://bv8hp68jt8i2u" path="res://scenes/allies/Ally.tscn" id="6_2ylut"]
 [ext_resource type="Texture2D" uid="uid://br3f6mswjjt7g" path="res://assets/bosses/bunny_boss.png" id="7_1p1xw"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="7_gt7ss"]
-[ext_resource type="AudioStream" uid="uid://cqqs0fpmlrjej" path="res://assets/sounds/boss/bossdeath_1.wav" id="7_kxdmi"]
 [ext_resource type="Texture2D" uid="uid://gxsr3xulqdq" path="res://assets/bosses/circle.png" id="7_q2kbg"]
-[ext_resource type="AudioStream" uid="uid://dl7a2k0nmdhg3" path="res://assets/sounds/boss/bossdeath_2.wav" id="8_1wn4c"]
 [ext_resource type="Script" uid="uid://d4hnm4svoo1uq" path="res://scripts/damage_system/Hurtbox.cs" id="8_k8p7h"]
-[ext_resource type="AudioStream" uid="uid://c6ui2hjjwv7l4" path="res://assets/sounds/boss/bossdeath_3.wav" id="9_deryg"]
 [ext_resource type="Texture2D" uid="uid://bvqr0jehwj20x" path="res://assets/bosses/raccoon_boss.png" id="9_q2kbg"]
 [ext_resource type="Texture2D" uid="uid://jwrnc5rjbedp" path="res://assets/bosses/rat_boss.png" id="10_gt7ss"]
-[ext_resource type="AudioStream" uid="uid://b6ysnu0bei257" path="res://assets/sounds/boss/bosshit_1.wav" id="10_srw7b"]
-[ext_resource type="AudioStream" uid="uid://cjcq4tgx7n183" path="res://assets/sounds/boss/bosshit_2.wav" id="11_ky1rn"]
-[ext_resource type="AudioStream" uid="uid://cr7dhojekg1q1" path="res://assets/sounds/boss/bosshit_3.wav" id="12_xufym"]
-[ext_resource type="AudioStream" uid="uid://6dgweycxo3wf" path="res://assets/sounds/explosions/fire_explosions/fireballexplode.wav" id="13_srw7b"]
-[ext_resource type="AudioStream" uid="uid://buefvftm6cr73" path="res://assets/sounds/explosions/fire_explosions/fireballexplode2.wav" id="14_ky1rn"]
-[ext_resource type="AudioStream" uid="uid://bh3lyhm4yaiks" path="res://assets/sounds/explosions/fire_explosions/fireballexplode3.wav" id="15_xufym"]
 
 [sub_resource type="Curve" id="Curve_abhiv"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5132275, 0.1048305), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.5327357, 0.5327357, 0, 0]
 point_count = 3
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xj4k4"]
-streams_count = 3
-stream_0/stream = ExtResource("7_kxdmi")
-stream_1/stream = ExtResource("8_1wn4c")
-stream_2/stream = ExtResource("9_deryg")
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_t7axc"]
-streams_count = 3
-stream_0/stream = ExtResource("10_srw7b")
-stream_1/stream = ExtResource("11_ky1rn")
-stream_2/stream = ExtResource("12_xufym")
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_mx8e8"]
-streams_count = 3
-stream_0/stream = ExtResource("14_ky1rn")
-stream_1/stream = ExtResource("15_xufym")
-stream_2/stream = ExtResource("13_srw7b")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4q0qo"]
 blend_mode = 1
@@ -473,9 +446,6 @@ _destructorBody = NodePath("destructor")
 _explosionParticles = NodePath("ExplodeEffect")
 _oozeParticles = NodePath("destructor/OozeParticles")
 _explosionLightMaxIntensity = 5.0
-_bossDeathSounds = SubResource("AudioStreamRandomizer_xj4k4")
-_bossHitSounds = SubResource("AudioStreamRandomizer_t7axc")
-_bossExplosionSounds = SubResource("AudioStreamRandomizer_mx8e8")
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 10.0
@@ -497,9 +467,9 @@ explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_q2kbg")
 
 [node name="destructor" type="Node2D" parent="."]
+z_index = 2
 
 [node name="Ring" type="Sprite2D" parent="destructor"]
-z_index = -1
 position = Vector2(0, -11.000001)
 scale = Vector2(1.3, 1.3)
 texture = ExtResource("7_q2kbg")

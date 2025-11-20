@@ -11,7 +11,6 @@ radius = 48.0
 
 [node name="TreasureChest" type="Area2D"]
 z_index = 1
-y_sort_enabled = true
 script = ExtResource("1_xiu7i")
 Pictures = Array[Texture2D]([ExtResource("2_1yxra"), ExtResource("3_mtj5q")])
 
