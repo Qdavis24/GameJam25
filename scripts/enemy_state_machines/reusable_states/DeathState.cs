@@ -11,6 +11,11 @@ public partial class DeathState : EState
 	private ParticleProcessMaterial _deathEffectMaterial;
 
 	// Super's abstract methods below
+	public override void _Ready()
+	{
+		base._Ready();
+		_deathEffect.Finished += Exit;
+	}
 	public override void Enter()
 	{
 		_stateMachine.Owner.CollisionLayer = 0;
@@ -22,7 +27,6 @@ public partial class DeathState : EState
 		Vector3 materialDir = new Vector3(dir.X, dir.Y, 0);
 		_deathEffectMaterial.Direction = materialDir;
 		_deathEffect.Emitting = true;
-		_deathEffect.Finished += Exit;
 	}
 
 	public override void Exit()
