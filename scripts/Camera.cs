@@ -4,9 +4,7 @@ using Godot;
 public partial class Camera : Camera2D
 {
 	[Export] private float _speed;
-	
 	[Export] private float _shakeAmount = 10f;
-	[Export] private float _shakeDuration = 0.3f;
 
 	[Export] private float _deathAnimDuration = 10f;
 	[Export] private float _deathAnimRotation = -Mathf.Pi/7;
@@ -59,10 +57,10 @@ public partial class Camera : Camera2D
 		}
 	}
 	
-	public void Shake(float amount)
+	public void Shake(float amount, float duration=.3f)
 	{
 		_shakeAmount = amount;
-		_shakeTimer = _shakeDuration;
+		_shakeTimer = duration;
 	}
 
 	public void DeathAnim()

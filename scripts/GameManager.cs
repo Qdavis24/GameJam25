@@ -27,6 +27,7 @@ public partial class GameManager : Node
 	[Export] private PackedScene _enemySpawnerScene;
 	[Export] private PackedScene _camScene;
 	[Export] private PackedScene _xpPoolScene;
+	[Export] private PackedScene _persistentNodes;
 	
 	[ExportCategory("Node References")]
 	[Export] private ScreenFade _screenFade;
@@ -46,7 +47,8 @@ public partial class GameManager : Node
 	public World World;
 	public FlowField FlowField;
 	public Player Player;
-	
+	public Node2D PersistentNodes;
+
 	// Game Manager Logic State
 	enum GameState {
 		MainMenu,
@@ -70,6 +72,8 @@ public partial class GameManager : Node
 		Instance = this;
 		XpPool = _xpPoolScene.Instantiate<XpPool>();
 		GetTree().Root.CallDeferred("add_child", XpPool);
+		PersistentNodes = _persistentNodes.Instantiate<Node2D>();
+		GetTree().Root.CallDeferred("add_child", PersistentNodes);
 		_mainMenu.Show();
 		
 		_mainMenu.InitGame += InitGame;
@@ -136,7 +140,7 @@ public partial class GameManager : Node
 		Player = _playerScene.Instantiate<Player>();
 		Player.AnimationSet = character;
 		_ui.InitializeUiFromPlayer(Player); // connects players signals related to stats and upgrade to ui
-		GetTree().Root.AddChild(Player);
+		PersistentNodes.AddChild(Player);
 		Player.Died += OnPlayerDeath;
 		InitWorldLevel();
 		await _screenFade.FadeToNormal();
