@@ -62,7 +62,7 @@ public partial class GameManager : Node
 	private bool _isPaused;
 	
 	private Vector2I _lastPlayerCoord;
-	private int _numSpawners;
+	public int NumSpawners;
 	
 	public static GameManager Instance;
 	
@@ -224,10 +224,10 @@ public partial class GameManager : Node
 	
 	private void SpawnEnemySpawners()
 	{
-		_numSpawners = 0;
+		NumSpawners = 0;
 		foreach (Shrine shrine in World.LogicalData.Shrines)
 		{
-			_numSpawners++;
+			NumSpawners++;
 			var newSpawner = _enemySpawnerScene.Instantiate<EnemySpawner>();
 			newSpawner.Init(_enemySpawnerHealth, _enemySpawnerWaveInterval, _enemySpawnerNumEnemiesPerWave,
 				_enemySpawnerNumWaves);
@@ -282,8 +282,8 @@ public partial class GameManager : Node
 	// Signal Callbacks
 	private void OnSpawnerDestroyed(Vector2 pos)
 	{
-		_numSpawners--;
-		if (_numSpawners <= 0)
+		NumSpawners--;
+		if (NumSpawners <= 0)
 		{
 			var exitPortal = _exitPortalScene.Instantiate<ExitPortal>();
 			exitPortal.GlobalPosition = pos;
