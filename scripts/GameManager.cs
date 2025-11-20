@@ -238,9 +238,7 @@ public partial class GameManager : Node
 			ally.QueueFree();
 		}
 		
-		GD.Print("CLEARING:", AllyInstances.Count);
 		AllyInstances.Clear();
-		GD.Print("CLEARED:", AllyInstances.Count);
 	}
 
 	private void ScaleDifficulty()
