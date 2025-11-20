@@ -10,6 +10,7 @@ public partial class Sfx : Node
 	
 	private const string SfxBus = "SFX";
 	private const string MusicBus  = "Music";
+	private const string ExplosionBus = "Explosion";
 
 	public void PlayFootstep(AudioStream stream, Vector2 pos)
 	{
@@ -91,6 +92,22 @@ public partial class Sfx : Node
 		};
 
 		AddChild(p);
+		p.Finished += () => p.QueueFree();
+		p.Play();
+	}
+	
+	public void PlayFireballExplosion(AudioStream stream, Vector2 pos, float volumeDb = -6f)
+	{
+		if (stream == null) return;
+
+		var p = new AudioStreamPlayer
+		{
+			Stream = stream,
+			VolumeDb = volumeDb,
+			Bus = ExplosionBus
+		};
+		
+				AddChild(p);
 		p.Finished += () => p.QueueFree();
 		p.Play();
 	}
