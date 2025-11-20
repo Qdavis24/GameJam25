@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://0p8w5ski1dbo"]
+[gd_scene load_steps=9 format=3 uid="uid://0p8w5ski1dbo"]
 
 [ext_resource type="Script" uid="uid://yrbchvu57mbu" path="res://scripts/Portals/ExitPortal.cs" id="1_810g0"]
-[ext_resource type="AudioStream" uid="uid://b7hfuc3ynks7n" path="res://assets/sounds/portal/portal_idle-34022.mp3" id="2_6dv6g"]
-[ext_resource type="AudioStream" uid="uid://dqmb5c3g07k6g" path="res://assets/sounds/portal/spawn.wav" id="2_6fsux"]
+[ext_resource type="AudioStream" uid="uid://bjt2ebysffjw6" path="res://assets/sounds/portal/portal_idle-34022.mp3" id="2_6dv6g"]
+[ext_resource type="AudioStream" uid="uid://d3bf8m3lm1n0" path="res://assets/sounds/portal/spawn.wav" id="2_6fsux"]
+[ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="3_jacg2"]
 
 [sub_resource type="Curve" id="Curve_sj1d0"]
 _limits = [-0.112359524, 2.0, 0.0, 1.0]
@@ -29,16 +30,6 @@ color = Color(0.28560802, 0.0009629519, 0.51313466, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_burnr"]
 radius = 47.042534
-
-[sub_resource type="Gradient" id="Gradient_goa5y"]
-offsets = PackedFloat32Array(0, 0.47333333, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.45333332, 0.45333332, 0.45333332, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_qrvcb"]
-gradient = SubResource("Gradient_goa5y")
-fill = 1
-fill_from = Vector2(0.50934577, 0.47663552)
-fill_to = Vector2(0.8271028, 0.20560747)
 
 [node name="PlayerExitPortal" type="Node2D" node_paths=PackedStringArray("_portalSoundPlayer", "_particles", "_light", "_enterRange")]
 y_sort_enabled = true
@@ -70,7 +61,7 @@ position = Vector2(1, -4)
 scale = Vector2(0.21311736, 0.21311736)
 color = Color(0.3647059, 0, 1, 1)
 energy = 4.5
-texture = SubResource("GradientTexture2D_qrvcb")
+texture = ExtResource("3_jacg2")
 texture_scale = 9.26
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]

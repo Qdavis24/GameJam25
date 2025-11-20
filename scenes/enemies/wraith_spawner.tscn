@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://dyrdk24okgbja"]
+[gd_scene load_steps=73 format=3 uid="uid://dyrdk24okgbja"]
 
 [ext_resource type="Script" uid="uid://c11o53mb0kruj" path="res://scripts/EnemySpawner.cs" id="1_7lb27"]
 [ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_dva5f"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dnsjmjr2bh647" path="res://scenes/enemies/deer_wraith/deer_wraith.tscn" id="5_dva5f"]
 [ext_resource type="PackedScene" uid="uid://bv8hp68jt8i2u" path="res://scenes/allies/Ally.tscn" id="6_2ylut"]
 [ext_resource type="Texture2D" uid="uid://br3f6mswjjt7g" path="res://assets/bosses/bunny_boss.png" id="7_1p1xw"]
+[ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="7_gt7ss"]
 [ext_resource type="Texture2D" uid="uid://gxsr3xulqdq" path="res://assets/bosses/circle.png" id="7_q2kbg"]
 [ext_resource type="Script" uid="uid://d4hnm4svoo1uq" path="res://scripts/damage_system/Hurtbox.cs" id="8_k8p7h"]
 [ext_resource type="Texture2D" uid="uid://bvqr0jehwj20x" path="res://assets/bosses/raccoon_boss.png" id="9_q2kbg"]
@@ -15,15 +16,6 @@
 [sub_resource type="Curve" id="Curve_abhiv"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5132275, 0.1048305), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.5327357, 0.5327357, 0, 0]
 point_count = 3
-
-[sub_resource type="Gradient" id="Gradient_abhiv"]
-offsets = PackedFloat32Array(0, 0.6802326)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_twont"]
-gradient = SubResource("Gradient_abhiv")
-fill = 1
-fill_from = Vector2(0.4957265, 0.47435898)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4q0qo"]
 blend_mode = 1
@@ -466,7 +458,7 @@ autostart = true
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(1, 0, 1, 1)
-texture = SubResource("GradientTexture2D_twont")
+texture = ExtResource("7_gt7ss")
 texture_scale = 20.0
 
 [node name="ExplodeEffect" type="GPUParticles2D" parent="."]

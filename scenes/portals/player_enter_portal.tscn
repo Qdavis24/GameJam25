@@ -1,18 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://qevbfpqv6q20"]
+[gd_scene load_steps=11 format=3 uid="uid://qevbfpqv6q20"]
 
 [ext_resource type="Script" uid="uid://bjdvo6aab61xk" path="res://scripts/Portals/EnterPortal.cs" id="1_ap7dn"]
-[ext_resource type="AudioStream" uid="uid://dqmb5c3g07k6g" path="res://assets/sounds/portal/spawn.wav" id="2_cjie2"]
-[ext_resource type="AudioStream" uid="uid://b7hfuc3ynks7n" path="res://assets/sounds/portal/portal_idle-34022.mp3" id="2_emtbt"]
-
-[sub_resource type="Gradient" id="Gradient_ap7dn"]
-offsets = PackedFloat32Array(0, 0.47333333, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.45333332, 0.45333332, 0.45333332, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_y64p0"]
-gradient = SubResource("Gradient_ap7dn")
-fill = 1
-fill_from = Vector2(0.50934577, 0.47663552)
-fill_to = Vector2(0.8271028, 0.20560747)
+[ext_resource type="AudioStream" uid="uid://d3bf8m3lm1n0" path="res://assets/sounds/portal/spawn.wav" id="2_cjie2"]
+[ext_resource type="AudioStream" uid="uid://bjt2ebysffjw6" path="res://assets/sounds/portal/portal_idle-34022.mp3" id="2_emtbt"]
+[ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="4_4ko36"]
 
 [sub_resource type="Curve" id="Curve_emtbt"]
 _limits = [-0.112359524, 2.0, 0.0, 1.0]
@@ -74,7 +65,7 @@ position = Vector2(1, -4)
 scale = Vector2(0.21311736, 0.21311736)
 color = Color(0.3647059, 0, 1, 1)
 energy = 4.05
-texture = SubResource("GradientTexture2D_y64p0")
+texture = ExtResource("4_4ko36")
 texture_scale = 9.26
 
 [node name="Portal" type="GPUParticles2D" parent="."]

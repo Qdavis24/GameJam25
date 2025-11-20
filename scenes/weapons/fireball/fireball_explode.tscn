@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://bc8136epjg2t4"]
+[gd_scene load_steps=10 format=3 uid="uid://bc8136epjg2t4"]
 
 [ext_resource type="Script" uid="uid://cnp88pu7w5f07" path="res://scripts/weapons/fireball_weapon/FireballExplode.cs" id="1_cpsw5"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_0il0b"]
 [ext_resource type="AudioStream" uid="uid://6dgweycxo3wf" path="res://assets/sounds/explosions/fire_explosions/fireballexplode.wav" id="2_q4xwo"]
 [ext_resource type="AudioStream" uid="uid://buefvftm6cr73" path="res://assets/sounds/explosions/fire_explosions/fireballexplode2.wav" id="3_t26wx"]
 [ext_resource type="AudioStream" uid="uid://bh3lyhm4yaiks" path="res://assets/sounds/explosions/fire_explosions/fireballexplode3.wav" id="4_tw5ni"]
+[ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="5_t26wx"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1it7h"]
 streams_count = 3
@@ -28,15 +29,6 @@ scale_min = 0.0
 scale_max = 4.0
 color = Color(1, 0.627451, 0.16078432, 1)
 
-[sub_resource type="Gradient" id="Gradient_q4xwo"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_t26wx"]
-gradient = SubResource("Gradient_q4xwo")
-fill = 1
-fill_from = Vector2(0.48598132, 0.5233645)
-fill_to = Vector2(0.85046726, 0.24299066)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_4h438"]
 radius = 96.18
 
@@ -59,7 +51,7 @@ process_material = SubResource("ParticleProcessMaterial_31e3c")
 [node name="ExplodeLight" type="PointLight2D" parent="."]
 position = Vector2(-0.9999962, -1.0000038)
 scale = Vector2(2.5, 2.5)
-texture = SubResource("GradientTexture2D_t26wx")
+texture = ExtResource("5_t26wx")
 
 [node name="Hitbox" type="Area2D" parent="." groups=["PlayerHitbox"]]
 z_index = -1
