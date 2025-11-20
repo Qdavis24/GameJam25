@@ -1,34 +1,92 @@
 using Godot;
 using GameJam25.scripts.damage_system;
+using GameJam25.scripts.enemies;
 using GameJam25.scripts.enemy_state_machines.base_classes;
 
 public partial class Enemy : CharacterBody2D
 {
+	[Export] public EnemyType Type;
+	
 	[ExportCategory("Sound Fx")] 
 	[Export] private AudioStreamRandomizer _hitSounds;
 	
 	[ExportCategory("stats")] 
 	[Export] private float _maxHealth; //starting health
-
 	[Export] public int XpReward = 3;
 
 	[ExportCategory("Distance Ranges")] 
 	[Export] public Area2D SteeringRange;
+	[Export] public Hurtbox Hurtbox;
 	[Export] public int AttackRange;
+	
 
-	[ExportCategory("Miscellaneous")] 
+	[ExportCategory("References")] 
 	[Export] public AnimatedSprite2D Animations;
-	[Export] private Timer _flashTimer;
+	[Export] private Timer _damageIntervalTimer;
 	[Export] private EStateMachine _stateMachine;
 	[Export] private ShaderMaterial _flashShader;
-	[Export] private Timer _damageIntervalTimer;
+	[Export] private GpuParticles2D _trailParticles;
+
+	private uint _originalCollisionLayer;
+	private uint _originalCollisionMask;
+
+	public bool CanTakeDamage = true;
+	public bool InPool = true;
 	
-	
-	public Hurtbox Hurtbox;
 	public float Health; // public so states can use this
+
+
+
+	public void Enable(Vector2 spawnPosition)
+	{
+		InPool = true;
+		_trailParticles.ProcessMode = ProcessModeEnum.Inherit; // maybe dont if bad performance
+		_trailParticles.Emitting = true;
+		GlobalPosition = spawnPosition;
+		Health = _maxHealth;
+    
+		// Collision and monitoring
+		CanTakeDamage = true;
+		CollisionLayer = _originalCollisionLayer;
+		CollisionMask = _originalCollisionMask;
+		SteeringRange.Monitorable = true;
+		SteeringRange.Monitoring = true;
+		Hurtbox.Monitorable = true;
+		Hurtbox.Monitoring = true;
+    
+		// Animations and visibility
+		Visible = true;
+		Animations.Play(); // Or "idle"
+		
+		_stateMachine.IsActive = true;
+		_stateMachine.Init();
+	}
+
+	public void Disable()
+	{
+		InPool = false;
+		_trailParticles.ProcessMode = ProcessModeEnum.Inherit; // maybe dont if bad performance
+		_trailParticles.Emitting = true;
+		// Collision and monitoring
+		CanTakeDamage = false;
+		CollisionLayer = 0;
+		CollisionMask = 0;
+		SteeringRange.Monitorable = false;
+		SteeringRange.Monitoring = false;
+		Hurtbox.Monitorable = false;
+		Hurtbox.Monitoring = false;
+    
+		// Animations and visibility
+		Visible = false;
+		Animations.Stop();
+    
+		// Stop timers
+		_damageIntervalTimer.Stop();
+		Animations.Material = null;
+
+		_stateMachine.IsActive = false;
+	}
 	
-
-
 	public void TakeDamage(float amount, float knockbackWeight, Vector2 direction)
 	{
 		if (_stateMachine.CurrState.Name == "DeathState") return;
@@ -40,11 +98,18 @@ public partial class Enemy : CharacterBody2D
 
 	public override void _Ready()
 	{
-		Hurtbox = GetNode<Hurtbox>("Hurtbox");
-		double randomScale = GD.RandRange(0.9, 1.3);
-		Scale = new Vector2((float)randomScale, (float)randomScale);
+		// Cache collision settings from editor
+		_originalCollisionLayer = CollisionLayer;
+		_originalCollisionMask = CollisionMask;
+		
+		double randomScale = GD.RandRange(1, 1.12);
+		Scale *= (float) randomScale;
 		Hurtbox.AreaEntered += OnEnemyHurtBoxEntered;
-		_flashTimer.Timeout += () => Animations.Material = null;
+		_damageIntervalTimer.Timeout += () =>
+		{
+			CanTakeDamage = true;
+			Animations.Material = null;
+		};
 		
 		Health = _maxHealth;
 	}
@@ -52,13 +117,12 @@ public partial class Enemy : CharacterBody2D
 
 	private void OnEnemyHurtBoxEntered(Area2D area)
 	{
-		if (!Hurtbox.IsActive) return;
-		if (!area.IsInGroup("PlayerHitbox")) return;
+		if (!CanTakeDamage || !area.IsInGroup("PlayerHitbox")) return;
+		CanTakeDamage = false;
 		Hitbox hb = (Hitbox)area;
 		Animations.Material = _flashShader;
-		_flashTimer.Start();
-		Sfx.I.Play2D(_hitSounds, GlobalPosition, -40);
-		
+		_damageIntervalTimer.Start();
+		Sfx.I.Play2D(_hitSounds, GlobalPosition, -20);
 		TakeDamage(hb.Damage, hb.KnockbackWeight, (GlobalPosition - hb.GlobalPosition));
 	}
 }

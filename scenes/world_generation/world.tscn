@@ -1,6 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://s3w1eg52kr8u"]
+[gd_scene load_steps=29 format=3 uid="uid://s3w1eg52kr8u"]
 
 [ext_resource type="Script" uid="uid://dq73tw5i6mbrk" path="res://scripts/world_generation/World.cs" id="1_132vp"]
+[ext_resource type="Shader" uid="uid://cejnfr3nmlr6a" path="res://scenes/world_generation/world.gdshader" id="2_s0qqk"]
 [ext_resource type="Resource" uid="uid://bfks6ydjmu5gu" path="res://resources/tile_config.tres" id="2_w0i7v"]
 [ext_resource type="PackedScene" uid="uid://c6lr8f133tbfv" path="res://scenes/world_generation/shrines/racoon_shrine.tscn" id="3_klido"]
 [ext_resource type="Script" uid="uid://bvu271y34tacx" path="res://scripts/world_generation/pipeline/WorldGenerationPipelineManager.cs" id="4_pfpup"]
@@ -8,6 +9,7 @@
 [ext_resource type="Shader" uid="uid://r3xjxg7c3bx7" path="res://assets/shaders/tree.gdshader" id="5_itp5q"]
 [ext_resource type="Script" uid="uid://csuwanyvgyjhk" path="res://scripts/world_generation/pipeline/logical_stages/GenerateTerrainStage.cs" id="6_132vp"]
 [ext_resource type="Texture2D" uid="uid://02wpitircr3d" path="res://assets/tile_sets/object_layer_terrain/IPN_Atlas.png" id="6_pfpup"]
+[ext_resource type="Script" uid="uid://bh1fwevuond4k" path="res://scenes/world_generation/ObstacleLayer.cs" id="7_fgma2"]
 [ext_resource type="Script" uid="uid://xwgx2tol2mjl" path="res://scripts/world_generation/pipeline/logical_stages/FindIslandsStage.cs" id="7_gubng"]
 [ext_resource type="Script" uid="uid://bsr4viawm7cxa" path="res://scripts/world_generation/pipeline/logical_stages/FindConnectionsStage.cs" id="8_ysaxy"]
 [ext_resource type="Script" uid="uid://dwk5hwtddjr83" path="res://scripts/world_generation/pipeline/logical_stages/ConnectIslandsStage.cs" id="9_s0qqk"]
@@ -17,6 +19,19 @@
 [ext_resource type="Script" uid="uid://du8smpfyvpfos" path="res://scripts/world_generation/pipeline/physical_stages/SpawnShrinesStage.cs" id="14_sqldb"]
 [ext_resource type="Script" uid="uid://cfcxf7vnuqjhj" path="res://scripts/world_generation/pipeline/physical_stages/SpawnChestsStage.cs" id="15_gubng"]
 [ext_resource type="PackedScene" uid="uid://drylev6qbp30i" path="res://scenes/chest/TreasureChest.tscn" id="16_ysaxy"]
+[ext_resource type="Shader" uid="uid://dedyvaqponlc" path="res://scenes/world_generation/player_vignette.gdshader" id="19_tmpep"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fgma2"]
+shader = ExtResource("19_tmpep")
+shader_parameter/alpha = 1.0
+shader_parameter/inner_radius = 0.0
+shader_parameter/outer_radius = 1.6
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tmpep"]
+shader = ExtResource("2_s0qqk")
+shader_parameter/diamond_size = 0.3
+shader_parameter/fade_width = 0.05
+shader_parameter/border_color = Color(0, 0, 0, 1)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_132vp"]
 texture = ExtResource("4_wyppg")
@@ -69,6 +84,9 @@ sources/0 = SubResource("TileSetAtlasSource_132vp")
 shader = ExtResource("5_itp5q")
 shader_parameter/wind_strength = 0.4250000201875
 shader_parameter/wind_speed = 2.4910001183225
+shader_parameter/player_position = Vector2(0, 0)
+shader_parameter/transparency_radius = 150.0
+shader_parameter/fade_width = 50.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gubng"]
 texture = ExtResource("6_pfpup")
@@ -140,16 +158,39 @@ script = ExtResource("1_132vp")
 _worldGenPipelineManger = NodePath("GenerationPipeline")
 metadata/_edit_horizontal_guides_ = [-21.0]
 
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="PlayerVignette" type="ColorRect" parent="CanvasLayer2"]
+material = SubResource("ShaderMaterial_fgma2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="MapBorderVignette" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_tmpep")
+offset_left = -9636.0
+offset_top = -2976.0
+offset_right = 9772.0
+offset_bottom = 11826.0
+mouse_filter = 2
+
 [node name="BaseLayer" type="TileMapLayer" parent="."]
 z_index = -1
 y_sort_enabled = true
 tile_set = SubResource("TileSet_nmbn7")
 
 [node name="ObstacleLayer" type="TileMapLayer" parent="." groups=["Obstacle"]]
-z_index = 1
-y_sort_enabled = true
+z_index = 10
 material = SubResource("ShaderMaterial_683jg")
 tile_set = SubResource("TileSet_vbebb")
+rendering_quadrant_size = 64
+script = ExtResource("7_fgma2")
 
 [node name="GenerationPipeline" type="Node" parent="."]
 script = ExtResource("4_pfpup")
@@ -184,7 +225,7 @@ script = ExtResource("11_fgma2")
 _baseTileMapLayer = NodePath("../../BaseLayer")
 _obstacleTileMapLayer = NodePath("../../ObstacleLayer")
 _tileConfig = ExtResource("2_w0i7v")
-_neighborsPerSpawn = 1
+_borderSize = 5
 
 [node name="SpawnChestsStage" type="Node" parent="GenerationPipeline"]
 script = ExtResource("15_gubng")

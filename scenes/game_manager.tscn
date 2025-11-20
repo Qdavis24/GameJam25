@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=21 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
 [ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/xp_system/xp.tscn" id="2_jdad8"]
@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://c4dvx6r2y6cel" path="res://scenes/XpPool.tscn" id="9_ry0e6"]
 [ext_resource type="PackedScene" uid="uid://0fwmr8vwok0m" path="res://scenes/PersistentNodes.tscn" id="10_pc0jn"]
 [ext_resource type="AudioStream" uid="uid://c7sxtsvb57f32" path="res://assets/sounds/ui/death.wav" id="11_5xtl8"]
+[ext_resource type="PackedScene" uid="uid://bw75x36wra83g" path="res://scenes/FlowField.tscn" id="11_c7a3q"]
+[ext_resource type="PackedScene" uid="uid://b81130pfj02wn" path="res://scenes/EnemyPool.tscn" id="12_4vth2"]
 [ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="12_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="13_5xtl8"]
 [ext_resource type="AudioStream" uid="uid://hmqhwgil6rft" path="res://assets/sounds/ui/start.wav" id="13_30v7y"]
@@ -23,8 +25,8 @@
 y_sort_enabled = true
 script = ExtResource("1_udu3i")
 _enemySpawnerNumEnemiesPerWave = 10.0
-_enemySpawnerWaveInterval = 30.0
-_enemySpawnerNumWaves = 5.0
+_enemySpawnerWaveInterval = 20.0
+_enemySpawnerNumWaves = 10.0
 _enemySpawnerNumWavesScalr = 2.0
 _xpOrbScene = ExtResource("2_jdad8")
 _worldScene = ExtResource("2_oo155")
@@ -35,6 +37,8 @@ _enemySpawnerScene = ExtResource("5_jdad8")
 _camScene = ExtResource("8_30v7y")
 _xpPoolScene = ExtResource("9_ry0e6")
 _persistentNodes = ExtResource("10_pc0jn")
+_flowFieldScene = ExtResource("11_c7a3q")
+_enemyPoolScene = ExtResource("12_4vth2")
 _screenFade = NodePath("ScreenFade")
 _ui = NodePath("Ui")
 _mainMenu = NodePath("MainMenu")
@@ -42,6 +46,9 @@ _pauseScreen = NodePath("Ui/PauseScreen2")
 _deathScreen = NodePath("Ui/DeathScreen2")
 
 [node name="Ui" parent="." instance=ExtResource("9_k4jhu")]
+layer = 2
+_levelUpSounds = null
+_chestOpenSounds = null
 
 [node name="DeathScreen2" parent="Ui" instance=ExtResource("13_5xtl8")]
 _deathSound = ExtResource("11_5xtl8")
@@ -49,6 +56,7 @@ _deathSound = ExtResource("11_5xtl8")
 [node name="PauseScreen2" parent="Ui" instance=ExtResource("8_lcbjr")]
 
 [node name="MainMenu" parent="." instance=ExtResource("12_30v7y")]
+layer = 3
 _clickSound = ExtResource("13_30v7y")
 
 [node name="ScreenFade" type="CanvasLayer" parent="." node_paths=PackedStringArray("_overlay")]
@@ -64,11 +72,10 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="ColorTone" type="CanvasModulate" parent="."]
-color = Color(0.38928655, 0.38928664, 0.3892865, 1)
+color = Color(0.3440756, 0.3440758, 0.34407574, 1)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("16_cjvif")
 volume_db = 6.0
 autoplay = true
 bus = &"Music"
-parameters/looping = true

@@ -21,7 +21,7 @@ public partial class XpPool : Node2D
 		}
 	}
 
-	public void SpawnXpAt(int amount, Vector2 globalPosition)
+	public async void SpawnXpAt(int amount, Vector2 globalPosition)
 	{
 		var radIncr = Mathf.Tau / amount;
 		for (int i = 0; i < amount; i++)
@@ -33,6 +33,7 @@ public partial class XpPool : Node2D
 				newOrb = _orbPool.Dequeue();
 			
 			newOrb.Enable();
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 			newOrb.GlobalPosition = globalPosition + Vector2.FromAngle(radIncr * i) * _spawnOffset;
 		}
 	}

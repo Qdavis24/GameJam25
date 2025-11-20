@@ -1,0 +1,13 @@
+[gd_scene load_steps=5 format=3 uid="uid://b81130pfj02wn"]
+
+[ext_resource type="Script" uid="uid://vdbis4wrjcrh" path="res://scripts/EnemyPool.cs" id="1_00iip"]
+[ext_resource type="PackedScene" uid="uid://dywc23eylfitj" path="res://scenes/enemies/bunny_wraith/bunny_wraith.tscn" id="2_5wn4s"]
+[ext_resource type="PackedScene" uid="uid://dtgtqkim67d2o" path="res://scenes/enemies/owl_wraith/owl_wraith.tscn" id="3_kn3g8"]
+[ext_resource type="PackedScene" uid="uid://dnsjmjr2bh647" path="res://scenes/enemies/deer_wraith/deer_wraith.tscn" id="4_um0m0"]
+
+[node name="EnemyPool" type="Node2D"]
+script = ExtResource("1_00iip")
+_poolSize = 100
+_bunnyWraithScene = ExtResource("2_5wn4s")
+_owlWraithScene = ExtResource("3_kn3g8")
+_deerWraithScene = ExtResource("4_um0m0")

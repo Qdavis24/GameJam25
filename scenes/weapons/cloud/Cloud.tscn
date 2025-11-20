@@ -15,7 +15,7 @@ stream_1/stream = ExtResource("3_t32gg")
 stream_2/stream = ExtResource("4_eddxc")
 
 [node name="Cloud" type="Node2D" node_paths=PackedStringArray("_light", "_attackInterval")]
-z_index = 1
+z_index = 2
 script = ExtResource("1_u7243")
 _lightningSound = SubResource("AudioStreamRandomizer_xuenw")
 _light = NodePath("PointLight2D")

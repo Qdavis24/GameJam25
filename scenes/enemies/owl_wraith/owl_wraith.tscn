@@ -30,10 +30,17 @@ stream_3/stream = ExtResource("5_fkf4r")
 [sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
 radius = 15.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pdrcd"]
+radius = 20.0
+height = 80.0
+
 [sub_resource type="Curve" id="Curve_eieg8"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3152174, 0.8202247), 0.0, 0.0, 0, 0, Vector2(0.6956522, -0.5730337), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_voie1"]
+radius = 155.00322
 
 [sub_resource type="Curve" id="Curve_oto54"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -52,37 +59,51 @@ damping_max = 2.6590002
 scale_max = 3.0
 color = Color(0.99381655, 0, 0.20968658, 1)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_voie1"]
-radius = 240.0
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pdrcd"]
-radius = 20.0
-height = 80.0
-
-[node name="OwlWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Animations", "_flashTimer", "_stateMachine", "_damageIntervalTimer") groups=["Enemies", "OwlWraiths"]]
+[node name="OwlWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Hurtbox", "Animations", "_damageIntervalTimer", "_stateMachine", "_trailParticles") groups=["Enemies", "OwlWraiths"]]
+z_index = 1
 y_sort_enabled = true
 collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_pkq8v")
+Type = 1
 _hitSounds = SubResource("AudioStreamRandomizer_w2b4p")
 _maxHealth = 30.0
-SteeringRange = NodePath("SteeringRange")
+SteeringRange = NodePath("WraithStateMachine/ChaseState/SteeringRange")
+Hurtbox = NodePath("Hurtbox")
 AttackRange = 500
 Animations = NodePath("WraithAnimations")
-_flashTimer = NodePath("FlashTimer")
+_damageIntervalTimer = NodePath("DamageIntervalTimer")
 _stateMachine = NodePath("WraithStateMachine")
 _flashShader = ExtResource("2_rvc00")
-_damageIntervalTimer = NodePath("DamageInterval")
+_trailParticles = NodePath("TrailParticles")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_q5y88")
 
-[node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("_initialState")]
-script = ExtResource("2_eieg8")
-_initialState = NodePath("ChaseState")
+[node name="Hurtbox" type="Area2D" parent="." groups=["EnemyHurtbox"]]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("19_w2b4p")
 
-[node name="ChaseState" type="Node2D" parent="WraithStateMachine"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 8)
+shape = SubResource("CapsuleShape2D_pdrcd")
+
+[node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("InitialState")]
+script = ExtResource("2_eieg8")
+InitialState = NodePath("SpawnState")
+
+[node name="SpawnState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_timer")]
+script = ExtResource("15_fkf4r")
+_timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="WraithStateMachine/SpawnState"]
+one_shot = true
+
+[node name="ChaseState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_steeringRange", "_boidsTimer")]
 script = ExtResource("3_eieg8")
+_steeringRange = NodePath("SteeringRange")
+_boidsTimer = NodePath("BoidsTimer")
 _minDistancePerCycle = 500.0
 _maxDistancePerCycle = 510.0
 _minPathMag = 0.2
@@ -97,11 +118,37 @@ _minSpeed = 120.0
 _maxSpeed = 120.0
 _attackState = "ShootState"
 
+[node name="SteeringRange" type="Area2D" parent="WraithStateMachine/ChaseState"]
+collision_layer = 4
+collision_mask = 4
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WraithStateMachine/ChaseState/SteeringRange"]
+shape = SubResource("CircleShape2D_voie1")
+
+[node name="BoidsTimer" type="Timer" parent="WraithStateMachine/ChaseState"]
+wait_time = 0.4
+
+[node name="ShootState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_timer")]
+script = ExtResource("8_s7auy")
+_timer = NodePath("Timer")
+_projectile = ExtResource("9_eieg8")
+_projectileSpeed = 300
+
+[node name="Timer" type="Timer" parent="WraithStateMachine/ShootState"]
+
+[node name="DeathState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_deathEffect")]
+script = ExtResource("5_rvc00")
+_deathEffect = NodePath("DeathEffect")
+
+[node name="DeathEffect" parent="WraithStateMachine/DeathState" instance=ExtResource("9_mguii")]
+
 [node name="KnockbackState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_hitEffect")]
 script = ExtResource("4_oto54")
 KnockbackCurve = SubResource("Curve_oto54")
 _knockBackDuration = 1.0
-_hitEffect = NodePath("../../GPUParticles2D")
+_hitEffect = NodePath("../../TrailParticles")
 
 [node name="KnockBackEffect" type="GPUParticles2D" parent="WraithStateMachine/KnockbackState"]
 emitting = false
@@ -112,51 +159,14 @@ explosiveness = 1.0
 trail_lifetime = 0.1
 process_material = SubResource("ParticleProcessMaterial_ad4ay")
 
-[node name="DeathState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_deathEffect")]
-script = ExtResource("5_rvc00")
-_deathEffect = NodePath("DeathEffect")
-
-[node name="DeathEffect" parent="WraithStateMachine/DeathState" instance=ExtResource("9_mguii")]
-
 [node name="InstanceContext" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("7_yqrye")
-
-[node name="ShootState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_timer")]
-script = ExtResource("8_s7auy")
-_timer = NodePath("Timer")
-_projectile = ExtResource("9_eieg8")
-_projectileSpeed = 300
-
-[node name="Timer" type="Timer" parent="WraithStateMachine/ShootState"]
-
-[node name="SpawnState" type="Node2D" parent="WraithStateMachine"]
-script = ExtResource("15_fkf4r")
 
 [node name="WraithAnimations" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.7, 0.7)
 sprite_frames = ExtResource("16_fkf4r")
-animation = &"spawn"
-autoplay = "default"
-frame = 38
-frame_progress = 1.0
 
-[node name="SteeringRange" type="Area2D" parent="."]
-collision_layer = 4
-collision_mask = 4
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SteeringRange"]
-shape = SubResource("CircleShape2D_voie1")
-
-[node name="Hurtbox" type="Area2D" parent="." groups=["EnemyHurtbox"]]
-collision_layer = 2
-collision_mask = 2
-script = ExtResource("19_w2b4p")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-position = Vector2(0, 8)
-shape = SubResource("CapsuleShape2D_pdrcd")
-
-[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+[node name="TrailParticles" type="GPUParticles2D" parent="."]
 z_index = -1
 amount = 40
 process_material = ExtResource("20_apl8d")
@@ -168,13 +178,8 @@ position = Vector2(0, -20.189999)
 scale = Vector2(1.29, 1.67)
 texture = ExtResource("11_rvc00")
 
-[node name="FlashTimer" type="Timer" parent="."]
+[node name="DamageIntervalTimer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
 
-[node name="DamageInterval" type="Timer" parent="."]
-wait_time = 0.2
-
-[connection signal="body_entered" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeEntered"]
-[connection signal="body_exited" from="SteeringRange" to="WraithStateMachine/ChaseState" method="OnSteeringRangeExited"]
 [connection signal="area_entered" from="Hurtbox" to="." method="OnEnemyHurtBoxEntered"]

@@ -21,6 +21,7 @@ public partial class KnockbackState : EState
 	// Super's abstract methods below
 	public override void Enter()
 	{
+		if (_stateMachine.Owner.Health <= 0) _stateMachine.TransitionTo("DeathState");
 		_knockbackWeight = _stateMachine.InstanceContext.KnockbackWeight;
 		_hitEffectMaterial = (ParticleProcessMaterial)_hitEffect.ProcessMaterial;
 		_currTime = 0;
@@ -41,8 +42,6 @@ public partial class KnockbackState : EState
 
 	public override void PhysicsUpdate(double delta)
 	{
-		if (_stateMachine.Owner.Health <= 0) _stateMachine.TransitionTo("DeathState");
-		
 		_currTime += delta;
 		float sample = KnockbackCurve.Sample((float)(_currTime / _knockBackDuration));
 		float currSpeed = sample * _knockbackWeight;

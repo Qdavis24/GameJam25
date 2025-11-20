@@ -19,6 +19,7 @@ public partial class Xp : Area2D
 	}
 	public void Disable()
 	{
+		_lifetime.Stop();
 		_colorRect.Visible = false;
 		_particles.Emitting = false;  // Stops GPU from emitting new particles
 		_particles.ProcessMode = Node.ProcessModeEnum.Disabled;  // Stops all processing

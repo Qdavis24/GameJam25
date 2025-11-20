@@ -6,19 +6,18 @@ namespace GameJam25.scripts.enemy_state_machines.base_classes;
 
 public partial class EStateMachine : Node2D
 {
-	[Signal] public delegate void ChangeCurrentStateLabelEventHandler(string nextState);
-	[Export] private EState _initialState;
+	[Export] public EState InitialState;
 	private Dictionary<string, EState> _allStates = new();
 	public EState CurrState;
 	
 	public Enemy Owner;
 	public EInstanceContext InstanceContext;
 
+	public bool IsActive;
 
 	public override void _Ready()
 	{
 		Owner = (Enemy)GetParent();
-		Owner.Animations.Play("spawn");
 		foreach (Node child in GetChildren())
 		{
 			if (child is EState)
@@ -31,12 +30,12 @@ public partial class EStateMachine : Node2D
 				InstanceContext = context;
 			}
 		}
-
-		
-		if (_initialState != null)
+	}
+	public void Init()
+	{
+		if (InitialState != null)
 		{
-			EmitSignal(SignalName.ChangeCurrentStateLabel, _initialState.Name);
-			CurrState = _allStates[_initialState.Name];
+			CurrState = _allStates[InitialState.Name];
 			CurrState.Enter();
 		}
 		else
@@ -46,15 +45,16 @@ public partial class EStateMachine : Node2D
 	}
 	public override void _Process(double delta)
 	{
+		if (!IsActive) return;
 		CurrState.Update(delta);
 	}
 	public override void _PhysicsProcess(double delta)
 	{
+		if (!IsActive) return;
 		CurrState.PhysicsUpdate(delta);
 	}
 	public void TransitionTo(String newState)
 	{
-		EmitSignal(SignalName.ChangeCurrentStateLabel, newState);
 		CurrState.Exit();
 		CurrState = _allStates[newState];
 		CurrState.Enter();

@@ -9,7 +9,6 @@
 radius = 15.132746
 
 [node name="ShadowBall" type="Node2D" node_paths=PackedStringArray("_hitbox")]
-z_index = -1
 script = ExtResource("1_umkxh")
 _explosionParticles = ExtResource("2_2fh2j")
 _hitbox = NodePath("Hitbox")
@@ -28,4 +27,4 @@ modulate = Color(0.20392157, 0.12941177, 1, 1)
 rotation = -3.1415927
 sprite_frames = ExtResource("4_umkxh")
 autoplay = "default"
-frame_progress = 0.68102974
+frame_progress = 0.057199676

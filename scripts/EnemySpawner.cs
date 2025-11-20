@@ -2,13 +2,14 @@ using System;
 using Godot;
 using System.Collections.Generic;
 using GameJam25.scripts.damage_system;
+using GameJam25.scripts.enemies;
 
 public partial class EnemySpawner : Node2D
 {
     [Signal]
     public delegate void SpawnerDestroyedEventHandler(Vector2 pos);
 
-    [ExportCategory("Spawner Boss")] 
+    [ExportCategory("Spawner Boss")]
     [Export] private Hurtbox _bossHurtbox;
     [Export] private ShaderMaterial _flashShaderMaterial;
     [Export] private Timer _flashTimer;
@@ -19,8 +20,6 @@ public partial class EnemySpawner : Node2D
     [Export] private float _maxEnergy;
 
     [ExportCategory("Spawner Config")] 
-    [Export] private PackedScene[] _enemyTypes;
-    [Export] private float[] _enemyTypeSpawnChance;
     [Export] private Timer _timer;
     [Export] private Vector2 _spawnRadius;
     [Export] private int _numEnemiesPerWave = 1;
@@ -34,11 +33,20 @@ public partial class EnemySpawner : Node2D
     [Export] private AnimatedSprite2D _ratBoss;
     [Export] private AnimatedSprite2D _bunnyBoss;
 
-    [ExportCategory("Destructor Config")]
-    [Export] private Node2D _destructorBody;
+    [ExportCategory("Destructor Config")] [Export]
+    private Node2D _destructorBody;
+
     [Export] private GpuParticles2D _explosionParticles;
     [Export] private GpuParticles2D _oozeParticles;
     [Export] private float _explosionLightMaxIntensity;
+
+    // have to manually set these cause godot won't export an array of enum values :(
+    private EnemyType[] _enemyTypes = {
+        EnemyType.OwlWraith, EnemyType.BunnyWraith, EnemyType.DeerWraith
+    };
+
+    private float[] _enemyTypeSpawnChance = {.2f, .4f, .4f};
+
     
     private Dictionary<string, AnimatedSprite2D> _bosses;
 
@@ -106,25 +114,18 @@ public partial class EnemySpawner : Node2D
         }
     }
 
-    private void SpawnGroup(PackedScene enemyPackedScene, int numEnemies)
+    private void SpawnGroup(EnemyType enemyType, int numEnemies)
     {
         for (int i = 0; i < numEnemies; i++)
         {
-            InstantiateEnemy(enemyPackedScene);
+            var globalPosition = GlobalPosition + new Vector2(
+                (_spawnRadius.X * GD.Randf() + 150) * (GD.Randf() < 0.5f ? -1 : 1),
+                (_spawnRadius.Y * GD.Randf() + 150) * (GD.Randf() < 0.5f ? -1 : 1)
+            );
+            GameManager.Instance.EnemyPool.SpawnEnemyAt(enemyType, globalPosition);
         }
     }
-
-    private void InstantiateEnemy(PackedScene enemyPackedScene)
-    {
-        var enemy = enemyPackedScene.Instantiate<Node2D>();
-        var randSign = GD.Randf() < .5 ? -1 : 1;
-        var xOffset = _spawnRadius.X * GD.Randf() * randSign;
-        randSign = GD.Randf() < .5 ? -1 : 1;
-        var yOffset = _spawnRadius.Y * GD.Randf() * randSign;
-        enemy.GlobalPosition += GlobalPosition + new Vector2(xOffset, yOffset);
-        GameManager.Instance.World.AddChild(enemy);
-    }
-
+    
     private void OnBossHurtboxEntered(Area2D area)
     {
         if (!_active) return;

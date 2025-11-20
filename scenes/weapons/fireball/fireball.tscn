@@ -12,8 +12,6 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_bvcyv"]
 
 [node name="fireball" type="Node2D" node_paths=PackedStringArray("_hitbox")]
-z_index = 1
-y_sort_enabled = true
 script = ExtResource("1_4h438")
 _wooshStream = ExtResource("6_1npbi")
 _fireStream = ExtResource("5_xt8ci")
@@ -42,9 +40,8 @@ amount = 30
 process_material = ExtResource("7_u56s2")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-y_sort_enabled = true
 rotation = -3.1415927
 scale = Vector2(1.2, 1.2)
 sprite_frames = ExtResource("8_u56s2")
 autoplay = "default"
-frame_progress = 0.74675184
+frame_progress = 0.04795667

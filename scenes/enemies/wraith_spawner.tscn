@@ -48,7 +48,7 @@ scale_max = 8.0
 color = Color(0.46277052, 0.00014983103, 0.46276718, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gt7ss"]
-size = Vector2(118, 80)
+size = Vector2(118, 46)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4q0qo"]
 radius = 42.047592
@@ -475,7 +475,6 @@ process_material = SubResource("ParticleProcessMaterial_q2kbg")
 y_sort_enabled = true
 
 [node name="Ring" type="Sprite2D" parent="destructor"]
-z_as_relative = false
 position = Vector2(0, -11.000001)
 scale = Vector2(1.3, 1.3)
 texture = ExtResource("7_q2kbg")
@@ -494,7 +493,7 @@ z_as_relative = false
 y_sort_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="destructor/SummonerBoss"]
-position = Vector2(6, 7)
+position = Vector2(6, -10)
 shape = SubResource("RectangleShape2D_gt7ss")
 
 [node name="Hurtbox" type="Area2D" parent="destructor/SummonerBoss" groups=["EnemyHurtbox"]]
@@ -514,7 +513,6 @@ one_shot = true
 
 [node name="RaccoonBoss" type="AnimatedSprite2D" parent="destructor/SummonerBoss"]
 visible = false
-y_sort_enabled = true
 position = Vector2(51, -68)
 scale = Vector2(1.2, 1.2)
 sprite_frames = SubResource("SpriteFrames_pscgh")
@@ -523,7 +521,6 @@ frame_progress = 0.40193263
 
 [node name="BunnyBoss" type="AnimatedSprite2D" parent="destructor/SummonerBoss"]
 visible = false
-y_sort_enabled = true
 position = Vector2(14, -63)
 scale = Vector2(1.2, 1.2)
 sprite_frames = SubResource("SpriteFrames_se4yv")
@@ -532,7 +529,6 @@ frame_progress = 0.34373945
 
 [node name="RatBoss" type="AnimatedSprite2D" parent="destructor/SummonerBoss"]
 visible = false
-y_sort_enabled = true
 position = Vector2(50, -66)
 scale = Vector2(1.2, 1.2)
 sprite_frames = SubResource("SpriteFrames_ptlav")

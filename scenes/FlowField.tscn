@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw75x36wra83g"]
+
+[ext_resource type="Script" uid="uid://dh2vd0772cnlb" path="res://scripts/FlowField.cs" id="1_ijeol"]
+
+[node name="FlowField" type="Node2D"]
+script = ExtResource("1_ijeol")
+_updateDistance = 500.0

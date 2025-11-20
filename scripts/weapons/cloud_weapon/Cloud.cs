@@ -19,7 +19,7 @@ public partial class Cloud : Node2D
     [Export] private float _oscillationDistance = 25f;
     [Export] private float _oscillationMagnitude = .6f;
 
-    public Node2D Target;
+    public Enemy Target;
     public float Speed;
     public float Damage;
 
@@ -37,7 +37,7 @@ public partial class Cloud : Node2D
     public override void _PhysicsProcess(double delta)
     {
         if(!_active) return;
-        if (!IsInstanceValid(Target))
+        if (Target.InPool)
         {
             var tween = CreateTween();
             tween.TweenProperty(this, "modulate:a", 0f, 1f);

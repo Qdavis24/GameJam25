@@ -38,8 +38,11 @@ public partial class Ally : CharacterBody2D
 	private float _flipTimer = 0f;
 	private int _facing = 1; // 1 = right, -1 = left
 
+	private FlowField _flowField;
+
 	public override void _Ready()
 	{
+		_flowField = GameManager.Instance.FlowField;
 		AddToGroup("allies");
 		_isFree = false;
 
@@ -59,11 +62,11 @@ public partial class Ally : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!_isFree || TravellingThroughPortal || (GameManager.Instance.FlowField.Directions == null))
+		if (!_isFree || TravellingThroughPortal || !GameManager.Instance.FlowField.Valid)
 			return;
 
 		// 1) Base direction from flow field
-		Vector2 flowDir = GetFlowFieldDir();
+		Vector2 flowDir = _flowField.GetDirection(GlobalPosition);
 
 		// 2) Steering direction we’ll build
 		Vector2 steering = Vector2.Zero;
@@ -155,46 +158,7 @@ public partial class Ally : CharacterBody2D
 		AddChild(weapon);
 		weapon.InitWeapon();
 	}
-
-	// ---------- FLOW FIELD ----------
-
-	private Vector2 GetFlowFieldDir()
-	{
-		var tilemap = GameManager.Instance.World.PhysicalData.BaseTileMapLayer;
-		var allyCoord = tilemap.LocalToMap(tilemap.ToLocal(GlobalPosition));
-
-		var dir = Vector2.Zero;
-		int flowFieldCols = GameManager.Instance.FlowField.Directions.GetLength(0);
-		int flowFieldRows = GameManager.Instance.FlowField.Directions.GetLength(1);
-		int numSampleDirs = 0;
-
-		for (int colShift = -1; colShift <= 1; colShift++)
-		for (int rowShift = -1; rowShift <= 1; rowShift++)
-		{
-			int currCol = allyCoord.X + colShift;
-			int currRow = allyCoord.Y + rowShift;
-			if (currCol < 0 || currCol >= flowFieldCols || currRow < 0 || currRow >= flowFieldRows)
-				continue;
-
-			var currDir = GameManager.Instance.FlowField.Directions[currCol, currRow];
-			if (currDir == Vector2.Zero)
-				continue;
-
-			dir += currDir;
-			numSampleDirs++;
-		}
-
-		if (numSampleDirs == 0)
-			return Vector2.Zero;
-
-		dir /= numSampleDirs;
-
-		if (dir.LengthSquared() < 0.0001f)
-			return Vector2.Zero;
-
-		return dir.Normalized();
-	}
-
+	
 	// ---------- BOIDS STEERING ----------
 
 	private Vector2 GetBoidsDir()
