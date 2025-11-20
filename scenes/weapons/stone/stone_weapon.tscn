@@ -6,10 +6,10 @@
 [node name="StoneWeapon" type="Node2D"]
 script = ExtResource("1_eln4r")
 _stonePackedScene = ExtResource("2_vq06o")
-_offset = 55.0
+_offset = 65.0
 _projSpeed = 200.0
 _projCount = 3.0
-_projSize = 0.5
+_projSize = 0.6
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5
