@@ -14,14 +14,14 @@
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7wt0a"]
 light_mode = 1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wt0a"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjsac"]
 bg_color = Color(0.7246427, 0.7246425, 0.7246429, 1)
-corner_radius_top_left = 23
-corner_radius_top_right = 23
-corner_radius_bottom_right = 23
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
 
 [sub_resource type="Theme" id="Theme_mjsac"]
-Panel/styles/panel = SubResource("StyleBoxFlat_7wt0a")
+Panel/styles/panel = SubResource("StyleBoxFlat_mjsac")
 
 [sub_resource type="Theme" id="Theme_21i2r"]
 Label/colors/font_color = Color(0, 0, 0, 1)

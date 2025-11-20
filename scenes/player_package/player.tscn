@@ -1,4 +1,4 @@
-[gd_scene load_steps=126 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=133 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
@@ -23,6 +23,8 @@
 [ext_resource type="Texture2D" uid="uid://32x8486t4ucv" path="res://assets/characters/fox/racoon_walk.png" id="13_huy1x"]
 [ext_resource type="Script" uid="uid://d4hnm4svoo1uq" path="res://scripts/damage_system/Hurtbox.cs" id="18_huy1x"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="23_ditwi"]
+[ext_resource type="Texture2D" uid="uid://ds24bfwijl5at" path="res://assets/ui/mouse_icon.png" id="25_vsn27"]
+[ext_resource type="FontFile" uid="uid://gr65klg0w4k1" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="25_yfvsg"]
 
 [sub_resource type="Curve" id="Curve_fiwjr"]
 _data = [Vector2(0, 0.15730345), 0.0, -0.38083962, 0, 0, Vector2(1, 1), 0.6891386, 0.0, 0, 0]
@@ -764,6 +766,31 @@ radius = 22.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_fiwjr"]
 radius = 503.00894
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_oa6mu"]
+light_mode = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wt0a"]
+bg_color = Color(0.7246427, 0.7246425, 0.7246429, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+
+[sub_resource type="Theme" id="Theme_n4jys"]
+Panel/styles/panel = SubResource("StyleBoxFlat_7wt0a")
+
+[sub_resource type="Theme" id="Theme_xtqb1"]
+Label/colors/font_color = Color(0, 0, 0, 1)
+Label/constants/line_spacing = -14
+Label/font_sizes/font_size = 46
+Label/fonts/font = ExtResource("25_yfvsg")
+
+[sub_resource type="Theme" id="Theme_vsn27"]
+default_font = ExtResource("25_yfvsg")
+Label/colors/font_color = Color(0, 0, 0, 1)
+Label/colors/font_outline_color = Color(1, 1, 1, 1)
+Label/constants/outline_size = 5
+Label/font_sizes/font_size = 41
+
 [node name="Player" type="CharacterBody2D" groups=["Players"]]
 z_index = 1
 y_sort_enabled = true
@@ -827,5 +854,47 @@ color = Color(1, 0.77254903, 0.49803922, 1)
 energy = 0.12
 texture = ExtResource("23_ditwi")
 texture_scale = 5.0
+
+[node name="StartHelp" type="Panel" parent="."]
+z_index = 6
+material = SubResource("CanvasItemMaterial_oa6mu")
+offset_left = 41.0
+offset_top = -133.0
+offset_right = 333.0
+offset_bottom = -55.0
+theme = SubResource("Theme_n4jys")
+
+[node name="CenterContainer" type="CenterContainer" parent="StartHelp"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="StartHelp/CenterContainer"]
+layout_mode = 2
+theme = SubResource("Theme_xtqb1")
+text = "I need to find
+my friends"
+
+[node name="TextureRect" type="TextureRect" parent="StartHelp"]
+layout_mode = 0
+offset_left = -201.0
+offset_top = 43.0
+offset_right = -1.0
+offset_bottom = 243.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("25_vsn27")
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="StartHelp"]
+layout_mode = 0
+offset_left = -196.0
+offset_top = -7.0
+offset_right = 15.0
+offset_bottom = 79.0
+theme = SubResource("Theme_vsn27")
+text = "Attack"
 
 [connection signal="area_entered" from="Hurtbox" to="." method="OnPlayerHurtBoxEntered"]
