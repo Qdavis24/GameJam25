@@ -7,6 +7,7 @@ public partial class Sfx : Node
 	public override void _EnterTree() => I = this;
 
 	private bool _footstepPlaying = false;
+	private static bool _explosionPlaying = false;
 	
 	private const string SfxBus = "SFX";
 	private const string MusicBus  = "Music";
@@ -100,15 +101,28 @@ public partial class Sfx : Node
 	{
 		if (stream == null) return;
 
+		// If an explosion sound is currently active, skip
+		if (_explosionPlaying)
+			return;
+
+		_explosionPlaying = true;
+
 		var p = new AudioStreamPlayer
 		{
 			Stream = stream,
 			VolumeDb = volumeDb,
 			Bus = ExplosionBus
 		};
-		
-				AddChild(p);
-		p.Finished += () => p.QueueFree();
+
+		AddChild(p);
+
+		// When sound finishes, clear the flag
+		p.Finished += () =>
+		{
+			_explosionPlaying = false;
+			p.QueueFree();
+		};
+
 		p.Play();
 	}
 	
