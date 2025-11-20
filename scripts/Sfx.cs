@@ -7,7 +7,8 @@ public partial class Sfx : Node
 	public override void _EnterTree() => I = this;
 
 	private bool _footstepPlaying = false;
-	private static bool _explosionPlaying = false;
+	private static bool _explosionCooldown = false;
+	private const float ExplosionCooldownTime = 0.12f; // 120 ms
 	
 	private const string SfxBus = "SFX";
 	private const string MusicBus  = "Music";
@@ -101,11 +102,11 @@ public partial class Sfx : Node
 	{
 		if (stream == null) return;
 
-		// If an explosion sound is currently active, skip
-		if (_explosionPlaying)
+		// Skip if still in cooldown
+		if (_explosionCooldown)
 			return;
 
-		_explosionPlaying = true;
+		_explosionCooldown = true;
 
 		var p = new AudioStreamPlayer
 		{
@@ -116,14 +117,16 @@ public partial class Sfx : Node
 
 		AddChild(p);
 
-		// When sound finishes, clear the flag
-		p.Finished += () =>
-		{
-			_explosionPlaying = false;
-			p.QueueFree();
-		};
-
+		// Let the audio free itself *after it finishes naturally*
+		p.Finished += () => p.QueueFree();
 		p.Play();
+
+		// Create the cooldown timer (one-shot)
+		var timer = GetTree().CreateTimer(ExplosionCooldownTime);
+		timer.Timeout += () =>
+		{
+			_explosionCooldown = false;
+		};
 	}
 	
 	public override void _Ready()
