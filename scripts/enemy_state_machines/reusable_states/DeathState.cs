@@ -16,6 +16,7 @@ public partial class DeathState : EState
 		_stateMachine.Owner.Animations.Play("death");
 		var collision = _stateMachine.Owner.GetNode<CollisionShape2D>("CollisionShape2D");
 		collision.QueueFree();
+		GameManager.Instance.EnemyDeathUpdateKillCounter();
 
 		_stateMachine.Owner.Hurtbox.IsActive = false;
 		_deathEffectMaterial = (ParticleProcessMaterial)_deathEffect.ProcessMaterial;

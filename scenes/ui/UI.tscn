@@ -1,18 +1,20 @@
-[gd_scene load_steps=22 format=3 uid="uid://w11lstxqrmpj"]
+[gd_scene load_steps=24 format=3 uid="uid://w11lstxqrmpj"]
 
 [ext_resource type="PackedScene" uid="uid://cnrgwrvkm8ajt" path="res://scenes/ui/UpgradeScreen.tscn" id="1_d2gw2"]
 [ext_resource type="Script" uid="uid://bu3whablyvrhm" path="res://scripts/ui/Ui.cs" id="1_m01cm"]
-[ext_resource type="AudioStream" uid="uid://cqwr4184hxlig" path="res://assets/sounds/chest-xp-levelup/levelup_1.wav" id="2_mfq64"]
+[ext_resource type="AudioStream" uid="uid://cab5de2u5gjxo" path="res://assets/sounds/chest-xp-levelup/levelup_1.wav" id="2_mfq64"]
 [ext_resource type="PackedScene" uid="uid://dhg5dra5mmuyc" path="res://scenes/ui/PauseScreen.tscn" id="2_tnv4l"]
-[ext_resource type="AudioStream" uid="uid://j61l5lg5bj80" path="res://assets/sounds/chest-xp-levelup/levelup_2.wav" id="3_gu145"]
+[ext_resource type="AudioStream" uid="uid://bnx6eelewml5k" path="res://assets/sounds/chest-xp-levelup/levelup_2.wav" id="3_gu145"]
 [ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="3_j3nm3"]
 [ext_resource type="Texture2D" uid="uid://6j3o18xex4il" path="res://assets/ui/heart.png" id="3_nnfdp"]
 [ext_resource type="Texture2D" uid="uid://7ci5xohqb3ky" path="res://assets/ui/xp.png" id="3_s64wo"]
-[ext_resource type="AudioStream" uid="uid://b0y3kgdksu2ws" path="res://assets/sounds/chest-xp-levelup/chest_1.wav" id="4_28fq0"]
-[ext_resource type="AudioStream" uid="uid://c7sxtsvb57f32" path="res://assets/sounds/ui/death.wav" id="4_p6rkd"]
+[ext_resource type="AudioStream" uid="uid://c2rd4a0jwwnuv" path="res://assets/sounds/chest-xp-levelup/chest_1.wav" id="4_28fq0"]
+[ext_resource type="AudioStream" uid="uid://cs76hbtwecae3" path="res://assets/sounds/ui/death.wav" id="4_p6rkd"]
 [ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="5_dqg8s"]
-[ext_resource type="AudioStream" uid="uid://cml123lh3qckh" path="res://assets/sounds/chest-xp-levelup/chest_2.wav" id="5_m01xj"]
-[ext_resource type="AudioStream" uid="uid://b3o1l53fhat8l" path="res://assets/sounds/chest-xp-levelup/chest_3.wav" id="6_ii5g7"]
+[ext_resource type="AudioStream" uid="uid://bwfbqnl7q0ril" path="res://assets/sounds/chest-xp-levelup/chest_2.wav" id="5_m01xj"]
+[ext_resource type="AudioStream" uid="uid://44l4fysjf7pj" path="res://assets/sounds/chest-xp-levelup/chest_3.wav" id="6_ii5g7"]
+[ext_resource type="Texture2D" uid="uid://bik2atq4wjw7h" path="res://assets/ui/skull.png" id="14_28fq0"]
+[ext_resource type="Texture2D" uid="uid://c465etebqrmpl" path="res://assets/ui/portal.png" id="15_m01xj"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_5tdvf"]
 random_pitch = 1.27
@@ -91,9 +93,9 @@ anchor_top = 0.012074074
 anchor_right = 0.020958334
 anchor_bottom = 0.037
 offset_left = -0.44000053
-offset_top = -0.03999996
+offset_top = 0.96000004
 offset_right = -0.24000168
-offset_bottom = 0.040000916
+offset_bottom = 1.0400009
 texture = ExtResource("3_s64wo")
 expand_mode = 2
 metadata/_edit_use_anchors_ = true
@@ -112,13 +114,13 @@ metadata/_edit_use_anchors_ = true
 [node name="HealthIcon" type="TextureRect" parent="."]
 anchors_preset = -1
 anchor_left = 0.007
-anchor_top = 0.053000003
+anchor_top = 0.055000003
 anchor_right = 0.021000002
-anchor_bottom = 0.07700001
+anchor_bottom = 0.079
 offset_left = -0.44000053
-offset_top = -0.24000168
+offset_top = -0.40000534
 offset_right = -1.3200035
-offset_bottom = -0.16001129
+offset_bottom = -0.32000732
 texture = ExtResource("3_nnfdp")
 expand_mode = 2
 metadata/_edit_use_anchors_ = true
@@ -135,3 +137,41 @@ grow_horizontal = 2
 size_flags_horizontal = 4
 theme = SubResource("Theme_m01cm")
 metadata/_edit_use_anchors_ = true
+
+[node name="Stats" type="HBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.032
+anchor_top = 0.086
+anchor_right = 0.257
+anchor_bottom = 0.117000006
+offset_left = -2.4400024
+offset_top = 5.119995
+offset_right = -2.4400024
+offset_bottom = -5.3600082
+alignment = 1
+
+[node name="Skull" type="TextureRect" parent="Stats"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("14_28fq0")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="KillCounter" type="Label" parent="Stats"]
+layout_mode = 2
+text = "0"
+
+[node name="Control" type="Control" parent="Stats"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Portal" type="TextureRect" parent="Stats"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("15_m01xj")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="LevelCounter" type="Label" parent="Stats"]
+layout_mode = 2
+text = "1"

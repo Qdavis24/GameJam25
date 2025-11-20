@@ -1,12 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://dox5xw1hpjw6a"]
+[gd_scene load_steps=7 format=3 uid="uid://dox5xw1hpjw6a"]
 
 [ext_resource type="Script" uid="uid://c4ktbxt8w6sfp" path="res://scripts/ui/DeathScreen.cs" id="1_yar2g"]
 [ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xj0m4"]
+[ext_resource type="FontFile" uid="uid://gr65klg0w4k1" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="3_xj0m4"]
 
 [sub_resource type="Theme" id="Theme_tmfs4"]
 default_font = ExtResource("2_xj0m4")
 default_font_size = 200
 Label/colors/font_color = Color(0.8828571, 0, 0.17124498, 1)
+
+[sub_resource type="Theme" id="Theme_n6h62"]
+default_font = ExtResource("3_xj0m4")
+Label/font_sizes/font_size = 42
 
 [sub_resource type="Theme" id="Theme_mwkx4"]
 default_font = ExtResource("2_xj0m4")
@@ -35,6 +40,35 @@ layout_mode = 2
 layout_mode = 2
 theme = SubResource("Theme_tmfs4")
 text = "You Died"
+
+[node name="Stats" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_n6h62")
+alignment = 1
+
+[node name="Kills" type="Label" parent="CenterContainer/VBoxContainer/Stats"]
+layout_mode = 2
+text = "Kills: "
+
+[node name="KillCount" type="Label" parent="CenterContainer/VBoxContainer/Stats"]
+layout_mode = 2
+text = "0"
+
+[node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer/Stats"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Level" type="Label" parent="CenterContainer/VBoxContainer/Stats"]
+layout_mode = 2
+text = "Level: "
+
+[node name="LevelCount" type="Label" parent="CenterContainer/VBoxContainer/Stats"]
+layout_mode = 2
+text = "1"
+
+[node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
 
 [node name="Menu" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2

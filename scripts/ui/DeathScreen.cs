@@ -7,17 +7,26 @@ public partial class DeathScreen : Panel
 	public delegate void MainMenuRequestedEventHandler();
 
 	[Export] private AudioStream _deathSound;
+	
+	private Label _killCount;
+	private Label _levelCount;
 
 	public override void _Ready()
 	{
 		ProcessMode = Node.ProcessModeEnum.Always;
 		Visible = false;
+		
+		_killCount = GetNode<Label>("CenterContainer/VBoxContainer/Stats/KillCount");
+		_levelCount = GetNode<Label>("CenterContainer/VBoxContainer/Stats/LevelCount");
+		
 		GetNode<Button>("CenterContainer/VBoxContainer/Menu").Pressed += EmitSignalMainMenuRequested;
 	}
 
 
-	public void Open()
+	public void Open((string kills, string level) counters)
 	{
+		_killCount.Text = counters.kills;
+		_levelCount.Text = counters.level;
 		Visible = true;
 		Sfx.I.PlayUi(_deathSound);
 		Modulate = new Color(Modulate, 1); // ensure alpha is 1 (visible)

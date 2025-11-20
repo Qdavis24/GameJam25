@@ -260,6 +260,7 @@ public partial class GameManager : Node
 	private async void ChangeLevel()
 	{
 		await _screenFade.FadeToBlack();
+		_ui.IncrementLevelCounter();
 		InitWorldLevel();
 		await _screenFade.FadeToNormal();
 	}
@@ -297,7 +298,7 @@ public partial class GameManager : Node
 		GetTree().Paused = true;
 		_isPaused = true;
 		Cam.DeathAnim();
-		_deathScreen.Open();
+		_deathScreen.Open(_ui.GetCounters());
 		_gameState = GameState.DeathScreen;
 	}
 
@@ -305,5 +306,10 @@ public partial class GameManager : Node
 	public void OpenChest()
 	{
 		_ui.OpenChest();
+	}
+	
+	public void EnemyDeathUpdateKillCounter()
+	{
+		_ui.IncrementKillCounter();
 	}
 }
