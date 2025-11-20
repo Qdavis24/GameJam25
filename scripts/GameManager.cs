@@ -140,6 +140,7 @@ public partial class GameManager : Node
 		Player = _playerScene.Instantiate<Player>();
 		Player.AnimationSet = character;
 		_ui.InitializeUiFromPlayer(Player); // connects players signals related to stats and upgrade to ui
+		_ui.ResetCounters();
 		PersistentNodes.AddChild(Player);
 		Player.Died += OnPlayerDeath;
 		InitWorldLevel();
@@ -154,6 +155,7 @@ public partial class GameManager : Node
 		Cam = null;
 		Player.QueueFree();
 		Player = null;
+		RemoveAllies();
 		World.QueueFree();
 		World = null;
 		FlowField = null;
@@ -169,7 +171,7 @@ public partial class GameManager : Node
 	{
 		Bosses = new() { "rat", "raccoon", "bunny"};
 		PauseAllies();
-		
+		_ui.HideUpgrade(); // prevent upgrade from remaining
 		Player.Visible = false;
 		_gameState = GameState.LoadingGame;
 		Player.InitForWorldLevel();
@@ -196,7 +198,11 @@ public partial class GameManager : Node
 		foreach (var ally in AllyInstances.ToArray())
 		{
 			if (!IsInstanceValid(ally)) 
+			{
+				GD.Print("PauseAllies says not valid instance");
 				continue;
+			}
+				
 			// Mark as travelling so their own logic can behave differently
 			ally.TravellingThroughPortal = true;
 		}
@@ -207,11 +213,34 @@ public partial class GameManager : Node
 		foreach (var ally in AllyInstances.ToArray())
 		{
 			if (!IsInstanceValid(ally)) 
+			{
 				continue;
+			}
+
+				
+			if (!ally.IsFreedFromCage)
+			{
+				continue;
+			}
 			
 			ally.GlobalPosition = Player.GlobalPosition;
 			ally.TravellingThroughPortal = false;
 		}
+	}
+	
+	public void RemoveAllies()
+	{
+		foreach (var ally in AllyInstances.ToArray())
+		{
+			if (!IsInstanceValid(ally)) 
+				continue;
+			
+			ally.QueueFree();
+		}
+		
+		GD.Print("CLEARING:", AllyInstances.Count);
+		AllyInstances.Clear();
+		GD.Print("CLEARED:", AllyInstances.Count);
 	}
 
 	private void ScaleDifficulty()

@@ -111,5 +111,10 @@ public partial class Ui : CanvasLayer
 	{
 		return (_killCounter.Text, _levelCounter.Text);
 	}
+	public void ResetCounters()
+	{
+		_killCounter.Text = "0";
+		_levelCounter.Text = "1";
+	}
 	
 }

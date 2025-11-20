@@ -180,6 +180,9 @@ public partial class EnemySpawner : Node2D
 
 		_ally = _allyPackedScene.Instantiate<Ally>();
 		_ally.Species = species;
+		
+		var allyInstances = GameManager.Instance.AllyInstances;
+		allyInstances.Add(_ally);
 
 		var center = GlobalPosition;
 		float distanceMultiplier = 2.0f;

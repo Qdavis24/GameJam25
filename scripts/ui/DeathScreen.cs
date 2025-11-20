@@ -10,6 +10,8 @@ public partial class DeathScreen : Panel
 	
 	private Label _killCount;
 	private Label _levelCount;
+	
+	private bool _mainMenuBeenPressed = false;
 
 	public override void _Ready()
 	{
@@ -19,12 +21,14 @@ public partial class DeathScreen : Panel
 		_killCount = GetNode<Label>("CenterContainer/VBoxContainer/Stats/KillCount");
 		_levelCount = GetNode<Label>("CenterContainer/VBoxContainer/Stats/LevelCount");
 		
-		GetNode<Button>("CenterContainer/VBoxContainer/Menu").Pressed += EmitSignalMainMenuRequested;
+		GetNode<Button>("CenterContainer/VBoxContainer/Menu").Pressed += MainMenuPressed;
 	}
 
 
 	public void Open((string kills, string level) counters)
 	{
+		_mainMenuBeenPressed = false;
+
 		_killCount.Text = counters.kills;
 		_levelCount.Text = counters.level;
 		Visible = true;
@@ -38,5 +42,12 @@ public partial class DeathScreen : Panel
 	{
 		Visible = false;
 
+	}
+	
+	public void MainMenuPressed()
+	{
+		if (_mainMenuBeenPressed) return;
+		_mainMenuBeenPressed = true;
+		EmitSignalMainMenuRequested();
 	}
 }
