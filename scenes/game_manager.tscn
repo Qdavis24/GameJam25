@@ -18,13 +18,13 @@
 [ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="12_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dox5xw1hpjw6a" path="res://scenes/ui/DeathScreen.tscn" id="13_5xtl8"]
 [ext_resource type="Script" uid="uid://cag2c5l6em61o" path="res://scripts/ScreenFade.cs" id="13_lcbjr"]
-[ext_resource type="AudioStream" uid="uid://bx1fn3t0qw8s6" path="res://assets/sounds/ForestTunes(74bpm-Gmaj-GameJam).mp3" id="16_cjvif"]
+[ext_resource type="AudioStream" uid="uid://c5xj42iq22ybi" path="res://assets/sounds/ForestTunes(74bpm-Gmaj-GameJam).mp3" id="16_cjvif"]
 
 [node name="GameManager" type="Node2D" node_paths=PackedStringArray("_screenFade", "_ui", "_mainMenu", "_pauseScreen", "_deathScreen")]
 y_sort_enabled = true
 script = ExtResource("1_udu3i")
 _enemySpawnerNumEnemiesPerWave = 10.0
-_enemySpawnerWaveInterval = 25.0
+_enemySpawnerWaveInterval = 30.0
 _enemySpawnerNumWaves = 10.0
 _enemySpawnerNumWavesScalr = 2.0
 _xpOrbScene = ExtResource("2_jdad8")

@@ -153,7 +153,6 @@ public partial class GameManager : Node
     private async void EndGame()
     {
         await _screenFade.FadeToBlack();
-        EnemyPool.ReturnAllEnemies();
         // cleanup all game components
         Cam.QueueFree();
         Cam = null;
@@ -172,6 +171,7 @@ public partial class GameManager : Node
         XpPool.QueueFree();
         XpPool = null;
         
+        EnemyPool.ReturnAllEnemies();
         EnemyPool.QueueFree();
         EnemyPool = null;
         

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 namespace GameJam25.scripts.world_generation.models
 {
-    public class PhysicalWorldData
+    public struct PhysicalWorldData
     {
         
         public TileMapLayer BaseTileMapLayer;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameJam25.scripts.world_generation.models
 {
-    public class Shrine
+    public struct Shrine
     {
         public Vector2I RootCell { get; }
         public List<Vector2I> AllCells { get; }

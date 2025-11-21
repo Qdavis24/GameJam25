@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dtgtqkim67d2o"]
+[gd_scene load_steps=28 format=3 uid="uid://dtgtqkim67d2o"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_pkq8v"]
 [ext_resource type="Script" uid="uid://dx3v6yxf8sc1u" path="res://scripts/enemy_state_machines/base_classes/EStateMachine.cs" id="2_eieg8"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bb1am2rf2c6lb" path="res://scenes/enemies/owl_wraith/shadow_ball.tscn" id="9_eieg8"]
 [ext_resource type="PackedScene" uid="uid://chvr7h6jkalhr" path="res://scenes/enemies/Particle_Effects/death_particles.tscn" id="9_mguii"]
 [ext_resource type="Texture2D" uid="uid://bsii8213thyr1" path="res://assets/characters/fox/shadow.png" id="11_rvc00"]
+[ext_resource type="PackedScene" uid="uid://cknywm26hylby" path="res://scenes/pickups/health.tscn" id="14_w2b4p"]
 [ext_resource type="Script" uid="uid://dvb6dfm4xhywl" path="res://scripts/enemy_state_machines/reusable_states/SpawnState.cs" id="15_fkf4r"]
 [ext_resource type="SpriteFrames" uid="uid://cot265y1n4uxo" path="res://scenes/enemies/owl_wraith/owl_wraith_sprite_frames.tres" id="16_fkf4r"]
 [ext_resource type="Script" uid="uid://d4hnm4svoo1uq" path="res://scripts/damage_system/Hurtbox.cs" id="19_w2b4p"]
@@ -133,6 +134,8 @@ _projectileSpeed = 300
 [node name="DeathState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_deathEffect")]
 script = ExtResource("5_rvc00")
 _deathEffect = NodePath("DeathEffect")
+_healthDropChance = 0.1
+_healthScene = ExtResource("14_w2b4p")
 
 [node name="DeathEffect" parent="WraithStateMachine/DeathState" instance=ExtResource("9_mguii")]
 

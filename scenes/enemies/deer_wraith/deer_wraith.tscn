@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dnsjmjr2bh647"]
+[gd_scene load_steps=28 format=3 uid="uid://dnsjmjr2bh647"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_patmq"]
 [ext_resource type="AudioStream" uid="uid://ct748j1w2mwkf" path="res://assets/sounds/thuds/hitsound.wav" id="2_4mccc"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://op8oiyqpgdc1" path="res://scripts/enemy_state_machines/base_classes/EInstanceContext.cs" id="12_gdbcg"]
 [ext_resource type="PackedScene" uid="uid://binbhlfd5jls4" path="res://scenes/enemies/deer_wraith/meele_attack.tscn" id="13_axc5h"]
 [ext_resource type="Script" uid="uid://bnctq15ygaq0a" path="res://scripts/enemy_state_machines/custom_states/MeeleState.cs" id="13_xv4jy"]
+[ext_resource type="PackedScene" uid="uid://cknywm26hylby" path="res://scenes/pickups/health.tscn" id="15_f0xl5"]
 [ext_resource type="Script" uid="uid://dvb6dfm4xhywl" path="res://scripts/enemy_state_machines/reusable_states/SpawnState.cs" id="15_sh0ou"]
 [ext_resource type="Texture2D" uid="uid://bsii8213thyr1" path="res://assets/characters/fox/shadow.png" id="16_ho4mj"]
 [ext_resource type="SpriteFrames" uid="uid://cy1om80shqujm" path="res://scenes/enemies/deer_wraith/deer_wraith_sprite_frames.tres" id="16_sh0ou"]
@@ -146,6 +147,8 @@ process_material = SubResource("ParticleProcessMaterial_ad4ay")
 [node name="DeathState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_deathEffect")]
 script = ExtResource("10_b83jp")
 _deathEffect = NodePath("DeathEffect")
+_healthDropChance = 0.01
+_healthScene = ExtResource("15_f0xl5")
 
 [node name="DeathEffect" parent="WraithStateMachine/DeathState" instance=ExtResource("11_n5gwk")]
 

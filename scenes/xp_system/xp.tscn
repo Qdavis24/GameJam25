@@ -41,6 +41,7 @@ offset_bottom = 2.0
 color = Color(1, 1, 0, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_elyt5")
 
 [node name="Xp" type="GPUParticles2D" parent="."]

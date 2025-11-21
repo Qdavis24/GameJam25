@@ -15,11 +15,23 @@ public partial class World : Node2D
 
 	public override void _Ready()
 	{
-		_worldGenPipelineManger.PipelineFinished += EmitSignalWorldGenerationComplete;
+		_worldGenPipelineManger.PipelineFinished += OnPipelineFinished;
 		
 		LogicalData = new();
 		PhysicalData = new();
 		_worldGenPipelineManger.RunPipeline();
-		
+	}
+
+	private void OnPipelineFinished()
+	{
+		CleanupUnusedProceduralData();
+		EmitSignalWorldGenerationComplete();
+	}
+
+	private void CleanupUnusedProceduralData()
+	{
+		LogicalData.Islands.Clear();
+		LogicalData.IslandEdges.Clear();
+		LogicalData.Paths.Clear();
 	}
 }

@@ -47,8 +47,12 @@ namespace GameJam25.scripts.world_generation.pipeline
 			{
 				_pipelineStages.Add(child as PipelineStage);
 			}
-			
-			foreach (PipelineStage stage in _pipelineStages) stage.ProcessStage();
+
+			foreach (PipelineStage stage in _pipelineStages)
+			{
+				stage.ProcessStage();
+				stage.QueueFree();
+			}
 			EmitSignalPipelineFinished();
 		}
 	}

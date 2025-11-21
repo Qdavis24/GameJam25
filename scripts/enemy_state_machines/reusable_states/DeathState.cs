@@ -5,9 +5,12 @@ namespace GameJam25.scripts.enemy_state_machines.reusable_states;
 
 public partial class DeathState : EState
 {
-	[ExportCategory("special effects")] [Export]
-	private GpuParticles2D _deathEffect;
+	[ExportCategory("special effects")] 
+	[Export] private GpuParticles2D _deathEffect;
 
+	[Export] private float _healthDropChance;
+	[Export] private PackedScene _healthScene;
+	
 	private ParticleProcessMaterial _deathEffectMaterial;
 
 	// Super's abstract methods below
@@ -32,6 +35,12 @@ public partial class DeathState : EState
 	public override void Exit()
 	{
 		_stateMachine.Owner.Animations.Stop();
+		if (GD.Randf() < _healthDropChance)
+		{
+			var health = _healthScene.Instantiate<Area2D>();
+			health.GlobalPosition = GlobalPosition;
+			GetTree().Root.AddChild(health);
+		}
 		GameManager.Instance.XpPool.SpawnXpAt(_stateMachine.Owner.XpReward, GlobalPosition);
 		GameManager.Instance.EnemyPool.ReturnEnemy(_stateMachine.Owner);
 	}

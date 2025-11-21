@@ -18,7 +18,7 @@ public partial class Enemy : CharacterBody2D
 	[Export] public Area2D SteeringRange;
 	[Export] public Hurtbox Hurtbox;
 	[Export] public int AttackRange;
-	
+
 
 	[ExportCategory("References")] 
 	[Export] public AnimatedSprite2D Animations;
@@ -40,7 +40,7 @@ public partial class Enemy : CharacterBody2D
 	public void Enable(Vector2 spawnPosition)
 	{
 		InPool = false;
-		_trailParticles.ProcessMode = ProcessModeEnum.Inherit; // maybe dont if bad performance
+		_trailParticles.ProcessMode = ProcessModeEnum.Inherit;
 		_trailParticles.Emitting = true;
 		GlobalPosition = spawnPosition;
 		Health = _maxHealth;
@@ -65,8 +65,8 @@ public partial class Enemy : CharacterBody2D
 	public void Disable()
 	{
 		InPool = true;
-		if (IsInstanceValid(_trailParticles) && _trailParticles != null) _trailParticles.Emitting = true;
-		// Collision and monitoring
+		_trailParticles.ProcessMode = ProcessModeEnum.Inherit;
+		_trailParticles.Emitting = true;
 		CanTakeDamage = false;
 		CollisionLayer = 0;
 		CollisionMask = 0;

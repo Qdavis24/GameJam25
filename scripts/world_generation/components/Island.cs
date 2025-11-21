@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameJam25.scripts.world_generation.models
 {
-	public class Island
+	public struct Island
 	{
 		public List<Vector2I> AllCells;
 		public List<Vector2I> BorderCells;

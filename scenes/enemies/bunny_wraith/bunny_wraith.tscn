@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dywc23eylfitj"]
+[gd_scene load_steps=28 format=3 uid="uid://dywc23eylfitj"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_cqb61"]
 [ext_resource type="Material" uid="uid://d3dee6ucj0674" path="res://shaders/flash_shader.tres" id="2_hiihx"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://bwdq54lyr2fds" path="res://scripts/enemy_state_machines/reusable_states/DeathState.cs" id="5_iuhr7"]
 [ext_resource type="AudioStream" uid="uid://ckxrfox7070pk" path="res://assets/sounds/thuds/fleshy hit (1).wav" id="5_rlrlu"]
 [ext_resource type="PackedScene" uid="uid://ct0g3652cw1dx" path="res://scenes/enemies/bunny_wraith/explode_attack.tscn" id="6_ns0ja"]
+[ext_resource type="PackedScene" uid="uid://cknywm26hylby" path="res://scenes/pickups/health.tscn" id="6_qknn0"]
 [ext_resource type="PackedScene" uid="uid://chvr7h6jkalhr" path="res://scenes/enemies/Particle_Effects/death_particles.tscn" id="6_s0hyp"]
 [ext_resource type="Script" uid="uid://op8oiyqpgdc1" path="res://scripts/enemy_state_machines/base_classes/EInstanceContext.cs" id="7_ktkax"]
 [ext_resource type="Script" uid="uid://bu8otgwd2la2k" path="res://scripts/enemy_state_machines/custom_states/ExplodeState.cs" id="8_t25d3"]
@@ -144,6 +145,8 @@ process_material = SubResource("ParticleProcessMaterial_ad4ay")
 [node name="DeathState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_deathEffect")]
 script = ExtResource("5_iuhr7")
 _deathEffect = NodePath("DeathEffect")
+_healthDropChance = 0.2
+_healthScene = ExtResource("6_qknn0")
 
 [node name="DeathEffect" parent="WraithStateMachine/DeathState" instance=ExtResource("6_s0hyp")]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=136 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=138 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://dnxstr2v18wxm" path="res://assets/sounds/walk.wav" id="7_i0p41"]
 [ext_resource type="Texture2D" uid="uid://cn8ar0vmd2aid" path="res://assets/characters/fox/frog_blink.png" id="8_6aame"]
 [ext_resource type="Texture2D" uid="uid://doqnd2cc7u00i" path="res://assets/characters/fox/frog_idle.png" id="8_gwwsj"]
+[ext_resource type="AudioStream" uid="uid://8nxg8jpxmilp" path="res://assets/sounds/chest-xp-levelup/health_pickup.mp3" id="8_n4jys"]
 [ext_resource type="Texture2D" uid="uid://deku5ueeeta1i" path="res://assets/characters/fox/rabbit_idle.png" id="8_p7c74"]
 [ext_resource type="Texture2D" uid="uid://gcqmlr3e0g0o" path="res://assets/characters/fox/frog_walk.png" id="9_6aame"]
 [ext_resource type="Texture2D" uid="uid://ddcdwo58b52pg" path="res://assets/characters/fox/rabbit_walk.png" id="9_gsthy"]
@@ -25,7 +26,7 @@
 [ext_resource type="Script" uid="uid://d4hnm4svoo1uq" path="res://scripts/damage_system/Hurtbox.cs" id="18_huy1x"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="23_ditwi"]
 [ext_resource type="Texture2D" uid="uid://ds24bfwijl5at" path="res://assets/ui/mouse_icon.png" id="25_vsn27"]
-[ext_resource type="FontFile" uid="uid://gr65klg0w4k1" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="25_yfvsg"]
+[ext_resource type="FontFile" uid="uid://cm33if0b0s0da" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="25_yfvsg"]
 [ext_resource type="Texture2D" uid="uid://dkr6sie0av881" path="res://assets/ui/mouse2.png" id="26_yfvsg"]
 
 [sub_resource type="Curve" id="Curve_fiwjr"]
@@ -39,6 +40,11 @@ stream_0/stream = ExtResource("3_2rq5i")
 stream_1/stream = ExtResource("4_ditwi")
 stream_2/stream = ExtResource("5_feq7b")
 stream_3/stream = ExtResource("6_vsn27")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xtqb1"]
+random_pitch = 1.3
+streams_count = 1
+stream_0/stream = ExtResource("8_n4jys")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6qmwb"]
 atlas = ExtResource("4_p7c74")
@@ -816,11 +822,11 @@ LungeDuration = 0.3
 MaxXp = 500
 _xpSpeedRamp = SubResource("Curve_fiwjr")
 _xpMagnetSpeed = 15.0
-_xpAcquireRange = 50.0
 _flashShader = ExtResource("2_oa6mu")
 _damageIntervalTimer = NodePath("FlashIntervalTimer")
 SlashAttack = ExtResource("2_fiwjr")
 _xpSounds = SubResource("AudioStreamRandomizer_2rq5i")
+_healthSounds = SubResource("AudioStreamRandomizer_xtqb1")
 
 [node name="CloudWeapon" parent="." instance=ExtResource("3_3y6wl")]
 

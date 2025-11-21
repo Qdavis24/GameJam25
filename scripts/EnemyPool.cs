@@ -40,7 +40,6 @@ public partial class EnemyPool : Node2D
             {
                 var currEnemy = CreateEnemyForPool(_enemyScenes[type]);
                 _pool[type].Enqueue(currEnemy);
-                _allEnemies.Add(currEnemy);
             }
         }
     }
@@ -50,6 +49,7 @@ public partial class EnemyPool : Node2D
         var newEnemy = scene.Instantiate<Enemy>();
         AddChild(newEnemy);
         newEnemy.Disable();
+        _allEnemies.Add(newEnemy);
         return newEnemy;
     }
 
@@ -60,7 +60,6 @@ public partial class EnemyPool : Node2D
         if (_pool[type].Count == 0)
         {
             newEnemy = _enemyScenes[type].Instantiate<Enemy>();
-            _allEnemies.Add(newEnemy);
             AddChild(newEnemy);
         }
         else
@@ -85,10 +84,7 @@ public partial class EnemyPool : Node2D
         {
             var currEnemy = _allEnemies[i];
             if (!currEnemy.InPool)
-                if (!ReturnEnemy(currEnemy))
-                {
-                    _allEnemies.RemoveAt(i);
-                }
+                ReturnEnemy(currEnemy);
         }
     }
 }

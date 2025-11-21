@@ -36,17 +36,17 @@ public partial class Player : CharacterBody2D
 	[Export] private Curve _xpSpeedRamp;
 	[Export] private float _maxXpGrowthRate = 1.5f;
 	[Export] private float _xpMagnetSpeed = 20f;
-	[Export] private float _xpAcquireRange = 70f;
+	[Export] private float _aquirePickupRange = 70f;
 
-	[ExportCategory("Required Resources")] [Export]
-	public string AnimationSet = "fox";
-	
+	[ExportCategory("Required Resources")] 
+	[Export] public string AnimationSet = "fox";
 	[Export] private ShaderMaterial _flashShader;
 	[Export] private Timer _damageIntervalTimer;
 
 	[Export] public PackedScene SlashAttack;
 	
 	[Export] private AudioStream _xpSounds;
+	[Export] private AudioStream _healthSounds;
 
 	// internal refs
 	private Hurtbox _hurtbox;
@@ -59,7 +59,8 @@ public partial class Player : CharacterBody2D
 	private bool _showStartHelp = true;
 
 	// Xp state vars
-	private List<Xp> _xpInRange = new();
+	private List<Area2D> _xpInRange = new();
+	private List<Area2D> _healthInRange = new(); // TODO: make pickup base class for xp and health
 
 	// Player current stats
 	private float _health;
@@ -78,9 +79,13 @@ public partial class Player : CharacterBody2D
 	{
 		foreach (var xp in _xpInRange)
 		{
-			GameManager.Instance.XpPool.ReturnXp(xp);
+			GameManager.Instance.XpPool.ReturnXp(xp as Xp);
 		}
-
+		foreach (var health in _healthInRange)
+		{
+			health.QueueFree();
+		}
+		_healthInRange.Clear();
 		_xpInRange.Clear();
 	}
 
@@ -123,36 +128,51 @@ public partial class Player : CharacterBody2D
 	{
 		GetInput(delta);
 		MoveAndSlide();
-		AttractXp();
 	}
 
-	private void AttractXp()
+	public override void _Process(double delta)
 	{
-		for (int i = _xpInRange.Count - 1; i >= 0; i--)
-		{
-			var xp = _xpInRange[i];
-			var dir = (GlobalPosition - xp.GlobalPosition);
-			var lengthSquared = dir.LengthSquared();
-			if (lengthSquared < _xpAcquireRange)
-			{
-				_xp += xp.Amount;
-				while (_xp >= MaxXp)
-				{
-					_xp -= MaxXp;
-					MaxXp = (int)(MaxXp * _maxXpGrowthRate);
-					_level++;
-					EmitSignalXpChanged(_xp);
-					EmitSignalLevelChanged(_level);
-				}
+		AttractPickup(_xpInRange);
+		AttractPickup(_healthInRange);
+	}
 
-				GameManager.Instance.XpPool.ReturnXp(xp);
-				Sfx.I.Play2D(_xpSounds, GlobalPosition);
-				EmitSignalXpChanged(_xp);
-				_xpInRange.RemoveAt(i);
+	private void AttractPickup(List<Area2D> pickups)
+	{
+		for (int i = pickups.Count - 1; i >= 0; i--)
+		{
+			var pickup = pickups[i];
+			var dir = (GlobalPosition - pickup.GlobalPosition);
+			var lengthSquared = dir.LengthSquared();
+			if (lengthSquared < _aquirePickupRange)
+			{
+				if (pickup.IsInGroup("Xp"))
+				{
+					var xp = pickup as Xp;
+					_xp += xp.Amount;
+					while (_xp >= MaxXp)
+					{
+						_xp -= MaxXp;
+						MaxXp = (int)(MaxXp * _maxXpGrowthRate);
+						_level++;
+						EmitSignalXpChanged(_xp);
+						EmitSignalLevelChanged(_level);
+					}
+					GameManager.Instance.XpPool.ReturnXp(xp);
+					Sfx.I.Play2D(_xpSounds, GlobalPosition);
+					EmitSignalXpChanged(_xp);
+				}
+				else if (pickup.IsInGroup("Health"))
+				{
+					Sfx.I.Play2D(_healthSounds, GlobalPosition);
+					_health = Math.Clamp(_health + 50f, 0, _maxHealth);
+					EmitSignalHealthChanged(_health);
+					pickup.QueueFree();
+				}
+				pickups.RemoveAt(i);
 			}
 			else
 			{
-				xp.Position += dir.Normalized() *
+				pickup.Position += dir.Normalized() *
 							   _xpSpeedRamp.Sample(
 								   (float)Mathf.Clamp(Math.Pow(_xpSpeedIncreaseRange, 2) / lengthSquared, 0, 1)) *
 							   _xpMagnetSpeed;
@@ -312,8 +332,12 @@ public partial class Player : CharacterBody2D
 
 	private void OnPickupRangeEntered(Area2D area)
 	{
-		if (!area.IsInGroup("Xp")) return;
-		_xpInRange.Add(area as Xp);
+		if (area.IsInGroup("Xp"))
+			_xpInRange.Add(area);
+		else if (area.IsInGroup("Health"))
+			_healthInRange.Add(area);
+		
+			
 	}
 
 	private void OnPickupRangeExited(Area2D area)

@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://cknywm26hylby"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p2c41"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tm5g6"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vl2ll"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 180.0
+initial_velocity_min = 4.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, -2, 0)
+damping_min = 1.0
+damping_max = 2.0
+scale_min = 0.099999994
+color = Color(1, 0.23921569, 0, 1)
+hue_variation_min = -0.100000024
+hue_variation_max = 0.09999997
+
+[node name="Health" type="Area2D" groups=["Health"]]
+collision_layer = 8
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+color = Color(1, 0, 0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_p2c41")
+
+[node name="Health" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_tm5g6")
+amount = 10
+lifetime = 3.0
+process_material = SubResource("ParticleProcessMaterial_vl2ll")
