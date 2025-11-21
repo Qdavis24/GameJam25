@@ -33,7 +33,7 @@ public partial class ExplodeState : EState
             var explosion = _explosionAttackScene.Instantiate<ExplodeAttack>();
             explosion.GlobalPosition = GlobalPosition;
             GetTree().Root.AddChild(explosion);
-            _stateMachine.Owner.QueueFree();
+            GameManager.Instance.EnemyPool.ReturnEnemy(_stateMachine.Owner);
         }
     }
 }

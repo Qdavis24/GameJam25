@@ -40,6 +40,9 @@ public partial class Player : CharacterBody2D
 
 	[ExportCategory("Required Resources")] [Export]
 	public string AnimationSet = "fox";
+	
+	[Export] private ShaderMaterial _flashShader;
+	[Export] private Timer _damageIntervalTimer;
 
 	[Export] public PackedScene SlashAttack;
 	
@@ -69,6 +72,8 @@ public partial class Player : CharacterBody2D
 	private float lungeTime = 0f;
 	private Vector2 lungeDir = Vector2.Right;
 
+	private bool _canTakeDamage = true;
+
 	public void InitForWorldLevel()
 	{
 		foreach (var xp in _xpInRange)
@@ -81,6 +86,11 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
+		_damageIntervalTimer.Timeout += () =>
+		{
+			_canTakeDamage = true;
+			_anim.Material = null;
+		};
 		// wire up internal refs
 
 		_weapons[Weapon.Fireball] = GetNode<WeaponBase>("FireballWeapon");
@@ -260,6 +270,8 @@ public partial class Player : CharacterBody2D
 		GameManager.Instance.Cam.Shake(amount);
 		_health = Mathf.Clamp(_health - amount, 0, _maxHealth);
 		EmitSignalHealthChanged(_health);
+		_anim.Material = _flashShader;
+		_damageIntervalTimer.Start();
 
 		if (_health <= 0)
 		{

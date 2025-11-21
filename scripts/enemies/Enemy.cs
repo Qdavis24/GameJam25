@@ -65,8 +65,7 @@ public partial class Enemy : CharacterBody2D
 	public void Disable()
 	{
 		InPool = true;
-		_trailParticles.ProcessMode = ProcessModeEnum.Inherit; // maybe dont if bad performance
-		_trailParticles.Emitting = true;
+		if (IsInstanceValid(_trailParticles) && _trailParticles != null) _trailParticles.Emitting = true;
 		// Collision and monitoring
 		CanTakeDamage = false;
 		CollisionLayer = 0;
@@ -125,4 +124,5 @@ public partial class Enemy : CharacterBody2D
 		Sfx.I.Play2D(_hitSounds, GlobalPosition, -30);
 		TakeDamage(hb.Damage, hb.KnockbackWeight, (GlobalPosition - hb.GlobalPosition));
 	}
+	
 }
