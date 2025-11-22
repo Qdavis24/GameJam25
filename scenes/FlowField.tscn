@@ -4,4 +4,5 @@
 
 [node name="FlowField" type="Node2D"]
 script = ExtResource("1_ijeol")
-_updateDistance = 1000.0
+_updateDistance = 1500.0
+_cellsProcessedPerFrame = 300
