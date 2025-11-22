@@ -16,7 +16,7 @@ public partial class Enemy : CharacterBody2D
 
 	[ExportCategory("Distance Ranges")] 
 	[Export] public Area2D SteeringRange;
-	[Export] public Hurtbox Hurtbox;
+	[Export] public Area2D Hurtbox;
 	[Export] public int AttackRange;
 
 
