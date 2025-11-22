@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://qevbfpqv6q20"]
 
 [ext_resource type="Script" uid="uid://bjdvo6aab61xk" path="res://scripts/Portals/EnterPortal.cs" id="1_ap7dn"]
-[ext_resource type="AudioStream" uid="uid://d3bf8m3lm1n0" path="res://assets/sounds/portal/spawn.wav" id="2_cjie2"]
-[ext_resource type="AudioStream" uid="uid://bjt2ebysffjw6" path="res://assets/sounds/portal/portal_idle-34022.mp3" id="2_emtbt"]
+[ext_resource type="AudioStream" uid="uid://cmlhj6jvq3txe" path="res://assets/sounds/portal/spawn.wav" id="2_cjie2"]
+[ext_resource type="AudioStream" uid="uid://b7hfuc3ynks7n" path="res://assets/sounds/portal/portal_idle-34022.mp3" id="2_emtbt"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="4_4ko36"]
 
 [sub_resource type="Curve" id="Curve_emtbt"]

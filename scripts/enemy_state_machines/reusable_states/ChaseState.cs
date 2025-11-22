@@ -9,7 +9,7 @@ public partial class ChaseState : EState
 {
 	[ExportCategory("References")] 
 	[Export] private Area2D _steeringRange;
-	[Export] private Timer _boidsTimer;
+	[Export] private Timer _directionUpdateTimer;
 	
 	[ExportCategory("Interpolation Behavior")] 
 	[Export] private bool Interpolate;
@@ -42,6 +42,7 @@ public partial class ChaseState : EState
 	
 	private Player _player;
 	private Vector2 _currBoidsDir = Vector2.Zero;
+	private Vector2 _currFlowFieldDir = Vector2.Zero;
 
 	private enum Pathfinding
 	{
@@ -65,7 +66,9 @@ public partial class ChaseState : EState
 		
 		_steeringRange.BodyEntered += OnSteeringRangeEntered;
 		_steeringRange.BodyExited += OnSteeringRangeExited;
-		_boidsTimer.Timeout += UpdateBoidsDir;
+		
+		_directionUpdateTimer.Timeout += UpdateBoidsDir;
+		_directionUpdateTimer.Timeout += UpdateFlowFieldDir;
 	}
 
 	// Super's abstract methods below
@@ -74,7 +77,7 @@ public partial class ChaseState : EState
         _attackRange = _stateMachine.Owner.AttackRange;
         _attackRange *= _attackRange;
         _player = GameManager.Instance.Player;
-        _boidsTimer.Start();
+        _directionUpdateTimer.Start();
         _sameGroupEnemies.Clear();
         _currDistance = 0.0f;
         _stateMachine.Owner.Animations.Play("default");
@@ -82,7 +85,7 @@ public partial class ChaseState : EState
 
     public override void Exit()
     {
-        _boidsTimer.Stop();
+        _directionUpdateTimer.Stop();
     }
 
     public override void Update(double delta)
@@ -109,7 +112,7 @@ public partial class ChaseState : EState
                 baseDir = GetTradDir();
                 break;
             case Pathfinding.FlowField:
-                baseDir = GameManager.Instance.FlowField.GetDirection(_stateMachine.Owner.GlobalPosition);
+	            baseDir = _currFlowFieldDir;
                 break;
         }
         
@@ -138,7 +141,7 @@ public partial class ChaseState : EState
     {
         return (_player.GlobalPosition - _stateMachine.Owner.GlobalPosition).Normalized();
     }
-
+    
     private void UpdateBoidsDir()
     {
         if (_sameGroupEnemies.Count == 0) return;
@@ -160,6 +163,12 @@ public partial class ChaseState : EState
         var cohesionVec = (cohesionPos - _stateMachine.Owner.GlobalPosition).Normalized();
         _currBoidsDir = ((seperationVec * _separationForce) + (alignmentVec * _alignmentForce) + (cohesionVec * _cohesionForce))
             .Normalized();
+    }
+
+    private void UpdateFlowFieldDir()
+    {
+	    if (!GameManager.Instance.FlowField.Valid) return;
+	    _currFlowFieldDir = GameManager.Instance.FlowField.GetDirection(_stateMachine.Owner.GlobalPosition);
     }
     
 

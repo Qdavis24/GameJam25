@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://dox5xw1hpjw6a"]
 
 [ext_resource type="Script" uid="uid://c4ktbxt8w6sfp" path="res://scripts/ui/DeathScreen.cs" id="1_yar2g"]
-[ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xj0m4"]
-[ext_resource type="FontFile" uid="uid://gr65klg0w4k1" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="3_xj0m4"]
+[ext_resource type="FontFile" uid="uid://blrxolrpmx4l2" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xj0m4"]
+[ext_resource type="FontFile" uid="uid://cm33if0b0s0da" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="3_xj0m4"]
 
 [sub_resource type="Theme" id="Theme_tmfs4"]
 default_font = ExtResource("2_xj0m4")

@@ -1,12 +1,12 @@
 [gd_scene load_steps=12 format=3 uid="uid://ct0g3652cw1dx"]
 
 [ext_resource type="Script" uid="uid://bcn7hrl18n30k" path="res://scripts/enemies/bunny_wraith_package/ExplodeAttack.cs" id="1_wgsim"]
-[ext_resource type="AudioStream" uid="uid://16f74yg8jy7e" path="res://assets/sounds/explosions/standard_explosions/explosion1.wav" id="2_eq4f3"]
+[ext_resource type="AudioStream" uid="uid://b360mg7ka8au7" path="res://assets/sounds/explosions/standard_explosions/explosion1.wav" id="2_eq4f3"]
 [ext_resource type="Script" uid="uid://crgnarhjvq7si" path="res://scripts/damage_system/Hitbox.cs" id="2_jjf1j"]
-[ext_resource type="AudioStream" uid="uid://dnf84c7s36vsu" path="res://assets/sounds/explosions/standard_explosions/explosion2.wav" id="3_h1810"]
-[ext_resource type="AudioStream" uid="uid://bp4o0juyr4oq2" path="res://assets/sounds/explosions/standard_explosions/explosion3.wav" id="4_3o2lo"]
-[ext_resource type="AudioStream" uid="uid://d4c16n4jnk61w" path="res://assets/sounds/explosions/standard_explosions/explosion4.wav" id="5_v2ynr"]
-[ext_resource type="AudioStream" uid="uid://cu1fpb8y5wkyv" path="res://assets/sounds/explosions/standard_explosions/explosion5.wav" id="6_2h3wh"]
+[ext_resource type="AudioStream" uid="uid://brdehv6l80ulf" path="res://assets/sounds/explosions/standard_explosions/explosion2.wav" id="3_h1810"]
+[ext_resource type="AudioStream" uid="uid://bi2k6g68u3iaw" path="res://assets/sounds/explosions/standard_explosions/explosion3.wav" id="4_3o2lo"]
+[ext_resource type="AudioStream" uid="uid://bbpqb72afy61c" path="res://assets/sounds/explosions/standard_explosions/explosion4.wav" id="5_v2ynr"]
+[ext_resource type="AudioStream" uid="uid://dpk3nk8afovcn" path="res://assets/sounds/explosions/standard_explosions/explosion5.wav" id="6_2h3wh"]
 [ext_resource type="Material" uid="uid://bf5ry4vj0t01u" path="res://resources/bunny_wraith_explode_attack.tres" id="7_3o2lo"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="7_h1810"]
 

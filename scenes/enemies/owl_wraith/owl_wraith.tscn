@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dtgtqkim67d2o"]
+[gd_scene load_steps=27 format=3 uid="uid://dtgtqkim67d2o"]
 
 [ext_resource type="Script" uid="uid://dxvrv1firkpx5" path="res://scripts/enemies/Enemy.cs" id="1_pkq8v"]
 [ext_resource type="Script" uid="uid://dx3v6yxf8sc1u" path="res://scripts/enemy_state_machines/base_classes/EStateMachine.cs" id="2_eieg8"]
@@ -18,7 +18,6 @@
 [ext_resource type="PackedScene" uid="uid://cknywm26hylby" path="res://scenes/pickups/health.tscn" id="14_w2b4p"]
 [ext_resource type="Script" uid="uid://dvb6dfm4xhywl" path="res://scripts/enemy_state_machines/reusable_states/SpawnState.cs" id="15_fkf4r"]
 [ext_resource type="SpriteFrames" uid="uid://cot265y1n4uxo" path="res://scenes/enemies/owl_wraith/owl_wraith_sprite_frames.tres" id="16_fkf4r"]
-[ext_resource type="Script" uid="uid://d4hnm4svoo1uq" path="res://scripts/damage_system/Hurtbox.cs" id="19_w2b4p"]
 [ext_resource type="Material" uid="uid://blwtha3b1xtls" path="res://resources/enemy_trail.tres" id="20_apl8d"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_w2b4p"]
@@ -60,7 +59,7 @@ damping_max = 2.6590002
 scale_max = 3.0
 color = Color(0.99381655, 0, 0.20968658, 1)
 
-[node name="OwlWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Animations", "_damageIntervalTimer", "_stateMachine") groups=["Enemies", "OwlWraiths"]]
+[node name="OwlWraith" type="CharacterBody2D" node_paths=PackedStringArray("SteeringRange", "Hurtbox", "Animations", "_damageIntervalTimer", "_stateMachine", "_trailParticles") groups=["Enemies", "OwlWraiths"]]
 z_index = 1
 collision_layer = 5
 motion_mode = 1
@@ -68,11 +67,13 @@ script = ExtResource("1_pkq8v")
 _hitSounds = SubResource("AudioStreamRandomizer_w2b4p")
 _maxHealth = 10.0
 SteeringRange = NodePath("WraithStateMachine/ChaseState/SteeringRange")
+Hurtbox = NodePath("Hurtbox")
 AttackRange = 500
 Animations = NodePath("WraithAnimations")
 _damageIntervalTimer = NodePath("DamageIntervalTimer")
 _stateMachine = NodePath("WraithStateMachine")
 _flashShader = ExtResource("2_rvc00")
+_trailParticles = NodePath("TrailParticles")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_q5y88")
@@ -80,23 +81,26 @@ shape = SubResource("CircleShape2D_q5y88")
 [node name="Hurtbox" type="Area2D" parent="." groups=["EnemyHurtbox"]]
 collision_layer = 2
 collision_mask = 2
-script = ExtResource("19_w2b4p")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(0, 8)
 shape = SubResource("CapsuleShape2D_pdrcd")
 
-[node name="WraithStateMachine" type="Node2D" parent="."]
+[node name="WraithStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("InitialState")]
 script = ExtResource("2_eieg8")
+InitialState = NodePath("SpawnState")
 
-[node name="SpawnState" type="Node2D" parent="WraithStateMachine"]
+[node name="SpawnState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_timer")]
 script = ExtResource("15_fkf4r")
+_timer = NodePath("Timer")
 
 [node name="Timer" type="Timer" parent="WraithStateMachine/SpawnState"]
 one_shot = true
 
-[node name="ChaseState" type="Node2D" parent="WraithStateMachine"]
+[node name="ChaseState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_steeringRange", "_directionUpdateTimer")]
 script = ExtResource("3_eieg8")
+_steeringRange = NodePath("SteeringRange")
+_directionUpdateTimer = NodePath("DirUpdateTimer")
 _minDistancePerCycle = 500.0
 _maxDistancePerCycle = 510.0
 _minPathMag = 0.2
@@ -110,6 +114,7 @@ _flowFieldInfluence = 0.9
 _minSpeed = 120.0
 _maxSpeed = 120.0
 _attackState = "ShootState"
+_togglePathfindingRange = 1000.0
 
 [node name="SteeringRange" type="Area2D" parent="WraithStateMachine/ChaseState"]
 collision_layer = 4
@@ -120,8 +125,8 @@ monitorable = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WraithStateMachine/ChaseState/SteeringRange"]
 shape = SubResource("CircleShape2D_voie1")
 
-[node name="BoidsTimer" type="Timer" parent="WraithStateMachine/ChaseState"]
-wait_time = 0.4
+[node name="DirUpdateTimer" type="Timer" parent="WraithStateMachine/ChaseState"]
+wait_time = 0.3
 
 [node name="ShootState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_timer")]
 script = ExtResource("8_s7auy")

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bdase20j5pa4" path="res://scripts/menu/MainMenu.cs" id="1_6k0m2"]
 [ext_resource type="Texture2D" uid="uid://r8e85o7y176c" path="res://assets/ui/Background3.png" id="1_xr86y"]
 [ext_resource type="AudioStream" uid="uid://hmqhwgil6rft" path="res://assets/sounds/ui/start.wav" id="2_1enlb"]
-[ext_resource type="FontFile" uid="uid://cnneilwebnxw7" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xr86y"]
+[ext_resource type="FontFile" uid="uid://blrxolrpmx4l2" path="res://assets/ui/fonts/Jacquard12-Regular.ttf" id="2_xr86y"]
 [ext_resource type="Script" uid="uid://ckfb73b4uvpu3" path="res://scripts/menu/CharacterSelect.cs" id="4_arvcj"]
 [ext_resource type="Texture2D" uid="uid://ciit1agds6ihw" path="res://assets/characters/fox/fox_idle.png" id="4_f1mbi"]
 [ext_resource type="Shader" uid="uid://d0ye3o780v4h2" path="res://scenes/main_menu/MainMenuTitleText.gdshader" id="4_qmweu"]
@@ -259,7 +259,6 @@ FoxSound = ExtResource("6_tdscb")
 FrogSound = ExtResource("7_1enlb")
 RabbitSound = ExtResource("8_2c0k1")
 RaccoonSound = ExtResource("9_ifx2v")
-_clickSound = ExtResource("2_1enlb")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CharacterSelect"]
 layout_mode = 1

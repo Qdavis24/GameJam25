@@ -10,6 +10,7 @@ public partial class FlowField : Node2D
     [Export] private int _cellsProcessedPerFrame = 500;
 
     public Vector2[,] _directions;
+    private Vector2[,] _cachedDirections;
 
     private int[,] _costs;
     private bool[,] _visited;
@@ -43,6 +44,7 @@ public partial class FlowField : Node2D
 
         _frontier = new Queue<Vector2I>();
         _directions = new Vector2[_terrainColumnLength, _terrainRowLength];
+        _cachedDirections = new Vector2[_terrainColumnLength, _terrainRowLength];
         
         _active = true;
     }
@@ -130,9 +132,14 @@ public partial class FlowField : Node2D
 
     public Vector2 GetDirection(Vector2 globalPosition)
     {
+        var sampleCoord = GetTargetCoord(globalPosition);
+        return _directions[sampleCoord.X, sampleCoord.Y];
+        if (_cachedDirections[sampleCoord.X, sampleCoord.Y] != Vector2.Zero)
+            return _cachedDirections[sampleCoord.X, sampleCoord.Y];
+        
+        
         var dir = Vector2.Zero;
         var numSampleDirs = 0;
-        var sampleCoord = GetTargetCoord(globalPosition);
         for (int colShift = -1; colShift <= 1; colShift++)
         for (int rowShift = -1; rowShift <= 1; rowShift++)
         {
@@ -145,6 +152,8 @@ public partial class FlowField : Node2D
             numSampleDirs++;
         }
         dir /= numSampleDirs;
-        return dir.Normalized();
+        dir = dir.Normalized();
+        _cachedDirections[sampleCoord.X, sampleCoord.Y] = dir;
+        return dir;
     }
 }

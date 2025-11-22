@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
 [ext_resource type="PackedScene" uid="uid://c4dvx6r2y6cel" path="res://scenes/XpPool.tscn" id="9_ry0e6"]
 [ext_resource type="PackedScene" uid="uid://0fwmr8vwok0m" path="res://scenes/PersistentNodes.tscn" id="10_pc0jn"]
-[ext_resource type="AudioStream" uid="uid://cs76hbtwecae3" path="res://assets/sounds/ui/death.wav" id="11_5xtl8"]
+[ext_resource type="AudioStream" uid="uid://c7sxtsvb57f32" path="res://assets/sounds/ui/death.wav" id="11_5xtl8"]
 [ext_resource type="PackedScene" uid="uid://bw75x36wra83g" path="res://scenes/FlowField.tscn" id="11_c7a3q"]
 [ext_resource type="PackedScene" uid="uid://b81130pfj02wn" path="res://scenes/EnemyPool.tscn" id="12_4vth2"]
 [ext_resource type="PackedScene" uid="uid://dq2mhqcvxoppe" path="res://scenes/main_menu/MainMenu.tscn" id="12_30v7y"]
@@ -24,7 +24,7 @@
 y_sort_enabled = true
 script = ExtResource("1_udu3i")
 _enemySpawnerNumEnemiesPerWave = 10.0
-_enemySpawnerWaveInterval = 30.0
+_enemySpawnerWaveInterval = 20.0
 _enemySpawnerNumWaves = 10.0
 _enemySpawnerNumWavesScalr = 2.0
 _xpOrbScene = ExtResource("2_jdad8")

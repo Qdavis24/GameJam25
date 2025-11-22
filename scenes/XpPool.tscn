@@ -5,4 +5,5 @@
 
 [node name="XpPool" type="Node2D"]
 script = ExtResource("1_ksrdo")
+_poolSize = 50
 _xpOrbPckdScene = ExtResource("2_rnmi7")
