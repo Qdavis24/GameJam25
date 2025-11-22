@@ -42,6 +42,8 @@ public partial class FlowField : Node2D
         
         _lastUpdatePos = target.GlobalPosition;
 
+        _visited = new bool[_terrainColumnLength, _terrainRowLength];
+        _costs = new int[_terrainColumnLength, _terrainRowLength];
         _frontier = new Queue<Vector2I>();
         _directions = new Vector2[_terrainColumnLength, _terrainRowLength];
         _cachedDirections = new Vector2[_terrainColumnLength, _terrainRowLength];
@@ -101,9 +103,7 @@ public partial class FlowField : Node2D
     private void InitNewField()
     {
         _frontier.Clear();
-        _visited = new bool[_terrainColumnLength, _terrainRowLength];
-        _costs = new int[_terrainColumnLength, _terrainRowLength];
-
+        Array.Clear(_visited);
         for (int col = 0; col < _terrainColumnLength; col++)
         for (int row = 0; row < _terrainRowLength; row++)
             _costs[col, row] = int.MaxValue;
@@ -133,7 +133,7 @@ public partial class FlowField : Node2D
     public Vector2 GetDirection(Vector2 globalPosition)
     {
         var sampleCoord = GetTargetCoord(globalPosition);
-        return _directions[sampleCoord.X, sampleCoord.Y];
+            
         if (_cachedDirections[sampleCoord.X, sampleCoord.Y] != Vector2.Zero)
             return _cachedDirections[sampleCoord.X, sampleCoord.Y];
         
