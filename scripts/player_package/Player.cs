@@ -246,7 +246,7 @@ public partial class Player : CharacterBody2D
 		}
 		else
 		{
-			Sfx.I.PlayFootstep(_audio.Stream, GlobalPosition);
+			Sfx.I.PlayFootstep(_audio.Stream);
 			Play("walk");
 		}
 	}
