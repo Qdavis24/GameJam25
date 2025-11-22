@@ -5,9 +5,8 @@ using Godot;
 public partial class Fireball : Node2D
 {
 	[ExportCategory("sound FX")] 
-	[Export] private AudioStream _wooshStream;
+	
 	[Export] private AudioStream _fireStream;
-	[Export] private float _wooshVolume;
 	[Export] private float _fireVolume;
 	
 	
@@ -33,7 +32,6 @@ public partial class Fireball : Node2D
 		_hitbox.AreaEntered += OnAreaEntered;
 		_hitbox.BodyEntered += OnBodyEntered;
 		Sfx.I.PlayFollowing(_fireStream,  this,_fireVolume,.5f + GD.Randf());
-		Sfx.I.Play2D(_wooshStream, GlobalPosition, _wooshVolume, pitch: .5f + GD.Randf());
 	}
 
 	private void SpawnExplosion()

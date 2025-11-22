@@ -7,6 +7,8 @@ using Vector2 = Godot.Vector2;
 
 public partial class FireballWeapon : WeaponBase
 {
+	[Export] private AudioStream _wooshStream;
+	[Export] private float _wooshVolume;
 	[Export] private PackedScene _fireballPackedScene;
 	[Export] private float _oscillationLength;
 	[Export] private float _oscillationMag;
@@ -95,7 +97,7 @@ public partial class FireballWeapon : WeaponBase
 		{
 			var currFireball = _fireballPackedScene.Instantiate<Fireball>();
 			currFireball.GlobalPosition = GlobalPosition;
-			GameManager.Instance.World.AddChild(currFireball);
+			GameManager.Instance.World.CallDeferred("add_child", currFireball);
 			currFireball.ExplosionScale = _projSize;
 			currFireball.Scale *= _projSize;
 			currFireball.Damage = _projDamage;
@@ -103,7 +105,7 @@ public partial class FireballWeapon : WeaponBase
 			
 			_fireballs[i] = currFireball;
 		}
-
+		Sfx.I.Play2D(_wooshStream, GlobalPosition, _wooshVolume, pitch: .5f + GD.Randf());
 		_burstsDistances.Add(0.0f);
 		_bursts.Add(_fireballs);
 	}
