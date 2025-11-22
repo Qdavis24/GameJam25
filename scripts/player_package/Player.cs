@@ -112,7 +112,6 @@ public partial class Player : CharacterBody2D
 
 		_hurtbox.AreaEntered += OnHurtboxEntered;
 		_pickupRange.AreaEntered += OnPickupRangeEntered;
-		_pickupRange.AreaExited += OnPickupRangeExited;
 
 
 		_health = _maxHealth;
@@ -141,6 +140,11 @@ public partial class Player : CharacterBody2D
 		for (int i = pickups.Count - 1; i >= 0; i--)
 		{
 			var pickup = pickups[i];
+			if (!IsInstanceValid(pickup))
+			{
+				pickups.RemoveAt(i);
+				continue;
+			}
 			var dir = (GlobalPosition - pickup.GlobalPosition);
 			var lengthSquared = dir.LengthSquared();
 			if (lengthSquared < _aquirePickupRange)
@@ -339,10 +343,5 @@ public partial class Player : CharacterBody2D
 		
 			
 	}
-
-	private void OnPickupRangeExited(Area2D area)
-	{
-		if (!area.IsInGroup("Xp")) return;
-		_xpInRange.Remove(area as Xp);
-	}
+	
 }
