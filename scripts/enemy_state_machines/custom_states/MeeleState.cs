@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using GameJam25.scripts.enemy_state_machines;
 using GameJam25.scripts.enemy_state_machines.base_classes;
 
 public partial class MeeleState : EState
@@ -30,7 +31,7 @@ public partial class MeeleState : EState
 		if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(GameManager.Instance.Player.GlobalPosition) >
 			Math.Pow(_stateMachine.Owner.AttackRange, 2))
 		{
-			_stateMachine.TransitionTo("ChaseState");
+			_stateMachine.TransitionTo(StateName.ChaseState);
 		}
 	}
 

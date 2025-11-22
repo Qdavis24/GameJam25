@@ -10,7 +10,7 @@ public partial class SpawnState : EState
 	public override void _Ready()
 	{
 		base._Ready();
-		_timer.Timeout += () => _stateMachine.TransitionTo("ChaseState");
+		_timer.Timeout += () => _stateMachine.TransitionTo(StateName.ChaseState);
 	}
 	public override void Enter()
 	{

@@ -31,7 +31,7 @@ public partial class ShootState : EState
 		if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(GameManager.Instance.Player.GlobalPosition) >
 			_stateMachine.Owner.AttackRange * _stateMachine.Owner.AttackRange) // transition to chase
 		{
-			_stateMachine.TransitionTo("ChaseState");
+			_stateMachine.TransitionTo(StateName.ChaseState);
 		}
 		
 	}

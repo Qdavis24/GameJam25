@@ -7,7 +7,7 @@ namespace GameJam25.scripts.enemy_state_machines.base_classes;
 public partial class EStateMachine : Node2D
 {
 	[Export] public EState InitialState;
-	private Dictionary<string, EState> _allStates = new();
+	private Dictionary<StateName, EState> _allStates = new();
 	public EState CurrState;
 	
 	public Enemy Owner;
@@ -53,7 +53,7 @@ public partial class EStateMachine : Node2D
 		if (!IsActive) return;
 		CurrState.PhysicsUpdate(delta);
 	}
-	public void TransitionTo(String newState)
+	public void TransitionTo(StateName newState)
 	{
 		CurrState.Exit();
 		CurrState = _allStates[newState];

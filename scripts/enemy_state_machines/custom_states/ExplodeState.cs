@@ -24,7 +24,7 @@ public partial class ExplodeState : EState
         if (_stateMachine.Owner.GlobalPosition.DistanceSquaredTo(GameManager.Instance.Player.GlobalPosition) >
             _stateMachine.Owner.AttackRange)
         {
-            _stateMachine.TransitionTo("ChaseState");
+            _stateMachine.TransitionTo(StateName.ChaseState);
         }
 
         _currTime -= delta;

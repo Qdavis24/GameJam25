@@ -28,7 +28,7 @@ stream_2/stream = ExtResource("4_87glh")
 stream_3/stream = ExtResource("5_rlrlu")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q5y88"]
-radius = 15.0
+radius = 9.055386
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pdrcd"]
 radius = 20.0
@@ -65,7 +65,7 @@ collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_cqb61")
 _hitSounds = SubResource("AudioStreamRandomizer_qknn0")
-_maxHealth = 10.0
+_maxHealth = 20.0
 SteeringRange = NodePath("WraithStateMachine/ChaseState/SteeringRange")
 Hurtbox = NodePath("Hurtbox")
 AttackRange = 50
@@ -110,12 +110,13 @@ _path = SubResource("Curve_t25d3")
 _separationForce = 1.5
 _alignmentForce = 0.7
 _cohesionForce = 0.8
-_boidsInfluence = 0.9
+_boidsInfluence = 0.5
 _flowFieldInfluence = 1.0
 _minSpeed = 200.0
 _maxSpeed = 200.0
-_attackState = "ExplodeState"
-_togglePathfindingRange = 1000.0
+_attackState = 5
+_togglePathfindingRange = 600.0
+Name = 1
 
 [node name="SteeringRange" type="Area2D" parent="WraithStateMachine/ChaseState"]
 collision_layer = 4
@@ -125,18 +126,20 @@ collision_mask = 4
 shape = SubResource("CircleShape2D_voie1")
 
 [node name="DirUpdateTimer" type="Timer" parent="WraithStateMachine/ChaseState"]
-wait_time = 0.3
+wait_time = 0.5
 
 [node name="ExplodeState" type="Node2D" parent="WraithStateMachine"]
 script = ExtResource("8_t25d3")
 _explosionDelay = 0.5
 _explosionAttackScene = ExtResource("6_ns0ja")
+Name = 5
 
 [node name="KnockbackState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_hitEffect")]
 script = ExtResource("4_uyoe8")
 KnockbackCurve = SubResource("Curve_oto54")
 _knockBackDuration = 1.0
 _hitEffect = NodePath("KnockBackEffect")
+Name = 2
 
 [node name="KnockBackEffect" type="GPUParticles2D" parent="WraithStateMachine/KnockbackState"]
 emitting = false
@@ -152,6 +155,7 @@ script = ExtResource("5_iuhr7")
 _deathEffect = NodePath("DeathEffect")
 _healthDropChance = 0.2
 _healthScene = ExtResource("6_qknn0")
+Name = 3
 
 [node name="DeathEffect" parent="WraithStateMachine/DeathState" instance=ExtResource("6_s0hyp")]
 
@@ -164,7 +168,7 @@ sprite_frames = ExtResource("16_rlrlu")
 
 [node name="TrailParticles" type="GPUParticles2D" parent="."]
 z_index = -1
-amount = 40
+amount = 10
 process_material = ExtResource("20_0gjp1")
 
 [node name="Shadow" type="Sprite2D" parent="."]

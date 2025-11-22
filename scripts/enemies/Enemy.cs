@@ -1,6 +1,7 @@
 using Godot;
 using GameJam25.scripts.damage_system;
 using GameJam25.scripts.enemies;
+using GameJam25.scripts.enemy_state_machines;
 using GameJam25.scripts.enemy_state_machines.base_classes;
 
 public partial class Enemy : CharacterBody2D
@@ -88,11 +89,11 @@ public partial class Enemy : CharacterBody2D
 	
 	public void TakeDamage(float amount, float knockbackWeight, Vector2 direction)
 	{
-		if (_stateMachine.CurrState.Name == "DeathState") return;
+		if (_stateMachine.CurrState.Name == StateName.DeathState) return;
 		Health -= amount;
 		_stateMachine.InstanceContext.KnockbackDir = direction.Normalized();
 		_stateMachine.InstanceContext.KnockbackWeight = knockbackWeight;
-		_stateMachine.TransitionTo("KnockbackState");
+		_stateMachine.TransitionTo(StateName.KnockbackState);
 	}
 
 	public override void _Ready()

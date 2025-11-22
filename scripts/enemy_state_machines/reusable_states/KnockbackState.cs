@@ -21,7 +21,7 @@ public partial class KnockbackState : EState
 	// Super's abstract methods below
 	public override void Enter()
 	{
-		if (_stateMachine.Owner.Health <= 0) _stateMachine.TransitionTo("DeathState");
+		if (_stateMachine.Owner.Health <= 0) _stateMachine.TransitionTo(StateName.DeathState);
 		_knockbackWeight = _stateMachine.InstanceContext.KnockbackWeight;
 		_hitEffectMaterial = (ParticleProcessMaterial)_hitEffect.ProcessMaterial;
 		_currTime = 0;
@@ -49,7 +49,7 @@ public partial class KnockbackState : EState
 		_stateMachine.Owner.MoveAndSlide();
 		if (_currTime >= _knockBackDuration)
 		{
-			_stateMachine.TransitionTo("ChaseState");
+			_stateMachine.TransitionTo(StateName.ChaseState);
 		}
 	}
 }

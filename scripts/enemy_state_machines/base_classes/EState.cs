@@ -4,6 +4,7 @@ namespace GameJam25.scripts.enemy_state_machines.base_classes;
 
 public abstract partial class EState : Node2D
 {
+    [Export] public StateName Name;
     
     protected EStateMachine _stateMachine;
 

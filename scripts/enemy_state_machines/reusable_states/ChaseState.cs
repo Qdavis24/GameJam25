@@ -24,12 +24,13 @@ public partial class ChaseState : EState
 	[Export] private float _alignmentForce = .8f;
 	[Export] private float _cohesionForce = .7f;
 
-	[ExportCategory("General Behavior")] 
+	[ExportCategory("General Behavior")] [Export]
+	private float _updateDirMaxTime = .3f;
 	[Export] private float _boidsInfluence;
 	[Export] private float _flowFieldInfluence;
 	[Export] private float _minSpeed;
 	[Export] private float _maxSpeed;
-	[Export] private string _attackState;
+	[Export] private StateName _attackState;
 	[Export] private float _togglePathfindingRange = 300.0f; // range to stop using FF to pathfind (pxls)
 
 	private float _speed;
@@ -55,17 +56,19 @@ public partial class ChaseState : EState
 	public override void _Ready()
 	{
 		base._Ready();
-		_sameGroupEnemies = new List<Enemy>();
+		_sameGroupEnemies = new List<Enemy>(25); // assuming 25 should be good for the max count this would be
 		
 		_speed = _minSpeed + (_maxSpeed - _minSpeed) * GD.Randf();
 		_pathMagnitude = _minPathMag + (_maxPathMag - _minPathMag) * GD.Randf();
 		_distancePerCycle = (_minDistancePerCycle + (_maxDistancePerCycle - _minDistancePerCycle) * GD.Randf()) *
 							190.0f; // try to account for tile size
+		_directionUpdateTimer.WaitTime = .2 + _updateDirMaxTime * GD.Randf();
 		
 		_togglePathfindingRange *= _togglePathfindingRange;
 		
 		_steeringRange.BodyEntered += OnSteeringRangeEntered;
 		_steeringRange.BodyExited += OnSteeringRangeExited;
+
 		
 		_directionUpdateTimer.Timeout += UpdateBoidsDir;
 		_directionUpdateTimer.Timeout += UpdateFlowFieldDir;
@@ -168,6 +171,7 @@ public partial class ChaseState : EState
     private void UpdateFlowFieldDir()
     {
 	    if (!GameManager.Instance.FlowField.Valid) return;
+	    if (GlobalPosition == new Vector2(Single.NaN, Single.NaN)) GD.PrintErr($"ChaseState::UpdateFlowFieldDir : InPool = {_stateMachine.Owner.InPool}, Health = {_stateMachine.Owner.Health}");
 	    _currFlowFieldDir = GameManager.Instance.FlowField.GetDirection(_stateMachine.Owner.GlobalPosition);
     }
     
@@ -177,7 +181,7 @@ public partial class ChaseState : EState
         if (body == _stateMachine.Owner) // TO DO currently registers itself here, not good
             return;
         
-        if (body.IsInGroup(_stateMachine.Owner.GetGroups()[0]))
+        if (body.IsInGroup("Enemies"))
         {
             _sameGroupEnemies.Add(body as Enemy);
         }
@@ -185,7 +189,7 @@ public partial class ChaseState : EState
 
     private void OnSteeringRangeExited(Node2D body)
     {
-        if (body.IsInGroup(_stateMachine.Owner.GetGroups()[0]))
+	    if (body.IsInGroup("Enemies"))
         {
             _sameGroupEnemies.Remove(body as Enemy);
         }
