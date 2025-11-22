@@ -20,7 +20,7 @@ public partial class EnemyPool : Node2D
 
     public override void _Ready()
     {
-        _allEnemies = new List<Enemy>();
+        _allEnemies = new List<Enemy>(_poolSize * 6);
         _enemyScenes = new()
         {
             { EnemyType.BunnyWraith, _bunnyWraithScene },
@@ -29,9 +29,9 @@ public partial class EnemyPool : Node2D
         };
         _pool = new()
         {
-            { EnemyType.BunnyWraith, new Queue<Enemy>() },
-            { EnemyType.DeerWraith, new Queue<Enemy>() },
-            { EnemyType.OwlWraith, new Queue<Enemy>() }
+            { EnemyType.BunnyWraith, new Queue<Enemy>(_poolSize * 2) },
+            { EnemyType.DeerWraith, new Queue<Enemy>(_poolSize * 2) },
+            { EnemyType.OwlWraith, new Queue<Enemy>(_poolSize * 2) }
         };
 
         foreach (EnemyType type in _types)
@@ -53,24 +53,20 @@ public partial class EnemyPool : Node2D
         return newEnemy;
     }
 
-    public void SpawnEnemyAt(EnemyType type, Vector2 globalPosition)
+    public bool SpawnEnemyAt(EnemyType type, Vector2 globalPosition)
     {
         if (!_pool.ContainsKey(type)) GD.PrintErr("EnemyPool.SpawnEnemyAt : type doesn't exist");
         Enemy newEnemy;
         if (_pool[type].Count == 0)
-        {
-            newEnemy = _enemyScenes[type].Instantiate<Enemy>();
-            AddChild(newEnemy);
-        }
-        else
-            newEnemy = _pool[type].Dequeue();
+            return false;
 
+        newEnemy = _pool[type].Dequeue();
         newEnemy.Enable(globalPosition);
+        return true;
     }
 
     public bool ReturnEnemy(Enemy enemy)
     {
-        if (!IsInstanceValid(enemy)) return false;
         var type = enemy.Type;
         if (!_pool.ContainsKey(type)) GD.PrintErr("EnemyPool.ReturnEnemy : type doesn't exist");
         enemy.Disable();
