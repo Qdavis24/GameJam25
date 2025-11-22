@@ -11,6 +11,6 @@ public partial class Hitbox : Area2D
 
 	public override void _Ready()
 	{
-		KnockbackWeight = Damage * 20f; // 3 pixels per frame per damage point
+		KnockbackWeight = Damage * 30f; // 3 pixels per frame per damage point
 	}
 }
