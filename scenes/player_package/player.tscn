@@ -772,7 +772,7 @@ height = 38.0
 radius = 22.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fiwjr"]
-radius = 503.00894
+radius = 182.06866
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_oa6mu"]
 light_mode = 1
