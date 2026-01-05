@@ -83,27 +83,27 @@ sources/0 = SubResource("TileSetAtlasSource_132vp")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_683jg"]
 shader = ExtResource("5_itp5q")
 shader_parameter/wind_strength = 0.2000000095
-shader_parameter/wind_speed = 1.5000000712500001
+shader_parameter/wind_speed = 1.50000007125
 shader_parameter/player_position = Vector2(0, 0)
 shader_parameter/transparency_radius = 150.0
 shader_parameter/fade_width = 50.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n115m"]
 texture = ExtResource("6_fgma2")
-margins = Vector2i(29, 23)
-separation = Vector2i(8, 0)
-texture_region_size = Vector2i(120, 200)
+margins = Vector2i(15, 15)
+separation = Vector2i(5, 0)
+texture_region_size = Vector2i(60, 100)
 0:0/0 = 0
-0:0/0/texture_origin = Vector2i(4, 70)
+0:0/0/texture_origin = Vector2i(0, 26)
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -22.5, -30, 0, 0, 22.5, 30, 0)
 1:0/0 = 0
-1:0/0/texture_origin = Vector2i(1, 77)
+1:0/0/texture_origin = Vector2i(0, 25)
 1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -22.5, -30, 0, 0, 22.5, 30, 0)
 2:0/0 = 0
-2:0/0/texture_origin = Vector2i(4, 75)
+2:0/0/texture_origin = Vector2i(0, 25)
 2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -22.5, -30, 0, 0, 22.5, 30, 0)
 3:0/0 = 0
-3:0/0/texture_origin = Vector2i(-4, 65)
+3:0/0/texture_origin = Vector2i(0, 25)
 3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -22.5, -30, 0, 0, 22.5, 30, 0)
 
 [sub_resource type="TileSet" id="TileSet_vbebb"]
@@ -193,6 +193,7 @@ script = ExtResource("11_fgma2")
 _baseTileMapLayer = NodePath("../../BaseLayer")
 _obstacleTileMapLayer = NodePath("../../ObstacleLayer")
 _tileConfig = ExtResource("2_w0i7v")
+_obstacleSpawnChance = 1.0
 _borderSize = 5
 
 [node name="SpawnChestsStage" type="Node" parent="GenerationPipeline"]
