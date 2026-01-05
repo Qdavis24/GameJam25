@@ -124,7 +124,7 @@ collision_mask = 4
 shape = SubResource("CircleShape2D_voie1")
 
 [node name="DirUpdateTimer" type="Timer" parent="WraithStateMachine/ChaseState"]
-wait_time = 0.3
+wait_time = 0.1
 
 [node name="MeeleState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_attackIntervalTimer")]
 script = ExtResource("13_xv4jy")
