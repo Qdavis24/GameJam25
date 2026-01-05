@@ -59,18 +59,20 @@ public partial class EnemyPool : Node2D
         Enemy newEnemy;
         if (_pool[type].Count == 0)
         {
-            newEnemy = _enemyScenes[type].Instantiate<Enemy>();
-            AddChild(newEnemy);
+            GD.PrintErr("EnemyPool::SpawnEnemyAt ${type} enemy pool empty");
+            return;
         }
-        else
-            newEnemy = _pool[type].Dequeue();
-
+        newEnemy = _pool[type].Dequeue();
         newEnemy.Enable(globalPosition);
     }
 
     public bool ReturnEnemy(Enemy enemy)
     {
-        if (!IsInstanceValid(enemy)) return false;
+        if (!IsInstanceValid(enemy))
+        {
+            GD.PrintErr($"Enemy Returning to Pool is not valid instance ${enemy.Name}");
+            return false;
+        }
         var type = enemy.Type;
         if (!_pool.ContainsKey(type)) GD.PrintErr("EnemyPool.ReturnEnemy : type doesn't exist");
         enemy.Disable();
