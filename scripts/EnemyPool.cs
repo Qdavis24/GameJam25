@@ -70,11 +70,11 @@ public partial class EnemyPool : Node2D
     {
         if (!IsInstanceValid(enemy))
         {
-            GD.PrintErr($"Enemy Returning to Pool is not valid instance ${enemy.Name}");
+            GD.PrintErr($"EnemyPool::ReturnEnemy Enemy Returning to Pool is not valid instance ${enemy.Name}");
             return false;
         }
         var type = enemy.Type;
-        if (!_pool.ContainsKey(type)) GD.PrintErr("EnemyPool.ReturnEnemy : type doesn't exist");
+        if (!_pool.ContainsKey(type)) GD.PrintErr("EnemyPool::ReturnEnemy Type doesn't exist");
         enemy.Disable();
         _pool[type].Enqueue(enemy);
         return true;
@@ -82,11 +82,10 @@ public partial class EnemyPool : Node2D
 
     public void ReturnAllEnemies()
     {
-        for (int i = _allEnemies.Count - 1; i >= 0; i--)
+        foreach (Enemy enemy in _allEnemies)
         {
-            var currEnemy = _allEnemies[i];
-            if (!currEnemy.InPool)
-                ReturnEnemy(currEnemy);
+            if (enemy.InPool) continue;
+            ReturnEnemy(enemy);
         }
     }
 }
