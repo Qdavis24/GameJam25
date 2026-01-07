@@ -1,4 +1,4 @@
-[gd_scene load_steps=138 format=3 uid="uid://wmtjofjmupla"]
+[gd_scene load_steps=136 format=3 uid="uid://wmtjofjmupla"]
 
 [ext_resource type="Script" uid="uid://cqgtfutv56jfk" path="res://scripts/player_package/Player.cs" id="1_rdh6l"]
 [ext_resource type="PackedScene" uid="uid://ct7f3veokingu" path="res://scenes/player_package/attacks/slash_attack_scene.tscn" id="2_fiwjr"]
@@ -26,12 +26,8 @@
 [ext_resource type="Script" uid="uid://d4hnm4svoo1uq" path="res://scripts/damage_system/Hurtbox.cs" id="18_huy1x"]
 [ext_resource type="Texture2D" uid="uid://byxuj2naefhmi" path="res://resources/light_gradient.tres" id="23_ditwi"]
 [ext_resource type="Texture2D" uid="uid://ds24bfwijl5at" path="res://assets/ui/mouse_icon.png" id="25_vsn27"]
-[ext_resource type="FontFile" uid="uid://cm33if0b0s0da" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="25_yfvsg"]
+[ext_resource type="FontFile" uid="uid://gr65klg0w4k1" path="res://assets/ui/fonts/Jersey10-Regular.ttf" id="25_yfvsg"]
 [ext_resource type="Texture2D" uid="uid://dkr6sie0av881" path="res://assets/ui/mouse2.png" id="26_yfvsg"]
-
-[sub_resource type="Curve" id="Curve_fiwjr"]
-_data = [Vector2(0, 0.15730345), 0.0, -0.38083962, 0, 0, Vector2(1, 1), 0.6891386, 0.0, 0, 0]
-point_count = 2
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2rq5i"]
 random_pitch = 1.5
@@ -771,9 +767,6 @@ height = 38.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_s5buh"]
 radius = 22.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_fiwjr"]
-radius = 503.00894
-
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_oa6mu"]
 light_mode = 1
 
@@ -817,11 +810,12 @@ animations = [{
 z_index = 1
 z_as_relative = false
 script = ExtResource("1_rdh6l")
+_maxHealth = 1000000.0
 LungeSpeed = 600.0
 LungeDuration = 0.3
 MaxXp = 500
-_xpSpeedRamp = SubResource("Curve_fiwjr")
-_xpMagnetSpeed = 15.0
+PickupRange = 50.0
+PickupAttractRange = 500.0
 _flashShader = ExtResource("2_oa6mu")
 _damageIntervalTimer = NodePath("FlashIntervalTimer")
 SlashAttack = ExtResource("2_fiwjr")
@@ -865,13 +859,6 @@ _iframeTime = 0.5
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(-1, 0)
 shape = SubResource("CircleShape2D_s5buh")
-
-[node name="PickupRange" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupRange"]
-shape = SubResource("CircleShape2D_fiwjr")
 
 [node name="PointLight2D2" type="PointLight2D" parent="."]
 color = Color(1, 0.77254903, 0.49803922, 1)

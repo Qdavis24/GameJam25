@@ -190,13 +190,13 @@ public partial class GameManager : Node
     {
         _gameState = GameState.LoadingGame;
         EnemyPool.ReturnAllEnemies();
+        XpPool.ReturnAll();
         Bosses = new() { "rat", "raccoon", "bunny" };
         PauseAllies();
         
         _ui.HideUpgrade(); // prevent upgrade from remaining
 
         Player.Visible = false;
-        Player.InitForWorldLevel();
         
         SpawnWorld();
         
