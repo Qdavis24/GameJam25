@@ -35,12 +35,6 @@ public partial class DeathState : EState
 	public override void Exit()
 	{
 		_stateMachine.Owner.Animations.Stop();
-		if (GD.Randf() < _healthDropChance)
-		{
-			var health = _healthScene.Instantiate<Area2D>();
-			health.GlobalPosition = GlobalPosition;
-			GetTree().Root.AddChild(health);
-		}
 		GameManager.Instance.XpPool.SpawnXpAt(_stateMachine.Owner.XpReward, GlobalPosition);
 		GameManager.Instance.EnemyPool.ReturnEnemy(_stateMachine.Owner);
 	}
