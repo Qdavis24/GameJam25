@@ -29,8 +29,8 @@ public partial class Xp : Area2D
 		}
 		else if (dir.Length() <= _player.PickupAttractRange)
 		{
-			dir.Normalized();
-			GlobalPosition += dir * 5.0f * (float) delta;
+			dir = dir.Normalized();
+			GlobalPosition += dir * 300.0f * (float) delta;
 		}
 	}
 
