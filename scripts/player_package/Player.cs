@@ -72,8 +72,8 @@ public partial class Player : CharacterBody2D
 				MaxXp = (int)(MaxXp * _maxXpGrowthRate);
 				_level++;
 				EmitSignalLevelChanged(_level);
-				Sfx.I.Play2D(_xpSounds, GlobalPosition);
 			}
+			Sfx.I.Play2D(_xpSounds, GlobalPosition, 0);
 			EmitSignalXpChanged(_xp);
 		}
 	}
