@@ -1,7 +1,6 @@
-[gd_scene load_steps=20 format=3 uid="uid://cuv7nxob83tho"]
+[gd_scene load_steps=19 format=3 uid="uid://cuv7nxob83tho"]
 
 [ext_resource type="Script" uid="uid://dwivr8cvx0oyb" path="res://scripts/GameManager.cs" id="1_udu3i"]
-[ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/xp_system/xp.tscn" id="2_jdad8"]
 [ext_resource type="PackedScene" uid="uid://s3w1eg52kr8u" path="res://scenes/world_generation/world.tscn" id="2_oo155"]
 [ext_resource type="PackedScene" uid="uid://wmtjofjmupla" path="res://scenes/player_package/player.tscn" id="3_udu3i"]
 [ext_resource type="PackedScene" uid="uid://qevbfpqv6q20" path="res://scenes/portals/player_enter_portal.tscn" id="4_oo155"]
@@ -9,8 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://0p8w5ski1dbo" path="res://scenes/portals/player_exit_portal.tscn" id="6_k4jhu"]
 [ext_resource type="PackedScene" uid="uid://bssqllrsjeor5" path="res://scenes/Camera.tscn" id="8_30v7y"]
 [ext_resource type="PackedScene" uid="uid://dhg5dra5mmuyc" path="res://scenes/ui/PauseScreen.tscn" id="8_lcbjr"]
+[ext_resource type="PackedScene" uid="uid://c4dvx6r2y6cel" path="res://scenes/pickup_system/PickupPool.tscn" id="8_pc0jn"]
 [ext_resource type="PackedScene" uid="uid://w11lstxqrmpj" path="res://scenes/ui/UI.tscn" id="9_k4jhu"]
-[ext_resource type="PackedScene" uid="uid://c4dvx6r2y6cel" path="res://scenes/XpPool.tscn" id="9_ry0e6"]
 [ext_resource type="PackedScene" uid="uid://0fwmr8vwok0m" path="res://scenes/PersistentNodes.tscn" id="10_pc0jn"]
 [ext_resource type="AudioStream" uid="uid://c7sxtsvb57f32" path="res://assets/sounds/ui/death.wav" id="11_5xtl8"]
 [ext_resource type="PackedScene" uid="uid://bw75x36wra83g" path="res://scenes/FlowField.tscn" id="11_c7a3q"]
@@ -27,14 +26,13 @@ _enemySpawnerNumEnemiesPerWave = 10.0
 _enemySpawnerWaveInterval = 20.0
 _enemySpawnerNumWaves = 10.0
 _enemySpawnerNumWavesScalr = 2.0
-_xpOrbScene = ExtResource("2_jdad8")
 _worldScene = ExtResource("2_oo155")
 _playerScene = ExtResource("3_udu3i")
 _enterPortalScene = ExtResource("4_oo155")
 _exitPortalScene = ExtResource("6_k4jhu")
 _enemySpawnerScene = ExtResource("5_jdad8")
 _camScene = ExtResource("8_30v7y")
-_xpPoolScene = ExtResource("9_ry0e6")
+_pickupPoolScene = ExtResource("8_pc0jn")
 _persistentNodes = ExtResource("10_pc0jn")
 _flowFieldScene = ExtResource("11_c7a3q")
 _enemyPoolScene = ExtResource("12_4vth2")

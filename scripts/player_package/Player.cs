@@ -77,6 +77,15 @@ public partial class Player : CharacterBody2D
 			EmitSignalXpChanged(_xp);
 		}
 	}
+
+	public float Health
+	{
+		get { return _health; }
+		set
+		{
+			_health = Math.Clamp(value, 0, _maxHealth);
+		}
+	}
 	private int _level;
 
 

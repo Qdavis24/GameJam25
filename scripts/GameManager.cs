@@ -19,14 +19,13 @@ public partial class GameManager : Node
     [Export] private float _enemySpawnerNumWavesScalr = 1.1f;
 
     [ExportCategory("Scene References")] 
-    [Export] private PackedScene _xpOrbScene;
     [Export] private PackedScene _worldScene;
     [Export] private PackedScene _playerScene;
     [Export] private PackedScene _enterPortalScene;
     [Export] private PackedScene _exitPortalScene;
     [Export] private PackedScene _enemySpawnerScene;
     [Export] private PackedScene _camScene;
-    [Export] private PackedScene _xpPoolScene;
+    [Export] private PackedScene _pickupPoolScene;
     [Export] private PackedScene _persistentNodes;
     [Export] private PackedScene _flowFieldScene;
     [Export] private PackedScene _enemyPoolScene;
@@ -46,7 +45,7 @@ public partial class GameManager : Node
 
     // Game state
     public Camera Cam;
-    public XpPool XpPool;
+    public PickupPool PickupPool;
     public World World;
     public FlowField FlowField;
     public EnemyPool EnemyPool;
@@ -121,8 +120,8 @@ public partial class GameManager : Node
         await _screenFade.FadeToBlack();
         _mainMenu.Close();
         
-        XpPool = _xpPoolScene.Instantiate<XpPool>();
-        GetTree().Root.AddChild(XpPool);
+        PickupPool = _pickupPoolScene.Instantiate<PickupPool>();
+        GetTree().Root.AddChild(PickupPool);
 
         EnemyPool = _enemyPoolScene.Instantiate<EnemyPool>();
         GetTree().Root.AddChild(EnemyPool);
@@ -168,8 +167,8 @@ public partial class GameManager : Node
         FlowField.QueueFree();
         FlowField = null;
         
-        XpPool.QueueFree();
-        XpPool = null;
+        PickupPool.QueueFree();
+        PickupPool = null;
         
         EnemyPool.ReturnAllEnemies();
         EnemyPool.QueueFree();
@@ -190,7 +189,7 @@ public partial class GameManager : Node
     {
         _gameState = GameState.LoadingGame;
         EnemyPool.ReturnAllEnemies();
-        XpPool.ReturnAll();
+        PickupPool.ReturnAll();
         Bosses = new() { "rat", "raccoon", "bunny" };
         PauseAllies();
         

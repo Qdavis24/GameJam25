@@ -7,9 +7,12 @@ public partial class DeathState : EState
 {
 	[ExportCategory("special effects")] 
 	[Export] private GpuParticles2D _deathEffect;
-
-	[Export] private float _healthDropChance;
 	[Export] private PackedScene _healthScene;
+
+	[ExportCategory("PickupDrops")] 
+	[Export] private float _healthDropChance;
+	[Export] private float _xpDropChance;
+	
 	
 	private ParticleProcessMaterial _deathEffectMaterial;
 
@@ -35,7 +38,11 @@ public partial class DeathState : EState
 	public override void Exit()
 	{
 		_stateMachine.Owner.Animations.Stop();
-		GameManager.Instance.XpPool.SpawnXpAt(_stateMachine.Owner.XpReward, GlobalPosition);
+		GameManager.Instance.PickupPool.SpawnPickupAt(PickupType.Xp, GlobalPosition, _stateMachine.Owner.XpReward);
+		if (GD.RandRange(0, 1) < _healthDropChance)
+		{
+			GameManager.Instance.PickupPool.SpawnPickupAt(PickupType.Health, GlobalPosition);
+		}
 		GameManager.Instance.EnemyPool.ReturnEnemy(_stateMachine.Owner);
 	}
 

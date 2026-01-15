@@ -1,20 +1,22 @@
 using Godot;
 using System;
+using GameJam25.scripts;
 
-public partial class Xp : Area2D
+public abstract partial class Pickup : Node2D
 {
 	[Export] private Timer _lifetime;
 	[Export] private int _maxValue = 10;
 	[Export] private ColorRect _colorRect;
 	[Export] private GpuParticles2D _particles;
-
+	
+	public abstract PickupType Type { get; }
 	public int Amount;
 	public bool InPool = true;
-	private Player _player;
+	protected Player _player;
 
 	public override void _Ready()
 	{
-		_lifetime.Timeout += () => GameManager.Instance.XpPool.ReturnXp(this);
+		_lifetime.Timeout += () => GameManager.Instance.PickupPool.ReturnPickup(this);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -24,8 +26,8 @@ public partial class Xp : Area2D
 		var distanceFromPlayer = dir.Length();
 		if (distanceFromPlayer <= _player.PickupRange)
 		{
-			_player.Xp += Amount;
-			GameManager.Instance.XpPool.ReturnXp(this);
+			RewardPlayer();
+			GameManager.Instance.PickupPool.ReturnPickup(this);
 		}
 		else if (dir.Length() <= _player.PickupAttractRange)
 		{
@@ -42,7 +44,6 @@ public partial class Xp : Area2D
 		_colorRect.Visible = false;
 		_particles.Emitting = false;  // Stops GPU from emitting new particles
 		_particles.ProcessMode = Node.ProcessModeEnum.Disabled;  // Stops all processing
-		Monitorable = false;
 	}
 
 	public void Enable()
@@ -54,6 +55,7 @@ public partial class Xp : Area2D
 		_particles.Emitting = true;  // GPU starts emitting again
 		_particles.ProcessMode = Node.ProcessModeEnum.Inherit;
 		Amount = GD.RandRange((int)(_maxValue*.5f), _maxValue);
-		Monitorable = true;
 	}
+
+	protected abstract void RewardPlayer();
 }
