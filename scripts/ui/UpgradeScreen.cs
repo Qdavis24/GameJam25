@@ -83,4 +83,11 @@ public partial class UpgradeScreen : Panel
 		Hide();
 	}
 	
+	public void ResetUnlocks()
+	{
+		_unlocked[Weapon.Fireball] = false;
+		_unlocked[Weapon.Water] = false;
+		_unlocked[Weapon.Cloud] = false;
+		_unlocked[Weapon.Stone] = false;
+	}
 }

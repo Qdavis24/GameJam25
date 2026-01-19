@@ -117,4 +117,8 @@ public partial class Ui : CanvasLayer
 		_levelCounter.Text = "1";
 	}
 	
+	public void ResetUnlocks()
+	{
+		_upgradeScreen.ResetUnlocks();
+	}
 }
