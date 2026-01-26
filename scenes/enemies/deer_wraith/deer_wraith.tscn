@@ -124,7 +124,8 @@ collision_mask = 4
 shape = SubResource("CircleShape2D_voie1")
 
 [node name="DirUpdateTimer" type="Timer" parent="WraithStateMachine/ChaseState"]
-wait_time = 0.005
+process_callback = 0
+wait_time = 0.05
 
 [node name="MeeleState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_attackIntervalTimer")]
 script = ExtResource("13_xv4jy")
@@ -152,8 +153,8 @@ process_material = SubResource("ParticleProcessMaterial_ad4ay")
 [node name="DeathState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_deathEffect")]
 script = ExtResource("10_b83jp")
 _deathEffect = NodePath("DeathEffect")
-_healthDropChance = 0.01
 _healthScene = ExtResource("15_f0xl5")
+_healthDropChance = 0.01
 
 [node name="DeathEffect" parent="WraithStateMachine/DeathState" instance=ExtResource("11_n5gwk")]
 
