@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://cknywm26hylby"]
+
+[ext_resource type="Script" uid="uid://bwsfkswncae8t" path="res://scripts/pickup_system/Health.cs" id="1_tm5g6"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_p2c41"]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tm5g6"]
+blend_mode = 1
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vl2ll"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 180.0
+initial_velocity_min = 8.0
+initial_velocity_max = 9.0
+gravity = Vector3(0, -2, 0)
+damping_min = 1.0
+damping_max = 2.0
+scale_min = 0.5
+scale_max = 1.5
+color = Color(1, 0.23921569, 0, 1)
+hue_variation_min = -0.100000024
+hue_variation_max = 0.09999997
+
+[node name="Health" type="Node2D" node_paths=PackedStringArray("_lifetime", "_colorRect", "_particles") groups=["Health"]]
+script = ExtResource("1_tm5g6")
+_lifetime = NodePath("Lifetime")
+_colorRect = NodePath("ColorRect")
+_particles = NodePath("Health")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("CanvasItemMaterial_p2c41")
+offset_left = -12.0
+offset_top = -11.0
+offset_right = 11.0
+offset_bottom = 12.0
+color = Color(1, 0, 0, 1)
+
+[node name="Health" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_tm5g6")
+amount = 20
+lifetime = 3.0
+process_material = SubResource("ParticleProcessMaterial_vl2ll")
+
+[node name="Lifetime" type="Timer" parent="."]
+wait_time = 6.0
+one_shot = true

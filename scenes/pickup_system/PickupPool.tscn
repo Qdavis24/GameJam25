@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4dvx6r2y6cel"]
+
+[ext_resource type="Script" uid="uid://xrqevgpm6aqs" path="res://scripts/pickup_system/PickupPool.cs" id="1_54iuu"]
+[ext_resource type="PackedScene" uid="uid://chbtc3k4s18uw" path="res://scenes/pickup_system/xp.tscn" id="2_rnmi7"]
+[ext_resource type="PackedScene" uid="uid://cknywm26hylby" path="res://scenes/pickup_system/health.tscn" id="3_ahv20"]
+
+[node name="XpPool" type="Node2D"]
+script = ExtResource("1_54iuu")
+_xpPckdScene = ExtResource("2_rnmi7")
+_healthPckdScene = ExtResource("3_ahv20")
