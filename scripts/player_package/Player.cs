@@ -84,6 +84,11 @@ public partial class Player : CharacterBody2D
 		set
 		{
 			_health = Math.Clamp(value, 0, _maxHealth);
+			EmitSignalHealthChanged(_health);
+			if (_health <= 0)
+			{
+				EmitSignalDied(); // send stats here?
+			}
 		}
 	}
 	private int _level;
@@ -118,11 +123,11 @@ public partial class Player : CharacterBody2D
 
 		_hurtbox.AreaEntered += OnHurtboxEntered;
 		
-		_health = _maxHealth;
+		Health = _maxHealth;
 		Xp = 0;
 		_level = 1;
 
-		EmitSignalStatsInitialized(_health, _maxHealth, Xp, MaxXp, _level);
+		EmitSignalStatsInitialized(Health, _maxHealth, Xp, MaxXp, _level);
 
 		_anim.Play(AnimationSet + "_idle");
 	}
@@ -241,15 +246,9 @@ public partial class Player : CharacterBody2D
 	private void TakeDamage(float amount, Vector2 dir)
 	{
 		GameManager.Instance.Cam.Shake(amount);
-		_health = Mathf.Clamp(_health - amount, 0, _maxHealth);
-		EmitSignalHealthChanged(_health);
+		Health -= amount;
 		_anim.Material = _flashShader;
 		_damageIntervalTimer.Start();
-
-		if (_health <= 0)
-		{
-			EmitSignalDied(); // send stats here?
-		}
 	}
 
 	public void UpgradeWeapon(WeaponUpgrade upg)
