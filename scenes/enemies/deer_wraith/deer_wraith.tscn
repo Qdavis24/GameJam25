@@ -14,7 +14,7 @@
 [ext_resource type="Script" uid="uid://op8oiyqpgdc1" path="res://scripts/enemy_state_machines/base_classes/EInstanceContext.cs" id="12_gdbcg"]
 [ext_resource type="PackedScene" uid="uid://binbhlfd5jls4" path="res://scenes/enemies/deer_wraith/meele_attack.tscn" id="13_axc5h"]
 [ext_resource type="Script" uid="uid://bnctq15ygaq0a" path="res://scripts/enemy_state_machines/custom_states/MeeleState.cs" id="13_xv4jy"]
-[ext_resource type="PackedScene" uid="uid://cknywm26hylby" path="res://scenes/pickups/health.tscn" id="15_f0xl5"]
+[ext_resource type="PackedScene" uid="uid://cknywm26hylby" path="res://scenes/pickup_system/health.tscn" id="15_f0xl5"]
 [ext_resource type="Script" uid="uid://dvb6dfm4xhywl" path="res://scripts/enemy_state_machines/reusable_states/SpawnState.cs" id="15_sh0ou"]
 [ext_resource type="Texture2D" uid="uid://bsii8213thyr1" path="res://assets/characters/fox/shadow.png" id="16_ho4mj"]
 [ext_resource type="SpriteFrames" uid="uid://cy1om80shqujm" path="res://scenes/enemies/deer_wraith/deer_wraith_sprite_frames.tres" id="16_sh0ou"]
@@ -65,7 +65,7 @@ collision_layer = 5
 motion_mode = 1
 script = ExtResource("1_patmq")
 _hitSounds = SubResource("AudioStreamRandomizer_qknn0")
-_maxHealth = 10.0
+_maxHealth = 20.0
 SteeringRange = NodePath("WraithStateMachine/ChaseState/SteeringRange")
 Hurtbox = NodePath("Hurtbox")
 AttackRange = 100
@@ -124,7 +124,7 @@ collision_mask = 4
 shape = SubResource("CircleShape2D_voie1")
 
 [node name="DirUpdateTimer" type="Timer" parent="WraithStateMachine/ChaseState"]
-wait_time = 0.1
+wait_time = 0.005
 
 [node name="MeeleState" type="Node2D" parent="WraithStateMachine" node_paths=PackedStringArray("_attackIntervalTimer")]
 script = ExtResource("13_xv4jy")
