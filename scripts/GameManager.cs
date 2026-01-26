@@ -138,6 +138,7 @@ public partial class GameManager : Node
         Player = _playerScene.Instantiate<Player>();
         _ui.InitializeUiFromPlayer(Player); // connects players signals related to stats and upgrade to ui
         _ui.ResetCounters();
+        _ui.ResetUnlocks();
         Player.AnimationSet = character;
         Player.Died += OnPlayerDeath;
         PersistentNodes.AddChild(Player);
