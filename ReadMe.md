@@ -1,4 +1,4 @@
-# Game Jam 25 - Top-down Action Game
+# Cursed Critters - Top-down Action Game
 
 ---
 
